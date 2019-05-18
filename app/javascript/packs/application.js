@@ -16,6 +16,7 @@
 // const imagePath = (name) => images(name, true)
 
 import 'stylesheets/application'
+import 'bootstrap'
 
 import { Application } from "stimulus"
 import { definitionsFromContext } from "stimulus/webpack-helpers"

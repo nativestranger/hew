@@ -2,10 +2,16 @@
   "name": "hew",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.2",
     "@rails/webpacker": "^4.0.2",
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0",
+    "resolve-url-loader": "^3.1.0",
     "stimulus": "^1.1.1"
   },
   "devDependencies": {
+    "expose-loader": "^0.7.5",
     "webpack-dev-server": "^3.4.1"
   }
 }
