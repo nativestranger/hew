@@ -1,7 +1,11 @@
 es:
+  artists: "Los artistas"
   english: "Inglés"
+  menu: "Menú"
   spanish: "Español"
+  search: "Buscar"
   settings: "Ajustes"
   sign_in: "Registrarse"
   sign_out: "Desconectar"
   success: "Éxito"
+  venues: "Venidas"

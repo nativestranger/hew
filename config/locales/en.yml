@@ -30,9 +30,13 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  artists: "Artists"
   english: "English"
+  menu: "Menu"
   spanish: "Spanish"
+  search: "Search"
   settings: "Settings"
   sign_in: "Sign in"
   sign_out: "Sign out"
   success: "Success!"
+  venues: "Venues"
