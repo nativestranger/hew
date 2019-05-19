@@ -1,0 +1,10 @@
+<h1>
+  <%= t('settings') %>
+</h1>
+
+<%= simple_form_for current_user, url: update_profile_settings_path do |f| %>
+  <%= f.input :first_name %>
+  <%= f.input :last_name %>
+  <%= f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']] %>
+  <%= f.button :submit, 'Save' %>
+<% end %>

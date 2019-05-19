@@ -30,5 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  english: "English"
+  spanish: "Spanish"
+  settings: "Settings"
   sign_in: "Sign in"
   sign_out: "Sign out"
+  success: "Success!"

@@ -1,3 +1,7 @@
 es:
+  english: "Inglés"
+  spanish: "Español"
+  settings: "Ajustes"
   sign_in: "Registrarse"
   sign_out: "Desconectar"
+  success: "Éxito"
