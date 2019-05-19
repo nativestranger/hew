@@ -4,3 +4,8 @@ $fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
 @import '~bootstrap/scss/bootstrap';
 @import 'variables';
 @import 'base';
+
+.fade {
+  -webkit-transition-duration: 30s; /* Safari */
+  transition-duration: 30s;
+}
