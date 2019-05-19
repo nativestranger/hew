@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang=<%= I18n.locale %>>
   <head>
     <title>Hew</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
@@ -13,8 +14,10 @@
   </head>
 
   <body>
-    <%= render 'shared/navbar' %>
-    <%= bootstrap_flash %>
-    <%= yield %>
+    <div class="container-fluid">
+      <%= render 'shared/navbar' %>
+      <%= bootstrap_flash %>
+      <%= yield %>
+    </div>
   </body>
 </html>

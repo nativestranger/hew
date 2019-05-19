@@ -1,0 +1,23 @@
+sudo: required
+dist: trusty
+group: edge
+language: node_js
+node_js:
+  - 8.10.0
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
+  chrome: stable
+env:
+  global:
+  - PGPORT=5432
+before_install:
+  - rvm install 2.5.1
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+install:
+  - bundle install
+  - yarn install
+  - bundle exec rake db:setup
+script:
+  - bundle exec rspec
