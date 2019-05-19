@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -40,6 +42,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'geocoder'
+gem 'haml-rails', '~> 2.0'
 gem 'simple_form'
 
 group :development, :test do
@@ -48,6 +51,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.8'
+  gem 'rubocop'
+  gem 'rubocop-performance'
 end
 
 group :development do

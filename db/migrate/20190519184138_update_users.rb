@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateUsers < ActiveRecord::Migration[5.2]
   def change
     add_column :users, :locale, :string, null: false, default: 'en'
