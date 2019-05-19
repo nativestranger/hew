@@ -5,7 +5,9 @@ require_relative 'application'
 
 # Initialize the Rails application.
 Rails.application.initialize!
-Rails.application.routes.default_url_options[:host] = Rails.application.secrets.host
+
+Rails.application.routes.default_url_options[:host] = \
+  Rails.application.secrets.host
 
 if Rails.env.production?
   ActionMailer::Base.smtp_settings = {

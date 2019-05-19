@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BootstrapFlashHelper
-  ALERT_TYPES = [:success, :info, :warning, :danger] unless const_defined?(:ALERT_TYPES)
+  ALERT_TYPES = %i[success info warning danger].freeze unless const_defined?(:ALERT_TYPES)
 
   def bootstrap_flash(options = {})
     flash_messages = []
