@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 class SettingsController < ApplicationController
   before_action :authenticate_user!
 
-  def profile
-  end
+  def profile; end
 
   def update_profile
     if current_user.update(profile_params)
@@ -15,7 +16,7 @@ class SettingsController < ApplicationController
 
   private
 
-    def profile_params
-      params.require(:user).permit(:first_name, :last_name, :locale)
-    end
+  def profile_params
+    params.require(:user).permit(:first_name, :last_name, :locale)
+  end
 end

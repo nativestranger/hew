@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 en_admin = User.new(email: 'en@example.com', password: 'password')
 en_admin.save!
 en_admin.confirm

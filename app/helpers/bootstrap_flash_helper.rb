@@ -1,6 +1,9 @@
-module BootstrapFlashHelper
-  ALERT_TYPES = [:success, :info, :warning, :danger] unless const_defined?(:ALERT_TYPES)
+# frozen_string_literal: true
 
+module BootstrapFlashHelper
+  ALERT_TYPES = %i[success info warning danger].freeze unless const_defined?(:ALERT_TYPES)
+
+  # rubocop:disable all
   def bootstrap_flash(options = {})
     flash_messages = []
     flash.each do |type, message|
@@ -27,4 +30,5 @@ module BootstrapFlashHelper
     end
     flash_messages.join("\n").html_safe
   end
+  # rubocop:enable all
 end
