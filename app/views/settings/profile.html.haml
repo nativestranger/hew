@@ -1,15 +1,18 @@
-%h1= t('settings')
+.card.border-bootstrap.box-shadow
+  .card-header
+    %h1= t('settings')
 
-= simple_form_for current_user, url: update_profile_settings_path do |f|
-  = f.error_notification
+  .card-body
+    = simple_form_for current_user, url: update_profile_settings_path do |f|
+      = f.error_notification
 
-  .form-group
-    %label{ for: 'user_first_name' }= t('first_name')
-    = f.input :first_name, class: 'form-control', label: false
-  .form-group
-    %label{ for: 'user_last_name' }= t('last_name')
-    = f.input :last_name, class: 'form-control', label: false
-  .form-group
-    %label{ for: 'user_locale' } Language
-    = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], label: false
-  = f.button :submit, t('save'), class: 'btn btn-primary'
+      .form-group
+        %label{ for: 'user_first_name' }= t('first_name')
+        = f.input :first_name, class: 'form-control', label: false
+      .form-group
+        %label{ for: 'user_last_name' }= t('last_name')
+        = f.input :last_name, class: 'form-control', label: false
+      .form-group
+        %label{ for: 'user_locale' } Language
+        = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], label: false
+      = f.button :submit, t('save'), class: 'btn btn-primary'
