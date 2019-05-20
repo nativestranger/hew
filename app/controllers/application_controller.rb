@@ -22,13 +22,16 @@ class ApplicationController < ActionController::Base
 
   def location_detected_locale
     # location = request.location
-    # return unless location.present? && location.country_code.present? && I18n.available_locales.include?(location.country_code)
+    # return unless location.present? && location.country_code.present?
+    # return unless I18n.available_locales.include?(location.country_code)
     # location.country_code.include?("-") ? location.country_code : location.country_code.downcase
   end
 
-  def header_detected_locale
+  def header_detected_locale # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/LineLength
     return unless (request.env["HTTP_ACCEPT_LANGUAGE"] || "en").scan(/^[a-z]{2}/).first.present? && I18n.available_locales.include?((request.env["HTTP_ACCEPT_LANGUAGE"] || "en").scan(/^[a-z]{2}/).first)
 
     (request.env["HTTP_ACCEPT_LANGUAGE"] || "en").scan(/^[a-z]{2}/).first
+    # rubocop:enable Metrics/LineLength
   end
 end
