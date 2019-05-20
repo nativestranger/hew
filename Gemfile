@@ -42,6 +42,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-bootstrap-views'
+gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
 gem 'rack-canonical-host'

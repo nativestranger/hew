@@ -2,7 +2,6 @@
   "name": "hew",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.2",
     "@rails/webpacker": "^4.0.2",
     "bootstrap": "^4.3.1",
     "jquery": "^3.4.1",
