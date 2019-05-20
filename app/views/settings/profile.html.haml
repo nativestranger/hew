@@ -3,9 +3,10 @@
     %h1= t('settings')
     = link_to "Change your password", edit_user_registration_path
 
-  .card-body
+  .card-body.form-inputs
     = simple_form_for current_user, url: update_profile_settings_path do |f|
       = f.error_notification
+      = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
       .row
         .col-md-6
