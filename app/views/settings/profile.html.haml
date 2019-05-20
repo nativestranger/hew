@@ -9,14 +9,20 @@
       .row
         .col-md-6
           .form-group
+            %label{ for: 'user_email' } Email
+            = f.input :email, input_html: { class: 'form-control' }, label: false
+        .col-md-6
+          .form-group
+            %label{ for: 'user_locale' } Language
+            = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+
+      .row
+        .col-md-6
+          .form-group
             %label{ for: 'user_first_name' }= t('first_name')
             = f.input :first_name, input_html: { class: 'form-control' }, label: false
         .col-md-6
           .form-group
             %label{ for: 'user_last_name' }= t('last_name')
             = f.input :last_name, input_html: { class: 'form-control' }, label: false
-
-      .form-group
-        %label{ for: 'user_locale' } Language
-        = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
       = f.button :submit, t('save'), class: 'btn btn-primary'
