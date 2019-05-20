@@ -34,4 +34,16 @@ class ApplicationController < ActionController::Base
     (request.env["HTTP_ACCEPT_LANGUAGE"] || "en").scan(/^[a-z]{2}/).first
     # rubocop:enable Metrics/LineLength
   end
+
+  def validate_attachment_type(file, valid_types)
+    # TODO: Remove this method and all calls when active storage validations are added (expected in Rails 6)
+    return false if file.blank?
+
+    if !file.content_type.in?(valid_types)
+      flash[:error] = "File could not be saved. File type must be one of #{valid_types.join(', ')}."
+      false
+    else
+      true
+    end
+  end
 end
