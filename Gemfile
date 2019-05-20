@@ -43,6 +43,7 @@ gem 'devise'
 gem 'devise-i18n'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
+gem 'rack-canonical-host'
 gem 'simple_form'
 
 group :development, :test do
