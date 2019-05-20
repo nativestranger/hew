@@ -1,7 +1,10 @@
 es:
   artists: "Los artistas"
   english: "Inglés"
+  first_name: "Nombre"
+  last_name: "Apellido"
   menu: "Menú"
+  save: "Salvar"
   spanish: "Español"
   search: "Buscar"
   settings: "Ajustes"

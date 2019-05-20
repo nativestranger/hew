@@ -32,8 +32,11 @@
 en:
   artists: "Artists"
   english: "English"
+  first_name: "First Name"
+  last_name: "Last Name"
   menu: "Menu"
   spanish: "Spanish"
+  save: "Save"
   search: "Search"
   settings: "Settings"
   sign_in: "Sign in"
