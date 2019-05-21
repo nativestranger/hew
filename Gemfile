@@ -46,6 +46,7 @@ gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
 gem 'rack-canonical-host'
+gem 'react-rails'
 gem 'simple_form'
 
 group :development, :test do

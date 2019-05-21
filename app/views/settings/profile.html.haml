@@ -5,7 +5,7 @@
       = link_to "Change your password", edit_user_registration_path
     .col-md-2
       - if current_user.avatar.attached?
-        = image_tag current_user.avatar, class: 'img-fluid'
+        = image_tag current_user.avatar, class: 'img-fluid rounded'
 
   .card-body.form-inputs
     = simple_form_for current_user, url: update_profile_settings_path do |f|
