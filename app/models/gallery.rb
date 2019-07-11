@@ -5,5 +5,5 @@ class Gallery < ApplicationRecord
 
   validates :name, presence: true
 
-  attr_accessor :images_ids_in_position_order
+  attr_accessor :image_ids_in_position_order
 end

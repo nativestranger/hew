@@ -26,7 +26,7 @@ class GalleriesController < ApplicationController
     if @gallery.update(permitted_params)
       gi_count = @gallery.gallery_images.count
       @gallery.gallery_images.each { |gi| gi.update(position: gi.position + gi_count) }
-      @gallery.images_ids_in_position_order.split(',').each_with_index do |gi_index, i|
+      @gallery.image_ids_in_position_order.split(',').each_with_index do |gi_index, i|
         @gallery.gallery_images.where(id: gi_index).update(position: i + 1)
       end
 
@@ -45,7 +45,7 @@ class GalleriesController < ApplicationController
     def permitted_params
       params.require(:gallery).permit(
         :name,
-        :images_ids_in_position_order,
+        :image_ids_in_position_order,
         gallery_images_attributes: [:id, :name, :description, :alt, :_destroy]
       )
     end

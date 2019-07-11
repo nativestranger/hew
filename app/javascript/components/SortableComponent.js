@@ -31,7 +31,7 @@ export default class SortableComponent extends Component {
   };
   render() {
     let imagesByPosition = this.state.items.map(i => i.props.img_id)
-    document.getElementById('gallery_images_ids_in_position_order').value = imagesByPosition
+    document.getElementById('gallery_image_ids_in_position_order').value = imagesByPosition
     return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} helperClass={this.props.helperClass} axis='xy' />;
   }
 };

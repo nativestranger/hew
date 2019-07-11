@@ -31,11 +31,13 @@
 
 en:
   artists: "Artists"
+  curators: "Curators"
   english: "English"
   first_name: "First Name"
   gallery: "Gallery"
   galleries: "Galleries"
   my_galleries: "My Galleries"
+  my_gallery: "My Gallery"
   last_name: "Last Name"
   menu: "Menu"
   name: "Nombre"

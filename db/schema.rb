@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_06_20_214336) do
   create_table "galleries", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "user_id"
+    t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_galleries_on_user_id"

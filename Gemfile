@@ -38,9 +38,9 @@ gem 'jbuilder', '~> 2.5'
 # gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
+gem 'active_model_serializers'
 gem 'acts_as_list'
 gem 'bootsnap', '>= 1.1.0', require: false
-gem 'bootstrap', '~> 4.3.1'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-bootstrap-views'

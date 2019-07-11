@@ -1,10 +1,12 @@
 es:
   artists: "Los artistas"
+  curators: "Curadoras"
   english: "Inglés"
   first_name: "Nombre"
   gallery: "Galería"
   galleries: "Galerías"
   my_galleries: "Mis Galerías"
+  my_gallery: "Mi Galería"
   last_name: "Apellido"
   menu: "Menú"
   name: "Nombre"
