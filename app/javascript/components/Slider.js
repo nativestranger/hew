@@ -51,9 +51,11 @@ export default class SimpleSlider extends React.Component {
     };
 
     return (
-      <Slider {...settings}>
-        { this.renderImages() }
-      </Slider>
+      <div className='gallery'>
+        <Slider {...settings}>
+          { this.renderImages() }
+        </Slider>
+      </div>
     );
   }
 };

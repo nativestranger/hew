@@ -1,0 +1,20 @@
+.row
+  .col-md-4
+  .col-md-4
+    %h5.text-center
+      = @gallery.name
+      = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+        edit_gallery_path(@gallery),
+        class: 'float-right'
+
+-# %i.fa.fa-chevron-right
+-# %i.fa.fa-camera-retro
+
+.row
+  .col-md-4.mx-auto
+    .card.border-bootstrap.box-shadow.p-4
+      = react_component("Slider", { images: gallery_image_hashes(@gallery) })
+
+  -# - @gallery.gallery_images.each do |gallery_image|
+  -#   .d-inline-block{ style: 'height: 100px;' }
+  -#     = image_tag(gallery_image.img_upload, class: 'img-thumbnail mh-100')
