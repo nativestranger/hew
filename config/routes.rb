@@ -9,4 +9,10 @@ Rails.application.routes.draw do
 
   get 'settings/profile', to: 'settings#profile'
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings
+
+  namespace :v1 do
+    resources :galleries, only: [] do
+      resources :gallery_images, only: :create
+    end
+  end
 end

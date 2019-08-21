@@ -2,5 +2,10 @@
 = button_to 'New Gallery', new_gallery_path, class: 'btn btn-default btn-primary', method: :get
 %hr
 
-- @galleries.each do |gallery|
-  = button_to gallery.name, gallery, class: 'btn btn-default btn-primary', method: :get
+.card-deck
+  - @galleries.each do |gallery|
+    .card
+      -# %img.card-img-top{ src: gallery.gallery_images.first.img_upload, alt: gallery.gallery_images.first.alt }
+      .card-header= gallery.name
+      .card-body
+        = button_to gallery.name, gallery, class: 'btn btn-default btn-primary', method: :get

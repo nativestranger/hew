@@ -1,2 +1,2 @@
 .gallery-images
-  = react_component('SortableComponent', { items: gallery_image_hashes(gallery) })
+  = react_component('SortableComponent', { gallery_id: @gallery.id, items: gallery_image_hashes(gallery) })
