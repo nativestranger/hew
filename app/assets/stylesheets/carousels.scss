@@ -1,4 +1,4 @@
-.gallery {
+.carousel {
   .slick-track{
       display: flex;
 
@@ -14,7 +14,7 @@
   }
 }
 
-.gallery-images {
+.carousel-images {
   ul {
     display: inline-block;
     padding: 0;
@@ -30,7 +30,7 @@
   }
 }
 
-.upload-gallery-img {
+.upload-carousel-img {
   display: inline-block;
   max-height: 100px;
   img {

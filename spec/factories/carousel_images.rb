@@ -1,7 +1,7 @@
 include ActionDispatch::TestProcess # for seed
 
 FactoryBot.define do
-  factory :gallery_image do
+  factory :carousel_image do
 
     trait :van do
       img_upload { fixture_file_upload(Rails.root.join('app', 'assets', 'images', 'van.jpg')) }

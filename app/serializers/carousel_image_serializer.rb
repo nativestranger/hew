@@ -1,4 +1,4 @@
-class GalleryImageSerializer < ActiveModel::Serializer
+class CarouselImageSerializer < ActiveModel::Serializer
   attributes :id,
              :alt,
              :src,

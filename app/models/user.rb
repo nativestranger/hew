@@ -8,5 +8,5 @@ class User < ApplicationRecord
          :confirmable, :lockable # , :omniauthable
 
   has_one_attached :avatar
-  has_many :galleries
+  has_many :carousels
 end

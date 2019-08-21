@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :gallery do
+  factory :carousel do
     name { Faker::Name.name }
     user { create(:user) }
   end

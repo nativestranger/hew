@@ -1,4 +1,4 @@
-class GallerySerializer < ActiveModel::Serializer
+class CarouselSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
              :description

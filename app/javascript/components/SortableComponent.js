@@ -24,19 +24,19 @@ const SortableList = SortableContainer(({items}) => {
 export default class SortableComponent extends Component {
   renderItem = (item) => {
     return (
-      <div className="sortable-gallery-image" img_id={ item.id }>
+      <div className="sortable-carousel-image" img_id={ item.id }>
         <img className="img-thumbnail" src={ item.src } />
       </div>
     )
   };
   state = {
     items: this.props.items.map(this.renderItem),
-    galleryImageObjects: this.props.items,
+    carouselImageObjects: this.props.items,
   };
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items, galleryImageObjects}) => ({
+    this.setState(({items, carouselImageObjects}) => ({
       items: arrayMove(items, oldIndex, newIndex),
-      galleryImageObjects: arrayMove(galleryImageObjects, oldIndex, newIndex),
+      carouselImageObjects: arrayMove(carouselImageObjects, oldIndex, newIndex),
     }));
   };
 
@@ -44,10 +44,10 @@ export default class SortableComponent extends Component {
     this.refs.fileUploader.click();
   };
 
-  addGalleryImage = (formData) => {
+  addCarouselImage = (formData) => {
     return axios({
       method: 'post',
-      url: `/v1/galleries/${this.props.gallery_id}/gallery_images`,
+      url: `/v1/carousels/${this.props.carousel_id}/carousel_images`,
       data: formData,
       config: { headers: {'Content-Type': 'multipart/form-data' }}
     });
@@ -59,12 +59,12 @@ export default class SortableComponent extends Component {
     let formData = new FormData();
     formData.append('image', e.target.files[0], e.target.files[0].name)
 
-    this.addGalleryImage(formData).then(response => {
+    this.addCarouselImage(formData).then(response => {
       this.setState({ file: undefined });
-      let galleryImageObjects = [...this.state.galleryImageObjects, response.data.gallery_image];
+      let carouselImageObjects = [...this.state.carouselImageObjects, response.data.carousel_image];
       this.setState({
-        galleryImageObjects: galleryImageObjects,
-        items: galleryImageObjects.map(this.renderItem),
+        carouselImageObjects: carouselImageObjects,
+        items: carouselImageObjects.map(this.renderItem),
       });
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
@@ -78,10 +78,10 @@ export default class SortableComponent extends Component {
           <div className='loader'></div>
         </div>
       )
-    } else if(this.props.gallery_id) {
+    } else if(this.props.carousel_id) {
       return (
         <div className='col-lg-2'>
-          <figure className="upload-gallery-img" onClick={this.openfileUploader}>
+          <figure className="upload-carousel-img" onClick={this.openfileUploader}>
             <input type="file" onChange={this.handleFileUpload} ref="fileUploader" style={{display: "none"}}/>
             <img src="https://www.flaticon.com/premium-icon/icons/svg/1582/1582582.svg" className="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." />
           </figure>
@@ -94,7 +94,7 @@ export default class SortableComponent extends Component {
     let thisComponent = this;
 
     let imagesByPosition = this.state.items.map(i => i.props.img_id)
-    document.getElementById('gallery_image_ids_in_position_order').value = imagesByPosition
+    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition
 
     return (
       <div className='row'>
