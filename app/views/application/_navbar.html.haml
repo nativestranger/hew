@@ -27,7 +27,8 @@
         .dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
           - if current_user
             = link_to t('settings'), settings_profile_path, class: "dropdown-item"
-            = link_to t('my_carousels'), carousels_path, class: "dropdown-item"
+            -# = link_to t('my_carousels'), carousels_path, class: "dropdown-item"
+            = link_to t('venues'), venues_path, class: "dropdown-item"
             .dropdown-divider
             = link_to t('sign_out'), destroy_user_session_path, method: :delete, class: "dropdown-item"
           - else

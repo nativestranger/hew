@@ -1,0 +1,14 @@
+.card
+  .card-header
+    %h5.text-center
+      = venue.name
+      = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+        edit_venue_path(venue),
+        class: 'float-right'
+  .card-body
+    %h5 Address
+    %p= venue.full_address
+
+    - if venue.website.present?
+      %h5= t('website')
+      %p= venue.website

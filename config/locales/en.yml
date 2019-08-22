@@ -31,6 +31,7 @@
 
 en:
   artists: "Artists"
+  city: "Ciudad"
   curators: "Curators"
   english: "English"
   first_name: "First Name"
@@ -38,6 +39,7 @@ en:
   carousels: "Carousels"
   my_carousels: "My Carousels"
   my_carousel: "My Carousel"
+  my_venue: "My Venue"
   last_name: "Last Name"
   menu: "Menu"
   name: "Nombre"
@@ -49,4 +51,6 @@ en:
   sign_in: "Sign in"
   sign_out: "Sign out"
   success: "Success!"
+  venue: "Venue"
   venues: "Venues"
+  website: "Website"

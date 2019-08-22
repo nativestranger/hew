@@ -1,0 +1,8 @@
+.nested-fields
+  .row
+    .col-lg-4
+      .form-group
+        %label{ for: 'city_id' }= t('city')
+        = f.association :city, collection: supported_venue_cities.pluck(:name, :id), label: false
+    .col-lg-4= f.input :street_address
+    .col-lg-4= f.input :postal_code

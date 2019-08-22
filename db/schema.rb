@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_21_032159) do
+ActiveRecord::Schema.define(version: 2019_08_21_034158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -39,6 +39,15 @@ ActiveRecord::Schema.define(version: 2019_08_21_032159) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
+  create_table "addresses", force: :cascade do |t|
+    t.bigint "city_id", null: false
+    t.string "street_address", default: "", null: false
+    t.string "postal_code", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_addresses_on_city_id"
+  end
+
   create_table "carousel_images", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "description", default: "", null: false
@@ -58,6 +67,31 @@ ActiveRecord::Schema.define(version: 2019_08_21_032159) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_carousels_on_user_id"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.bigint "state_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "state_id"], name: "index_cities_on_name_and_state_id", unique: true
+    t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_countries_on_name", unique: true
+  end
+
+  create_table "states", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.bigint "country_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_states_on_country_id"
+    t.index ["name", "country_id"], name: "index_states_on_name_and_country_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -89,7 +123,23 @@ ActiveRecord::Schema.define(version: 2019_08_21_032159) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
+  create_table "venues", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "website", default: "", null: false
+    t.bigint "address_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["address_id"], name: "index_venues_on_address_id"
+    t.index ["user_id"], name: "index_venues_on_user_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "addresses", "cities"
   add_foreign_key "carousel_images", "carousels"
   add_foreign_key "carousels", "users"
+  add_foreign_key "cities", "states"
+  add_foreign_key "states", "countries"
+  add_foreign_key "venues", "addresses"
+  add_foreign_key "venues", "users"
 end

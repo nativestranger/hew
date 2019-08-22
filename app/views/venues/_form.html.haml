@@ -1,0 +1,23 @@
+.form-inputs
+  = simple_form_for @venue do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    .row
+      .col-md-4
+        .form-group
+          %label{ for: 'venue_name' }= t('name')
+          = f.input :name, input_html: { class: 'form-control' }, label: false
+      .col-md-8
+        .form-group
+          %label{ for: 'venue_website' }= t('website')
+          .input-group
+            .input-group-prepend
+              .input-group-text https://
+            = f.input_field :website, class: "form-control"
+
+      .col-md-12
+        = f.simple_fields_for :address do |address|
+          = render 'addresses/address_fields', f: address
+
+    = f.button :submit, t('save'), class: 'btn btn-primary'

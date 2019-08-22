@@ -1,0 +1,7 @@
+.clearfix
+  %h2.pull-left= t('venues')
+  .pull-right= button_to 'New Venue', new_venue_path, class: 'btn btn-default btn-primary', method: :get
+
+.card-deck
+  - @venues.each do |venue|
+    = render 'venue', venue: venue
