@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_21_034158) do
+ActiveRecord::Schema.define(version: 2019_08_22_034050) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -85,6 +85,20 @@ ActiveRecord::Schema.define(version: 2019_08_21_034158) do
     t.index ["name"], name: "index_countries_on_name", unique: true
   end
 
+  create_table "shows", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.bigint "venue_id", null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
+    t.string "overview", default: "", null: false
+    t.text "full_description", default: "", null: false
+    t.datetime "application_deadline", null: false
+    t.text "application_details", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["venue_id"], name: "index_shows_on_venue_id"
+  end
+
   create_table "states", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "country_id", null: false
@@ -139,6 +153,7 @@ ActiveRecord::Schema.define(version: 2019_08_21_034158) do
   add_foreign_key "carousel_images", "carousels"
   add_foreign_key "carousels", "users"
   add_foreign_key "cities", "states"
+  add_foreign_key "shows", "venues"
   add_foreign_key "states", "countries"
   add_foreign_key "venues", "addresses"
   add_foreign_key "venues", "users"

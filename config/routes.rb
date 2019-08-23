@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :carousels
   resources :venues, except: :destroy
+  resources :shows, except: :destroy
 
   get 'settings/profile', to: 'settings#profile'
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings
