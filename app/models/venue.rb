@@ -3,12 +3,8 @@ class Venue < ApplicationRecord
   belongs_to :address
   has_many :shows, dependent: :restrict_with_error
 
-  delegate :country, :city, :state, :postal_code, :street_address, to: :address
-
   accepts_nested_attributes_for :address
   validates :name, presence: true
 
-  def full_address
-    "#{street_address}, #{city}, #{state} #{postal_code}, #{country}"
-  end
+  delegate :display_address, to: :address
 end

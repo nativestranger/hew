@@ -7,7 +7,7 @@
         class: 'float-right'
   .card-body
     %h5 Address
-    %p= venue.full_address
+    %p= venue.display_address
 
     - if venue.website.present?
       %h5= t('website')

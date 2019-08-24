@@ -42,6 +42,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_034050) do
   create_table "addresses", force: :cascade do |t|
     t.bigint "city_id", null: false
     t.string "street_address", default: "", null: false
+    t.string "street_address_2", default: "", null: false
     t.string "postal_code", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

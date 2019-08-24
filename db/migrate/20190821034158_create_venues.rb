@@ -22,6 +22,7 @@ class CreateVenues < ActiveRecord::Migration[5.2]
     create_table :addresses do |t|
       t.references :city, foreign_key: true, null: false
       t.string :street_address, null: false, default: ''
+      t.string :street_address_2, null: false, default: ''
       t.string :postal_code, null: false, default: ''
       t.timestamps
     end

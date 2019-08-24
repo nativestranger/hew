@@ -23,3 +23,5 @@ CSV.foreach("#{Rails.root}/db/data/states/mexico.csv", headers: true) do |csv_ro
   country = Country.mexico
   State.where(country: country, name: csv_row.fetch('name')).first_or_create!
 end
+
+FactoryBot.create(:venue, user: en_admin)

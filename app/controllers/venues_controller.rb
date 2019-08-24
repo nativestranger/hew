@@ -39,7 +39,7 @@ class VenuesController < ApplicationController
     params.require(:venue).permit(
       :name,
       :website,
-      address_attributes: %i[id city_id street_address postal_code]
+      address_attributes: %i[id city_id street_address street_address_2 postal_code]
     )
   end
 
