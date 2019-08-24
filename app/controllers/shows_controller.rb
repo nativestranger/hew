@@ -18,11 +18,9 @@ class ShowsController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @show.update(permitted_params)
@@ -38,24 +36,24 @@ class ShowsController < ApplicationController
 
   private
 
-    def permitted_params
-      params.require(:show).permit(
+  def permitted_params
+    params.require(:show).permit(
+      :name,
+      :start_at,
+      :end_at,
+      :overview,
+      :full_description,
+      :application_details,
+      :application_deadline,
+      venue_attributes: [
         :name,
-        :start_at,
-        :end_at,
-        :overview,
-        :full_description,
-        :application_details,
-        :application_deadline,
-        venue_attributes: [
-          :name,
-          :website,
-          { address_attributes: [:id, :city_id, :street_address, :postal_code] }
-        ]
-      )
-    end
+        :website,
+        { address_attributes: %i[id city_id street_address postal_code] }
+      ]
+    )
+  end
 
-    def set_show
-      @show = Show.find(params[:id])
-    end
+  def set_show
+    @show = Show.find(params[:id])
+  end
 end

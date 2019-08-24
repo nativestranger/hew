@@ -5,6 +5,6 @@ class City < ApplicationRecord
   validates :name, presence: true
 
   def self.mexico_city
-    find_or_create_by!(name: 'Mexico City', state: Country.mexico.states.find_by_name('Mexico City'))
+    find_or_create_by!(name: 'Mexico City', state: Country.mexico.states.find_by(name: 'Mexico City'))
   end
 end

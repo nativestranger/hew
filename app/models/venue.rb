@@ -8,6 +8,6 @@ class Venue < ApplicationRecord
   validates :name, presence: true
 
   def full_address
-    "#{ street_address }, #{ city }, #{ state } #{ postal_code }, #{ country }"
+    "#{street_address}, #{city}, #{state} #{postal_code}, #{country}"
   end
 end

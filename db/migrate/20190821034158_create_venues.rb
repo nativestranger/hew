@@ -10,14 +10,14 @@ class CreateVenues < ActiveRecord::Migration[5.2]
       t.references :country, foreign_key: true, null: false
       t.timestamps
     end
-    add_index :states, [:name, :country_id], unique: true
+    add_index :states, %i[name country_id], unique: true
 
     create_table :cities do |t|
       t.string :name, null: false, default: ''
       t.references :state, foreign_key: true, null: false
       t.timestamps
     end
-    add_index :cities, [:name, :state_id], unique: true
+    add_index :cities, %i[name state_id], unique: true
 
     create_table :addresses do |t|
       t.references :city, foreign_key: true, null: false

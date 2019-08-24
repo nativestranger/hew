@@ -14,12 +14,12 @@ es_admin.confirm
 # FactoryBot.create(:carousel_image, :bathroom, carousel: carousel, position: 2)
 # FactoryBot.create(:carousel_image, :face, carousel: carousel, position: 3)
 
-CSV.foreach("#{ Rails.root }/db/data/states/united_states.csv", headers: true) do |csv_row|
+CSV.foreach("#{Rails.root}/db/data/states/united_states.csv", headers: true) do |csv_row|
   country = Country.united_states
   State.where(country: country, name: csv_row.fetch('name')).first_or_create!
 end
 
-CSV.foreach("#{ Rails.root }/db/data/states/mexico.csv", headers: true) do |csv_row|
+CSV.foreach("#{Rails.root}/db/data/states/mexico.csv", headers: true) do |csv_row|
   country = Country.mexico
   State.where(country: country, name: csv_row.fetch('name')).first_or_create!
 end

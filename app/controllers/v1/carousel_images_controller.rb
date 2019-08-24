@@ -16,7 +16,7 @@ class V1::CarouselImagesController < V1Controller
 
   private
 
-    def set_carousel
-      @carousel = Carousel.find(params[:carousel_id])
-    end
+  def set_carousel
+    @carousel = Carousel.find(params[:carousel_id])
+  end
 end

@@ -17,11 +17,9 @@ class VenuesController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @venue.update(permitted_params)
@@ -37,15 +35,15 @@ class VenuesController < ApplicationController
 
   private
 
-    def permitted_params
-      params.require(:venue).permit(
-        :name,
-        :website,
-        address_attributes: [:id, :city_id, :street_address, :postal_code]
-      )
-    end
+  def permitted_params
+    params.require(:venue).permit(
+      :name,
+      :website,
+      address_attributes: %i[id city_id street_address postal_code]
+    )
+  end
 
-    def set_venue
-      @venue = Venue.find(params[:id])
-    end
+  def set_venue
+    @venue = Venue.find(params[:id])
+  end
 end

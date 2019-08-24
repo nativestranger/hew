@@ -16,11 +16,9 @@ class CarouselsController < ApplicationController
     end
   end
 
-  def show
-  end
+  def show; end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @carousel.update(permitted_params)
@@ -42,15 +40,15 @@ class CarouselsController < ApplicationController
 
   private
 
-    def permitted_params
-      params.require(:carousel).permit(
-        :name,
-        :image_ids_in_position_order,
-        carousel_images_attributes: [:id, :name, :description, :alt, :_destroy]
-      )
-    end
+  def permitted_params
+    params.require(:carousel).permit(
+      :name,
+      :image_ids_in_position_order,
+      carousel_images_attributes: %i[id name description alt _destroy]
+    )
+  end
 
-    def set_carousel
-      @carousel = Carousel.find(params[:id])
-    end
+  def set_carousel
+    @carousel = Carousel.find(params[:id])
+  end
 end
