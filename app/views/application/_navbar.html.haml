@@ -1,4 +1,4 @@
-%nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-3.text-right
+%nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-4.text-right
   %a.navbar-brand{:href => "/"} Hew
   %button.navbar-toggler{"aria-controls" => "navbarSupportedContent", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarSupportedContent", "data-toggle" => "collapse", :type => "button"}
     %span.navbar-toggler-icon
@@ -17,8 +17,8 @@
           - if current_user
             = link_to t('settings'), settings_profile_path, class: "dropdown-item"
             -# = link_to t('my_carousels'), carousels_path, class: "dropdown-item"
-            = link_to t('venues'), venues_path, class: "dropdown-item"
-            = link_to t('shows'), shows_path, class: "dropdown-item"
+            -# = link_to t('venues'), venues_path, class: "dropdown-item"
+            = link_to t('my_shows'), shows_path, class: "dropdown-item"
             .dropdown-divider
             = link_to t('sign_out'), destroy_user_session_path, method: :delete, class: "dropdown-item"
           - else

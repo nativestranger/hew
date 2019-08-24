@@ -1,38 +1,41 @@
-.card.border-bootstrap.box-shadow
-  .card-header.row
-    .col-md-10
-      %h1= t('settings')
-      = link_to "Change your password", edit_user_registration_path
-    .col-md-2
-      - if current_user.avatar.attached?
-        = image_tag current_user.avatar, class: 'img-fluid rounded'
+.row
+  .col-lg-10.mx-auto
+    .card.border-bootstrap.box-shadow
+      .card-header
+        .row
+          .col-md-10
+            %h1= t('settings')
+            = link_to "Change your password", edit_user_registration_path
+          .col-md-2
+            - if current_user.avatar.attached?
+              = image_tag current_user.avatar, class: 'img-fluid rounded'
 
-  .card-body.form-inputs
-    = simple_form_for current_user, url: update_profile_settings_path do |f|
-      = f.error_notification
-      = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+      .card-body.form-inputs
+        = simple_form_for current_user, url: update_profile_settings_path do |f|
+          = f.error_notification
+          = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
-      .row
-        .col-md-6
-          .form-group
-            %label{ for: 'user_email' } Email
-            = f.input :email, input_html: { class: 'form-control' }, label: false
-        .col-md-6
-          .form-group
-            %label{ for: 'user_locale' } Language
-            = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
-      .row
-        .col-md-6
-          .form-group
-            %label{ for: 'user_first_name' }= t('first_name')
-            = f.input :first_name, input_html: { class: 'form-control' }, label: false
-        .col-md-6
-          .form-group
-            %label{ for: 'user_last_name' }= t('last_name')
-            = f.input :last_name, input_html: { class: 'form-control' }, label: false
+          .row
+            .col-md-6
+              .form-group
+                %label{ for: 'user_email' } Email
+                = f.input :email, input_html: { class: 'form-control' }, label: false
+            .col-md-6
+              .form-group
+                %label{ for: 'user_locale' } Language
+                = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+          .row
+            .col-md-6
+              .form-group
+                %label{ for: 'user_first_name' }= t('first_name')
+                = f.input :first_name, input_html: { class: 'form-control' }, label: false
+            .col-md-6
+              .form-group
+                %label{ for: 'user_last_name' }= t('last_name')
+                = f.input :last_name, input_html: { class: 'form-control' }, label: false
 
-      .form-group
-        %label{ for: "user_avatar"} Avatar
-        = f.input :avatar, as: :file, label: false#, input_html: { accept: User::AVATAR }
+          .form-group
+            %label{ for: "user_avatar"} Avatar
+            = f.input :avatar, as: :file, label: false#, input_html: { accept: User::AVATAR }
 
-      = f.button :submit, t('save'), class: 'btn btn-primary'
+          = f.button :submit, t('save'), class: 'btn btn-primary'

@@ -11,6 +11,7 @@ export default class ReactDatePicker extends React.Component {
     showTimeSelect: PropTypes.bool.isRequired,
     isClearable: PropTypes.bool.isRequired,
     placeholderText: PropTypes.string,
+    invalidInput: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -41,14 +42,19 @@ export default class ReactDatePicker extends React.Component {
 
   render() {
     let selectedContainer = {}
-
     if (this.state.startDate) {
       selectedContainer.selected = this.state.startDate
+    }
+
+    let classNameContainer = {}
+    if (this.props.invalidInput && !this.state.startDate) {
+      selectedContainer.className = 'is-invalid'
     }
 
     return (
       <DatePicker
         { ...selectedContainer }
+        { ...classNameContainer }
         onChange={this.handleChange}
         showTimeSelect={this.props.showTimeSelect}
         isClearable={this.props.isClearable}

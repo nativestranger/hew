@@ -12,6 +12,7 @@ class Show < ApplicationRecord
   validates :application_details, presence: true
 
   validate :end_at_is_after_start_at
+  validate :application_deadline_is_before_start_at
 
   scope :accepting_applications, -> {
     where('application_deadline > ?', Time.current)
@@ -27,5 +28,11 @@ class Show < ApplicationRecord
     return unless end_at && start_at && end_at < start_at
 
     errors.add(:base, 'The end date must be after the start date')
+  end
+
+  def application_deadline_is_before_start_at
+    return unless application_deadline && start_at && application_deadline > start_at
+
+    errors.add(:base, 'The application deadline must be before the start date')
   end
 end

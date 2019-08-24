@@ -1,7 +1,9 @@
-.clearfix
-  %h2.pull-left= t('shows')
-  .pull-right= button_to 'New Show', new_show_path, class: 'btn btn-default btn-primary', method: :get
+.row
+  .col-lg-10.mx-auto
+    .clearfix
+      %h2.pull-left= t('shows')
+      .pull-right= button_to 'New Show', new_show_path, class: 'btn btn-default btn-primary', method: :get
 
-.card-deck
-  - @shows.each do |show|
-    = render 'show', show: show
+    .card-deck
+      - @shows.each do |show|
+        = render 'show', show: show

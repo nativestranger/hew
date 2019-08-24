@@ -8,23 +8,24 @@
         .form-group
           %label{ for: 'show_name' }= t('name')
           = f.input :name, input_html: { class: 'form-control' }, label: false
-      .col-md-4
+      .col-md-4.col-6
         .form-group
           %label Start Date
           = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
-          = react_component 'ReactDatePicker', { startDate: @show.start_at, formFieldId: 'show_start_at', showTimeSelect: false, isClearable: false }
-
-      .col-md-4
+          = react_component 'ReactDatePicker', { startDate: @show.start_at, formFieldId: 'show_start_at', showTimeSelect: false, isClearable: false, invalidInput: @show.errors[:start_at].present? }
+      .col-md-4.col-6
         .form-group
           %label End Date
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
-          = react_component 'ReactDatePicker', { startDate: @show.end_at, formFieldId: 'show_end_at', showTimeSelect: false, isClearable: false }
+          = react_component 'ReactDatePicker', { startDate: @show.end_at, formFieldId: 'show_end_at', showTimeSelect: false, isClearable: false, invalidInput: @show.errors[:start_at].present? }
 
     .row
-      .col-md-4
+      .col-md-12
         .form-group
-          = f.input :overview, input_html: { class: 'form-control' }
-      .col-md-8
+          = f.input :overview, input_html: { class: 'form-control' }, as: :text
+
+    .row
+      .col-md-12
         .form-group
           %label{ for: 'show_full_description' } Full Description
           = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
@@ -34,18 +35,19 @@
         .form-group
           %label Application Deadline
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false }
+          = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @show.errors[:start_at].present? }
 
-      .col-md-8
+    .row
+      .col-md-12
         .form-group
           %label{ for: 'show_application_details' } Application Details
           = f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
-    %hr
+    %hr.border
 
     .row
       .col-md-12
-        %h3 Venue Details
+        %h3.text-center Venue Details
         = f.simple_fields_for :venue do |venue|
           = render '/venues/venue_fields', f: venue
 
