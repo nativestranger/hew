@@ -10,4 +10,14 @@ class Show < ApplicationRecord
   validates :full_description, presence: true
   validates :application_deadline, presence: true
   validates :application_details, presence: true
+
+  validate :end_at_is_after_start_at
+
+  private
+
+  def end_at_is_after_start_at
+    return unless end_at && start_at && end_at < start_at
+
+    errors.add(:base, 'The end date must be after the start date')
+  end
 end

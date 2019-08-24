@@ -10,10 +10,15 @@
           = f.input :name, input_html: { class: 'form-control' }, label: false
       .col-md-4
         .form-group
-          = f.input :start_at, input_html: { class: 'form-control' }
+          %label Start Date
+          = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
+          = react_component 'ReactDatePicker', { startDate: @show.start_at, formFieldId: 'show_start_at', showTimeSelect: false, isClearable: false }
+
       .col-md-4
         .form-group
-          = f.input :end_at, input_html: { class: 'form-control' }
+          %label End Date
+          = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
+          = react_component 'ReactDatePicker', { startDate: @show.end_at, formFieldId: 'show_end_at', showTimeSelect: false, isClearable: false }
 
     .row
       .col-md-4
@@ -27,7 +32,10 @@
     .row
       .col-md-4
         .form-group
-          = f.input :application_deadline, input_html: { class: 'form-control' }
+          %label Application Deadline
+          = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
+          = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false }
+
       .col-md-8
         .form-group
           %label{ for: 'show_application_details' } Application Details

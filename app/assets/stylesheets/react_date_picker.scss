@@ -1,0 +1,20 @@
+.react-datepicker-wrapper {
+  width: 100%;
+  .react-datepicker__input-container {
+    width: 100%;
+    input {
+      @extend .form-control;
+    }
+  }
+}
+
+.react-datepicker__time-container {
+  width: 90px !important;
+  .react-datepicker__time-box {
+    width: 100% !important;
+  }
+}
+
+[data-react-class="ReactDatePicker"] {
+  width: 100%;
+}
