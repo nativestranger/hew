@@ -20,7 +20,14 @@ class SettingsController < ApplicationController
   private
 
   def profile_params
-    params.require(:user).permit(:first_name, :last_name, :locale, :email)
+    params.require(:user).permit(
+      :first_name,
+      :last_name,
+      :is_curator,
+      :is_artist,
+      :locale,
+      :email
+    )
   end
 
   def success_notice

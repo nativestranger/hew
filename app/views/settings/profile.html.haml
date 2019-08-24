@@ -16,14 +16,11 @@
           = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
           .row
-            .col-md-6
+            .col-md-12
               .form-group
                 %label{ for: 'user_email' } Email
                 = f.input :email, input_html: { class: 'form-control' }, label: false
-            .col-md-6
-              .form-group
-                %label{ for: 'user_locale' } Language
-                = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+
           .row
             .col-md-6
               .form-group
@@ -33,6 +30,20 @@
               .form-group
                 %label{ for: 'user_last_name' }= t('last_name')
                 = f.input :last_name, input_html: { class: 'form-control' }, label: false
+
+            -# .col-md-6
+            -#   .form-group
+            -#     %label{ for: 'user_locale' } Language
+            -#     = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+          .row
+            .col-6
+              .form-group
+                %label
+                = f.input :is_artist, label: 'I am an artist'
+            .col-6
+              .form-group
+                %label
+                = f.input :is_curator, label: 'I am a curator'
 
           .form-group
             %label{ for: "user_avatar"} Avatar

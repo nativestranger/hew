@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_22_034051) do
+ActiveRecord::Schema.define(version: 2019_08_24_185310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -132,6 +132,8 @@ ActiveRecord::Schema.define(version: 2019_08_22_034051) do
     t.string "locale", default: "en", null: false
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
+    t.boolean "is_artist", default: false, null: false
+    t.boolean "is_curator", default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
