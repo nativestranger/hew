@@ -13,6 +13,14 @@ class Show < ApplicationRecord
 
   validate :end_at_is_after_start_at
 
+  scope :accepting_applications, -> {
+    where('application_deadline > ?', Time.current)
+  }
+
+  def submissions
+    Array.new(rand(0..30))
+  end
+
   private
 
   def end_at_is_after_start_at
