@@ -42,6 +42,8 @@ Rails.application.configure do
   # config.middleware.use Rack::Deflater
   # config.action_mailer.asset_host = ENV.fetch("ASSET_HOST", ENV.fetch("APPLICATION_HOST"))
 
+  config.action_mailer.default_url_options = { host: Rails.application.secrets.host }
+
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
