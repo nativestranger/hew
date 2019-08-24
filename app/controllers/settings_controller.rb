@@ -25,9 +25,7 @@ class SettingsController < ApplicationController
 
   def success_notice
     result = t('success')
-    if current_user.unconfirmed_email.present?
-      result += " You must confirm your new email address."
-    end
+    result += " You must confirm your new email address." if current_user.unconfirmed_email.present?
     result
   end
 end

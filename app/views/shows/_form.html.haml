@@ -1,0 +1,44 @@
+.form-inputs
+  = simple_form_for @show do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    .row
+      .col-md-4
+        .form-group
+          %label{ for: 'show_name' }= t('name')
+          = f.input :name, input_html: { class: 'form-control' }, label: false
+      .col-md-4
+        .form-group
+          = f.input :start_at, input_html: { class: 'form-control' }
+      .col-md-4
+        .form-group
+          = f.input :end_at, input_html: { class: 'form-control' }
+
+    .row
+      .col-md-4
+        .form-group
+          = f.input :overview, input_html: { class: 'form-control' }
+      .col-md-8
+        .form-group
+          %label{ for: 'show_full_description' } Full Description
+          = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
+    .row
+      .col-md-4
+        .form-group
+          = f.input :application_deadline, input_html: { class: 'form-control' }
+      .col-md-8
+        .form-group
+          %label{ for: 'show_application_details' } Application Details
+          = f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
+    %hr
+
+    .row
+      .col-md-12
+        %h3 Venue Details
+        = f.simple_fields_for :venue do |venue|
+          = render '/venues/venue_fields', f: venue
+
+    = f.button :submit, t('save'), class: 'btn btn-primary'

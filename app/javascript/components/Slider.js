@@ -51,7 +51,7 @@ export default class SimpleSlider extends React.Component {
     };
 
     return (
-      <div className='gallery'>
+      <div className='carousel'>
         <Slider {...settings}>
           { this.renderImages() }
         </Slider>

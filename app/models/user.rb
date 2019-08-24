@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :timeoutable, :trackable
@@ -8,5 +6,6 @@ class User < ApplicationRecord
          :confirmable, :lockable # , :omniauthable
 
   has_one_attached :avatar
-  has_many :galleries
+  has_many :carousels, dependent: :destroy
+  has_many :venues, dependent: :destroy
 end

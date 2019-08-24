@@ -1,0 +1,10 @@
+.card
+  .card-header
+    %h5.text-center
+      = show.name
+      = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+        edit_show_path(show),
+        class: 'float-right'
+  .card-body
+    %h5 Venue
+    = render 'venues/venue', venue: show.venue

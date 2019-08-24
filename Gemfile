@@ -40,10 +40,11 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'active_model_serializers'
 gem 'acts_as_list'
+# gem 'administrate'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
-gem 'devise-i18n'
 gem 'devise-bootstrap-views'
+gem 'devise-i18n'
 gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
@@ -51,6 +52,7 @@ gem 'jquery-rails'
 gem 'rack-canonical-host'
 gem 'react-rails'
 gem 'simple_form'
+gem 'trix-rails', require: 'trix'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
