@@ -1,6 +1,6 @@
 class Country < ApplicationRecord
   alias_attribute :to_s, :name
-  has_many :states
+  has_many :states, dependent: :destroy
   validates :name, presence: true
 
   def self.united_states

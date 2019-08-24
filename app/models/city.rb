@@ -1,7 +1,7 @@
 class City < ApplicationRecord
   alias_attribute :to_s, :name
   belongs_to :state
-  has_many :addresses
+  has_many :addresses, dependent: :restrict_with_exception
   validates :name, presence: true
 
   def self.mexico_city

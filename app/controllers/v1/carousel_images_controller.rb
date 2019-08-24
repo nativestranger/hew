@@ -5,13 +5,12 @@ class V1::CarouselImagesController < V1Controller
   def create
     @carousel_image = @carousel.carousel_images.new
     @carousel_image.img_upload.attach(params[:image])
-    if @carousel_image.save
-      render json: {
-        carousel_image: CarouselImageSerializer.new(@carousel_image).serializable_hash
-      }
-    else
-      raise 'oops'
-    end
+
+    raise 'oops' unless @carousel_image.save
+
+    render json: {
+      carousel_image: CarouselImageSerializer.new(@carousel_image).serializable_hash
+    }
   end
 
   private

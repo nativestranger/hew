@@ -6,6 +6,6 @@ class User < ApplicationRecord
          :confirmable, :lockable # , :omniauthable
 
   has_one_attached :avatar
-  has_many :carousels
-  has_many :venues
+  has_many :carousels, dependent: :destroy
+  has_many :venues, dependent: :destroy
 end

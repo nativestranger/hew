@@ -22,12 +22,7 @@ class CarouselsController < ApplicationController
 
   def update
     if @carousel.update(permitted_params)
-      gi_count = @carousel.carousel_images.count
-      @carousel.carousel_images.each { |gi| gi.update(position: gi.position + gi_count) }
-      @carousel.image_ids_in_position_order.split(',').each_with_index do |gi_index, i|
-        @carousel.carousel_images.where(id: gi_index).update(position: i + 1)
-      end
-
+      update_image_order
       redirect_to @carousel, notice: t('success')
     else
       render :edit
@@ -50,5 +45,13 @@ class CarouselsController < ApplicationController
 
   def set_carousel
     @carousel = Carousel.find(params[:id])
+  end
+
+  def update_image_order
+    image_count = @carousel.carousel_images.count
+    @carousel.carousel_images.each { |gi| gi.update(position: gi.position + image_count) }
+    @carousel.image_ids_in_position_order.split(',').each_with_index do |gi_index, i|
+      @carousel.carousel_images.where(id: gi_index).update(position: i + 1)
+    end
   end
 end

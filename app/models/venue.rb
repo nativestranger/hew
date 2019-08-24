@@ -1,6 +1,7 @@
 class Venue < ApplicationRecord
   belongs_to :user
   belongs_to :address
+  has_many :shows, dependent: :restrict_with_error
 
   delegate :country, :city, :state, :postal_code, :street_address, to: :address
 
