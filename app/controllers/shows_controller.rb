@@ -46,6 +46,7 @@ class ShowsController < ApplicationController
       :application_details,
       :application_deadline,
       venue_attributes: [
+        :id,
         :name,
         :website,
         { address_attributes: %i[id city_id street_address street_address_2 postal_code] }
