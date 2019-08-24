@@ -16,4 +16,7 @@ es_admin.confirm
 
 require_relative 'seed_states_and_cities'
 
-FactoryBot.create(:venue, user: en_admin)
+5.times { FactoryBot.create(:show) }
+
+venue = FactoryBot.create(:venue, user: en_admin)
+FactoryBot.create(:show, venue: venue)
