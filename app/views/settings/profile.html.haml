@@ -45,6 +45,15 @@
                 %label
                 = f.input :is_curator, label: 'I am a curator'
 
+          .row
+            .col-md-12
+              #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+                %label{ for: 'user_artist_website' } Artist Website
+                .input-group
+                  .input-group-prepend
+                    .input-group-text https://
+                  = f.input_field :artist_website, class: "form-control"
+
           .form-group
             %label{ for: "user_avatar"} Avatar
             = f.input :avatar, as: :file, label: false#, input_html: { accept: User::AVATAR }
