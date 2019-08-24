@@ -7,9 +7,6 @@
     "array-move": "^2.1.0",
     "axios": "^0.19.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
-    "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
-    "popper.js": "^1.15.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -21,7 +18,6 @@
     "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "expose-loader": "^0.7.5",
     "webpack-dev-server": "^3.4.1"
   }
 }

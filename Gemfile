@@ -42,6 +42,7 @@ gem 'active_model_serializers'
 gem 'acts_as_list'
 # gem 'administrate'
 gem 'bootsnap', '>= 1.1.0', require: false
+gem 'bootstrap', '~> 4.3.1'
 gem 'devise'
 gem 'devise-bootstrap-views'
 gem 'devise-i18n'
