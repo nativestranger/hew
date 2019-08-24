@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 2019_08_22_034050) do
 
   create_table "carousels", force: :cascade do |t|
     t.string "name", default: "", null: false
-    t.bigint "user_id"
+    t.bigint "user_id", null: false
     t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
