@@ -11,7 +11,16 @@ class User < ApplicationRecord
   has_many :venues, dependent: :destroy
   has_many :shows, dependent: :destroy
 
+  before_save :set_gravatar_url, if: :email_changed?
+
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  private
+
+  def set_gravatar_url
+    gravatar_id = Digest::MD5.hexdigest(email.downcase)
+    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=48"
   end
 end
