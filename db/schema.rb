@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_24_192816) do
+ActiveRecord::Schema.define(version: 2019_08_24_193232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -86,6 +86,22 @@ ActiveRecord::Schema.define(version: 2019_08_24_192816) do
     t.index ["name"], name: "index_countries_on_name", unique: true
   end
 
+  create_table "show_applications", force: :cascade do |t|
+    t.bigint "show_id"
+    t.bigint "user_id"
+    t.text "artist_statement", default: "", null: false
+    t.string "artist_website", default: "", null: false
+    t.string "artist_instagram_url", default: "", null: false
+    t.string "photos_url", default: "", null: false
+    t.string "supplemental_material_url", default: "", null: false
+    t.integer "status_id", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["show_id", "user_id"], name: "index_show_applications_on_show_id_and_user_id", unique: true
+    t.index ["show_id"], name: "index_show_applications_on_show_id"
+    t.index ["user_id"], name: "index_show_applications_on_user_id"
+  end
+
   create_table "shows", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "venue_id", null: false
@@ -135,6 +151,7 @@ ActiveRecord::Schema.define(version: 2019_08_24_192816) do
     t.boolean "is_artist", default: false, null: false
     t.boolean "is_curator", default: false, null: false
     t.string "artist_website", default: "", null: false
+    t.string "instagram_url", default: "", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -157,6 +174,8 @@ ActiveRecord::Schema.define(version: 2019_08_24_192816) do
   add_foreign_key "carousel_images", "carousels"
   add_foreign_key "carousels", "users"
   add_foreign_key "cities", "states"
+  add_foreign_key "show_applications", "shows"
+  add_foreign_key "show_applications", "users"
   add_foreign_key "shows", "venues"
   add_foreign_key "states", "countries"
   add_foreign_key "venues", "addresses"

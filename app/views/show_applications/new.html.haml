@@ -1,0 +1,14 @@
+.row
+  .col-lg-10.mx-auto
+    .card.border-bootstrap.box-shadow
+      .card-header
+        %h1
+          = t('new')
+          = t('show_application')
+
+      .card-body
+        - if current_user
+          = render 'form'
+        - else
+          -# TODO: this
+          -# = render 'public_form'

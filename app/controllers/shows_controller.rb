@@ -1,6 +1,15 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show, only: %i[show edit update]
+  before_action :set_show, only: %i[applications show edit update]
+
+  has_scope :fresh, type: :boolean
+  has_scope :accepted, type: :boolean
+  has_scope :maybe, type: :boolean
+  has_scope :rejected, type: :boolean
+
+  def applications
+    @applications = apply_scopes(@show.applications)
+  end
 
   def new
     @venue = Venue.new(address: Address.new(city: City.mexico_city))
@@ -31,7 +40,7 @@ class ShowsController < ApplicationController
   end
 
   def index
-    @shows = Show.all
+    @shows = current_user.shows
   end
 
   private

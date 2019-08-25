@@ -1,0 +1,41 @@
+.row
+  .col-lg-10.mx-auto
+    .card
+      .card-body
+        %h4.text-center Submissions: #{ @show.name }
+
+        %ul.nav.nav-tabs
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, fresh: true), class: params[:fresh] ? 'active' : '' }
+              Fresh (#{ @show.applications.fresh.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, accepted: true), class: params[:accepted] ? 'active' : '' }
+              Accepted (#{ @show.applications.accepted.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, maybe: true), class: params[:maybe] ? 'active' : '' }
+              Maybe (#{ @show.applications.maybe.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, rejected: true), class: params[:rejected] ? 'active' : '' }
+              Rejected (#{ @show.applications.rejected.count })
+
+      - @applications.each do |show_application|
+        .row
+          .col-10.mx-auto.mb-4
+            .card
+              .card-header
+                .pull-left= show_application.user.full_name
+                .pull-right
+                  = link_to 'Accept', '#', class: 'btn btn-default btn-success'
+                  = link_to 'Maybe', '#', class: 'btn btn-default btn-warning'
+                  = link_to 'Reject', '#', class: 'btn btn-default btn-danger'
+              .card-body
+                .row.text-center.mb-4
+                  .col-3= link_to 'Website', '#'
+                  .col-3= link_to 'Photos', '#'
+                  .col-3= link_to 'Instagram', '#'
+                  .col-3= link_to 'Extras', '#'
+
+                .row
+                  .col-md-10.mx-auto
+                    .blockquote= show_application.artist_statement.html_safe
+                    %footer.blockquote-footer= show_application.user.full_name

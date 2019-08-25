@@ -14,6 +14,8 @@ class Show < ApplicationRecord
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
 
+  has_many :applications, class_name: 'ShowApplication'
+
   scope :accepting_applications, -> {
     where('application_deadline > ?', Time.current)
   }

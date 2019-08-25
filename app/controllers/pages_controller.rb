@@ -1,10 +1,16 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
+  before_action :authenticate_user!, only: :dashboard
+
   def home
     params[:show_sort_by] ||= 'Application Deadline'
     set_shows
     @city = City.mexico_city
+  end
+
+  def dashboard
+    @shows = current_user.shows
   end
 
   private

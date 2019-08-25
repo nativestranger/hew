@@ -1,0 +1,16 @@
+.row
+  .col-lg-10.mx-auto
+    .row
+      .col-md-8.mb-4= render 'shows/show', show: @show
+      .col-md-4
+        .card
+          .card-header
+            %h5.text-center Application Info
+          .card-body
+            %h6 Deadline
+            %p= I18n.l(@show.application_deadline, format: :long)
+
+            %h6 Details to Include
+            %p= @show.application_details.html_safe
+          .card-footer.text-center
+            = link_to 'Apply', new_show_application_path(show_id: @show.id), class: 'btn btn-success'
