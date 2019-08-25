@@ -57,7 +57,9 @@ export default class Chat extends React.Component {
                                                  gravatar_url: App.currentUser().gravatar_url }
     }
 
-    this.setState({ messages: this.state.messages.concat(optimisticallyCreatedMessage) });
+    let newMessages = [...this.state.messages]
+    newMessages.unshift(optimisticallyCreatedMessage)
+    this.setState({ messages: newMessages });
 
     let thisComponent = this;
     $.post(this.props.createMessagePath,
@@ -86,7 +88,7 @@ export default class Chat extends React.Component {
 
   render() {
     let renderUserIcon = function(user) {
-      return (<img className="rounded-circle float-left" style={ { width: '50px', height: '50px' } } src={user.gravatar_url}/>)
+      return (<img className="chat-avatar float-left" src={user.gravatar_url}/>)
     }
 
     let renderMessage = function(message) {
@@ -112,12 +114,12 @@ export default class Chat extends React.Component {
       		  <div className="col-12 p-0 m-0 position-absolute" style={ { right: '0px' } }>
       			<div className="card border-0 rounded" style={ { boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.01)", overflow: 'hidden' } }>
 
-      			  <div className="card-header p-1 bg-light border border-top-0 border-left-0 border-right-0" style={ { color: "rgba(96, 125, 139,1.0)" } }>
-                <h6>{ this.props.chatName }</h6>
+      			  <div className="card-header bg-light border border-top-0 border-left-0 border-right-0" style={ { color: "rgba(96, 125, 139,1.0)" } }>
+                <h6 className='mb-1'>{ this.props.chatName }</h6>
       			  </div>
 
       				<div className="card bg-sohbet border-0 m-0 p-0" style={ { height: '60vh' } }>
-        			  <div ref='messagesDiv' id="sohbet" className="card border-0 m-0 p-0 position-relative bg-transparent" style={ { overflowY: 'auto', height: '60vh' } }>
+        			  <div ref='messagesDiv' className="messages card border-0 m-0 p-0 position-relative bg-transparent" style={ { overflowY: 'auto', height: '60vh' } }>
                   { this.state.messages.map(renderMessage) }
         			  </div>
       			  </div>

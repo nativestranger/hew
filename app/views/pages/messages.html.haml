@@ -4,7 +4,16 @@
 
     .list-group
       - @chats.each do |chat|
-        .list-group-item.list-group-item-action.border-left-0.border-right-0
-          %h5.text-center
-          %h3= "#{chat.name}"
-          = link_to 'Chat', chat_path(chat), class: 'btn btn-default btn-primary'
+        %a.list-group-item.list-group-item-action.flex-column.align-items-start{ href: chat_path(chat) }
+          .d-flex.w-100.justify-content-between.mb-3
+            - last_message = chat.messages.last
+            .users
+              - other_chat_users(chat).each do |user|
+                .d-inline-block= image_tag(user.gravatar_url, class: 'chat-avatar')
+                %span.mt-1.ml-2= user.full_name
+            %small= time_ago_in_words(last_message&.created_at) if last_message
+
+          - if last_message
+            %p.mb-1= last_message_preview(chat)
+          - else
+            %p.text-muted No Messages

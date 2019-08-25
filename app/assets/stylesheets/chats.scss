@@ -1,4 +1,16 @@
+.chat-avatar {
+  @extend .rounded-circle;
+  width: 30px;
+  height: 30px;
+}
+
 .chat {
+
+  .messages {
+    display: flex;
+    flex-direction: column-reverse;
+    align-content: flex-end;
+  }
 
   a { text-decoration: none !important; }
 

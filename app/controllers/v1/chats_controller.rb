@@ -8,7 +8,7 @@ class V1::ChatsController < V1Controller
   end
 
   def create_message
-    chat_user.messages.create!(message_params)
+    create_message!
     set_messages
     render json: { messages: helpers.json_messages(@messages) }
   end
@@ -29,5 +29,14 @@ class V1::ChatsController < V1Controller
 
   def chat_user
     @chat.chat_users.find_by(user: current_user)
+  end
+
+  def create_message!
+    Message.transaction do
+      chat_user.messages.create!(message_params)
+      @chat.touch
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
+    end
   end
 end
