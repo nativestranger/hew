@@ -1,14 +1,9 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show, only: %i[applications show edit update]
-
-  has_scope :fresh, type: :boolean
-  has_scope :accepted, type: :boolean
-  has_scope :maybe, type: :boolean
-  has_scope :rejected, type: :boolean
+  before_action :set_show, only: %i[applications show edit update update_application_status]
 
   def applications
-    @applications = apply_scopes(@show.applications)
+    @applications = @show.applications.send(helpers.curator_application_status_scope)
   end
 
   def new
@@ -41,6 +36,14 @@ class ShowsController < ApplicationController
 
   def index
     @shows = current_user.shows
+  end
+
+  def update_application_status
+    status = ShowApplication.status_ids.find {|k, v| v == params.fetch(:status_id).to_i  }.first
+    @show_application = @show.applications.find(params[:show_application_id])
+    @show_application.update!(status_id: status)
+    flash[:notice] = "Moved #{@show_application.user.full_name} to '#{status.capitalize}'."
+    redirect_to show_applications_path(@show, { helpers.curator_application_status_scope => true })
   end
 
   private

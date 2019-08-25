@@ -17,7 +17,11 @@
     <%= render 'navbar' %>
 
     <div class="container-fluid">
-      <%= bootstrap_flash %>
+      <div class='row'>
+        <div class='col-lg-10 mx-auto'>
+          <%= bootstrap_flash %>
+        </div>
+      </div>
       <%= yield %>
     </div>
   </body>

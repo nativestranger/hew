@@ -6,17 +6,22 @@
 
         %ul.nav.nav-tabs
           %li.nav-item
-            %a.nav-link{ href: show_applications_path(@show, fresh: true), class: params[:fresh] ? 'active' : '' }
+            %a.nav-link{ href: show_applications_path(@show, fresh: true), class: curator_application_status_scope == :fresh ? 'active' : '' }
               Fresh (#{ @show.applications.fresh.count })
           %li.nav-item
-            %a.nav-link{ href: show_applications_path(@show, accepted: true), class: params[:accepted] ? 'active' : '' }
+            %a.nav-link{ href: show_applications_path(@show, accepted: true), class: curator_application_status_scope == :accepted ? 'active' : '' }
               Accepted (#{ @show.applications.accepted.count })
           %li.nav-item
-            %a.nav-link{ href: show_applications_path(@show, maybe: true), class: params[:maybe] ? 'active' : '' }
+            %a.nav-link{ href: show_applications_path(@show, maybe: true), class: curator_application_status_scope == :maybe ? 'active' : '' }
               Maybe (#{ @show.applications.maybe.count })
           %li.nav-item
-            %a.nav-link{ href: show_applications_path(@show, rejected: true), class: params[:rejected] ? 'active' : '' }
+            %a.nav-link{ href: show_applications_path(@show, rejected: true), class: curator_application_status_scope == :rejected ? 'active' : '' }
               Rejected (#{ @show.applications.rejected.count })
+
+      - if @applications.none?
+        .row
+          .col-10.mx-auto.mb-4
+            %p.text-muted No applications here.
 
       - @applications.each do |show_application|
         .row
@@ -25,9 +30,9 @@
               .card-header
                 .pull-left= show_application.user.full_name
                 .pull-right
-                  = link_to 'Accept', '#', class: 'btn btn-default btn-success'
-                  = link_to 'Maybe', '#', class: 'btn btn-default btn-warning'
-                  = link_to 'Reject', '#', class: 'btn btn-default btn-danger'
+                  = link_to 'Accept', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-success', method: :patch
+                  = link_to 'Maybe', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:maybe], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-warning', method: :patch
+                  = link_to 'Reject', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:rejected], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-danger', method: :patch
               .card-body
                 .row.text-center.mb-4
                   .col-3= link_to 'Website', '#'

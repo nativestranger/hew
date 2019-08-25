@@ -38,7 +38,7 @@
             .card-footer
               .row
                 .col-6
-                  = pluralize(show.submissions.count, 'Submission')
+                  = pluralize(show.applications.count, 'Submission')
                   .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
                 .col-6
                   .pull-right= link_to 'Show Details', public_show_details_path(id: show.id), class: 'btn btn-outline-success'
