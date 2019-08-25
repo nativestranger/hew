@@ -9,4 +9,16 @@ FactoryBot.define do
     application_deadline { 1.day.from_now }
     application_details { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
   end
+
+  trait :current do
+    start_at { Time.current - rand(1..2).days }
+    end_at { Time.current + rand(1..2).days }
+    application_deadline { 4.days.ago }
+  end
+
+  trait :old do
+    start_at { rand(7..14).days.ago }
+    end_at { start_at + rand(1..4).days }
+    application_deadline { 15.days.ago }
+  end
 end

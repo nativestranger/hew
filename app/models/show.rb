@@ -14,13 +14,22 @@ class Show < ApplicationRecord
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
 
-  scope :accepting_applications, -> {
-    where('application_deadline > ?', Time.current)
+  has_many :applications, class_name: 'ShowApplication', dependent: :destroy
+
+  scope :accepting_applications, lambda {
+    where('application_deadline > ?', Time.current).published
   }
 
-  def submissions
-    Array.new(rand(0..30))
-  end
+  scope :current, lambda {
+    where('start_at <= ?', Time.current)
+      .where('end_at >= ?', Time.current)
+  }
+
+  scope :past, -> { where('end_at <= ?', Time.current) }
+
+  scope :unpublished, -> { where(is_public: false) }
+
+  scope :published, -> { where(is_public: true) }
 
   private
 

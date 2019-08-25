@@ -7,7 +7,17 @@ Rails.application.routes.draw do
   devise_for :users
   resources :carousels
   resources :venues, except: :destroy
+
   resources :shows, except: :destroy
+
+  match 'shows/:id/applications', via: :get, to: 'shows#applications', as: :show_applications
+  match 'shows/:id/applications/:show_application_id', via: :patch, to: 'shows#update_application_status', as: :update_show_application_status
+  match 'shows/:id/details', via: :get, to: 'public_shows#details', as: :public_show_details
+
+  resources :show_applications, only: %i[new create]
+  get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
+
+  get 'dashboard', to: 'pages#dashboard', as: :dashboard
 
   get 'settings/profile', to: 'settings#profile'
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings
