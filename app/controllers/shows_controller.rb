@@ -39,11 +39,11 @@ class ShowsController < ApplicationController
   end
 
   def update_application_status
-    status = ShowApplication.status_ids.find {|k, v| v == params.fetch(:status_id).to_i  }.first
+    status = ShowApplication.status_ids.find { |_k, v| v == params.fetch(:status_id).to_i }.first
     @show_application = @show.applications.find(params[:show_application_id])
     @show_application.update!(status_id: status)
     flash[:notice] = "Moved #{@show_application.user.full_name} to '#{status.capitalize}'."
-    redirect_to show_applications_path(@show, { helpers.curator_application_status_scope => true })
+    redirect_to show_applications_path(@show, helpers.curator_application_status_scope => true)
   end
 
   private

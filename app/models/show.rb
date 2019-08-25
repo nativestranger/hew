@@ -16,13 +16,13 @@ class Show < ApplicationRecord
 
   has_many :applications, class_name: 'ShowApplication'
 
-  scope :accepting_applications, -> {
+  scope :accepting_applications, lambda {
     where('application_deadline > ?', Time.current).published
   }
 
-  scope :current, -> {
-    where('start_at <= ?', Time.current).
-    where('end_at >= ?', Time.current)
+  scope :current, lambda {
+    where('start_at <= ?', Time.current)
+      .where('end_at >= ?', Time.current)
   }
 
   scope :past, -> { where('end_at <= ?', Time.current) }

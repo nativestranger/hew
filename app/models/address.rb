@@ -13,6 +13,6 @@ class Address < ApplicationRecord
   private
 
   def full_street_address
-    street_address_2.blank? ? "#{street_address}" : "#{street_address}, #{street_address_2}"
+    street_address_2.blank? ? street_address.to_s : "#{street_address}, #{street_address_2}"
   end
 end

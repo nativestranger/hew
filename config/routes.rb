@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   match 'shows/:id/applications/:show_application_id', via: :patch, to: 'shows#update_application_status', as: :update_show_application_status
   match 'shows/:id/details', via: :get, to: 'public_shows#details', as: :public_show_details
 
-  resources :show_applications, only: [:new, :create]
+  resources :show_applications, only: %i[new create]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
   get 'dashboard', to: 'pages#dashboard', as: :dashboard

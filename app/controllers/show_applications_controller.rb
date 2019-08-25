@@ -5,9 +5,9 @@ class ShowApplicationsController < ApplicationController
 
   def new
     @show_application = ShowApplication.new(
-      show: @show,
-      artist_website: current_user.artist_website,
-      artist_instagram_url: current_user.instagram_url,
+      show:                 @show,
+      artist_website:       current_user.artist_website,
+      artist_instagram_url: current_user.instagram_url
     )
   end
 
