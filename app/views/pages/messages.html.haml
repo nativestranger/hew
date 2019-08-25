@@ -1,0 +1,10 @@
+.row
+  .col-lg-10.mx-auto
+    %h3 Messages
+
+    .list-group
+      - @chats.each do |chat|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0
+          %h5.text-center
+          %h3= "#{chat.name}"
+          = link_to 'Chat', chat_path(chat), class: 'btn btn-default btn-primary'

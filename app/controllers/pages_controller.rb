@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-  before_action :authenticate_user!, only: :dashboard
+  before_action :authenticate_user!, except: :home
 
   def home
     params[:show_sort_by] ||= 'Application Deadline'
@@ -11,6 +11,10 @@ class PagesController < ApplicationController
 
   def dashboard
     @shows = current_user.shows.send(helpers.curator_dashboard_shows_scope)
+  end
+
+  def messages
+    @chats = current_user.chats
   end
 
   private

@@ -53,6 +53,7 @@ gem 'jquery-rails'
 gem 'rack-canonical-host'
 gem 'react-rails'
 gem 'simple_form'
+gem 'sucker_punch'
 gem 'trix-rails', require: 'trix'
 
 group :development, :test do

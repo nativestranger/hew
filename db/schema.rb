@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_25_055136) do
+ActiveRecord::Schema.define(version: 2019_08_25_061354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -70,6 +70,24 @@ ActiveRecord::Schema.define(version: 2019_08_25_055136) do
     t.index ["user_id"], name: "index_carousels_on_user_id"
   end
 
+  create_table "chat_users", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id", "user_id"], name: "index_chat_users_on_chat_id_and_user_id", unique: true
+    t.index ["chat_id"], name: "index_chat_users_on_chat_id"
+    t.index ["user_id"], name: "index_chat_users_on_user_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.string "chatworthy_type", default: "", null: false
+    t.bigint "chatworthy_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chatworthy_type", "chatworthy_id"], name: "index_chats_on_chatworthy_type_and_chatworthy_id", unique: true
+  end
+
   create_table "cities", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "state_id", null: false
@@ -84,6 +102,14 @@ ActiveRecord::Schema.define(version: 2019_08_25_055136) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_countries_on_name", unique: true
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "chat_user_id", null: false
+    t.text "body", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_user_id"], name: "index_messages_on_chat_user_id"
   end
 
   create_table "show_applications", force: :cascade do |t|
