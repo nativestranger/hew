@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :show do
+    association :user
     name { Faker::Name.name }
     venue { create(:venue) }
     start_at { Time.current + rand(2..7).days }

@@ -14,6 +14,7 @@ class ShowApplicationsController < ApplicationController
     @show_application = ShowApplication.new(permitted_params.merge(user: current_user))
 
     if @show_application.save
+      ShowApplicationMailer.new_application(@show_application).deliver_now
       redirect_to application_submitted_path, notice: t('success')
     else
       render :new

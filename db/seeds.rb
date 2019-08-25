@@ -16,10 +16,10 @@ require_relative 'seed_states_and_cities'
 
 venue = FactoryBot.create(:venue, user: en_admin)
 
-3.times { FactoryBot.create(:show, venue: venue, is_public: true) }
-FactoryBot.create(:show, venue: venue)
-FactoryBot.create(:show, :current, venue: venue, is_public: true)
-2.times { FactoryBot.create(:show, :old, venue: venue, is_public: true) }
+3.times { FactoryBot.create(:show, user: en_admin, venue: venue, is_public: true) }
+FactoryBot.create(:show, user: en_admin, venue: venue)
+FactoryBot.create(:show, :current, user: en_admin, venue: venue, is_public: true)
+2.times { FactoryBot.create(:show, :old, user: en_admin, venue: venue, is_public: true) }
 
 Show.all.each do |show|
   rand(20..50).times { FactoryBot.create(:show_application, show: show) }

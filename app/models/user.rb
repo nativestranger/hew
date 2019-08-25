@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   has_many :carousels, dependent: :destroy
   has_many :venues, dependent: :destroy
-  has_many :shows, through: :venues
+  has_many :shows, dependent: :destroy
 
   def full_name
     "#{first_name} #{last_name}"
