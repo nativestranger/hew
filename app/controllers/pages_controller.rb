@@ -10,7 +10,7 @@ class PagesController < ApplicationController
   end
 
   def dashboard
-    @shows = current_user.shows
+    @shows = current_user.shows.send(helpers.curator_dashboard_shows_scope)
   end
 
   private

@@ -1,5 +1,5 @@
 .form-inputs
-  = simple_form_for @show_application do |f|
+  = simple_form_for @show_application, url: "/show_applications?show_id=#{@show_application.show_id}" do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
@@ -7,7 +7,7 @@
 
     .row
       .col-md-6
-        #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+        #user-artist-website-form-group.form-group
           %label{ for: 'show_application_artist_website' } Artist Website
           .input-group
             .input-group-prepend

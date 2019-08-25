@@ -8,7 +8,7 @@ class ShowsController < ApplicationController
 
   def new
     @venue = Venue.new(address: Address.new(city: City.mexico_city))
-    @show = Show.new(venue: @venue)
+    @show = Show.new(venue: @venue, is_public: true)
   end
 
   def create
@@ -54,6 +54,7 @@ class ShowsController < ApplicationController
       :start_at,
       :end_at,
       :overview,
+      :is_public,
       :full_description,
       :application_details,
       :application_deadline,

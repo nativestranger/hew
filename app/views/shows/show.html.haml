@@ -12,5 +12,6 @@
 
             %h6 Details to Include
             %p= @show.application_details.html_safe
+
           .card-footer.text-center
-            = link_to 'Apply', '#', class: 'btn btn-success'
+            = link_to 'View Submissions', show_applications_path(@show), class: 'btn btn-outline-success'

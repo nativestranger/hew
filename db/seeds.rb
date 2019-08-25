@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 en_admin = User.new(email: 'en@example.com', password: 'password')
 en_admin.save!
 en_admin.confirm
@@ -14,13 +12,15 @@ en_admin.confirm
 # FactoryBot.create(:carousel_image, :bathroom, carousel: carousel, position: 2)
 # FactoryBot.create(:carousel_image, :face, carousel: carousel, position: 3)
 
-# require_relative 'seed_states_and_cities'
-
-en_admin = User.find_by(email: 'en@example.com')
-
-5.times { FactoryBot.create(:show) }
+require_relative 'seed_states_and_cities'
 
 venue = FactoryBot.create(:venue, user: en_admin)
-show = FactoryBot.create(:show, venue: venue)
 
-50.times { FactoryBot.create(:show_application, show: show) }
+3.times { FactoryBot.create(:show, venue: venue, is_public: true) }
+FactoryBot.create(:show, venue: venue)
+FactoryBot.create(:show, :current, venue: venue, is_public: true)
+2.times { FactoryBot.create(:show, :old, venue: venue, is_public: true) }
+
+Show.all.each do |show|
+  rand(20..50).times { FactoryBot.create(:show_application, show: show) }
+end

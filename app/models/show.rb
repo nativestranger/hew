@@ -17,8 +17,19 @@ class Show < ApplicationRecord
   has_many :applications, class_name: 'ShowApplication'
 
   scope :accepting_applications, -> {
-    where('application_deadline > ?', Time.current)
+    where('application_deadline > ?', Time.current).published
   }
+
+  scope :current, -> {
+    where('start_at <= ?', Time.current).
+    where('end_at >= ?', Time.current)
+  }
+
+  scope :past, -> { where('end_at <= ?', Time.current) }
+
+  scope :unpublished, -> { where(is_public: false) }
+
+  scope :published, -> { where(is_public: true) }
 
   private
 
