@@ -1,7 +1,6 @@
 class ShowApplicationsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show, only: %i[new]
-  before_action :set_show_application, only: %i[show edit update]
 
   def new
     @show_application = ShowApplication.new(
@@ -32,10 +31,6 @@ class ShowApplicationsController < ApplicationController
       :photos_url,
       :supplemental_material_url
     )
-  end
-
-  def set_show_application
-    @show_application = ShowApplication.find(params[:id])
   end
 
   def set_show
