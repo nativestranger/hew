@@ -87,8 +87,8 @@ ActiveRecord::Schema.define(version: 2019_08_25_032503) do
   end
 
   create_table "show_applications", force: :cascade do |t|
-    t.bigint "show_id"
-    t.bigint "user_id"
+    t.bigint "show_id", null: false
+    t.bigint "user_id", null: false
     t.text "artist_statement", default: "", null: false
     t.string "artist_website", default: "", null: false
     t.string "artist_instagram_url", default: "", null: false
