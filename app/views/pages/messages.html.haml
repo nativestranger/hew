@@ -10,7 +10,7 @@
             .users
               - other_chat_users(chat).each do |user|
                 .d-inline-block= image_tag(user.gravatar_url, class: 'chat-avatar')
-                %span.mt-2= user.full_name
+                %span.mt-2.ml-2= user.full_name
                 %span= "(#{ chat.unread_messages(current_user).count })"
             %small= "#{time_ago_in_words(last_message&.created_at)} ago" if last_message
 

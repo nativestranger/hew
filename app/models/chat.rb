@@ -4,13 +4,6 @@ class Chat < ApplicationRecord
   has_many :users, through: :chat_users
   has_many :messages, through: :chat_users
 
-  def name
-    case chatworthy_type
-    when "ShowApplication"
-      "#{chatworthy.show.name} Application - #{chatworthy.user.full_name}"
-    end
-  end
-
   def setup!
     case chatworthy_type
     when "ShowApplication"

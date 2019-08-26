@@ -4,9 +4,9 @@ FactoryBot.define do
     user { create(:user) }
     artist_statement { Faker::Movies::Lebowski.quote }
     artist_website { 'www.website.com/1' }
-    artist_instagram_url { 'www.instagram.com/1' }
-    photos_url { 'www.photos_url.com/1' }
-    supplemental_material_url { 'www.supplemental_material_url.com/1' }
+    sequence(:artist_instagram_url) { |n| "www.instagram.com/#{n}" }
+    sequence(:photos_url) { |n| "www.photos_url.com/#{n}" }
+    sequence(:supplemental_material_url) { |n| "www.supplemental_material_url.com/#{n}" }
     status_id { ShowApplication.status_ids.values.sample }
 
     after(:create) do |show_application|

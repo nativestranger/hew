@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 export default class Chat extends React.Component {
   static propTypes = {
-    chatName: PropTypes.string.isRequired,
     users: PropTypes.array.isRequired,
     messagesPath: PropTypes.string.isRequired,
     createMessagePath: PropTypes.string.isRequired,
@@ -108,6 +107,17 @@ export default class Chat extends React.Component {
       end
     }
 
+    let renderUser = function(user) {
+      if (user.id == App.currentUser().id) { return; }
+
+      return (
+        <div className="d-inline-block">
+          <img className="chat-avatar d-inline-block" src={ user.gravatar_url } />
+          <span className="mt-2 ml-2">{ user.full_name }</span>
+        </div>
+      )
+    }
+
     return (
       <div className="chat">
         <div className="jumbotron m-0 p-0 bg-transparent">
@@ -116,7 +126,9 @@ export default class Chat extends React.Component {
       			<div className="card border-0 rounded" style={ { boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.10), 0 6px 10px 0 rgba(0, 0, 0, 0.01)", overflow: 'hidden' } }>
 
       			  <div className="card-header bg-light border border-top-0 border-left-0 border-right-0" style={ { color: "rgba(96, 125, 139,1.0)" } }>
-                <h6 className='mb-1'>{ this.props.chatName }</h6>
+                <div className="users">
+                  { this.props.users.map(renderUser) }
+                </div>
       			  </div>
 
       				<div className="card bg-sohbet border-0 m-0 p-0" style={ { height: '60vh' } }>
