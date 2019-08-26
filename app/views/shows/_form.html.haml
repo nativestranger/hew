@@ -35,7 +35,7 @@
         .form-group
           %label Application Deadline
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @show.errors[:start_at].present? }
+          = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @show.errors[:application_deadline].present? }
 
 
         .form-group

@@ -65,6 +65,6 @@
 
           .form-group
             %label{ for: "user_avatar"} Avatar
-            = f.input :avatar, as: :file, label: false#, input_html: { accept: User::AVATAR }
+            = f.input :avatar, as: :file, label: false
 
           = f.button :submit, t('save'), class: 'btn btn-primary'
