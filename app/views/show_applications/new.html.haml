@@ -7,8 +7,4 @@
           = t('show_application')
 
       .card-body
-        - if current_user
-          = render 'form'
-        - else
-          -# TODO: this
-          -# = render 'public_form'
+        = render 'form'

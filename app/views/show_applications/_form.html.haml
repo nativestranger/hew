@@ -5,6 +5,10 @@
 
     .d-none= f.input :show_id, input_html: { class: 'form-control' }, label: false
 
+    - if current_user.nil?
+      = f.simple_fields_for :user do |user|
+        = render 'user_fields', f: user
+
     .row
       .col-md-6
         #user-artist-website-form-group.form-group
