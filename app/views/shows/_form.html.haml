@@ -17,7 +17,7 @@
         .form-group
           %label End Date
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
-          = react_component 'ReactDatePicker', { startDate: @show.end_at, formFieldId: 'show_end_at', showTimeSelect: false, isClearable: false, invalidInput: @show.errors[:start_at].present? }
+          = react_component 'ReactDatePicker', { startDate: @show.end_at, formFieldId: 'show_end_at', showTimeSelect: false, isClearable: false, invalidInput: @show.errors[:end_at].present? }
 
     .row
       .col-md-12
