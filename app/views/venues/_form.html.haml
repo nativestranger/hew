@@ -1,0 +1,8 @@
+.form-inputs
+  = simple_form_for @venue do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    = render 'venue_fields', venue: @venue, f: f
+
+    = f.button :submit, t('save'), class: 'btn btn-primary'

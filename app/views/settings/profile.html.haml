@@ -1,0 +1,70 @@
+.row
+  .col-lg-10.mx-auto
+    .card.border-bootstrap.box-shadow
+      .card-header
+        .row
+          .col-md-10
+            %h1= t('settings')
+            = link_to "Change your password", edit_user_registration_path
+          .col-md-2
+            - if current_user.avatar.attached?
+              = image_tag current_user.avatar, class: 'img-fluid rounded'
+
+      .card-body.form-inputs
+        = simple_form_for current_user, url: update_profile_settings_path do |f|
+          = f.error_notification
+          = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+          .row
+            .col-md-12
+              .form-group
+                %label{ for: 'user_email' } Email
+                = f.input :email, input_html: { class: 'form-control' }, label: false
+
+          .row
+            .col-md-6
+              .form-group
+                %label{ for: 'user_first_name' }= t('first_name')
+                = f.input :first_name, input_html: { class: 'form-control' }, label: false
+            .col-md-6
+              .form-group
+                %label{ for: 'user_last_name' }= t('last_name')
+                = f.input :last_name, input_html: { class: 'form-control' }, label: false
+
+            -# .col-md-6
+            -#   .form-group
+            -#     %label{ for: 'user_locale' } Language
+            -#     = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+          .row
+            .col-6
+              .form-group
+                %label
+                = f.input :is_artist, label: 'I am an artist'
+            .col-6
+              .form-group
+                %label
+                = f.input :is_curator, label: 'I am a curator'
+
+          .row
+            .col-md-12
+              #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+                %label{ for: 'user_artist_website' } Artist Website
+                .input-group
+                  .input-group-prepend
+                    .input-group-text https://
+                  = f.input_field :artist_website, class: "form-control"
+
+          .row
+            .col-md-12
+              .form-group
+                %label{ for: 'user_instagram_url' } Instagram URL
+                .input-group
+                  .input-group-prepend
+                    .input-group-text https://
+                  = f.input_field :instagram_url, class: "form-control"
+
+          .form-group
+            %label{ for: "user_avatar"} Avatar
+            = f.input :avatar, as: :file, label: false
+
+          = f.button :submit, t('save'), class: 'btn btn-primary'

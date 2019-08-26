@@ -1,0 +1,54 @@
+.row
+  .col-lg-10.mx-auto
+    %h4 Artist Submissions: #{ @show.name }
+    .card
+      .card-header.pb-0
+
+        %ul.nav.nav-tabs
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, fresh: true), class: curator_application_status_scope == :fresh ? 'active' : '' }
+              Fresh (#{ @show.applications.fresh.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, accepted: true), class: curator_application_status_scope == :accepted ? 'active' : '' }
+              Accepted (#{ @show.applications.accepted.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, maybe: true), class: curator_application_status_scope == :maybe ? 'active' : '' }
+              Maybe (#{ @show.applications.maybe.count })
+          %li.nav-item
+            %a.nav-link{ href: show_applications_path(@show, rejected: true), class: curator_application_status_scope == :rejected ? 'active' : '' }
+              Rejected (#{ @show.applications.rejected.count })
+
+    - if @applications.none?
+      %p.ml-4.text-muted No applications here.
+
+    .list-group
+      - @applications.each do |show_application|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0
+          .d-flex.w-100.justify-content-between.mb-2
+            .details
+              .d-inline-block= image_tag(show_application.user.gravatar_url, class: 'rounded-circle')
+              %h4.d-inline-block.mb-0= show_application.user.full_name
+              -# %small.text-muted= time_ago_in_words(show_application.created_at)
+            .btns
+              .d-inline-block= button_to 'Accept', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
+              .d-inline-block= button_to 'Maybe', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:maybe], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-warning', method: :patch#, disabled: curator_application_status_scope == :maybe
+              .d-inline-block= button_to 'Reject', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:rejected], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
+
+          - if show_application.artist_statement.present?
+            %blockquote
+              #{show_application.artist_statement.html_safe}
+              %footer.blockquote-footer= show_application.user.full_name
+
+          .row.text-center
+            .col-3
+              %i.fa.fa-globe
+              = link_to 'Website', show_application.artist_website, target: :blank if show_application.artist_website.present?
+            .col-3
+              %i.fa.fa-camera-retro
+              = link_to 'Photos', show_application.photos_url, target: :blank if show_application.photos_url.present?
+            .col-3
+              %i.fa.fa-instagram
+              = link_to 'Instagram', show_application.artist_instagram_url, target: :blank if show_application.artist_instagram_url.present?
+            .col-3
+              %i.fa.fa-plus
+              = link_to 'Extras', show_application.supplemental_material_url, target: :blank if show_application.supplemental_material_url.present?

@@ -2,16 +2,23 @@
   "name": "hew",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.2",
+    "@babel/preset-react": "^7.0.0",
     "@rails/webpacker": "^4.0.2",
-    "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
-    "popper.js": "^1.15.0",
+    "array-move": "^2.1.0",
+    "axios": "^0.19.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-datepicker": "^2.8.0",
+    "react-dom": "^16.8.6",
+    "react-dropzone-component": "^3.2.0",
+    "react-slick": "^0.24.0",
+    "react-sortable-hoc": "^1.9.1",
+    "react_ujs": "^2.5.0",
     "resolve-url-loader": "^3.1.0",
-    "stimulus": "^1.1.1"
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
-    "expose-loader": "^0.7.5",
     "webpack-dev-server": "^3.4.1"
   }
 }

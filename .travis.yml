@@ -18,6 +18,6 @@ before_install:
 install:
   - bundle install
   - yarn install
-  - bundle exec rake db:setup
+  - bundle exec rake db:create db:migrate
 script:
   - bundle exec rspec

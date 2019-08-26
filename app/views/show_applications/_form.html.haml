@@ -1,0 +1,52 @@
+.form-inputs
+  = simple_form_for @show_application, url: "/show_applications?show_id=#{@show_application.show_id}" do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    .d-none= f.input :show_id, input_html: { class: 'form-control' }, label: false
+
+    - if current_user.nil?
+      = f.simple_fields_for :user do |user|
+        = render 'user_fields', f: user
+
+    .row
+      .col-md-6
+        .form-group
+          %label{ for: 'show_application_artist_website' } Artist Website
+          .input-group
+            .input-group-prepend
+              .input-group-text https://
+            = f.input_field :artist_website, class: "form-control"
+
+      .col-md-6
+        .form-group
+          %label{ for: 'show_application_artist_instagram_url' } Instagram URL
+          .input-group
+            .input-group-prepend
+              .input-group-text https://
+            = f.input_field :artist_instagram_url, class: "form-control"
+
+    .row
+      .col-md-6
+        .form-group
+          %label{ for: 'show_application_photos_url' } Link to Photos
+          .input-group
+            .input-group-prepend
+              .input-group-text https://
+            = f.input_field :photos_url, class: "form-control"
+
+      .col-md-6
+        .form-group
+          %label{ for: 'show_application_supplemental_material_url' } Supplemental Material
+          .input-group
+            .input-group-prepend
+              .input-group-text https://
+            = f.input_field :supplemental_material_url, class: "form-control"
+
+    .row
+      .col-md-12
+        .form-group
+          %label{ for: 'show_application_artist_statement' } Artist Statement
+          = f.input :artist_statement, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
+    = f.button :submit, t('save'), class: 'btn btn-primary'

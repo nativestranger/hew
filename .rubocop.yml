@@ -21,6 +21,9 @@ Metrics/ClassLength:
 Style/BlockComments:
   Enabled: false
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/SymbolArray:
   Enabled: true
 

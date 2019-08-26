@@ -1,0 +1,44 @@
+.row
+  .col-lg-10.mx-auto
+    .row
+      .col-md-6.text-sm-center.text-md-left.mb-2
+        %h2 Art Shows in: #{@city}
+      .col-md-6
+        .pull-right
+          %span Sort by:
+          .btn-group
+            %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
+              = params[:show_sort_by]
+              %span.caret
+            %ul.dropdown-menu.dropdown-menu-right
+              - ['Application Deadline', 'Recently Created'].each do |show_sort_by|
+                - next if params[:show_sort_by] == show_sort_by
+                %li= link_to show_sort_by, root_path({ show_sort_by: show_sort_by }), class: 'dropdown-item'
+
+    - if @shows.none?
+      .row
+        .col-12
+          .alert.alert-warning.w-100
+            %p Darn, no available shows found.
+
+    - @shows.each do |show|
+      .row
+        .col-12.mx-auto.mb-4
+          .card
+            .card-header
+              .row
+                .col-6
+                  %h5.d-inline= show.name
+                  @
+                  %h6.d-inline= show.venue.name
+                .col-6
+                  %h6.pull-right= I18n.l(show.start_at, format: :long)
+            .card-body
+              = show.overview
+            .card-footer
+              .row
+                .col-6
+                  = pluralize(show.applications.count, 'Submission')
+                  .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
+                .col-6
+                  .pull-right= link_to 'Show Details', public_show_details_path(id: show.id), class: 'btn btn-outline-success'

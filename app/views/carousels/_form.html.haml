@@ -1,0 +1,18 @@
+.form-inputs
+  = simple_form_for @carousel do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    .row
+      .col-md-4
+        .form-group
+          %label{ for: 'carousel_name' }= t('name')
+          = f.input :name, input_html: { class: 'form-control' }, label: false
+
+        = f.input :description
+
+      .col-md-8
+        = f.input :image_ids_in_position_order, as: :hidden, default: @carousel.carousel_images.map(&:id).join(',')
+        = render 'sortable_carousel_images', carousel: @carousel
+
+    = f.button :submit, t('save'), class: 'btn btn-primary'
