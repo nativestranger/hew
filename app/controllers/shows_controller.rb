@@ -12,8 +12,8 @@ class ShowsController < ApplicationController
   end
 
   def create
-    @show = Show.new(permitted_params)
-    @show.venue.user = current_user
+    @show = Show.new(permitted_params.merge(user: current_user))
+    @show.venue.user ||= current_user
 
     if @show.save
       redirect_to @show, notice: t('success')
