@@ -6,7 +6,8 @@ class ShowApplicationMailer < ApplicationMailer # :nodoc:
       body:    show_applications_url(show_application.show).to_s
     )
   end
-  def new_artist(show_application)
+
+  def new_artist(show_application) # TODO: custom messaging here. (& account/PW setup)
     user = show_application.user
     user.send(:generate_confirmation_token)
     Devise::Mailer.confirmation_instructions(user, user.instance_variable_get(:@raw_confirmation_token))
