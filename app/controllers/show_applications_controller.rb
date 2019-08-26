@@ -13,7 +13,10 @@ class ShowApplicationsController < ApplicationController
   def create
     @show_application = ShowApplication.new(permitted_params.merge(user: current_user))
 
-    if @show_application.save
+    create_show_application!
+
+    if @show_application.persisted?
+      ShowApplicationMailer.new_application(@show_application).deliver_later
       redirect_to application_submitted_path, notice: t('success')
     else
       render :new
@@ -35,5 +38,14 @@ class ShowApplicationsController < ApplicationController
 
   def set_show
     @show = Show.find(params[:show_id])
+  end
+
+  def create_show_application!
+    ShowApplication.transaction do
+      @show_application.save!
+      Chat.create!(chatworthy: @show_application).setup!
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
+    end
   end
 end

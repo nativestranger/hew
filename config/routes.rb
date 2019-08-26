@@ -4,10 +4,12 @@ Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   root 'pages#home'
-  devise_for :users
-  resources :carousels
-  resources :venues, except: :destroy
 
+  devise_for :users
+
+  resources :carousels
+  resources :chats, only: :show
+  resources :venues, except: :destroy
   resources :shows, except: :destroy
 
   match 'shows/:id/applications', via: :get, to: 'shows#applications', as: :show_applications
@@ -17,6 +19,7 @@ Rails.application.routes.draw do
   resources :show_applications, only: %i[new create]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
+  get 'messages', to: 'pages#messages', as: :messages
   get 'dashboard', to: 'pages#dashboard', as: :dashboard
 
   get 'settings/profile', to: 'settings#profile'
@@ -26,5 +29,7 @@ Rails.application.routes.draw do
     resources :carousels, only: [] do
       resources :carousel_images, only: :create
     end
+    get '/chats/:id/messages' => "chats#messages", as: :chat_messages
+    post '/chats/:id/create_message' => "chats#create_message", as: :chat_create_message
   end
 end

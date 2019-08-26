@@ -9,9 +9,24 @@ class User < ApplicationRecord
 
   has_many :carousels, dependent: :destroy
   has_many :venues, dependent: :destroy
-  has_many :shows, through: :venues
+  has_many :shows, dependent: :destroy
+
+  has_many :chat_users
+  has_many :chats, through: :chat_users
+
+  before_save :set_gravatar_url, if: :email_changed?
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  private
+
+  def set_gravatar_url
+    gravatar_id = Digest::MD5.hexdigest(email.downcase)
+    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=48"
   end
 end

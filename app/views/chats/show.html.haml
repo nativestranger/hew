@@ -1,0 +1,7 @@
+.row
+  .col-lg-10.mx-auto
+    = react_component "Chat", { chatName: @chat.name,
+                                users: @chat.users.map { |u| UserSerializer.new(u).serializable_hash },
+                                messagesPath: v1_chat_messages_path(@chat),
+                                createMessagePath: v1_chat_create_message_path(@chat),
+                                messages: json_messages(@chat.messages.recent) }
