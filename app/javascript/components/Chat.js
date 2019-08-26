@@ -18,6 +18,7 @@ export default class Chat extends React.Component {
 
   componentWillMount() {
     this.setState({ messages: this.props.messages })
+    this.refreshMessages()
     setTimeout(this.refreshMessages, 1500)
   }
 

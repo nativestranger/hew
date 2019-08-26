@@ -5,6 +5,7 @@
     .list-group
       - @chats.each do |chat|
         %a.list-group-item.list-group-item-action.flex-column.align-items-start{ href: chat_path(chat) }
+          .float-right= "(#{ chat.unread_messages(current_user).count })"
           .d-flex.w-100.justify-content-between.mb-3
             - last_message = chat.messages.last
             .users

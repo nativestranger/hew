@@ -10,6 +10,7 @@ class CreateChats < ActiveRecord::Migration[5.2]
     create_table :chat_users do |t|
       t.references :chat, null: false
       t.references :user, null: false
+      t.datetime :seen_at
       t.timestamps
     end
     add_index :chat_users, [:chat_id, :user_id], unique: true

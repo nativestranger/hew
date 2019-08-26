@@ -14,7 +14,7 @@ class PagesController < ApplicationController
   end
 
   def messages
-    @chats = current_user.chats.order(updated_at: :desc)
+    @chats = current_user.chats.includes(:chat_users).order(updated_at: :desc)
   end
 
   private

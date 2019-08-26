@@ -20,4 +20,11 @@ class Chat < ApplicationRecord
       chatworthy.chat.chat_users.create!(user: chatworthy.show.user)
     end
   end
+
+  def unread_messages(user)
+    seen_at = chat_users.find_by!(user: user).seen_at
+    return messages unless seen_at
+
+    messages.where("messages.created_at > ?", seen_at)
+  end
 end

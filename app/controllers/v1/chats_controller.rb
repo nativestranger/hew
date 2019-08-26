@@ -3,13 +3,12 @@ class V1::ChatsController < V1Controller
   before_action :set_chat
 
   def messages
-    set_messages
+    set_messages!
     render json: { messages: helpers.json_messages(@messages) }
   end
 
   def create_message
     create_message!
-    set_messages
     render json: { messages: helpers.json_messages(@messages) }
   end
 
@@ -19,8 +18,9 @@ class V1::ChatsController < V1Controller
     @chat = Chat.find(params[:id])
   end
 
-  def set_messages
+  def set_messages!
     @messages = @chat.messages.includes(chat_user: :user).recent
+    chat_user.update!(seen_at: Time.now)
   end
 
   def message_params
@@ -28,13 +28,14 @@ class V1::ChatsController < V1Controller
   end
 
   def chat_user
-    @chat.chat_users.find_by(user: current_user)
+    @chat_user ||= @chat.chat_users.find_by!(user: current_user)
   end
 
   def create_message!
     Message.transaction do
       chat_user.messages.create!(message_params)
       @chat.touch
+      set_messages!
     rescue ActiveRecord::RecordInvalid
       raise ActiveRecord::Rollback
     end
