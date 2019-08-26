@@ -59,8 +59,8 @@ class ShowApplicationsController < ApplicationController
     else
       @show_application.user.assign_attributes(
         artist_website: @show_application.artist_website,
-        instagram_url: @show_application.artist_instagram_url,
-        password: SecureRandom.uuid
+        instagram_url:  @show_application.artist_instagram_url,
+        password:       SecureRandom.uuid
       )
     end
   end

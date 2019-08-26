@@ -11,6 +11,6 @@ class MessageSerializer < ActiveModel::Serializer
   end
 
   def created_at_in_words
-    "#{ time_ago_in_words(object.created_at) } ago"
+    "#{time_ago_in_words(object.created_at)} ago"
   end
 end
