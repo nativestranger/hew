@@ -4,8 +4,6 @@ class ShowApplication < ApplicationRecord
 
   accepts_nested_attributes_for :user
 
-  has_one :chat, class_name: 'Chat', as: :chatworthy, dependent: :destroy
-
   enum status_id: {
     fresh:    0,
     accepted: 1,

@@ -51,7 +51,7 @@ class ShowApplicationsController < ApplicationController
     ShowApplication.transaction do
       build_show_application
       @show_application.save!
-      Chat.create!(chatworthy: @show_application).setup!
+      setup_connection!
     rescue ActiveRecord::RecordInvalid
       raise ActiveRecord::Rollback
     end
@@ -70,6 +70,14 @@ class ShowApplicationsController < ApplicationController
         password:       SecureRandom.uuid
       )
     end
+  end
+
+  def setup_connection!
+    return if @show.user_id == @show_application.user_id
+
+    @connection = Connection.find_or_create_between!(
+      @show.user_id, @show_application.user_id
+    )
   end
 
   private
