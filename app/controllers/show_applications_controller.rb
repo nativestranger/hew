@@ -22,6 +22,9 @@ class ShowApplicationsController < ApplicationController
       notice = current_user ? t('success') : "Success! You should receive a confirmation email shortly."
       redirect_to application_submitted_path, notice: notice
     else
+      if current_user.nil? && User.find_by(email: @show_application.user.email)
+        flash.now[:error] = "You already have an account with us. You need to sign in before applying."
+      end
       render :new
     end
   end
