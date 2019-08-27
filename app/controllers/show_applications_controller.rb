@@ -1,5 +1,6 @@
 class ShowApplicationsController < ApplicationController
-  before_action :set_show, only: %i[new]
+  before_action :set_show
+  before_action :ensure_new_application!
 
   def new
     @show_application = ShowApplication.new(
@@ -63,5 +64,13 @@ class ShowApplicationsController < ApplicationController
         password:       SecureRandom.uuid
       )
     end
+  end
+
+  private
+
+  def ensure_new_application!
+    return unless @show.application_for?(current_user)
+
+    redirect_to public_show_details_path(@show), notice: "You've already applied to this show."
   end
 end
