@@ -51,7 +51,8 @@
                 %label{ for: 'user_artist_website' } Artist Website
                 .input-group
                   .input-group-prepend
-                    .input-group-text https://
+                    .input-group-text
+                      .fa.fa-globe
                   = f.input_field :artist_website, class: "form-control"
 
           .row
@@ -60,7 +61,8 @@
                 %label{ for: 'user_instagram_url' } Instagram URL
                 .input-group
                   .input-group-prepend
-                    .input-group-text https://
+                    .input-group-text
+                      .fa.fa-globe
                   = f.input_field :instagram_url, class: "form-control"
 
           .form-group

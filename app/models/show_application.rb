@@ -13,5 +13,10 @@ class ShowApplication < ApplicationRecord
     rejected: 3
   }
 
+  validates :artist_website, url: { allow_blank: true }
+  validates :artist_instagram_url, url: { allow_blank: true }
+  validates :photos_url, url: { allow_blank: true }
+  validates :supplemental_material_url, url: { allow_blank: true }
+
   # what validations?
 end

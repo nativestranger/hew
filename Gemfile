@@ -55,6 +55,7 @@ gem 'react-rails'
 gem 'simple_form'
 gem 'sucker_punch'
 gem 'trix-rails', require: 'trix'
+gem 'validate_url'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

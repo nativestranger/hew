@@ -19,6 +19,9 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
+  validates :artist_website, url: { allow_blank: true }
+  validates :instagram_url, url: { allow_blank: true }
+
   def full_name
     "#{first_name} #{last_name}"
   end
