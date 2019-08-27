@@ -26,4 +26,9 @@
             %h6 Details to Include
             %p= @show.application_details.html_safe
           .card-footer.text-center
-            = link_to 'Apply', new_show_application_path(show_id: @show.id), class: 'btn btn-success'
+            = button_to 'Apply',
+                      new_show_application_path,
+                      class: 'btn btn-success',
+                      method: :get,
+                      params: { show_id: @show.id },
+                      disabled: @show.application_for?(current_user)
