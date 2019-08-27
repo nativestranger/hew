@@ -23,6 +23,8 @@ class User < ApplicationRecord
   validates :artist_website, url: { allow_blank: true }
   validates :instagram_url, url: { allow_blank: true }
 
+  scope :admins, -> { where(is_admin: true) }
+
   def full_name
     "#{first_name} #{last_name}"
   end

@@ -16,6 +16,7 @@ class ShowsController < ApplicationController
     @show.venue.user ||= current_user
 
     if @show.save
+      AdminMailer.new_show(@show).deliver_later if @show.is_public
       redirect_to @show, notice: t('success')
     else
       render :new
@@ -27,7 +28,10 @@ class ShowsController < ApplicationController
   def edit; end
 
   def update
+    private_before_update = !@show.is_public
+
     if @show.update(permitted_params)
+      AdminMailer.new_show(@show).deliver_later if @show.is_public && private_before_update
       redirect_to @show, notice: t('success')
     else
       render :edit
