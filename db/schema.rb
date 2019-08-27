@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_27_041158) do
+ActiveRecord::Schema.define(version: 2019_08_27_042123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -96,6 +96,14 @@ ActiveRecord::Schema.define(version: 2019_08_27_041158) do
     t.datetime "updated_at", null: false
     t.index ["name", "state_id"], name: "index_cities_on_name_and_state_id", unique: true
     t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "connections", force: :cascade do |t|
+    t.bigint "user1_id", null: false
+    t.bigint "user2_id", null: false
+    t.index ["user1_id", "user2_id"], name: "index_connections_on_user1_id_and_user2_id", unique: true
+    t.index ["user1_id"], name: "index_connections_on_user1_id"
+    t.index ["user2_id"], name: "index_connections_on_user2_id"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -207,6 +215,8 @@ ActiveRecord::Schema.define(version: 2019_08_27_041158) do
   add_foreign_key "carousel_images", "carousels"
   add_foreign_key "carousels", "users"
   add_foreign_key "cities", "states"
+  add_foreign_key "connections", "users", column: "user1_id"
+  add_foreign_key "connections", "users", column: "user2_id"
   add_foreign_key "show_applications", "shows"
   add_foreign_key "show_applications", "users"
   add_foreign_key "shows", "users"

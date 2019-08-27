@@ -6,11 +6,9 @@ class Chat < ApplicationRecord
 
   def setup!
     case chatworthy_type
-    when "ShowApplication"
-      return if chatworthy.user_id == chatworthy.show.user_id
-
-      chatworthy.chat.chat_users.create!(user: chatworthy.user)
-      chatworthy.chat.chat_users.create!(user: chatworthy.show.user)
+    when "Connection"
+      chatworthy.chat.chat_users.create!(user: chatworthy.user1)
+      chatworthy.chat.chat_users.create!(user: chatworthy.user2)
     end
   end
 
