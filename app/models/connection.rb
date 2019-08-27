@@ -17,7 +17,7 @@ class Connection < ApplicationRecord
     existing_connection = Connection.find_between(user1_id, user2_id)
     return existing_connection if existing_connection
 
-    connection = self.new(user1_id: user1_id, user2_id: user2_id)
+    connection = new(user1_id: user1_id, user2_id: user2_id)
     connection.save!
     Chat.create!(chatworthy: connection).setup!
     connection
