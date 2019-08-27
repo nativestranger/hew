@@ -26,5 +26,7 @@ class PagesController < ApplicationController
     when 'Recently Created'
       @shows = Show.accepting_applications.order(created_at: :desc)
     end
+
+    @shows = @shows.approved
   end
 end

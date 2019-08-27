@@ -22,6 +22,7 @@ class ShowDashboard < Administrate::BaseDashboard
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
     is_public: Field::Boolean,
+    is_approved: Field::Boolean,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -50,6 +51,7 @@ class ShowDashboard < Administrate::BaseDashboard
     :application_deadline,
     :application_details,
     :is_public,
+    :is_approved,
     :created_at,
     :updated_at,
     :applications,
@@ -70,6 +72,7 @@ class ShowDashboard < Administrate::BaseDashboard
     :application_deadline,
     :application_details,
     :is_public,
+    :is_approved,
   ].freeze
 
   # Overwrite this method to customize how shows are displayed
