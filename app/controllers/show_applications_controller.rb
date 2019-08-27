@@ -18,7 +18,9 @@ class ShowApplicationsController < ApplicationController
     if @show_application.persisted?
       ShowApplicationMailer.new_application(@show_application).deliver_later
       ShowApplicationMailer.new_artist(@show_application).deliver_later if current_user.nil?
-      redirect_to application_submitted_path, notice: t('success')
+
+      notice = current_user ? t('success') : "Success! You should receive a confirmation email shortly."
+      redirect_to application_submitted_path, notice: notice
     else
       render :new
     end

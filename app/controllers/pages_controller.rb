@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-  before_action :authenticate_user!, except: :home
+  before_action :authenticate_user!, except: [:home, :application_submitted]
 
   def home
     params[:show_sort_by] ||= 'Application Deadline'
