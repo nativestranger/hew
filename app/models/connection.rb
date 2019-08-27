@@ -26,8 +26,8 @@ class Connection < ApplicationRecord
   private
 
   def users_are_different
-    if user1_id == user2_id
-      errors.add(:base, 'Cannot connect a user to itself')
-    end
+    return unless user1_id == user2_id
+
+    errors.add(:base, 'Cannot connect a user to itself')
   end
 end
