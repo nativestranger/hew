@@ -5,7 +5,7 @@ FactoryBot.define do
     email { "#{SecureRandom.uuid[0..5]}@example.com" }
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    password      { SecureRandom.uuid[0..5] }
+    password      { 'password' }
     confirmed_at  { Time.current }
   end
 end

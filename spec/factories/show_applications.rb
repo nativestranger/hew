@@ -10,7 +10,11 @@ FactoryBot.define do
     status_id { ShowApplication.status_ids.values.sample }
 
     after(:create) do |show_application|
-      Chat.create!(chatworthy: show_application).setup!
+      unless show_application.show.user_id == show_application.user_id
+        Connection.find_or_create_between!(
+          show_application.show.user.id, show_application.user.id
+        )
+      end
     end
   end
 end

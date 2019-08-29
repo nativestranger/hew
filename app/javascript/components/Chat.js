@@ -83,15 +83,22 @@ export default class Chat extends React.Component {
   }
 
   render() {
+    let thisComponent = this;
+
     let renderUserIcon = function(user) {
       return (<img className="chat-avatar float-left" src={user.gravatar_url}/>)
     }
 
     let renderMessage = function(message) {
+      let isLatestMessage = thisComponent.state.messages[0] == message;
+
       if (message.user.id == App.currentUser().id)
         return (
           <div key={message.id} className="current-user p-2 m-0 position-relative" data-is={ `You - ${message.created_at_in_words}` }>
-          	<a className="float-right">{ message.body }</a>
+          	<a className="float-right">
+              { message.body }
+              { message.seen && isLatestMessage && (<i style={{ fontSize: '10px' }} className="fa fa-check ml-2"></i>) }
+            </a>
           </div>
         )
       else
@@ -107,7 +114,7 @@ export default class Chat extends React.Component {
       if (user.id == App.currentUser().id) { return; }
 
       return (
-        <div className="d-inline-block">
+        <div key={user.id} className="d-inline-block">
           <img className="chat-avatar d-inline-block" src={ user.gravatar_url } />
           <span className="mt-2 ml-2">{ user.full_name }</span>
         </div>

@@ -4,6 +4,7 @@ class MessageSerializer < ActiveModel::Serializer
   attributes :id,
              :body,
              :user,
+             :seen,
              :created_at_in_words
 
   def user
