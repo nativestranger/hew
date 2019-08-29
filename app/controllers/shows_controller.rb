@@ -7,7 +7,8 @@ class ShowsController < ApplicationController
   end
 
   def new
-    @venue = Venue.new(address: Address.new(city: City.mexico_city))
+    address = Address.new(city: 'Ciudad de México', state: 'Ciudad de México', country: 'MX')
+    @venue = Venue.new(address: address)
     @show = Show.new(venue: @venue, is_public: true)
   end
 
@@ -66,7 +67,7 @@ class ShowsController < ApplicationController
         :id,
         :name,
         :website,
-        { address_attributes: %i[id city_id street_address street_address_2 postal_code] }
+        { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
       ]
     )
   end
