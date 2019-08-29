@@ -5,6 +5,7 @@ class Venue < ApplicationRecord
 
   accepts_nested_attributes_for :address
   validates :name, presence: true
+  validates :website, url: { allow_blank: true }
 
   delegate :display_address, to: :address
 end
