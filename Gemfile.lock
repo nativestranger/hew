@@ -80,11 +80,20 @@ GEM
       sassc-rails (>= 2.0.0)
     builder (3.2.3)
     byebug (11.0.1)
+    carmen (1.1.3)
+      activesupport (>= 3.0.0)
     case_transform (0.2)
       activesupport
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
+    countries (3.0.0)
+      i18n_data (~> 0.8.0)
+      sixarm_ruby_unaccent (~> 1.1)
+      unicode_utils (~> 1.4)
+    country_select (4.0.0)
+      countries (~> 3.0)
+      sort_alphabetical (~> 1.0)
     crass (1.0.4)
     datetime_picker_rails (0.0.7)
       momentjs-rails (>= 2.8.1)
@@ -130,6 +139,7 @@ GEM
       ruby_parser (~> 3.5)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
+    i18n_data (0.8.0)
     jaro_winkler (1.5.2)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
@@ -296,6 +306,9 @@ GEM
     simple_form (4.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
+    sixarm_ruby_unaccent (1.2.0)
+    sort_alphabetical (1.1.0)
+      unicode_utils (>= 1.2.2)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-watcher-listen (2.0.1)
@@ -324,6 +337,7 @@ GEM
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.0)
+    unicode_utils (1.4.0)
     validate_url (1.0.8)
       activemodel (>= 3.0.0)
       public_suffix
@@ -352,6 +366,8 @@ DEPENDENCIES
   bootsnap (>= 1.1.0)
   bootstrap (~> 4.3.1)
   byebug
+  carmen
+  country_select (~> 4.0)
   devise
   devise-bootstrap-views
   devise-i18n

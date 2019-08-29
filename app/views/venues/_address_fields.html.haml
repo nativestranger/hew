@@ -3,7 +3,9 @@
     .col-xl-2.col-6
       .form-group
         %label{ for: 'city_id' }= t('city')
-        = f.association :city, collection: supported_venue_cities.pluck(:name, :id), label: false
+        = f.input :city, collection: supported_venue_cities, label: false
+        .d-none= f.input :state
+        .d-none= f.input :country
     .col-xl-2.col-6= f.input :postal_code
     .col-xl-8.col-12
       = f.input :street_address

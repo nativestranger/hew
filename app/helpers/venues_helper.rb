@@ -2,6 +2,6 @@
 
 module VenuesHelper
   def supported_venue_cities
-    [ City.mexico_city ]
+    ['Ciudad de México']
   end
 end

@@ -1,5 +1,3 @@
-require_relative 'seed_states_and_cities'
-
 admin = FactoryBot.create(:user, email: 'admin@example.com', password: 'password', is_admin: true)
 admin.confirm
 

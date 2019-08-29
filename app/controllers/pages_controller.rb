@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   def home
     params[:show_sort_by] ||= 'Application Deadline'
     set_shows
-    @city = City.mexico_city
+    @city = 'Ciudad de México'
   end
 
   def dashboard
