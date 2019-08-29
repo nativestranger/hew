@@ -9,7 +9,7 @@ class ChangeAddresses < ActiveRecord::Migration[5.2]
       a.update!(
         city: city.name,
         state: city.state.name,
-        country: state.country.name,
+        country: city.state.country.name,
       )
     end
 
