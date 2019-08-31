@@ -45,25 +45,18 @@
                 %label
                 = f.input :is_curator, label: 'I am a curator'
 
-          .row
-            .col-md-12
-              #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
-                %label{ for: 'user_artist_website' } Artist Website
-                .input-group
-                  .input-group-prepend
-                    .input-group-text
-                      .fa.fa-globe
-                  = f.input_field :artist_website, class: "form-control"
+          #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+            = f.input :artist_website, wrapper: :vertical_input_group, label: "Artist Website" do
+              .input-group-prepend
+                .input-group-text
+                  %span.fa.fa-globe
+              = f.input_field :artist_website, class: "form-control"
 
-          .row
-            .col-md-12
-              .form-group
-                %label{ for: 'user_instagram_url' } Instagram URL
-                .input-group
-                  .input-group-prepend
-                    .input-group-text
-                      .fa.fa-globe
-                  = f.input_field :instagram_url, class: "form-control"
+          = f.input :instagram_url, wrapper: :vertical_input_group, label: "Instagram URL" do
+            .input-group-prepend
+              .input-group-text
+                %span.fa.fa-globe
+            = f.input_field :instagram_url, class: "form-control"
 
           .form-group
             %label{ for: "user_avatar"} Avatar

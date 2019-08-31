@@ -11,41 +11,33 @@
 
     .row
       .col-md-6
-        .form-group
-          %label{ for: 'show_application_artist_website' } Artist Website
-          .input-group
-            .input-group-prepend
-              .input-group-text
-                .fa.fa-globe
-            = f.input_field :artist_website, class: "form-control"
+        = f.input :artist_website, wrapper: :vertical_input_group, label: "Artist Website" do
+          .input-group-prepend
+            .input-group-text
+              %span.fa.fa-globe
+          = f.input_field :artist_website, class: "form-control"
 
       .col-md-6
-        .form-group
-          %label{ for: 'show_application_artist_instagram_url' } Instagram URL
-          .input-group
-            .input-group-prepend
-              .input-group-text
-                .fa.fa-globe
-            = f.input_field :artist_instagram_url, class: "form-control"
+        = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Instagram URL" do
+          .input-group-prepend
+            .input-group-text
+              %span.fa.fa-globe
+          = f.input_field :artist_instagram_url, class: "form-control"
 
     .row
       .col-md-6
-        .form-group
-          %label{ for: 'show_application_photos_url' } Link to Photos
-          .input-group
-            .input-group-prepend
-              .input-group-text
-                .fa.fa-globe
-            = f.input_field :photos_url, class: "form-control"
+        = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Link to Photos" do
+          .input-group-prepend
+            .input-group-text
+              %span.fa.fa-globe
+          = f.input_field :photos_url, class: "form-control"
 
       .col-md-6
-        .form-group
-          %label{ for: 'show_application_supplemental_material_url' } Supplemental Material
-          .input-group
-            .input-group-prepend
-              .input-group-text
-                .fa.fa-globe
-            = f.input_field :supplemental_material_url, class: "form-control"
+        = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Supplemental Material" do
+          .input-group-prepend
+            .input-group-text
+              %span.fa.fa-globe
+          = f.input_field :supplemental_material_url, class: "form-control"
 
     .row
       .col-md-12

@@ -15,3 +15,5 @@ Show.all.each do |show|
   rand(3..4).times { FactoryBot.create(:show_application, show: show) }
   FactoryBot.create(:show_application, show: show, user: user)
 end
+
+admin.shows.first.update!(is_approved: true)
