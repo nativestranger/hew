@@ -40,6 +40,7 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'active_model_serializers'
 gem 'acts_as_list'
+gem 'aws-sdk', '~> 3'
 gem 'administrate'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.3.1'
@@ -68,6 +69,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.8'
   gem 'rubocop'
   gem 'rubocop-performance'
+  gem 'dotenv-rails'
 end
 
 group :development do
