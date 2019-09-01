@@ -17,5 +17,13 @@ module Admin
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
     # for more information
+
+    def update
+      was_approved = requested_resource.is_approved?
+      super
+      if !was_approved && requested_resource.is_approved?
+        ShowMailer.approved(requested_resource).deliver_later
+      end
+    end
   end
 end
