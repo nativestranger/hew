@@ -1,26 +1,40 @@
-$blue: #0000ff;
+$black: black;
 $darkslategray: #2f4f4f;
+$lightgray: lightgray;
+$blue: #0000ff;
+$yellow: yellow;
+$white: #fff;
 
 body {
   color: $darkslategray;
   font-family: "Lucida Console", Monaco, monospace;
-  font-size: 1.2rem;
 }
 
-h1, h2, h3, h4, h5, h6,
-.h1, .h2, .h3, .h4, .h5, .h6 {
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6,
+.h1, 
+.h2, 
+.h3, 
+.h4, 
+.h5, 
+.h6 {
   font-weight: 900;
+  margin-bottom: 0.5rem;
 }
 
 // CARDS
 .card {
-  border-radius: 0px;
-  box-shadow: 5px 10px lightgray;
-  border-color: black;
+  border-color: $black;
+  border-radius: 0;
+  box-shadow: 5px 10px $lightgray;
 }
 
 .card-header {
-  background-color: yellow;
+  background-color: $yellow;
   font-weight: 900px;
 }
 
@@ -32,15 +46,4 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 800;
   padding: 15px 25px;
   text-transform: uppercase;
-}
-
-.btn-outline-success {
-  color: $blue;
-  border-color: $blue;
-}
-
-.btn-outline-success:hover {
-  color: #fff;
-  background-color: $blue;
-  border-color: $blue;
 }
