@@ -1,7 +1,10 @@
+$blue: #0000ff;
+$darkslategray: #2f4f4f;
+
 body {
+  color: $darkslategray;
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 1.2rem;
-  color: darkslategray;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -23,21 +26,21 @@ h1, h2, h3, h4, h5, h6,
 
 // BUTTONS
 .btn {
+  border-radius: 0;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
   font-weight: 800;
   padding: 15px 25px;
   text-transform: uppercase;
-  border-radius: 0;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .btn-outline-success {
-  color: blue;
-  border-color: blue;
+  color: $blue;
+  border-color: $blue;
 }
 
 .btn-outline-success:hover {
   color: #fff;
-  background-color: blue;
-  border-color: blue;
+  background-color: $blue;
+  border-color: $blue;
 }
