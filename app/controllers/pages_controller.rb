@@ -22,9 +22,9 @@ class PagesController < ApplicationController
   def set_shows
     case params[:show_sort_by]
     when 'Application Deadline'
-      @shows = Show.accepting_applications.order(application_deadline: :desc)
+      @shows = Show.accepting_applications.order(application_deadline: :asc)
     when 'Recently Created'
-      @shows = Show.accepting_applications.order(created_at: :desc)
+      @shows = Show.accepting_applications.order(created_at: :asc)
     end
 
     @shows = @shows.approved

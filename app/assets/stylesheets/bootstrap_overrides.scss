@@ -1,0 +1,49 @@
+$black: #000000;
+$darkslategray: #2f4f4f;
+$lightgray: #d3d3d3;
+$blue: #0000ff;
+$yellow: #ffff00;
+$white: #fff;
+
+body {
+  color: $darkslategray;
+  font-family: "Lucida Console", Monaco, monospace;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+}
+
+// CARDS
+.card {
+  border-color: $black;
+  border-radius: 0;
+  box-shadow: 5px 10px $lightgray;
+}
+
+.card-header {
+  background-color: $yellow;
+  font-weight: 900px;
+}
+
+// BUTTONS
+.btn {
+  border-radius: 0;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  padding: 15px 25px;
+  text-transform: uppercase;
+}

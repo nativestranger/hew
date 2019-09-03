@@ -1,10 +1,7 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show, only: %i[applications show edit update update_application_status]
-
-  def applications
-    @applications = @show.applications.send(helpers.curator_application_status_scope)
-  end
+  before_action :authorize_user!, except: %i[new create index]
 
   def new
     address = Address.new(city: 'Ciudad de México', state: 'Ciudad de México', country: 'MX')
@@ -51,6 +48,10 @@ class ShowsController < ApplicationController
     redirect_to show_applications_path(@show, helpers.curator_application_status_scope => true)
   end
 
+  def applications
+    @applications = @show.applications.send(helpers.curator_application_status_scope)
+  end
+
   private
 
   def permitted_params
@@ -74,5 +75,9 @@ class ShowsController < ApplicationController
 
   def set_show
     @show = Show.find(params[:id])
+  end
+
+  def authorize_user!
+    redirect_to root_path unless current_user.id == @show.user_id
   end
 end

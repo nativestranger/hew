@@ -38,6 +38,20 @@ FactoryBot::SyntaxRunner.class_eval do
 end
 
 RSpec.configure do |config|
+  config.include Warden::Test::Helpers
+
+  config.before(:each, type: :system) do
+    if ENV['show']
+      driven_by :selenium, using: :chrome
+    else
+      driven_by :selenium, using: :chrome, options: { args: ["headless"] }
+    end
+  end
+
+  config.after :each do
+    Warden.test_reset!
+  end
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
