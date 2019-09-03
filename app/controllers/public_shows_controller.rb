@@ -7,9 +7,7 @@ class PublicShowsController < ApplicationController
   private
 
   def ensure_public!
-    return if @show.is_public?
-
-    redirect_to root_path
+    redirect_to root_path unless @show.is_public?
   end
 
   def set_show
