@@ -5,7 +5,7 @@ RSpec.describe 'Shows', type: :system do
   let(:show) { FactoryBot.create(:show, user: user) }
 
   before do
-    # login_as(user, scope: :user)
+    login_as(user, scope: :user)
   end
 
   describe 'new' do
@@ -21,9 +21,12 @@ RSpec.describe 'Shows', type: :system do
   end
 
   describe 'index' do
-    it 'displays the shows' do
+    let!(:other_show) { FactoryBot.create(:show) }
+    it "displays the current user's shows" do
       show
       visit shows_path
+      expect(page).to have_content(show.name)
+      expect(page).not_to have_content(other_show.name)
     end
   end
 
