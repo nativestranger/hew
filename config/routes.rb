@@ -5,9 +5,6 @@ Rails.application.routes.draw do
     resources :users
     resources :shows
     resources :show_applications
-    # resources :cities
-    # resources :countries
-    # resources :states
     root to: "users#index"
   end
 
