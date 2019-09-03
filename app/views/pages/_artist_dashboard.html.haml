@@ -1,0 +1,26 @@
+.d-flex.justify-content-between.mb-3
+  %h3 My Applications
+  = link_to 'My Shows', dashboard_path, class: 'btn btn-outline-success'
+
+.card
+  .card-header.pb-0
+
+    %ul.nav.nav-tabs
+      %li.nav-item
+        %a.nav-link{ href: dashboard_path(accepted: true, as_artist: true), class: curator_dashboard_show_applications_scope == :accepted ? 'active' : '' }
+          Accepted (#{current_user.show_applications.accepted.count})
+      %li.nav-item
+        %a.nav-link{ href: dashboard_path(pending: true, as_artist: true), class: curator_dashboard_show_applications_scope == :pending ? 'active' : '' }
+          Pending (#{current_user.show_applications.pending.count})
+      %li.nav-item
+        %a.nav-link{ href: dashboard_path(archive: true, as_artist: true), class: curator_dashboard_show_applications_scope == :archive ? 'active' : '' }
+          Archive (#{current_user.show_applications.archive.count})
+
+  .list-group
+    - @show_applications.each do |show_application|
+      .list-group-item.list-group-item-action.border-left-0.border-right-0
+        %h5.text-center
+
+        %h3= "#{show_application.show.name} @ #{show_application.show.venue.name}"
+        %p= "#{I18n.l(show_application.show.start_at, format: :long)} - #{I18n.l(show_application.show.end_at, format: :long)}"
+        %p.text-muted= show_application.show.overview

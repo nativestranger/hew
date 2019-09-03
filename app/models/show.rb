@@ -17,8 +17,10 @@ class Show < ApplicationRecord
 
   has_many :applications, class_name: 'ShowApplication', dependent: :destroy
 
+  scope :past_deadline, lambda { where('application_deadline < ?', Time.current) }
+
   scope :accepting_applications, lambda {
-    where('application_deadline >= ?', Time.current).published
+    where('application_deadline >= ?', Time.current)
   }
 
   scope :current, lambda {
