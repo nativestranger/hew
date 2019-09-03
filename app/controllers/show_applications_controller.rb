@@ -1,5 +1,6 @@
 class ShowApplicationsController < ApplicationController
-  before_action :set_show, only: %i[new]
+  before_action :set_show
+  before_action :ensure_new_application!
 
   def new
     @show_application = ShowApplication.new(
@@ -17,8 +18,13 @@ class ShowApplicationsController < ApplicationController
     if @show_application.persisted?
       ShowApplicationMailer.new_application(@show_application).deliver_later
       ShowApplicationMailer.new_artist(@show_application).deliver_later if current_user.nil?
-      redirect_to application_submitted_path, notice: t('success')
+
+      notice = current_user ? t('success') : "Success! You should receive a confirmation email shortly."
+      redirect_to application_submitted_path, notice: notice
     else
+      if current_user.nil? && User.find_by(email: @show_application.user.email)
+        flash.now[:error] = "You already have an account with us. You need to sign in before applying."
+      end
       render :new
     end
   end
@@ -45,7 +51,7 @@ class ShowApplicationsController < ApplicationController
     ShowApplication.transaction do
       build_show_application
       @show_application.save!
-      Chat.create!(chatworthy: @show_application).setup!
+      setup_connection!
     rescue ActiveRecord::RecordInvalid
       raise ActiveRecord::Rollback
     end
@@ -58,10 +64,27 @@ class ShowApplicationsController < ApplicationController
       @show_application.user = current_user
     else
       @show_application.user.assign_attributes(
+        is_artist:      true,
         artist_website: @show_application.artist_website,
-        instagram_url: @show_application.artist_instagram_url,
-        password: SecureRandom.uuid
+        instagram_url:  @show_application.artist_instagram_url,
+        password:       SecureRandom.uuid
       )
     end
+  end
+
+  def setup_connection!
+    return if @show.user_id == @show_application.user_id
+
+    @connection = Connection.find_or_create_between!(
+      @show.user_id, @show_application.user_id
+    )
+  end
+
+  private
+
+  def ensure_new_application!
+    return unless @show.application_for?(current_user)
+
+    redirect_to public_show_details_path(@show), notice: "You've already applied to this show."
   end
 end

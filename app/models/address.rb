@@ -1,8 +1,7 @@
 class Address < ApplicationRecord
-  belongs_to :city
-  delegate :state, to: :city
-  delegate :country, to: :state
-
+  validates :city, presence: true
+  validates :state, presence: true
+  validates :country, presence: true
   validates :street_address, presence: true
   validates :postal_code, presence: true
 

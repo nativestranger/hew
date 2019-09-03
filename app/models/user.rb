@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :carousels, dependent: :destroy
   has_many :venues, dependent: :destroy
   has_many :shows, dependent: :destroy
+  has_many :show_applications, dependent: :destroy
 
   has_many :chat_users
   has_many :chats, through: :chat_users
@@ -18,6 +19,11 @@ class User < ApplicationRecord
 
   validates :first_name, presence: true
   validates :last_name, presence: true
+
+  validates :artist_website, url: { allow_blank: true }
+  validates :instagram_url, url: { allow_blank: true }
+
+  scope :admins, -> { where(is_admin: true) }
 
   def full_name
     "#{first_name} #{last_name}"

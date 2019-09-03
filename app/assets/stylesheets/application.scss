@@ -1,12 +1,9 @@
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 @import "bootstrap";
+@import "bootstrap_overrides";
 @import "carousels";
 @import "chats";
 @import "font-awesome";
 @import "loader";
 @import "react_date_picker";
 @import "trix";
-
-html {
-  font-family: text,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
-}

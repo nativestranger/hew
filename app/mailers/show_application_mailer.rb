@@ -10,6 +10,11 @@ class ShowApplicationMailer < ApplicationMailer # :nodoc:
   def new_artist(show_application) # TODO: custom messaging here. (& account/PW setup)
     user = show_application.user
     user.send(:generate_confirmation_token)
-    Devise::Mailer.confirmation_instructions(user, user.instance_variable_get(:@raw_confirmation_token))
+
+    mail(
+      to:      show_application.show.user.email,
+      subject: "Thanks for applying to #{show_application.show.name}. Confirm your email address to get started.",
+      body:    user_confirmation_url(confirmation_token: user.confirmation_token)
+    )
   end
 end

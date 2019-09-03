@@ -37,10 +37,11 @@ export default class Chat extends React.Component {
     let thisComponent = this;
     $.get(this.props.messagesPath)
       .done(function(data) {
-        thisComponent.setState({ messages: data.messages });
+        thisComponent.setState({ messages: data.messages, refreshError: false });
         thisComponent.scrollToBottom()
         setTimeout(thisComponent.refreshMessages, 1500);
       }).fail(function(data) {
+        thisComponent.setState({ refreshError: 'Something went wrong...' })
         setTimeout(thisComponent.refreshMessages, 3000);
       });
   }
@@ -66,6 +67,7 @@ export default class Chat extends React.Component {
            { message: { body: this.refs.bodyInput.value },
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
+                  thisComponent.setState({ postError: false });
                   thisComponent.refs.bodyInput.value = '';
                   thisComponent.refs.submit.blur();
                 })
@@ -74,28 +76,29 @@ export default class Chat extends React.Component {
                 let messageIndex = messages.indexOf(optimisticallyCreatedMessage);
                 messages.splice(messageIndex, 1);
 
-                // TODO: show errorMessage
-                let errorMessage = 'Oops, your message failed to post. Contact the site maintainer if this persists.';
-
-                thisComponent.setState({ errorMessage: errorMessage,
+                thisComponent.setState({ postError: 'Oops, your message failed to post. Contact the site maintainer if this persists.',
                                          messages: messages });
-
-                // $(thisComponent.refs.noticeDiv).show();
-                // setTimeout(function() { $(thisComponent.refs.noticeDiv).fadeOut(500); }, 5000);
               })
         .always(function() { $(thisComponent.refs.submit).prop('disabled', false); });
   }
 
   render() {
+    let thisComponent = this;
+
     let renderUserIcon = function(user) {
       return (<img className="chat-avatar float-left" src={user.gravatar_url}/>)
     }
 
     let renderMessage = function(message) {
+      let isLatestMessage = thisComponent.state.messages[0] == message;
+
       if (message.user.id == App.currentUser().id)
         return (
           <div key={message.id} className="current-user p-2 m-0 position-relative" data-is={ `You - ${message.created_at_in_words}` }>
-          	<a className="float-right">{ message.body }</a>
+          	<a className="float-right">
+              { message.body }
+              { message.seen && isLatestMessage && (<i style={{ fontSize: '10px' }} className="fa fa-check ml-2"></i>) }
+            </a>
           </div>
         )
       else
@@ -111,7 +114,7 @@ export default class Chat extends React.Component {
       if (user.id == App.currentUser().id) { return; }
 
       return (
-        <div className="d-inline-block">
+        <div key={user.id} className="d-inline-block">
           <img className="chat-avatar d-inline-block" src={ user.gravatar_url } />
           <span className="mt-2 ml-2">{ user.full_name }</span>
         </div>
@@ -138,6 +141,13 @@ export default class Chat extends React.Component {
       			  </div>
 
               <hr/>
+
+              { this.state.refreshError && (
+                <div className='text-danger text-center '>{this.state.refreshError}</div>
+              )}
+              { this.state.postError && (
+                <div className='text-danger text-center '>{this.state.postError}</div>
+              )}
 
               <form ref='form' className="m-0 p-0 chat-message-form" onSubmit={this.handleSubmit} autoComplete="off">
                 <div className="row m-0 p-0">

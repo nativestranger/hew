@@ -4,14 +4,17 @@ class ShowApplication < ApplicationRecord
 
   accepts_nested_attributes_for :user
 
-  has_one :chat, class_name: 'Chat', as: :chatworthy, dependent: :destroy
-
   enum status_id: {
     fresh:    0,
     accepted: 1,
     maybe:    2,
     rejected: 3
   }
+
+  validates :artist_website, url: { allow_blank: true }
+  validates :artist_instagram_url, url: { allow_blank: true }
+  validates :photos_url, url: { allow_blank: true }
+  validates :supplemental_material_url, url: { allow_blank: true }
 
   # what validations?
 end

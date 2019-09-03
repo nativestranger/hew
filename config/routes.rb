@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :users
+    resources :shows
+    resources :show_applications
+    root to: "users#index"
+  end
+
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   root 'pages#home'

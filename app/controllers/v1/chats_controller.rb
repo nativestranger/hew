@@ -20,7 +20,7 @@ class V1::ChatsController < V1Controller
 
   def set_messages!
     @messages = @chat.messages.includes(chat_user: :user).recent
-    chat_user.update!(seen_at: Time.now)
+    chat_user.update!(seen_at: Time.zone.now)
   end
 
   def message_params

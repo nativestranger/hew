@@ -32,6 +32,14 @@ class Show < ApplicationRecord
 
   scope :published, -> { where(is_public: true) }
 
+  scope :approved, -> { where(is_approved: true) }
+
+  def application_for?(user)
+    return false unless user
+
+    applications.where(user: user).exists?
+  end
+
   private
 
   def end_at_is_after_start_at

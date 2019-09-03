@@ -1,9 +1,9 @@
 .row
   .col-lg-10.mx-auto
     .row
-      .col-md-6.text-sm-center.text-md-left.mb-2
+      .col-md-8.text-sm-center.text-md-left.mb-2
         %h2 Art Shows in: #{@city}
-      .col-md-6
+      .col-md-4
         .pull-right
           %span Sort by:
           .btn-group
@@ -27,11 +27,11 @@
           .card
             .card-header
               .row
-                .col-6
+                .col-8
                   %h5.d-inline= show.name
                   @
                   %h6.d-inline= show.venue.name
-                .col-6
+                .col-4
                   %h6.pull-right= I18n.l(show.start_at, format: :long)
             .card-body
               = show.overview
@@ -41,4 +41,8 @@
                   = pluralize(show.applications.count, 'Submission')
                   .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
                 .col-6
-                  .pull-right= link_to 'Show Details', public_show_details_path(id: show.id), class: 'btn btn-outline-success'
+                  .pull-right
+                    - if current_user && current_user.id == show.user_id
+                      = link_to 'View Submissions', show_applications_path(show), class: 'btn btn-outline-success'
+                    - else
+                      = link_to 'Show Details', public_show_details_path(id: show.id), class: 'btn btn-outline-primary'

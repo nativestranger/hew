@@ -62,6 +62,25 @@ SimpleForm.setup do |config|
     b.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
   end
 
+  # Use this wrapper for placing format add-ons or buttons to either side of a form input
+  config.wrappers :vertical_input_group, tag: 'div', class: 'form-group', error_class: 'form-group-invalid' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.optional :maxlength
+    b.optional :minlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+    b.use :label, class: 'control-label'
+    b.wrapper tag: 'div', class: 'row' do |ba|
+      ba.wrapper tag: 'div', class: 'input-group col-md-12' do |append|
+        append.use :input, class: 'form-control'
+        append.use :full_error, wrap_with: { tag: 'div', class: 'invalid-feedback' }
+      end
+      ba.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    end
+  end
+
   # vertical input for boolean
   config.wrappers :vertical_boolean, tag: 'fieldset', class: 'form-group', error_class: 'form-group-invalid', valid_class: 'form-group-valid' do |b|
     b.use :html5

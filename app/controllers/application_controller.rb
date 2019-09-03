@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   before_action :set_locale
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   private
 
@@ -33,6 +34,10 @@ class ApplicationController < ActionController::Base
 
     (request.env["HTTP_ACCEPT_LANGUAGE"] || "en").scan(/^[a-z]{2}/).first
     # rubocop:enable Metrics/LineLength
+  end
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:first_name, :last_name])
   end
 
   def validate_attachment_type(file, valid_types)

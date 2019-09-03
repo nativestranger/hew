@@ -1,6 +1,8 @@
 FactoryBot.define do
   factory :address do
-    city { City.mexico_city }
+    city { 'Ciudad de México' }
+    state { 'Ciudad de México' }
+    country { 'MX' }
     street_address { Faker::Address.street_address }
     postal_code { Faker::Address.zip_code }
   end

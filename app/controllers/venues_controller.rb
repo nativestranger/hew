@@ -1,6 +1,7 @@
 class VenuesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_venue, only: %i[show edit update]
+  before_action :authorize_user!, except: %i[new create]
 
   def new
     @venue = Venue.new
@@ -45,5 +46,9 @@ class VenuesController < ApplicationController
 
   def set_venue
     @venue = Venue.find(params[:id])
+  end
+
+  def authorize_user!
+    redirect_to root_path unless current_user.id == @venue.user_id
   end
 end
