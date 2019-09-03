@@ -6,7 +6,7 @@ user.confirm
 
 venue = FactoryBot.create(:venue, user: admin)
 
-3.times { FactoryBot.create(:show, user: admin, venue: venue, is_public: true) }
+3.times { FactoryBot.create(:show, user: admin, venue: venue, is_public: true, is_approved: true) }
 FactoryBot.create(:show, user: admin, venue: venue)
 FactoryBot.create(:show, :current, user: admin, venue: venue, is_public: true)
 2.times { FactoryBot.create(:show, :old, user: admin, venue: venue, is_public: true) }
