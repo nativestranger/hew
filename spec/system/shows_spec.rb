@@ -23,6 +23,7 @@ RSpec.describe 'Shows', type: :system do
       visit edit_show_path(show)
       fill_in 'show_overview', with: 'another overview'
       click_button 'Save'
+      expect(show.reload.overview).to eq('another overview')
     end
   end
 
