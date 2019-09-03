@@ -6,6 +6,8 @@ module ShowsHelper
       :unpublished
     elsif params[:current]
       :current
+    elsif params[:upcoming]
+      :upcoming
     else
       :accepting_applications
     end
