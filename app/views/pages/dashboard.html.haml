@@ -16,9 +16,6 @@
             %a.nav-link{ href: dashboard_path(upcoming: true), class: curator_dashboard_shows_scope == :upcoming ? 'active' : '' }
               Upcoming (#{current_user.shows.upcoming.count})
           %li.nav-item
-            %a.nav-link{ href: dashboard_path(unpublished: true), class: curator_dashboard_shows_scope == :unpublished ? 'active' : '' }
-              Unpublished (#{current_user.shows.unpublished.count})
-          %li.nav-item
             %a.nav-link{ href: dashboard_path(past: true), class: curator_dashboard_shows_scope == :past ? 'active' : '' }
               Past (#{current_user.shows.past.count})
 

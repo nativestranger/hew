@@ -33,8 +33,6 @@ class Show < ApplicationRecord
 
   scope :past, -> { where('end_at <= ?', Time.current) }
 
-  scope :unpublished, -> { where(is_public: false) }
-
   scope :published, -> { where(is_public: true) }
 
   scope :approved, -> { where(is_approved: true) }
