@@ -1,8 +1,8 @@
-$black: black;
+$black: #000000;
 $darkslategray: #2f4f4f;
-$lightgray: lightgray;
+$lightgray: #d3d3d3;
 $blue: #0000ff;
-$yellow: yellow;
+$yellow: #ffff00;
 $white: #fff;
 
 body {
@@ -10,17 +10,17 @@ body {
   font-family: "Lucida Console", Monaco, monospace;
 }
 
-h1, 
-h2, 
-h3, 
-h4, 
-h5, 
+h1,
+h2,
+h3,
+h4,
+h5,
 h6,
-.h1, 
-.h2, 
-.h3, 
-.h4, 
-.h5, 
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
 .h6 {
   font-weight: 900;
   margin-bottom: 0.5rem;
