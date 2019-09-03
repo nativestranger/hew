@@ -11,7 +11,7 @@ class ShowApplication < ApplicationRecord
     rejected: 3
   }
 
-  scope :pending, -> { where(status_id: [:fresh, :maybe]).joins(:show).merge(Show.accepting_applications) }
+  scope :pending, -> { where(status_id: %i[fresh maybe]).joins(:show).merge(Show.accepting_applications) }
   scope :archive, -> { joins(:show).rejected.or(ShowApplication.past_deadline) }
   scope :past_deadline, -> { joins(:show).merge(Show.past_deadline) }
 
