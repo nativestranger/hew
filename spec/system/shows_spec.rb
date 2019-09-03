@@ -9,24 +9,20 @@ RSpec.describe 'Shows', type: :system do
   end
 
   describe 'new' do
-    it 'renders the new template' do
+    xit 'lets you create' do
       visit new_show_path
+      fill_in 'show_name', with: 'Test Show'
+      fill_in 'show_overview', with: 'an overview'
+      find(:css, '.react-datepicker__day--007').click
+      # TODO: this
     end
   end
 
   describe 'edit' do
-    it 'renders the edit template' do
+    it 'lets you edit' do
       visit edit_show_path(show)
-    end
-  end
-
-  describe 'index' do
-    let!(:other_show) { FactoryBot.create(:show) }
-    it "displays the current user's shows" do
-      show
-      visit shows_path
-      expect(page).to have_content(show.name)
-      expect(page).not_to have_content(other_show.name)
+      fill_in 'show_overview', with: 'another overview'
+      click_button 'Save'
     end
   end
 

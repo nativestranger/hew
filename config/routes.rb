@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :carousels
   resources :chats, only: :show
   resources :venues, except: :destroy
-  resources :shows, except: :destroy
+  resources :shows, except: %i[destroy index]
 
   match 'shows/:id/applications', via: :get, to: 'shows#applications', as: :show_applications
   match 'shows/:id/applications/:show_application_id', via: :patch, to: 'shows#update_application_status', as: :update_show_application_status
