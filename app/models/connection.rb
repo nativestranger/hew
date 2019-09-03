@@ -24,7 +24,9 @@ class Connection < ApplicationRecord
   end
 
   def other_user(user)
-    raise Exception, message "Connection #{id} not shared by user #{user.id}." unless user.id.in?([user1_id, user2_id])
+    if !user.id.in?([user1_id, user2_id])
+      raise Exception.new message "Connection #{id} not shared by user #{user.id}."
+    end
 
     user.id == user1_id ? user2 : user1
   end
