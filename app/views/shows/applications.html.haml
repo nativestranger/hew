@@ -42,13 +42,13 @@
             .row.text-center
               .col-3
                 %i.fa.fa-globe
-                = link_to 'Website', show_application.artist_website, target: :blank if show_application.artist_website.present?
+                = link_to 'Website', show_application.artist_website, target: :_blank if show_application.artist_website.present?
               .col-3
                 %i.fa.fa-camera-retro
-                = link_to 'Photos', show_application.photos_url, target: :blank if show_application.photos_url.present?
+                = link_to 'Photos', show_application.photos_url, target: :_blank if show_application.photos_url.present?
               .col-3
                 %i.fa.fa-instagram
-                = link_to 'Instagram', show_application.artist_instagram_url, target: :blank if show_application.artist_instagram_url.present?
+                = link_to 'Instagram', show_application.artist_instagram_url, target: :_blank if show_application.artist_instagram_url.present?
               .col-3
                 %i.fa.fa-plus
-                = link_to 'Extras', show_application.supplemental_material_url, target: :blank if show_application.supplemental_material_url.present?
+                = link_to 'Extras', show_application.supplemental_material_url, target: :_blank if show_application.supplemental_material_url.present?

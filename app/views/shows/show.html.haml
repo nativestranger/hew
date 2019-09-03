@@ -3,9 +3,9 @@
     - if @show.is_public && !@show.is_approved
       .alert.alert-warning
         %p Your show will not appear on the the homepage until it has been approved by an administrator.
-        %p
-          To share your show with your audience, copy the following link:
-          = link_to public_show_details_url(@show)
+        = render 'share_link'
+    - elsif @show.is_public
+      .alert.alert-warning= render 'share_link'
 
     .row
       .col-md-8.mb-4= render 'show', show: @show
