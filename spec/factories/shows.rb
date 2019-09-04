@@ -12,21 +12,21 @@ FactoryBot.define do
   end
 
   trait :current do
-    start_at { Time.current - rand(1..2).days }
-    end_at { Time.current + rand(1..2).days }
-    application_deadline { 4.days.ago }
+    application_deadline { rand(2..4).days.ago }
+    start_at { application_deadline + 1.day }
+    end_at { Time.current + rand(2..4).days }
   end
 
   trait :old do
+    application_deadline { 15.days.ago }
     start_at { rand(7..14).days.ago }
     end_at { start_at + rand(1..4).days }
-    application_deadline { 15.days.ago }
   end
 
   trait :upcoming do
+    application_deadline { rand(1..4).days.ago }
     start_at { Time.current + rand(1..2).days }
-    end_at { Time.current + rand(3..4).days }
-    application_deadline { 1.day.ago }
+    end_at { start_at + rand(1.7).days }
   end
 
   trait :accepting_applications do

@@ -5,7 +5,7 @@ RSpec.describe 'dashboard', type: :system do
   let!(:upcoming_show) { FactoryBot.create(:show, :upcoming, user: user) }
   let!(:current_show) { FactoryBot.create(:show, :current, user: user) }
   let!(:old_show) { FactoryBot.create(:show, :old, user: user) }
-  let!(:show) { FactoryBot.create(:show, user: user) }
+  let!(:show) { FactoryBot.create(:show, :accepting_applications, user: user) }
 
   let!(:accepted_application) { FactoryBot.create(:show_application, status_id: :accepted, show: FactoryBot.create(:show, :current), user: user) }
   let!(:pending_application) { FactoryBot.create(:show_application, status_id: [:fresh, :maybe].sample, show: FactoryBot.create(:show, :accepting_applications), user: user) }
