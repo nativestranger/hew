@@ -23,6 +23,12 @@ RSpec.describe 'dashboard', type: :system do
       find(:css, '#current').click
       sleep 0.5
       expect(page.body).to have_content(current_show.name)
+      find(:css, '#upcoming').click
+      sleep 0.5
+      expect(page.body).to have_content(upcoming_show.name)
+      find(:css, '#past').click
+      sleep 0.5
+      expect(page.body).to have_content(old_show.name)
     end
   end
 
