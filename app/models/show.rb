@@ -33,6 +33,8 @@ class Show < ApplicationRecord
       .where('application_deadline <= ?', Time.current)
   }
 
+  scope :active, -> { accepting_applications.or(current).or(upcoming) }
+
   scope :past, -> { where('end_at <= ?', Time.current) }
 
   scope :published, -> { where(is_public: true) }

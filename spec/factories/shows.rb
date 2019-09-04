@@ -22,4 +22,16 @@ FactoryBot.define do
     end_at { start_at + rand(1..4).days }
     application_deadline { 15.days.ago }
   end
+
+  trait :upcoming do
+    start_at { Time.current + rand(1..2).days }
+    end_at { Time.current + rand(3..4).days }
+    application_deadline { 1.day.ago }
+  end
+
+  trait :accepting_applications do
+    application_deadline { Time.current + rand(1..2).days }
+    start_at { application_deadline + rand(1..2).days }
+    end_at { start_at + rand(3..4).days }
+  end
 end

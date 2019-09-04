@@ -7,14 +7,14 @@
 
     %ul.nav.nav-tabs
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(accepted: true, as_artist: true), class: artist_dashboard_show_applications_scope == :accepted ? 'active' : '' }
-          Accepted (#{current_user.show_applications.accepted.count})
+        %a.nav-link{ id: 'accepted_and_active', href: dashboard_path(accepted_and_active: true, as_artist: true), class: artist_dashboard_show_applications_scope == :accepted_and_active ? 'active' : '' }
+          Accepted (#{current_user.show_applications.accepted_and_active.count})
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(pending: true, as_artist: true), class: artist_dashboard_show_applications_scope == :pending ? 'active' : '' }
+        %a.nav-link{ id: 'pending', href: dashboard_path(pending: true, as_artist: true), class: artist_dashboard_show_applications_scope == :pending ? 'active' : '' }
           Pending (#{current_user.show_applications.pending.count})
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(archive: true, as_artist: true), class: artist_dashboard_show_applications_scope == :archive ? 'active' : '' }
-          Archive (#{current_user.show_applications.archive.count})
+        %a.nav-link{ id: 'past', href: dashboard_path(past: true, as_artist: true), class: artist_dashboard_show_applications_scope == :past ? 'active' : '' }
+          Past (#{current_user.show_applications.past.count})
 
   .list-group
     - @show_applications.each do |show_application|

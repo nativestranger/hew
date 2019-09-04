@@ -14,12 +14,12 @@ module DashboardHelper
   end
 
   def artist_dashboard_show_applications_scope
-    if params[:accepted]
-      :accepted
+    if params[:accepted_and_active]
+      :accepted_and_active
     elsif params[:pending]
       :pending
-    elsif params[:archive]
-      :archive
+    elsif params[:past]
+      :past
     else
       :pending
     end

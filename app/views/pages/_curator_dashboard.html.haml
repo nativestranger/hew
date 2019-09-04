@@ -7,16 +7,16 @@
 
     %ul.nav.nav-tabs
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(accepting_applications: true), class: curator_dashboard_shows_scope == :accepting_applications ? 'active' : '' }
+        %a.nav-link{ id: 'accepting_applications', href: dashboard_path(accepting_applications: true), class: curator_dashboard_shows_scope == :accepting_applications ? 'active' : '' }
           Accepting Applications (#{current_user.shows.accepting_applications.count})
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(current: true), class: curator_dashboard_shows_scope == :current ? 'active' : '' }
+        %a.nav-link{ id: 'current', href: dashboard_path(current: true), class: curator_dashboard_shows_scope == :current ? 'active' : '' }
           Current (#{current_user.shows.current.count})
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(upcoming: true), class: curator_dashboard_shows_scope == :upcoming ? 'active' : '' }
+        %a.nav-link{ id: 'upcoming', href: dashboard_path(upcoming: true), class: curator_dashboard_shows_scope == :upcoming ? 'active' : '' }
           Upcoming (#{current_user.shows.upcoming.count})
       %li.nav-item
-        %a.nav-link{ href: dashboard_path(past: true), class: curator_dashboard_shows_scope == :past ? 'active' : '' }
+        %a.nav-link{ id: 'past', href: dashboard_path(past: true), class: curator_dashboard_shows_scope == :past ? 'active' : '' }
           Past (#{current_user.shows.past.count})
 
   .list-group
