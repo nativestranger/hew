@@ -11,6 +11,16 @@ class ShowApplication < ApplicationRecord
     rejected: 3
   }
 
+  scope :pending, -> { where(status_id: %i[fresh maybe]).joins(:show).merge(Show.accepting_applications) }
+
+  scope :past, -> {
+    rejected.joins(:show).
+      or(accepted.joins(:show).merge(Show.past)).
+      or(joins(:show).merge(Show.past_deadline).where.not(status_id: :accepted))
+  }
+
+  scope :accepted_and_active, -> { accepted.joins(:show).merge(Show.active) }
+
   validates :artist_website, url: { allow_blank: true }
   validates :artist_instagram_url, url: { allow_blank: true }
   validates :photos_url, url: { allow_blank: true }

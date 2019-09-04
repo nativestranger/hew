@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 class PagesController < ApplicationController
-  before_action :authenticate_user!, except: [:home, :application_submitted]
+  before_action :authenticate_user!, except: %i[home application_submitted]
 
   def home
     params[:show_sort_by] ||= 'Application Deadline'
-    set_shows
+    set_homepage_shows
     @city = 'Ciudad de México'
   end
 
   def dashboard
-    @shows = current_user.shows.send(helpers.curator_dashboard_shows_scope)
+    if params[:as_artist]
+      @show_applications = current_user.show_applications.send(helpers.artist_dashboard_show_applications_scope)
+    else
+      @shows = current_user.shows.send(helpers.curator_dashboard_shows_scope)
+    end
   end
 
   def messages
@@ -19,7 +23,7 @@ class PagesController < ApplicationController
 
   private
 
-  def set_shows
+  def set_homepage_shows
     case params[:show_sort_by]
     when 'Application Deadline'
       @shows = Show.accepting_applications.order(application_deadline: :asc)
@@ -27,6 +31,6 @@ class PagesController < ApplicationController
       @shows = Show.accepting_applications.order(created_at: :asc)
     end
 
-    @shows = @shows.approved
+    @shows = @shows.approved.published
   end
 end
