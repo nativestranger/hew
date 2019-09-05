@@ -1,7 +1,7 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show, only: %i[applications show edit update update_application_status]
-  before_action :authorize_user!, except: %i[new create]
+  before_action :authorize_user!, except: %i[new create index]
 
   def new
     address = Address.new(city: 'Ciudad de México', state: 'Ciudad de México', country: 'MX')

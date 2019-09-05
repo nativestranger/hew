@@ -21,9 +21,7 @@ module Admin
     def update
       was_approved = requested_resource.is_approved?
       super
-      if !was_approved && requested_resource.is_approved?
-        ShowMailer.approved(requested_resource).deliver_later
-      end
+      ShowMailer.approved(requested_resource).deliver_later if !was_approved && requested_resource.is_approved?
     end
   end
 end

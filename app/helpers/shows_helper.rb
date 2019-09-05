@@ -1,13 +1,13 @@
 module ShowsHelper
-  def curator_dashboard_shows_scope
-    if params[:past]
-      :past
-    elsif params[:unpublished]
-      :unpublished
-    elsif params[:current]
-      :current
+  def curator_application_status_scope
+    if params[:accepted]
+      :accepted
+    elsif params[:maybe]
+      :maybe
+    elsif params[:rejected]
+      :rejected
     else
-      :accepting_applications
+      :fresh
     end
   end
 end

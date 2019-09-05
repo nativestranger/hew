@@ -17,8 +17,10 @@ class Show < ApplicationRecord
 
   has_many :applications, class_name: 'ShowApplication', dependent: :destroy
 
+  scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
+
   scope :accepting_applications, lambda {
-    where('application_deadline > ?', Time.current).published
+    where('application_deadline >= ?', Time.current)
   }
 
   scope :current, lambda {
@@ -26,9 +28,14 @@ class Show < ApplicationRecord
       .where('end_at >= ?', Time.current)
   }
 
-  scope :past, -> { where('end_at <= ?', Time.current) }
+  scope :upcoming, lambda {
+    where('start_at >= ?', Time.current)
+      .where('application_deadline <= ?', Time.current)
+  }
 
-  scope :unpublished, -> { where(is_public: false) }
+  scope :active, -> { accepting_applications.or(current).or(upcoming) }
+
+  scope :past, -> { where('end_at <= ?', Time.current) }
 
   scope :published, -> { where(is_public: true) }
 

@@ -8,21 +8,21 @@ class ShowDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    user: Field::BelongsTo,
+    user:                 Field::BelongsTo,
     # venue: Field::BelongsTo,
-    applications: Field::HasMany.with_options(class_name: "ShowApplication"),
-    id: Field::Number,
-    name: Field::String,
-    start_at: Field::DateTime,
-    end_at: Field::DateTime,
-    overview: Field::String,
-    full_description: Field::Text,
+    applications:         Field::HasMany.with_options(class_name: "ShowApplication"),
+    id:                   Field::Number,
+    name:                 Field::String,
+    start_at:             Field::DateTime,
+    end_at:               Field::DateTime,
+    overview:             Field::String,
+    full_description:     Field::Text,
     application_deadline: Field::DateTime,
-    application_details: Field::Text,
-    created_at: Field::DateTime,
-    updated_at: Field::DateTime,
-    is_public: Field::Boolean,
-    is_approved: Field::Boolean,
+    application_details:  Field::Text,
+    created_at:           Field::DateTime,
+    updated_at:           Field::DateTime,
+    is_public:            Field::Boolean,
+    is_approved:          Field::Boolean
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -30,11 +30,11 @@ class ShowDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :id,
-    :name,
-    :user,
-    :applications,
+  COLLECTION_ATTRIBUTES = %i[
+    id
+    name
+    user
+    applications
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -54,7 +54,7 @@ class ShowDashboard < Administrate::BaseDashboard
     :is_approved,
     :created_at,
     :updated_at,
-    :applications,
+    :applications
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -72,7 +72,7 @@ class ShowDashboard < Administrate::BaseDashboard
     :application_deadline,
     :application_details,
     :is_public,
-    :is_approved,
+    :is_approved
   ].freeze
 
   # Overwrite this method to customize how shows are displayed
