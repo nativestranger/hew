@@ -8,12 +8,12 @@ class StateDashboard < Administrate::BaseDashboard
   # which determines how the attribute is displayed
   # on pages throughout the dashboard.
   ATTRIBUTE_TYPES = {
-    country: Field::BelongsTo,
-    cities: Field::HasMany,
-    id: Field::Number,
-    name: Field::String,
+    country:    Field::BelongsTo,
+    cities:     Field::HasMany,
+    id:         Field::Number,
+    name:       Field::String,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -21,30 +21,30 @@ class StateDashboard < Administrate::BaseDashboard
   #
   # By default, it's limited to four items to reduce clutter on index pages.
   # Feel free to add, remove, or rearrange items.
-  COLLECTION_ATTRIBUTES = [
-    :id,
-    :name,
-    :country,
-    :cities,
+  COLLECTION_ATTRIBUTES = %i[
+    id
+    name
+    country
+    cities
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
-  SHOW_PAGE_ATTRIBUTES = [
-    :id,
-    :name,
-    :country,
-    :cities,
-    :created_at,
-    :updated_at,
+  SHOW_PAGE_ATTRIBUTES = %i[
+    id
+    name
+    country
+    cities
+    created_at
+    updated_at
   ].freeze
 
   # FORM_ATTRIBUTES
   # an array of attributes that will be displayed
   # on the model's form (`new` and `edit`) pages.
-  FORM_ATTRIBUTES = [
-    :name,
-    :country,
+  FORM_ATTRIBUTES = %i[
+    name
+    country
   ].freeze
 
   # Overwrite this method to customize how states are displayed
