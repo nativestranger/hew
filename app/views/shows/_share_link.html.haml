@@ -1,3 +1,6 @@
 %p
   To share your show with your audience, copy the following link:
-  = link_to public_show_details_url(@show), public_show_details_url(@show)
+
+  %div{"data-controller" => "clipboard" }
+    %input{ readonly: "readonly", type: "text", value: public_show_details_url(@show), "data-target" => "clipboard.source" }
+    %button.clipboard-button{ "data-action" => "clipboard#copy" } Copy to Clipboard
