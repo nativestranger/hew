@@ -59,8 +59,8 @@
                 %span.fa.fa-globe
             = f.input_field :instagram_url, class: "form-control"
 
-          -# .form-group
-          -#   %label{ for: "user_avatar"} Avatar
-          -#   = f.input :avatar, as: :file, label: false
+          .form-group
+            %label{ for: "user_avatar"} Avatar
+            = f.input :avatar, as: :file, label: false
 
           = f.button :submit, t('save'), class: 'btn btn-primary'
