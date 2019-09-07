@@ -155,7 +155,7 @@ export default class Chat extends React.Component {
                     <input className="mw-100 border rounded form-control" required={true} type="text" ref="bodyInput" name="text" title="Type a message..." placeholder="Type a message..." required />
                   </div>
                   <div className="col-3 m-0 p-1">
-                    <button ref="submit" className="btn btn-outline-secondary rounded border w-100" title="Gönder!" style= { { paddingRight: '16px' } }><i className="fa fa-paper-plane" aria-hidden="true"></i></button>
+                    <button ref="submit" className="btn submit-message btn-outline-secondary rounded border w-100" title="Gönder!" style= { { paddingRight: '16px' } }><i className="fa fa-paper-plane" aria-hidden="true"></i></button>
                   </div>
                 </div>
               </form>
