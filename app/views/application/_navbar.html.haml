@@ -9,13 +9,11 @@
     -#   %li.nav-item
     -#     %a.nav-link{:href => "#"}= t('curators')
 
-    %ul.navbar-nav.ml-auto    
+    %ul.navbar-nav.ml-auto
       - if current_user
-        %button.btn-light.mr-3
-          = link_to 'Add Call for Art', new_show_path
-      - else 
-        %button.btn-light.mr-3
-          = link_to 'Add Call for Art', new_user_registration_path
+        = button_to 'Add Call for Art', new_show_path, class: 'btn btn-link py-2 px-3 mr-2', method: :get
+      - else
+        = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-link py-2 px-3 mr-2', method: :get
       %li.nav-item.dropdown
         %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
           = t('menu')
