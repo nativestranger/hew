@@ -16,7 +16,7 @@ body {
   margin-bottom: 0;
 }
 
-.jumbotron {
+.jumbotron.funmotron {
   background: $white;
   color: $blue;
   border-radius: 0;
@@ -45,15 +45,15 @@ h6,
 }
 
 // CARDS
-.card {
+.card.fun-card {
   border-color: $black;
   border-radius: 0;
   box-shadow: 5px 10px $lightgray;
-}
 
-.card-header {
-  background-color: $yellow;
-  font-weight: 900px;
+  .card-header {
+    background-color: $yellow;
+    font-weight: 900px;
+  }
 }
 
 // BUTTONS
