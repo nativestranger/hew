@@ -12,7 +12,8 @@ class SettingsController < ApplicationController
         current_user.avatar.attach(params[:user][:avatar])
       end
       set_locale
-      redirect_to root_path, notice: success_notice
+      flash.notice = success_notice
+      redirect_back(fallback_location: root_path)
     else
       render :profile
     end

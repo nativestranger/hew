@@ -10,6 +10,8 @@
             .profile-avatar.float-right
               - if current_user.avatar.attached?
                 = image_tag current_user.avatar, class: 'img-fluid rounded'
+              - else
+                = image_tag current_user.gravatar_url, class: 'img-fluid rounded'
 
       .card-body.form-inputs
         = simple_form_for current_user, url: update_profile_settings_path do |f|
