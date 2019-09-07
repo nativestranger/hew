@@ -1,12 +1,13 @@
 .row
   .col-lg-10.mx-auto
+    .jumbotron
+      .container-fluid
+        %h1.display-3 Open Calls for Art in Mexico City
     .row
-      .col-md-8.text-sm-center.text-md-left.mb-2
-        %h2 Art Shows in: #{@city}
-      .col-md-4
+      .col
         .pull-right
-          %span Sort by:
-          .btn-group
+          %span.text-muted Sort by:
+          .btn-group.mb-1
             %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
               = params[:show_sort_by]
               %span.caret

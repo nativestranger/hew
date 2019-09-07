@@ -12,10 +12,10 @@
     %ul.navbar-nav.ml-auto    
       - if current_user
         %button.btn-outline-light.mr-3
-          = link_to 'Add a Call for Art', new_show_path
+          = link_to 'Add Call for Art', new_show_path
       - else 
         %button.btn-outline-light.mr-3
-          = link_to 'Add a Call for Art', new_user_registration_path
+          = link_to 'Add Call for Art', new_user_registration_path
       %li.nav-item.dropdown
         %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
           = t('menu')
