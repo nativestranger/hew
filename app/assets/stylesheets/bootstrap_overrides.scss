@@ -57,7 +57,7 @@ h6,
 }
 
 // BUTTONS
-.btn {
+.btn:not(.submit-message) {
   border-radius: 0;
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 0.9rem;
