@@ -3,12 +3,15 @@
     .card.border-bootstrap.box-shadow
       .card-header
         .row
-          .col-md-10
+          .col-10
             %h1= t('settings')
             = link_to "Change your password", edit_user_registration_path
-          .col-md-2
-            - if current_user.avatar.attached?
-              = image_tag current_user.avatar, class: 'img-fluid rounded'
+          .col-2
+            .profile-avatar.float-right
+              - if current_user.avatar.attached?
+                = image_tag current_user.avatar, class: 'img-fluid rounded'
+              - else
+                = image_tag current_user.gravatar_url, class: 'img-fluid rounded'
 
       .card-body.form-inputs
         = simple_form_for current_user, url: update_profile_settings_path do |f|
@@ -58,8 +61,8 @@
                 %span.fa.fa-globe
             = f.input_field :instagram_url, class: "form-control"
 
-          -# .form-group
-          -#   %label{ for: "user_avatar"} Avatar
-          -#   = f.input :avatar, as: :file, label: false
+          .form-group
+            %label{ for: "user_avatar"} Avatar
+            = f.input :avatar, as: :file, label: false
 
           = f.button :submit, t('save'), class: 'btn btn-primary'
