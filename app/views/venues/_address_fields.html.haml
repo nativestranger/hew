@@ -1,5 +1,8 @@
 .nested-fields
   .row
+    .col-xl-8.col-12
+      = f.input :street_address
+      = f.input :street_address_2, label: false
     .col-xl-2.col-6
       .form-group
         %label{ for: 'city_id' }= t('city')
@@ -7,6 +10,3 @@
         .d-none= f.input :state
         .d-none= f.input :country
     .col-xl-2.col-6= f.input :postal_code
-    .col-xl-8.col-12
-      = f.input :street_address
-      = f.input :street_address_2, label: false

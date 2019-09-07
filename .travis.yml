@@ -12,6 +12,9 @@ addons:
 env:
   global:
   - PGPORT=5432
+  - AWS_ACCESS_KEY_ID=dummy
+  - AWS_SECRET_KEY=dummy
+  - S3_BUCKET_NAME=dummy
 before_install:
   - rvm install 2.5.1
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &

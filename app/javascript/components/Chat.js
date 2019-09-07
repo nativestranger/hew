@@ -55,7 +55,7 @@ export default class Chat extends React.Component {
                                          created_at_in_words: 'less than a minute ago',
                                          user: { id: App.currentUser().id,
                                                  full_name: App.currentUser().full_name,
-                                                 gravatar_url: App.currentUser().gravatar_url }
+                                                 avatar_url: App.currentUser().avatar_url }
     }
 
     let newMessages = [...this.state.messages]
@@ -86,7 +86,7 @@ export default class Chat extends React.Component {
     let thisComponent = this;
 
     let renderUserIcon = function(user) {
-      return (<img className="chat-avatar float-left" src={user.gravatar_url}/>)
+      return (<img className="chat-avatar float-left" src={user.avatar_url}/>)
     }
 
     let renderMessage = function(message) {
@@ -115,7 +115,7 @@ export default class Chat extends React.Component {
 
       return (
         <div key={user.id} className="d-inline-block">
-          <img className="chat-avatar d-inline-block" src={ user.gravatar_url } />
+          <img className="chat-avatar d-inline-block" src={ user.avatar_url } />
           <span className="mt-2 ml-2">{ user.full_name }</span>
         </div>
       )

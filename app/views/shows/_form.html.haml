@@ -4,6 +4,9 @@
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .row
+      .col
+        %h3 Show Details
+    .row
       .col-md-4
         .form-group
           %label{ for: 'show_name' }= t('name')
@@ -30,6 +33,18 @@
           %label{ for: 'show_full_description' } Full Description
           = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
+    %hr.border
+
+    .row
+      .col
+        %h3 Application Details
+
+    .row
+      .col-md-12
+        .form-group
+          %label{ for: 'show_application_details' } What should Artists include when applying?
+          = f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
     .row
       .col-md-4
         .form-group
@@ -37,22 +52,18 @@
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
           = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @show.errors[:application_deadline].present? }
 
-
-        .form-group
-          %label
-          = f.input :is_public, label: 'Publish'
-
-      .col-md-8
-        .form-group
-          %label{ for: 'show_application_details' } Application Details
-          = f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
-
     %hr.border
 
     .row
       .col-md-12
-        %h3.text-center Venue Details
+        %h3 Venue Details
         = f.simple_fields_for :venue do |venue|
           = render '/venues/venue_fields', f: venue
+    .row
+      .col-md-2
+        = f.button :submit, t('save'), class: 'btn btn-primary'
 
-    = f.button :submit, t('save'), class: 'btn btn-primary'
+      .col
+        .form-group
+          %label
+            = f.input :is_public, label: 'Publish'
