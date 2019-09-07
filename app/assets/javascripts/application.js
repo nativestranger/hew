@@ -17,4 +17,6 @@
 //= require popper
 //= require bootstrap-sprockets
 //= require trix
+//= require jquery.ui.widget
+//= require z.jquery.fileupload
 //= require_tree .
