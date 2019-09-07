@@ -29,6 +29,14 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def avatar_url
+    if avatar.attached?
+      Rails.application.routes.url_helpers.rails_blob_url(avatar)
+    else
+      gravatar_url
+    end
+  end
+
   private
 
   def set_gravatar_url
