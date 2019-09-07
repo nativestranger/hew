@@ -9,7 +9,13 @@
     -#   %li.nav-item
     -#     %a.nav-link{:href => "#"}= t('curators')
 
-    %ul.navbar-nav.ml-auto
+    %ul.navbar-nav.ml-auto    
+      - if current_user
+        %button.btn-outline-light.mr-3
+          = link_to 'Add a Call for Art', new_show_path
+      - else 
+        %button.btn-outline-light.mr-3
+          = link_to 'Add a Call for Art', new_user_registration_path
       %li.nav-item.dropdown
         %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
           = t('menu')
@@ -27,6 +33,7 @@
             = link_to t('sign_out'), destroy_user_session_path, method: :delete, class: "dropdown-item"
           - else
             = link_to t('sign_in'), new_user_session_path, class: "dropdown-item"
+            = link_to t('sign_up'), new_user_registration_path, class: "dropdown-item"
   -# %form.form-inline.my-2.my-lg-0
   -#   %input.form-control.mr-sm-2{placeholder: 'search', type: "search"}
   -#   %button.btn.btn-outline-success.my-2.my-sm-0{:type => "submit"}
