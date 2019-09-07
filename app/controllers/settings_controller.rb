@@ -2,6 +2,7 @@
 
 class SettingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_s3_direct_post, only: %i[profile update_profile]
 
   def profile; end
 
@@ -36,5 +37,14 @@ class SettingsController < ApplicationController
     result = t('success')
     result += " You must confirm your new email address." if current_user.unconfirmed_email.present?
     result
+  end
+
+  # TODO: use this
+  def set_s3_direct_post
+    @s3_direct_post = S3_BUCKET.presigned_post(
+      key: "uploads/#{SecureRandom.uuid}/${filename}",
+      success_action_status: '201',
+      acl: 'public-read'
+    )
   end
 end
