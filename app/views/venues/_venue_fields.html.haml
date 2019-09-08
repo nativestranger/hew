@@ -10,6 +10,7 @@
           .input-group-text
             %span.fa.fa-globe
         = f.input_field :website, class: "form-control"
+        = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :website
 
   = f.simple_fields_for :address do |address|
     = render 'venues/address_fields', f: address

@@ -1,0 +1,3 @@
+- if f.object.errors.messages[attr_name].present?
+  - unless f.object.send(attr_name).starts_with?('http://', 'https://')
+    - f.object.errors.messages[attr_name].first << " (must start with 'https://' or 'http://')"

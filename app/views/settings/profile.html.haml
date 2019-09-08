@@ -54,12 +54,14 @@
                 .input-group-text
                   %span.fa.fa-globe
               = f.input_field :artist_website, class: "form-control"
+              = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_website
 
           = f.input :instagram_url, wrapper: :vertical_input_group, label: "Instagram URL" do
             .input-group-prepend
               .input-group-text
                 %span.fa.fa-globe
             = f.input_field :instagram_url, class: "form-control"
+            = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :instagram_url
 
           .form-group
             %label{ for: "user_avatar"} Avatar
