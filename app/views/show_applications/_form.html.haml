@@ -16,6 +16,7 @@
             .input-group-text
               %span.fa.fa-globe
           = f.input_field :artist_website, class: "form-control"
+          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_website
 
       .col-md-6
         = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Instagram URL" do
@@ -23,6 +24,7 @@
             .input-group-text
               %span.fa.fa-globe
           = f.input_field :artist_instagram_url, class: "form-control"
+          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_instagram_url
 
     .row
       .col-md-6
@@ -31,6 +33,7 @@
             .input-group-text
               %span.fa.fa-globe
           = f.input_field :photos_url, class: "form-control"
+          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :photos_url
 
       .col-md-6
         = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Supplemental Material" do
@@ -38,6 +41,7 @@
             .input-group-text
               %span.fa.fa-globe
           = f.input_field :supplemental_material_url, class: "form-control"
+          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :supplemental_material_url
 
     .row
       .col-md-12

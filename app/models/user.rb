@@ -20,8 +20,8 @@ class User < ApplicationRecord
   validates :first_name, presence: true
   validates :last_name, presence: true
 
-  validates :artist_website, url: { allow_blank: true }
-  validates :instagram_url, url: { allow_blank: true }
+  validates :artist_website, url: { allow_blank: true, public_suffix: true }
+  validates :instagram_url, url: { allow_blank: true, public_suffix: true }
 
   scope :admins, -> { where(is_admin: true) }
 

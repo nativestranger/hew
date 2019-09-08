@@ -21,10 +21,10 @@ class ShowApplication < ApplicationRecord
 
   scope :accepted_and_active, -> { accepted.joins(:show).merge(Show.active) }
 
-  validates :artist_website, url: { allow_blank: true }
-  validates :artist_instagram_url, url: { allow_blank: true }
-  validates :photos_url, url: { allow_blank: true }
-  validates :supplemental_material_url, url: { allow_blank: true }
+  validates :artist_website, url: { allow_blank: true, public_suffix: true }
+  validates :artist_instagram_url, url: { allow_blank: true, public_suffix: true }
+  validates :photos_url, url: { allow_blank: true, public_suffix: true }
+  validates :supplemental_material_url, url: { allow_blank: true, public_suffix: true }
 
   # what validations?
 end

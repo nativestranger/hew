@@ -5,13 +5,12 @@
         %label{ for: 'venue_name' }= 'Venue Name'
         = f.input :name, input_html: { class: 'form-control' }, label: false
     .col-md-8
-      .form-group
-        %label{ for: 'venue_website' }= t('website')
-        .input-group
-          .input-group-prepend
-            .input-group-text
-              .fa.fa-globe
-          = f.input_field :website, class: "form-control"
+      = f.input :website, wrapper: :vertical_input_group, label: "Website" do
+        .input-group-prepend
+          .input-group-text
+            %span.fa.fa-globe
+        = f.input_field :website, class: "form-control"
+        = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :website
 
   = f.simple_fields_for :address do |address|
     = render 'venues/address_fields', f: address
