@@ -82,6 +82,14 @@ export default class Chat extends React.Component {
         .always(function() { $(thisComponent.refs.submit).prop('disabled', false); });
   }
 
+  renderSeenUser(user) {
+    return (
+      <div key={ `seen-user-${user.id}` } className="seen-user">
+        <img className="avatar float-left" src={user.avatar_url}/>
+      </div>
+    )
+  }
+
   render() {
     let thisComponent = this;
 
@@ -95,9 +103,13 @@ export default class Chat extends React.Component {
       if (message.user.id == App.currentUser().id)
         return (
           <div key={message.id} className="current-user p-2 m-0 position-relative" data-is={ `You - ${message.created_at_in_words}` }>
+            { isLatestMessage && (
+              <span className="seen-users">
+                { message.seen_by && message.seen_by.map(thisComponent.renderSeenUser) }
+              </span>
+            ) }
           	<a className="float-right">
               { message.body }
-              { message.seen && isLatestMessage && (<i style={{ fontSize: '10px' }} className="fa fa-check ml-2"></i>) }
             </a>
           </div>
         )
