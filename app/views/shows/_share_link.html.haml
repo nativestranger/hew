@@ -1,3 +1,17 @@
-%p
-  To share your show with your audience, copy the following link:
-  = link_to public_show_details_url(@show), public_show_details_url(@show)
+.card.mb-2
+  .card-body
+    %p
+      %small
+        - if !@show.is_approved
+          Your show will not appear on the the homepage until it has been approved by an administrator.
+          %br
+
+        To share your show with your audience, copy the following link:
+
+    %div{"data-controller" => "clipboard" }
+      .row.no-gutters
+        .input-group.col-12
+          %input.d-inline-block.mw-100.border.rounded-left.form-control{ readonly: "readonly", type: "text", value: public_show_details_url(@show), "data-target" => "clipboard.source" }
+          .input-group-append
+            %button.rounded-right.btn.btn-primary.btn-success.p-2.clipboard-button{ "data-action" => "clipboard#copy" }
+              .fa.fa-clipboard
