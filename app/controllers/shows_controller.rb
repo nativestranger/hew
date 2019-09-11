@@ -1,6 +1,7 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show, only: %i[applications show edit update update_application_status]
+  before_action :set_show, except: %i[new create index]
+  before_action :set_show_application, only: %i[application_details update_application_status]
   before_action :authorize_user!, except: %i[new create index]
 
   def new
@@ -42,14 +43,16 @@ class ShowsController < ApplicationController
 
   def update_application_status
     status = ShowApplication.status_ids.find { |_k, v| v == params.fetch(:status_id).to_i }.first
-    @show_application = @show.applications.find(params[:show_application_id])
     @show_application.update!(status_id: status)
     flash[:notice] = "Moved #{@show_application.user.full_name} to '#{status.capitalize}'."
-    redirect_to show_applications_path(@show, helpers.curator_application_status_scope => true)
+    redirect_back(fallback_location: show_applications_path(@show, helpers.curator_application_status_scope => true))
   end
 
   def applications
     @applications = @show.applications.send(helpers.curator_application_status_scope)
+  end
+
+  def application_details
   end
 
   private
@@ -75,6 +78,10 @@ class ShowsController < ApplicationController
 
   def set_show
     @show = Show.find(params[:id])
+  end
+
+  def set_show_application
+    @show_application = @show.applications.find(params[:show_application_id])
   end
 
   def authorize_user!

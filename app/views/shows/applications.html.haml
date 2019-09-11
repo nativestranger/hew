@@ -27,7 +27,8 @@
             .d-flex.w-100.justify-content-between.mb-2
               .details
                 .d-inline-block= image_tag(show_application.user.gravatar_url, class: 'rounded-circle')
-                %h4.d-inline-block.mb-0= show_application.user.full_name
+                %h4.d-inline-block.mb-0
+                  = link_to show_application.user.full_name, curator_show_application_path(@show, show_application)
                 -# %small.text-muted= time_ago_in_words(show_application.created_at)
               .btns
                 .d-inline-block= button_to 'Accept', update_show_application_status_path(@show, show_application, { 'status_id' => ShowApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-default btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
