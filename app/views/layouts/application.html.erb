@@ -1,39 +1,20 @@
 <!DOCTYPE html>
 <html lang=<%= I18n.locale %>>
   <head>
-    <!-- Production - Google Tag Manager -->
     <% if Rails.env.production? %>
-    <script>
-    document.addEventListener('turbolinks:load', function(event) {
-      var url = event.data.url;  dataLayer.push({
-        'event':'pageView',
-        'virtualUrl': url
-      });
-    });(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-PT3CS8Q');
-    </script>
+      <script>
+      document.addEventListener('turbolinks:load', function(event) {
+        var url = event.data.url;  dataLayer.push({
+          'event':'pageView',
+          'virtualUrl': url
+        });
+      });(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',ENV['GTM_ID']);
+      </script>
     <% end %>
-    <!-- End Google Tag Manager -->
-  
-    <!-- Staging - Google Tag Manager -->
-    <% if Rails.env.staging? %>
-    <script>
-    document.addEventListener('turbolinks:load', function(event) {
-      var url = event.data.url;  dataLayer.push({
-        'event':'pageView',
-        'virtualUrl': url
-      });
-    });(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MN6ZNSF');
-    </script>
-    <% end %>
-    <!-- End Google Tag Manager -->
 
     <title>Hew</title>
     <%= csrf_meta_tags %>
@@ -48,10 +29,8 @@
   </head>
 
   <body>
-    <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PT3CS8Q"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
 
     <% if current_user %>
       <div id="user-data"
