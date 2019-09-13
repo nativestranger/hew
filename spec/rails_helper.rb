@@ -23,7 +23,7 @@ require 'rspec/rails'
 # require only the support files necessary.
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
-Webdrivers::Chromedriver.required_version = '76.0.3809.126'
+Webdrivers::Chromedriver.required_version = '77.0.3865.40'
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
