@@ -2,8 +2,8 @@ FactoryBot.define do
   factory :show_application do
     show { create(:show) }
     user { create(:user) }
-    artist_statement { Faker::Movies::Lebowski.quote }
-    artist_website { 'https://www.website.com/1' }
+    artist_statement { Faker::Lorem.paragraph(rand(10..50)) }
+    sequence(:artist_website) { |n| "https://www.website.com/#{n}" }
     sequence(:artist_instagram_url) { |n| "https://www.instagram.com/#{n}" }
     sequence(:photos_url) { |n| "https://www.photos_url.com/#{n}" }
     sequence(:supplemental_material_url) { |n| "https://www.supplemental_material_url.com/#{n}" }
