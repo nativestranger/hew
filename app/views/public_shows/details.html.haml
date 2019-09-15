@@ -4,11 +4,11 @@
       .col-md-8.mb-4
         .card.fun-card
           .card-header
-            %h5.text-center
+            %h4.text-center
               = @show.name
 
           .card-body
-            %h3= "#{@show.name} @ #{@show.venue.name}"
+            %h4= "#{@show.name} @ #{@show.venue.name}"
             %p= "#{I18n.l(@show.start_at, format: :long)} - #{I18n.l(@show.end_at, format: :long)}"
             %p.text-muted= @show.overview
 
@@ -18,12 +18,12 @@
       .col-md-4
         .card.fun-card
           .card-header
-            %h5.text-center Application Info
+            %h4.text-center Application Info
           .card-body
-            %h6 Deadline
+            %h5 Deadline
             %p= I18n.l(@show.application_deadline, format: :long)
 
-            %h6 Details to Include
+            %h5 Details to Include
             %p= @show.application_details.html_safe
           .card-footer.text-center
             = button_to 'Apply',
