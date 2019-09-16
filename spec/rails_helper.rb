@@ -24,11 +24,8 @@ require 'rspec/rails'
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
-if ENV['TRAVIS_JOB_NUMBER']
-  Webdrivers::Chromedriver.required_version = '70.0.3538.97'
-else
-  Webdrivers::Chromedriver.required_version = '77.0.3865.40'
-end
+# Webdrivers::Chromedriver.update
+# Webdrivers::Chromedriver.required_version = '77.0.3865.40'
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.

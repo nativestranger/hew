@@ -17,6 +17,7 @@ env:
   - S3_BUCKET_NAME=dummy
 before_install:
   - rvm install 2.5.1
+  - bundle exec rails runner "Webdrivers::Chromedriver.update"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 install:
   - bundle install
