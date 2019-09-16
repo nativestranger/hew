@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: chats
+#
+#  id              :bigint           not null, primary key
+#  chatworthy_type :string           default(""), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  chatworthy_id   :bigint           not null
+#
+# Indexes
+#
+#  index_chats_on_chatworthy_type_and_chatworthy_id  (chatworthy_type,chatworthy_id) UNIQUE
+#
+
 class Chat < ApplicationRecord
   belongs_to :chatworthy, polymorphic: true
   has_many :chat_users, dependent: :destroy
