@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: messages
+#
+#  id           :bigint           not null, primary key
+#  body         :text             default(""), not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  chat_user_id :bigint           not null
+#
+# Indexes
+#
+#  index_messages_on_chat_user_id  (chat_user_id)
+#
+
 class MessageSerializer < ActiveModel::Serializer
   include ActionView::Helpers::DateHelper
 
