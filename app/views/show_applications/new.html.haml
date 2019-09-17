@@ -1,10 +1,22 @@
 .row
   .col-lg-10.mx-auto
-    .card.fun-card.border-bootstrap.box-shadow
-      .card-header
-        %h1
-          = t('new')
-          = t('show_application')
+    .row
+      .col-md-8
+        .card.fun-card.border-bootstrap.box-shadow
+          .card-header
+            %h1
+              = t('new')
+              = t('show_application')
 
-      .card-body
-        = render 'form'
+          .card-body
+            = render 'form'
+      .col-md-4
+        .card.fun-card
+          .card-header
+            %h5.text-center Application Info
+          .card-body
+            %h6 Deadline
+            %p= I18n.l(@show.application_deadline, format: :long)
+
+            %h6 Details to Include
+            %p= @show.application_details.html_safe
