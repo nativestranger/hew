@@ -38,6 +38,7 @@
             -#   .form-group
             -#     %label{ for: 'user_locale' } Language
             -#     = f.input :locale, collection: [[t(:english), 'en'], [t(:spanish), 'es']], input_html: { class: 'form-control' }, label: false
+
           .row
             .col-6
               .form-group
@@ -48,13 +49,24 @@
                 %label
                 = f.input :is_curator, label: 'I am a curator'
 
-          #user-artist-website-form-group.form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
-            = f.input :artist_website, wrapper: :vertical_input_group, label: "Artist Website" do
-              .input-group-prepend
-                .input-group-text
-                  %span.fa.fa-globe
-              = f.input_field :artist_website, class: "form-control"
-              = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_website
+          #user-artist-fields
+            .row
+              .col-md-12
+                .form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+                  = f.input :artist_website, wrapper: :vertical_input_group, label: "Artist Website" do
+                    .input-group-prepend
+                      .input-group-text
+                        %span.fa.fa-globe
+                    = f.input_field :artist_website, class: "form-control"
+                    = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_website
+
+                .form-group
+                  %label{ for: 'user_artist_statement' } Artist Statement
+                  = f.input :artist_statement, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
+                .form-group
+                  %label{ for: 'user_bio' } Bio
+                  = f.input :bio, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
           = f.input :instagram_url, wrapper: :vertical_input_group, label: "Instagram URL" do
             .input-group-prepend
