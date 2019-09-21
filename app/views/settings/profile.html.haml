@@ -51,10 +51,10 @@
                 %label
                 = f.input :is_curator, label: 'I am a curator'
 
-          #user-artist-fields
+          #user-artist-fields{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
             .row
               .col-md-12
-                .form-group{ style: "display: #{current_user.is_artist? ? '' : 'none'}" }
+                .form-group
                   = f.input :artist_website, wrapper: :vertical_input_group, label: "Artist Website" do
                     .input-group-prepend
                       .input-group-text
