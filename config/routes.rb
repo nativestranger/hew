@@ -20,10 +20,11 @@ Rails.application.routes.draw do
   resources :shows, except: :destroy
 
   match 'shows/:id/applications', via: :get, to: 'shows#applications', as: :show_applications
+  match 'shows/:id/applications/:show_application_id/details', via: :get, to: 'shows#application_details', as: :curator_show_application
   match 'shows/:id/applications/:show_application_id', via: :patch, to: 'shows#update_application_status', as: :update_show_application_status
   match 'shows/:id/details', via: :get, to: 'public_shows#details', as: :public_show_details
 
-  resources :show_applications, only: %i[new create]
+  resources :show_applications, only: %i[new create show]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
   get 'messages', to: 'pages#messages', as: :messages

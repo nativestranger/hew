@@ -1,6 +1,6 @@
 class ShowApplicationsController < ApplicationController
-  before_action :set_show
-  before_action :ensure_new_application!
+  before_action :set_show, except: :show
+  before_action :ensure_new_application!, except: :show
 
   def new
     @show_application = ShowApplication.new(
@@ -27,6 +27,11 @@ class ShowApplicationsController < ApplicationController
       end
       render :new
     end
+  end
+
+  def show
+    @show_application = ShowApplication.find(params[:id])
+    @show = @show_application.show
   end
 
   private
