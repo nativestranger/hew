@@ -1,10 +1,12 @@
 .row
   .col-lg-10.mx-auto
+    = render 'share_artist_profile_link' if current_user.is_artist
+
     .card.fun-card.border-bootstrap.box-shadow
       .card-header
         .row
           .col-10
-            %h1= t('settings')
+            %h1 Profile
             = link_to "Change your password", edit_user_registration_path
           .col-2
             .profile-avatar.float-right

@@ -20,7 +20,7 @@
         .dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
           - if current_user
             = link_to 'Profile', settings_profile_path, class: "dropdown-item"
-            = link_to t('my_carousels'), carousels_path, class: "dropdown-item"
+            = link_to 'My Work', carousels_path, class: "dropdown-item"
             -# = link_to t('venues'), venues_path, class: "dropdown-item"
             -# = link_to t('my_shows'), shows_path, class: "dropdown-item"
             = link_to "Admin", admin_root_path, class: "dropdown-item" if current_user.is_admin?

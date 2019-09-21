@@ -6,4 +6,4 @@
       .col-md-3
         %h6.text-center= carousel.name
         = link_to public_carousel_path(carousel) do
-          = image_tag(carousel.carousel_images.first.img_upload.attachment, class: 'img-fluid')
+          = image_tag(carousel.carousel_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')

@@ -11,7 +11,7 @@ class CarouselsController < ApplicationController
     @carousel = Carousel.new(permitted_params.merge(user: current_user))
 
     if @carousel.save
-      redirect_to @carousel, notice: t('success')
+      redirect_to edit_carousel_path(@carousel), notice: 'Success! You can now add your images.'
     else
       render :new
     end
