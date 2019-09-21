@@ -23,19 +23,47 @@ const SortableList = SortableContainer(({items}) => {
 
 export default class SortableComponent extends Component {
   renderItem = (item) => {
+    let thisComponent = this;
+
+    let deleteCarouselImage = () => {
+      return axios({
+        method: 'delete',
+        url: `/v1/carousels/${this.props.carousel_id}/carousel_images/${item.id}/`
+      });
+    }
+
+    let removeImage = function(e) {
+      if (confirm("This will delete the image for good. Are you sure?")) {
+        deleteCarouselImage().then(response => {
+          thisComponent.setState({
+            carouselImageObjects: thisComponent.state.carouselImageObjects.filter(function(carouselImage) {
+              return carouselImage.id != item.id;
+            })
+          });
+        }).catch(error => {
+          alert(`Something went wrong: ${error}`);
+        });
+      }
+    }
+
     return (
       <div className="sortable-carousel-image" img_id={ item.id }>
+        { !thisComponent.state.sorting && (
+          <i className='fa fa-times' onClick={ removeImage }></i>
+        ) }
         <img className="img-thumbnail" src={ item.src } />
       </div>
     )
   };
   state = {
-    items: this.props.items.map(this.renderItem),
     carouselImageObjects: this.props.items,
+  };
+  onSortStart = () => {
+    this.setState({ sorting: true });
   };
   onSortEnd = ({oldIndex, newIndex}) => {
     this.setState(({items, carouselImageObjects}) => ({
-      items: arrayMove(items, oldIndex, newIndex),
+      sorting: false,
       carouselImageObjects: arrayMove(carouselImageObjects, oldIndex, newIndex),
     }));
   };
@@ -64,7 +92,6 @@ export default class SortableComponent extends Component {
       let carouselImageObjects = [...this.state.carouselImageObjects, response.data.carousel_image];
       this.setState({
         carouselImageObjects: carouselImageObjects,
-        items: carouselImageObjects.map(this.renderItem),
       });
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
@@ -93,13 +120,18 @@ export default class SortableComponent extends Component {
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.items.map(i => i.props.img_id)
-    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition
+    let imagesByPosition = this.state.carouselImageObjects.map(i => i.id);
+    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition;
 
     return (
       <div className='row'>
         <div className='col-lg-10'>
-          <SortableList items={this.state.items} onSortEnd={this.onSortEnd} helperClass={this.props.helperClass} axis='xy' />
+          <SortableList items={this.state.carouselImageObjects.map(this.renderItem)}
+                        distance={1}
+                        onSortStart={this.onSortStart}
+                        onSortEnd={this.onSortEnd}
+                        helperClass={this.props.helperClass}
+                        axis='xy' />
         </div>
         { this.uploadBoxOrSpinner() }
       </div>

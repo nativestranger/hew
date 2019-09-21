@@ -38,7 +38,7 @@ Rails.application.routes.draw do
 
   namespace :v1 do
     resources :carousels, only: [] do
-      resources :carousel_images, only: :create
+      resources :carousel_images, only: %i[create destroy]
     end
     get '/chats/:id/messages' => "chats#messages", as: :chat_messages
     post '/chats/:id/create_message' => "chats#create_message", as: :chat_create_message

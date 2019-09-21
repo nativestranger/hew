@@ -22,6 +22,7 @@ class CarouselsController < ApplicationController
   def edit; end
 
   def update
+    # TODO: transaction
     if @carousel.update(permitted_params)
       update_image_order
       redirect_to @carousel, notice: t('success')

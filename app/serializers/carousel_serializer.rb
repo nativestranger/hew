@@ -21,5 +21,12 @@
 class CarouselSerializer < ActiveModel::Serializer
   attributes :id,
              :name,
-             :description
+             :description,
+             :carousel_images
+
+  def carousel_images
+    object.carousel_images.map do |carousel_image|
+      CarouselImageSerializer.new(carousel_image).serializable_hash
+    end
+  end
 end
