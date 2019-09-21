@@ -9,15 +9,15 @@ axios.defaults.headers.common = {
   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
-const SortableItem = SortableElement(({value}) => <li>{value}</li>);
+const SortableItem = SortableElement(({value}) => <span>{value}</span>);
 
 const SortableList = SortableContainer(({items}) => {
   return (
-    <ul>
+    <div className='sortable-list'>
       {items.map((value, index) => (
         <SortableItem key={`item-${index}`} index={index} value={value} />
       ))}
-    </ul>
+    </div>
   );
 });
 
@@ -78,7 +78,7 @@ export default class SortableComponent extends Component {
           <div className='loader'></div>
         </div>
       )
-    } else if(this.props.carousel_id) {
+    } else {
       return (
         <div className='col-lg-2'>
           <figure className="upload-carousel-img" onClick={this.openfileUploader}>
