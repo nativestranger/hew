@@ -36,7 +36,7 @@ export default class SortableComponent extends Component {
       if (confirm("This will delete the image for good. Are you sure?")) {
         deleteCarouselImage().then(response => {
           thisComponent.setState({
-            carouselImageObjects: thisComponent.state.carouselImageObjects.filter(function(carouselImage) {
+            carouselImages: thisComponent.state.carouselImages.filter(function(carouselImage) {
               return carouselImage.id != item.id;
             })
           });
@@ -56,15 +56,15 @@ export default class SortableComponent extends Component {
     )
   };
   state = {
-    carouselImageObjects: this.props.items,
+    carouselImages: this.props.items,
   };
   onSortStart = () => {
     this.setState({ sorting: true });
   };
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items, carouselImageObjects}) => ({
+    this.setState(({items, carouselImages}) => ({
       sorting: false,
-      carouselImageObjects: arrayMove(carouselImageObjects, oldIndex, newIndex),
+      carouselImages: arrayMove(carouselImages, oldIndex, newIndex),
     }));
   };
 
@@ -89,9 +89,9 @@ export default class SortableComponent extends Component {
 
     this.addCarouselImage(formData).then(response => {
       this.setState({ file: undefined });
-      let carouselImageObjects = [...this.state.carouselImageObjects, response.data.carousel_image];
+      let carouselImages = [...this.state.carouselImages, response.data.carousel_image];
       this.setState({
-        carouselImageObjects: carouselImageObjects,
+        carouselImages: carouselImages,
       });
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
@@ -120,13 +120,13 @@ export default class SortableComponent extends Component {
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.carouselImageObjects.map(i => i.id);
+    let imagesByPosition = this.state.carouselImages.map(i => i.id);
     document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition;
 
     return (
       <div className='row'>
         <div className='col-lg-10'>
-          <SortableList items={this.state.carouselImageObjects.map(this.renderItem)}
+          <SortableList items={this.state.carouselImages.map(this.renderItem)}
                         distance={1}
                         onSortStart={this.onSortStart}
                         onSortEnd={this.onSortEnd}
