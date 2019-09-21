@@ -1,7 +1,7 @@
 class CarouselsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_carousel, only: %i[show edit update]
-  before_action :authorize_user!, except: %i[new create]
+  before_action :authorize_user!, except: %i[new create index]
 
   def new
     @carousel = Carousel.new

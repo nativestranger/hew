@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 group: edge
 language: node_js
 node_js:
@@ -18,9 +18,12 @@ env:
 before_install:
   - rvm install 2.5.1
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - gem install bundler -v '2.0.2'
 install:
   - bundle install
   - yarn install
   - bundle exec rake db:create db:migrate
+before_script:
+  - bundle exec rails runner "Webdrivers::Chromedriver.update"
 script:
   - bundle exec rspec

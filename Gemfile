@@ -55,6 +55,7 @@ gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails'
 gem 'rack-canonical-host'
 gem 'react-rails'
+gem 'sentry-raven'
 gem 'simple_form'
 gem 'sucker_punch'
 gem 'trix-rails', require: 'trix'
@@ -73,6 +74,7 @@ group :development, :test do
 end
 
 group :development do
+  gem 'annotate'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'letter_opener_web', '~> 1.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
