@@ -1,5 +1,5 @@
-.row
-  - @user.carousels.in_groups_of(4).each do |carousel_group|
+- @user.carousels.in_groups_of(4).each do |carousel_group|
+  .row
     - carousel_group.each do |carousel|
       - next unless carousel && carousel.carousel_images.first
 
