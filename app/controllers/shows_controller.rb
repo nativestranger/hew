@@ -4,7 +4,7 @@ class ShowsController < ApplicationController
   before_action :authorize_user!, except: %i[new create index]
 
   def new
-    address = Address.new(city: 'Ciudad de México', state: 'Ciudad de México', country: 'MX')
+    address = Address.new(city: 'Mexico City', state: 'Mexico City', country: 'MX')
     @venue = Venue.new(address: address)
     @show = Show.new(venue: @venue, is_public: true)
   end
