@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 
 export default class NextArrow extends React.Component {
   static propTypes = {
-    className: PropTypes.string.isRequired,
-    style: PropTypes.object.isRequired,
+    className: PropTypes.string,
+    style: PropTypes.object,
     onClick: PropTypes.func,
   };
 

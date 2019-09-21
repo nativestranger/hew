@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :carousels
+
+  match 'images/:id', via: :get, to: 'public_carousel_images#show', as: :public_carousel_image
   match 'works/:id', via: :get, to: 'public_carousels#show', as: :public_carousel # TODO: is a work always a body/carousel?
 
   resources :chats, only: :show

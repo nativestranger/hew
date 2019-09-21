@@ -1,9 +1,8 @@
 .carousel {
-
   .slick-arrow {
     i {
       border: solid black;
-      border-width: 0 3px 3px 0;
+      border-width: 0 2px 2px 0;
       display: inline-block;
       padding: 3px;
     }
@@ -16,6 +15,7 @@
     .left {
       transform: rotate(135deg);
       -webkit-transform: rotate(135deg);
+      float: right;
     }
   }
 

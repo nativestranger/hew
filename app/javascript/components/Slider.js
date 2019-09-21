@@ -30,9 +30,9 @@ export default class SimpleSlider extends React.Component {
 
     let renderImage = function(img) {
       return (
-        <div key={ img.id } onClick={ thisComponent.next }>
+        <a key={ img.id } href={ img.path }>
           <img className='img-fluid' src={ img.src } alt={ img.alt }/>
-        </div>
+        </a>
       );
     };
 

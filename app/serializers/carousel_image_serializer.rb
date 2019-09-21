@@ -26,12 +26,19 @@ class CarouselImageSerializer < ActiveModel::Serializer
              :alt,
              :src,
              :name,
+             :path,
              :position,
              :description
 
   def src
     Rails.application.routes.url_helpers.rails_blob_url(
       object.img_upload
+    )
+  end
+
+  def path
+    Rails.application.routes.url_helpers.public_carousel_image_path(
+      object
     )
   end
 end
