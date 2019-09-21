@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import NextArrow from "./NextArrow";
+import PreviousArrow from "./PreviousArrow";
 
 export default class SimpleSlider extends React.Component {
   static propTypes = {
@@ -47,7 +49,9 @@ export default class SimpleSlider extends React.Component {
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
-      ref: 'slider'
+      ref: 'slider',
+      nextArrow: <NextArrow />,
+      prevArrow: <PreviousArrow />
     };
 
     return (

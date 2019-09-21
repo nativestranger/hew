@@ -1,8 +1,7 @@
 .row
   .col-md-4.mx-auto.text-center
-    %h5= @carousel.name
-    .text-muted
-      = link_to @carousel.user.full_name, artist_profile_path(@carousel.user, artist_profile_section: 'Work')
+    %h5= link_to @carousel.user.full_name, artist_profile_path(@carousel.user, artist_profile_section: 'Work')
+    %h6= @carousel.name
 
     -# - if current_user&.id == @carousel.user_id
     -#   = link_to content_tag(:i, '', class: 'fa fa-pencil'),
