@@ -13,7 +13,7 @@
   .col-md-9
     .card.fun-card
       .card-header
-        %h5.text-center #{ current_artist_profile_section }
+        %h5.text-center #{ current_artist_profile_section_name }
       .card-body
-        = render current_artist_profile_section.downcase.gsub(' ', '_')
+        = render current_artist_profile_section_name.downcase.gsub(' ', '_')
       .card-footer.text-center
