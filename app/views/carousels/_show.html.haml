@@ -1,0 +1,18 @@
+.row
+  .col-md-4.mx-auto.text-center
+    %h5= @carousel.name
+    .text-muted
+      = link_to @carousel.user.full_name, artist_profile_path(@carousel.user, artist_profile_section: 'Work')
+
+    -# - if current_user&.id == @carousel.user_id
+    -#   = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+    -#     edit_carousel_path(@carousel),
+    -#     class: 'float-right'
+
+-# %i.fa.fa-chevron-right
+-# %i.fa.fa-camera-retro
+
+.row
+  .col-md-10.mx-auto
+    .card.border-0.box-shadow.p-4
+      = react_component("Slider", { images: carousel_image_hashes(@carousel) })
