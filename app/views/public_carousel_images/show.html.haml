@@ -1,0 +1,18 @@
+.row
+  .col-md-8.mx-auto.text-center
+    %h5= link_to @carousel_image.carousel.user.full_name, artist_profile_path(@carousel_image.user, artist_profile_section: 'Work')
+    -# %h6= link_to @carousel_image.carousel.name, public_carousel_path(@carousel_image.carousel)
+    %h6= @carousel_image.name
+
+    = image_tag rails_blob_url(@carousel_image.img_upload), class: 'img-fluid'
+
+-# TODO: allow editing of details & show them
+-# .row
+-#   .col-md-8.mx-auto.text-center
+-#     .card.fun-card.mt-3
+-#       .card-header
+-#         #{ @carousel_image.name } -
+-#         = link_to @carousel_image.carousel.name, public_carousel_path(@carousel_image.carousel)
+-#       .card-body
+-#         %p Dummy Work Details
+-#         10ft x 10ft, mystery blood and miscellaneous fluids

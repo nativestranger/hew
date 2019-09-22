@@ -1,0 +1,19 @@
+-# - TODO: mobile view
+
+.row
+  .col-md-3
+    .card.fun-card
+      .card-header
+        %h5.text-center= @user.full_name
+      .card-body
+        %ul
+          %li= link_to 'Work', artist_profile_path(@user, artist_profile_section: 'Work')
+          %li= link_to 'Statement', artist_profile_path(@user, artist_profile_section: 'Artist Statement')
+          %li= link_to 'Bio', artist_profile_path(@user, artist_profile_section: 'Bio')
+  .col-md-9
+    .card.fun-card
+      .card-header
+        %h5.text-center #{ current_artist_profile_section_name }
+      .card-body
+        = render current_artist_profile_section_name.downcase.gsub(' ', '_')
+      .card-footer.text-center

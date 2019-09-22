@@ -11,16 +11,16 @@
 
     %ul.navbar-nav.ml-auto
       - if current_user
-        = button_to 'Add Call for Art', new_show_path, class: 'btn btn-link py-2 px-3 mr-2', method: :get
+        = button_to 'Add Call for Art', new_show_path, class: 'btn btn-outline-primary py-2 px-3 mr-2', method: :get
       - else
-        = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-link py-2 px-3 mr-2', method: :get
+        = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-outline-primary py-2 px-3 mr-2', method: :get
       %li.nav-item.dropdown
         %a#navbarDropdown.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
           = t('menu')
         .dropdown-menu.dropdown-menu-right{"aria-labelledby" => "navbarDropdown"}
           - if current_user
             = link_to 'Profile', settings_profile_path, class: "dropdown-item"
-            -# = link_to t('my_carousels'), carousels_path, class: "dropdown-item"
+            = link_to 'My Work', carousels_path, class: "dropdown-item"
             -# = link_to t('venues'), venues_path, class: "dropdown-item"
             -# = link_to t('my_shows'), shows_path, class: "dropdown-item"
             = link_to "Admin", admin_root_path, class: "dropdown-item" if current_user.is_admin?

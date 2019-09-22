@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  artist_statement       :text             default(""), not null
 #  artist_website         :string           default(""), not null
+#  bio                    :text             default(""), not null
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string
 #  confirmed_at           :datetime

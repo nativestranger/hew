@@ -9,34 +9,62 @@ axios.defaults.headers.common = {
   'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 };
 
-const SortableItem = SortableElement(({value}) => <li>{value}</li>);
+const SortableItem = SortableElement(({value}) => <span>{value}</span>);
 
 const SortableList = SortableContainer(({items}) => {
   return (
-    <ul>
+    <div className='sortable-list'>
       {items.map((value, index) => (
         <SortableItem key={`item-${index}`} index={index} value={value} />
       ))}
-    </ul>
+    </div>
   );
 });
 
 export default class SortableComponent extends Component {
   renderItem = (item) => {
+    let thisComponent = this;
+
+    let deleteCarouselImage = () => {
+      return axios({
+        method: 'delete',
+        url: `/v1/carousels/${this.props.carousel_id}/carousel_images/${item.id}/`
+      });
+    }
+
+    let removeImage = function(e) {
+      if (confirm("This will delete the image for good. Are you sure?")) {
+        deleteCarouselImage().then(response => {
+          thisComponent.setState({
+            carouselImages: thisComponent.state.carouselImages.filter(function(carouselImage) {
+              return carouselImage.id != item.id;
+            })
+          });
+        }).catch(error => {
+          alert(`Something went wrong: ${error}`);
+        });
+      }
+    }
+
     return (
       <div className="sortable-carousel-image" img_id={ item.id }>
+        { !thisComponent.state.sorting && (
+          <i className='fa fa-times' onClick={ removeImage }></i>
+        ) }
         <img className="img-thumbnail" src={ item.src } />
       </div>
     )
   };
   state = {
-    items: this.props.items.map(this.renderItem),
-    carouselImageObjects: this.props.items,
+    carouselImages: this.props.items,
+  };
+  onSortStart = () => {
+    this.setState({ sorting: true });
   };
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items, carouselImageObjects}) => ({
-      items: arrayMove(items, oldIndex, newIndex),
-      carouselImageObjects: arrayMove(carouselImageObjects, oldIndex, newIndex),
+    this.setState(({items, carouselImages}) => ({
+      sorting: false,
+      carouselImages: arrayMove(carouselImages, oldIndex, newIndex),
     }));
   };
 
@@ -61,10 +89,9 @@ export default class SortableComponent extends Component {
 
     this.addCarouselImage(formData).then(response => {
       this.setState({ file: undefined });
-      let carouselImageObjects = [...this.state.carouselImageObjects, response.data.carousel_image];
+      let carouselImages = [...this.state.carouselImages, response.data.carousel_image];
       this.setState({
-        carouselImageObjects: carouselImageObjects,
-        items: carouselImageObjects.map(this.renderItem),
+        carouselImages: carouselImages,
       });
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
@@ -78,7 +105,7 @@ export default class SortableComponent extends Component {
           <div className='loader'></div>
         </div>
       )
-    } else if(this.props.carousel_id) {
+    } else {
       return (
         <div className='col-lg-2'>
           <figure className="upload-carousel-img" onClick={this.openfileUploader}>
@@ -93,13 +120,18 @@ export default class SortableComponent extends Component {
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.items.map(i => i.props.img_id)
-    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition
+    let imagesByPosition = this.state.carouselImages.map(i => i.id);
+    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition;
 
     return (
       <div className='row'>
         <div className='col-lg-10'>
-          <SortableList items={this.state.items} onSortEnd={this.onSortEnd} helperClass={this.props.helperClass} axis='xy' />
+          <SortableList items={this.state.carouselImages.map(this.renderItem)}
+                        distance={1}
+                        onSortStart={this.onSortStart}
+                        onSortEnd={this.onSortEnd}
+                        helperClass={this.props.helperClass}
+                        axis='xy' />
         </div>
         { this.uploadBoxOrSpinner() }
       </div>

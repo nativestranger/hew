@@ -1,0 +1,4 @@
+- if @user.artist_statement.present?
+  = @user.artist_statement.html_safe
+- else
+  %p #{@user.full_name} hasn't completed their artist statement.

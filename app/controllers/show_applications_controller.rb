@@ -6,6 +6,7 @@ class ShowApplicationsController < ApplicationController
     @show_application = ShowApplication.new(
       show:                 @show,
       artist_website:       current_user&.artist_website,
+      artist_statement:     current_user&.artist_statement,
       artist_instagram_url: current_user&.instagram_url
     )
 

@@ -1,0 +1,13 @@
+.card.mb-2
+  .card-body
+    %p
+      %small
+        To share your public artist profile, copy the following link:
+
+    %div{ "data-controller" => "clipboard" }
+      .row.no-gutters
+        .input-group.col-12
+          %input.d-inline-block.mw-100.border.rounded-left.form-control{ readonly: "readonly", type: "text", value: artist_profile_url(current_user), "data-target" => "clipboard.source" }
+          .input-group-append
+            %button.rounded-right.btn.btn-primary.btn-success.p-2.clipboard-button{ "data-action" => "clipboard#copy" }
+              .fa.fa-clipboard

@@ -1,9 +1,8 @@
-.card.border-bootstrap.box-shadow
-  .card-header.row
-    .col-md-10
-      %h1
-        = t('new')
-        = t('carousel')
+.row
+  .col-md-10.mx-auto
+    .card.border-bootstrap.box-shadow
+      .card-header
+        %h2 New Body of Work
 
-  .card-body
-    = render 'form'
+      .card-body
+        = render 'form'
