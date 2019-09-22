@@ -49,7 +49,7 @@ export default class SortableComponent extends Component {
     return (
       <div className="sortable-carousel-image" img_id={ item.id }>
         { !thisComponent.state.sorting && (
-          <i className='fa fa-times' onClick={ removeImage }></i>
+          <i className='fa fa-times delete-icon' onClick={ removeImage }></i>
         ) }
         <img className="img-thumbnail" src={ item.src } />
       </div>
