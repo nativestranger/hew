@@ -17,10 +17,15 @@
           Past (#{current_user.show_applications.past.count})
 
   .list-group
-    - @show_applications.each do |show_application|
+    - if @show_applications.none?
       .list-group-item.list-group-item-action.border-left-0.border-right-0
-        %h5.text-center
+        %p.text-muted.text-center Darn, no applications here.
 
-        %h3= "#{show_application.show.name} @ #{show_application.show.venue.name}"
-        %p= "#{I18n.l(show_application.show.start_at, format: :long)} - #{I18n.l(show_application.show.end_at, format: :long)}"
-        %p.text-muted= show_application.show.overview
+    - else
+      - @show_applications.each do |show_application|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0
+          %h5.text-center
+
+          %h3= "#{show_application.show.name} @ #{show_application.show.venue.name}"
+          %p= "#{I18n.l(show_application.show.start_at, format: :long)} - #{I18n.l(show_application.show.end_at, format: :long)}"
+          %p.text-muted= show_application.show.overview

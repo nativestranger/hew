@@ -37,7 +37,7 @@ class ShowsController < ApplicationController
   end
 
   def index
-    @shows = current_user.shows
+    redirect_to dashboard_path
   end
 
   def update_application_status

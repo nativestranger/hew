@@ -26,7 +26,7 @@
           .list-group-item.list-group-item-action.border-left-0.border-right-0
             .d-flex.w-100.justify-content-between.mb-2
               .details
-                .d-inline-block= image_tag(show_application.user.gravatar_url, class: 'rounded-circle')
+                .d-inline-block.w-25= image_tag(show_application.user.avatar_url, class: 'img-fluid rounded-circle')
                 %h4.d-inline-block.mb-0= show_application.user.full_name
                 -# %small.text-muted= time_ago_in_words(show_application.created_at)
               .btns

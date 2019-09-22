@@ -20,23 +20,27 @@
           Past (#{current_user.shows.past.count})
 
   .list-group
-    - @shows.each do |show|
+    - if @shows.none?
       .list-group-item.list-group-item-action.border-left-0.border-right-0
-        %h5.text-center
-          = link_to content_tag(:i, '', class: 'fa fa-pencil'),
-            edit_show_path(show),
-            class: 'float-right'
+        %p.text-muted.text-center Darn, no shows here.
+    - else
+      - @shows.each do |show|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0
+          %h5.text-center
+            = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+              edit_show_path(show),
+              class: 'float-right'
 
-        %h3= "#{show.name} @ #{show.venue.name}"
-        %p= "#{I18n.l(show.start_at, format: :long)} - #{I18n.l(show.end_at, format: :long)}"
-        %p.text-muted= show.overview
+          %h3= "#{show.name} @ #{show.venue.name}"
+          %p= "#{I18n.l(show.start_at, format: :long)} - #{I18n.l(show.end_at, format: :long)}"
+          %p.text-muted= show.overview
 
-        %h4 Description
-        %p= show.full_description.html_safe
+          %h4 Description
+          %p= show.full_description.html_safe
 
-        .row
-          .col-6
-            = pluralize(show.applications.count, 'Submission')
-            .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
-          .col-6
-            .pull-right= link_to 'View Submissions', show_applications_path(show), class: 'btn btn-outline-success'
+          .row
+            .col-6
+              = pluralize(show.applications.count, 'Submission')
+              .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
+            .col-6
+              .pull-right= link_to 'View Submissions', show_applications_path(show), class: 'btn btn-outline-success'

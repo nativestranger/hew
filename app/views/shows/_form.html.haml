@@ -31,19 +31,27 @@
       .col-md-12
         .form-group
           %label{ for: 'show_full_description' } Full Description
+          -# TODO: partial for this
+          - if f.object.errors[:full_description].any?
+            - f.object.errors[:full_description].each do |err|
+              %p.mt-0.text-danger= err
           = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
-    %hr.border
+    %hr
 
     .row
       .col
-        %h3 Application Details
+        %h4 Application Details
 
     .row
       .col-md-12
         .form-group
-          %label{ for: 'show_application_details' } What should Artists include when applying?
-          = f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+          -# %label{ for: 'show_application_details' }
+          %sm.text-muted What should Artists include when applying?
+          - if f.object.errors[:application_details].any?
+            - f.object.errors[:application_details].each do |err|
+              %p.mt-0.text-danger= err
+          .mt-2= f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     .row
       .col-md-4
@@ -52,11 +60,11 @@
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
           = react_component 'ReactDatePicker', { startDate: @show.application_deadline, formFieldId: 'show_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @show.errors[:application_deadline].present? }
 
-    %hr.border
+    %hr
 
     .row
       .col-md-12
-        %h3 Venue Details
+        %h4 Venue Details
         = f.simple_fields_for :venue do |venue|
           = render '/venues/venue_fields', f: venue
     .row

@@ -1,15 +1,34 @@
--# - TODO: mobile view
-
 .row
   .col-md-3
-    .card.fun-card
-      .card-header
-        %h5.text-center= @user.full_name
+    .card
       .card-body
-        %ul
-          %li= link_to 'Work', artist_profile_path(@user, artist_profile_section: 'Work')
-          %li= link_to 'Statement', artist_profile_path(@user, artist_profile_section: 'Artist Statement')
-          %li= link_to 'Bio', artist_profile_path(@user, artist_profile_section: 'Bio')
+        .profile-avatar= image_tag @user.avatar_url, class: 'img-fluid rounded mx-auto d-block'
+        %h6.text-center
+          .p-1= @user.full_name
+
+        .mt-3
+
+        .d-none.d-md-block
+          %ul.list-group.list-group-flush
+            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Work' ? 'disabled' : '' }
+              = link_to 'Work', artist_profile_path(@user, artist_profile_section: 'Work')
+            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Artist Statement' ? 'disabled' : '' }
+              = link_to 'Statement', artist_profile_path(@user, artist_profile_section: 'Artist Statement')
+            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Bio' ? 'disabled' : '' }
+              = link_to 'Bio', artist_profile_path(@user, artist_profile_section: 'Bio')
+
+        .d-block.d-md-none
+          %ul.nav.nav-tabs
+            %li.nav-item
+              %a.nav-link{ href: artist_profile_path(@user, artist_profile_section: 'Work'), class: current_artist_profile_section_name == 'Work' ? 'active' : '' }
+                Work
+            %li.nav-item
+              %a.nav-link{ href: artist_profile_path(@user, artist_profile_section: 'Artist Statement'), class: current_artist_profile_section_name == 'Artist Statement' ? 'active' : '' }
+                Statement
+            %li.nav-item
+              %a.nav-link{ href: artist_profile_path(@user, artist_profile_section: 'Bio'), class: current_artist_profile_section_name == 'Bio' ? 'active' : '' }
+                Bio
+
   .col-md-9
     .card.fun-card
       .card-header
