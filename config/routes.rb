@@ -6,6 +6,11 @@ Rails.application.routes.draw do
     resources :shows
     resources :show_applications
     root to: "users#index"
+    get 'blazer', to: 'application#blazer'
+  end
+
+  authenticated :user, ->(user) { user.is_admin? } do
+    mount Blazer::Engine, at: "blazer"
   end
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
