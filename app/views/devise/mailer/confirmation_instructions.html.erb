@@ -1,0 +1,11 @@
+<p>Welcome to Hew, <%= @email %>!</p>
+
+<p>Confirm your account to create your profile. As an artist, you'll be able to quickly apply to new Calls for Art and, as a curator, you'll be able to add your own Calls for Art to Hew.</p>
+
+<ol>
+  <li>Confirm your account email through this link: <strong><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></<strong></li>
+  <li>Then, make sure you click the following link to create your password: <strong><%= link_to 'Change my password', edit_password_url(@resource, reset_password_token: @token) %></strong><li>
+</ol>
+
+<p>Let us know if you have any questions,</p>
+<p>Team Hew // holahew@gmail.com</p>
