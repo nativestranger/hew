@@ -57,23 +57,17 @@
     }
 
     .sortable-carousel-image {
+      margin-top: 12px;
       .delete-icon {
+        position: relative;
+        right: -2px;
+        top: -12px;
         vertical-align: top;
       }
     }
   }
 }
 
-.upload-carousel-img {
-  display: inline-block;
-  max-height: 100px;
-  img {
-    max-height: 80px;
-    padding-top: 10px;
-  }
-  figure {
-    display: table;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.carousel-img-upload {
+  cursor: pointer;
 }

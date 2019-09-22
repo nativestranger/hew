@@ -48,9 +48,7 @@ export default class SortableComponent extends Component {
 
     return (
       <div className="sortable-carousel-image" img_id={ item.id }>
-        { !thisComponent.state.sorting && (
-          <i className='fa fa-times delete-icon' onClick={ removeImage }></i>
-        ) }
+        { <i className='fa fa-times delete-icon' onClick={ removeImage }></i> }
         <img className="img-thumbnail" src={ item.src } />
       </div>
     )
@@ -101,17 +99,14 @@ export default class SortableComponent extends Component {
   uploadBoxOrSpinner = () => {
     if (this.state.file) {
       return (
-        <div className='col-lg-2'>
-          <div className='loader'></div>
-        </div>
+        <div className='loader'></div>
       )
     } else {
       return (
-        <div className='col-lg-2'>
-          <figure className="upload-carousel-img" onClick={this.openfileUploader}>
-            <input type="file" onChange={this.handleFileUpload} ref="fileUploader" style={{display: "none"}}/>
-            <img src="https://www.flaticon.com/premium-icon/icons/svg/1582/1582582.svg" className="figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure." />
-          </figure>
+        <div className='carousel-img-upload' onClick={this.openfileUploader}>
+          <i className='fa fa-camera fa-2x'></i>
+          <span> Add a photo</span>
+          <input type="file" onChange={this.handleFileUpload} ref="fileUploader" style={{display: "none"}}/>
         </div>
       )
     }
@@ -124,16 +119,19 @@ export default class SortableComponent extends Component {
     document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition;
 
     return (
-      <div className='row'>
-        <div className='col-lg-10'>
-          <SortableList items={this.state.carouselImages.map(this.renderItem)}
-                        distance={1}
-                        onSortStart={this.onSortStart}
-                        onSortEnd={this.onSortEnd}
-                        helperClass={this.props.helperClass}
-                        axis='xy' />
-        </div>
+      <div>
         { this.uploadBoxOrSpinner() }
+
+        <div className='row mt-4'>
+          <div className='col-lg-12'>
+            <SortableList items={this.state.carouselImages.map(this.renderItem)}
+                          distance={1}
+                          onSortStart={this.onSortStart}
+                          onSortEnd={this.onSortEnd}
+                          helperClass={this.props.helperClass}
+                          axis='xy' />
+          </div>
+        </div>
       </div>
     )
   }
