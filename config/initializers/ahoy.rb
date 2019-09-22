@@ -10,4 +10,4 @@ Ahoy.cookies = false
 # GDPR
 
 # set to true for JavaScript tracking
-Ahoy.api = false
+Ahoy.api = true
