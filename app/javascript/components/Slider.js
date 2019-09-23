@@ -47,7 +47,7 @@ export default class SimpleSlider extends React.Component {
       centerPadding: 0,
       infinite: true,
       speed: 500,
-      slidesToCall: 1,
+      slidesToShow: 1,
       slidesToScroll: 1,
       ref: 'slider',
       nextArrow: <NextArrow />,
