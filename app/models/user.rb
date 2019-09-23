@@ -53,8 +53,8 @@ class User < ApplicationRecord
 
   has_many :carousels, dependent: :destroy
   has_many :venues, dependent: :destroy
-  has_many :shows, dependent: :destroy
-  has_many :show_applications, dependent: :destroy
+  has_many :calls, dependent: :destroy
+  has_many :call_applications, dependent: :destroy
 
   has_many :chat_users
   has_many :chats, through: :chat_users

@@ -4,7 +4,7 @@
     -# %h6= link_to @carousel_image.carousel.name, public_carousel_path(@carousel_image.carousel)
     %h6= @carousel_image.name
 
-    = image_tag rails_blob_url(@carousel_image.img_upload), class: 'img-fluid'
+    = image_tag rails_blob_url(@carousel_image.img_upload), class: 'img-fluid' # max-height?...
 
 -# TODO: allow editing of details & show them
 -# .row

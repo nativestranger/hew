@@ -1,9 +1,9 @@
-class ShowMailer < ApplicationMailer # :nodoc:
-  def approved(show)
+class CallMailer < ApplicationMailer # :nodoc:
+  def approved(call)
     mail(
-      to:      show.user.email,
-      subject: "Your show has been approved by Hew!",
-      body:    show_url(show).to_s
+      to:      call.user.email,
+      subject: "Your call has been approved by Hew!",
+      body:    call_url(call).to_s
     )
   end
 end

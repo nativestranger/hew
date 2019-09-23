@@ -32,15 +32,15 @@ FactoryBot.create(:carousel_image, carousel: big_dogs, name: 'big_dog4', image_f
 
 venue = FactoryBot.create(:venue, user: admin)
 
-2.times { FactoryBot.create(:show, is_public: true, is_approved: true) }
-3.times { FactoryBot.create(:show, user: admin, venue: venue, is_public: true, is_approved: true) }
-FactoryBot.create(:show, user: admin, venue: venue)
-FactoryBot.create(:show, :current, user: admin, venue: venue, is_public: true)
-2.times { FactoryBot.create(:show, :old, user: admin, venue: venue, is_public: true) }
+2.times { FactoryBot.create(:call, is_public: true, is_approved: true) }
+3.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true) }
+FactoryBot.create(:call, user: admin, venue: venue)
+FactoryBot.create(:call, :current, user: admin, venue: venue, is_public: true)
+2.times { FactoryBot.create(:call, :old, user: admin, venue: venue, is_public: true) }
 
-Show.all.each do |show|
-  rand(3..4).times { FactoryBot.create(:show_application, show: show) }
-  FactoryBot.create(:show_application, show: show, user: user)
+Call.all.each do |call|
+  rand(3..4).times { FactoryBot.create(:call_application, call: call) }
+  FactoryBot.create(:call_application, call: call, user: user)
 end
 
-admin.shows.first.update!(is_approved: true)
+admin.calls.first.update!(is_approved: true)

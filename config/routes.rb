@@ -3,8 +3,8 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :users
-    resources :shows
-    resources :show_applications
+    resources :calls
+    resources :call_applications
     root to: "users#index"
     get 'blazer', to: 'application#blazer'
   end
@@ -26,13 +26,13 @@ Rails.application.routes.draw do
 
   resources :chats, only: :show
   resources :venues, except: :destroy
-  resources :shows, except: :destroy
+  resources :calls, except: :destroy
 
-  match 'shows/:id/applications', via: :get, to: 'shows#applications', as: :show_applications
-  match 'shows/:id/applications/:show_application_id', via: :patch, to: 'shows#update_application_status', as: :update_show_application_status
-  match 'shows/:id/details', via: :get, to: 'public_shows#details', as: :public_show_details
+  match 'calls/:id/applications', via: :get, to: 'calls#applications', as: :call_applications
+  match 'calls/:id/applications/:call_application_id', via: :patch, to: 'calls#update_application_status', as: :update_call_application_status
+  match 'calls/:id/details', via: :get, to: 'public_calls#details', as: :public_call_details
 
-  resources :show_applications, only: %i[new create]
+  resources :call_applications, only: %i[new create]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
   get 'messages', to: 'pages#messages', as: :messages
