@@ -20,16 +20,6 @@ RSpec.describe 'Shows', type: :system do
     end
   end
 
-  describe 'index' do
-    let!(:other_show) { FactoryBot.create(:show) }
-    it "displays the current user's shows" do
-      show
-      visit shows_path
-      expect(page).to have_content(show.name)
-      expect(page).not_to have_content(other_show.name)
-    end
-  end
-
   describe 'show' do
     it 'shows the show' do
       visit show_path(show)
