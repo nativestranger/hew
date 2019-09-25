@@ -4,15 +4,15 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, except: %i[home application_submitted]
 
   def home
-    params[:show_sort_by] ||= 'Application Deadline'
-    set_homepage_shows
+    params[:call_sort_by] ||= 'Application Deadline'
+    set_homepage_calls
   end
 
   def dashboard
     if params[:as_artist]
-      @show_applications = current_user.show_applications.send(helpers.artist_dashboard_show_applications_scope)
+      @call_applications = current_user.call_applications.send(helpers.artist_dashboard_call_applications_scope)
     else
-      @shows = current_user.shows.send(helpers.curator_dashboard_shows_scope)
+      @calls = current_user.calls.send(helpers.curator_dashboard_calls_scope)
     end
   end
 
@@ -22,14 +22,14 @@ class PagesController < ApplicationController
 
   private
 
-  def set_homepage_shows
-    case params[:show_sort_by]
+  def set_homepage_calls
+    case params[:call_sort_by]
     when 'Application Deadline'
-      @shows = Show.accepting_applications.order(application_deadline: :asc)
+      @calls = Call.accepting_applications.order(application_deadline: :asc)
     when 'Recently Created'
-      @shows = Show.accepting_applications.order(created_at: :asc)
+      @calls = Call.accepting_applications.order(created_at: :asc)
     end
 
-    @shows = @shows.approved.published
+    @calls = @calls.approved.published
   end
 end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DashboardHelper
-  def curator_dashboard_shows_scope
+  def curator_dashboard_calls_scope
     if params[:past]
       :past
     elsif params[:current]
@@ -13,7 +13,7 @@ module DashboardHelper
     end
   end
 
-  def artist_dashboard_show_applications_scope
+  def artist_dashboard_call_applications_scope
     if params[:accepted_and_active]
       :accepted_and_active
     elsif params[:pending]

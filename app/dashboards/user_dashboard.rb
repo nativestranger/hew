@@ -12,8 +12,8 @@ class UserDashboard < Administrate::BaseDashboard
     avatar_blob:            Field::HasOne,
     carousels:              Field::HasMany,
     venues:                 Field::HasMany,
-    shows:                  Field::HasMany,
-    show_applications:      Field::HasMany,
+    calls:                  Field::HasMany,
+    call_applications:      Field::HasMany,
     chat_users:             Field::HasMany,
     chats:                  Field::HasMany,
     id:                     Field::Number,
@@ -54,12 +54,12 @@ class UserDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     email
-    shows
-    show_applications
+    calls
+    call_applications
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
-  # an array of attributes that will be displayed on the model's show page.
+  # an array of attributes that will be displayed on the model's call page.
   SHOW_PAGE_ATTRIBUTES = %i[
     id
     email
@@ -67,8 +67,8 @@ class UserDashboard < Administrate::BaseDashboard
     last_name
     is_artist
     is_curator
-    shows
-    show_applications
+    calls
+    call_applications
     artist_website
     instagram_url
     is_admin
