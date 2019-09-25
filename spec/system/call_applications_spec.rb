@@ -48,5 +48,4 @@ RSpec.describe 'CallApplications', type: :system do
     end
   end
 
-
 end
