@@ -1,5 +1,5 @@
 .d-flex.justify-content-between.mb-3
-  %h3= t('my_shows')
+  %h3 My Calls
   = link_to 'My Applications', dashboard_path(as_artist: true), class: 'btn btn-outline-success'
 
 .card.fun-card
@@ -7,36 +7,40 @@
 
     %ul.nav.nav-tabs
       %li.nav-item
-        %a.nav-link{ id: 'accepting_applications', href: dashboard_path(accepting_applications: true), class: curator_dashboard_shows_scope == :accepting_applications ? 'active' : '' }
-          Accepting Applications (#{current_user.shows.accepting_applications.count})
+        %a.nav-link{ id: 'accepting_applications', href: dashboard_path(accepting_applications: true), class: curator_dashboard_calls_scope == :accepting_applications ? 'active' : '' }
+          Accepting Applications (#{current_user.calls.accepting_applications.count})
       %li.nav-item
-        %a.nav-link{ id: 'current', href: dashboard_path(current: true), class: curator_dashboard_shows_scope == :current ? 'active' : '' }
-          Current (#{current_user.shows.current.count})
+        %a.nav-link{ id: 'current', href: dashboard_path(current: true), class: curator_dashboard_calls_scope == :current ? 'active' : '' }
+          Current (#{current_user.calls.current.count})
       %li.nav-item
-        %a.nav-link{ id: 'upcoming', href: dashboard_path(upcoming: true), class: curator_dashboard_shows_scope == :upcoming ? 'active' : '' }
-          Upcoming (#{current_user.shows.upcoming.count})
+        %a.nav-link{ id: 'upcoming', href: dashboard_path(upcoming: true), class: curator_dashboard_calls_scope == :upcoming ? 'active' : '' }
+          Upcoming (#{current_user.calls.upcoming.count})
       %li.nav-item
-        %a.nav-link{ id: 'past', href: dashboard_path(past: true), class: curator_dashboard_shows_scope == :past ? 'active' : '' }
-          Past (#{current_user.shows.past.count})
+        %a.nav-link{ id: 'past', href: dashboard_path(past: true), class: curator_dashboard_calls_scope == :past ? 'active' : '' }
+          Past (#{current_user.calls.past.count})
 
   .list-group
-    - @shows.each do |show|
+    - if @calls.none?
       .list-group-item.list-group-item-action.border-left-0.border-right-0
-        %h5.text-center
-          = link_to content_tag(:i, '', class: 'fa fa-pencil'),
-            edit_show_path(show),
-            class: 'float-right'
+        %p.text-muted.text-center Darn, no calls here.
+    - else
+      - @calls.each do |call|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0
+          %h5.text-center
+            = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+              edit_call_path(call),
+              class: 'float-right'
 
-        %h3= "#{show.name} @ #{show.venue.name}"
-        %p= "#{I18n.l(show.start_at, format: :long)} - #{I18n.l(show.end_at, format: :long)}"
-        %p.text-muted= show.overview
+          %h3= "#{call.name} @ #{call.venue.name}"
+          %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
+          %p.text-muted= call.overview
 
-        %h4 Description
-        %p= show.full_description.html_safe
+          %h4 Description
+          %p= call.full_description.html_safe
 
-        .row
-          .col-6
-            = pluralize(show.applications.count, 'Submission')
-            .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
-          .col-6
-            .pull-right= link_to 'View Submissions', show_applications_path(show), class: 'btn btn-outline-success'
+          .row
+            .col-6
+              = pluralize(call.applications.count, 'Submission')
+              .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
+            .col-6
+              .pull-right= link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'

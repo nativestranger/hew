@@ -25,14 +25,15 @@ include ActionDispatch::TestProcess # for seed
 
 FactoryBot.define do
   factory :carousel_image do
-    trait :van do
-      img_upload { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'images', 'van.jpg')) }
+    transient do
+      image_fixture_path {}
     end
-    trait :bathroom do
-      img_upload { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'images', 'bathroom.jpg')) }
-    end
-    trait :face do
-      img_upload { fixture_file_upload(Rails.root.join('spec', 'fixtures', 'images', 'face.jpg')) }
+
+    after(:build) do |instance, evaluator|
+      if evaluator.image_fixture_path
+        instance.img_upload = \
+          fixture_file_upload(Rails.root.join('spec', 'fixtures', 'images', *evaluator.image_fixture_path.split('/')))
+      end
     end
   end
 end

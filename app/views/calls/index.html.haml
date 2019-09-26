@@ -1,0 +1,25 @@
+.row
+  .col-lg-10.mx-auto
+    %h3 My Calls
+
+    - @calls.each do |call|
+      .row
+        .col-12.mx-auto.mb-4
+          .card.fun-card
+            .card-header
+              .row
+                .col-6
+                  %h5.d-inline= call.name
+                  @
+                  %h6.d-inline= call.venue.name
+                .col-6
+                  %h6.pull-right= I18n.l(call.start_at, format: :long)
+            .card-body
+              = call.overview
+            .card-footer
+              .row
+                .col-6
+                  = pluralize(call.applications.count, 'Submission')
+                  .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
+                .col-6
+                  .pull-right= link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'

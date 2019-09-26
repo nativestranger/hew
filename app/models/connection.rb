@@ -33,6 +33,7 @@ class Connection < ApplicationRecord
     )
   end
 
+  # TODO: pg lock
   def self.find_or_create_between!(user1_id, user2_id) # TODO: pg advisory lock
     existing_connection = Connection.find_between(user1_id, user2_id)
     return existing_connection if existing_connection

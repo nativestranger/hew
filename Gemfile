@@ -40,8 +40,10 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'active_model_serializers'
 gem 'acts_as_list'
+gem 'ahoy_matey'
 gem 'aws-sdk', '~> 3'
 gem 'administrate'
+gem 'blazer'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.3.1'
 gem 'carmen'

@@ -1,49 +1,49 @@
 .row
   .col-lg-10.mx-auto
-    .jumbotron.funmotron
+    .jumbotron.funmotron.mb-4
       .container-fluid
-        %h1.display-3 Open Calls for Art in Mexico City
+        %h3 Open Calls for Art in Mexico City
     .row
       .col
         .pull-right
           %span.text-muted Sort by:
           .btn-group.mb-1
             %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
-              = params[:show_sort_by]
+              = params[:call_sort_by]
               %span.caret
             %ul.dropdown-menu.dropdown-menu-right
-              - ['Application Deadline', 'Recently Created'].each do |show_sort_by|
-                - next if params[:show_sort_by] == show_sort_by
-                %li= link_to show_sort_by, root_path({ show_sort_by: show_sort_by }), class: 'dropdown-item'
+              - ['Application Deadline', 'Recently Created'].each do |call_sort_by|
+                - next if params[:call_sort_by] == call_sort_by
+                %li= link_to call_sort_by, root_path({ call_sort_by: call_sort_by }), class: 'dropdown-item'
 
-    - if @shows.none?
+    - if @calls.none?
       .row
         .col-12
           .alert.alert-warning.w-100
-            %p Darn, no available shows found.
+            %p Darn, no available calls found.
 
-    - @shows.each do |show|
+    - @calls.each do |call|
       .row
         .col-12.mx-auto.mb-4
           .card.fun-card
             .card-header
               .row
                 .col-8
-                  %h5.d-inline= show.name
+                  %h5.d-inline= call.name
                   @
-                  %h6.d-inline= show.venue.name
+                  %h6.d-inline= call.venue.name
                 .col-4
-                  %h6.pull-right= I18n.l(show.start_at, format: :long)
+                  %h6.pull-right= I18n.l(call.start_at, format: :long)
             .card-body
-              = show.overview
+              = call.overview
             .card-footer
               .row
                 .col-6
-                  = pluralize(show.applications.count, 'Submission')
-                  .text-muted Deadline #{I18n.l(show.application_deadline, format: :long)}
+                  = pluralize(call.applications.count, 'Submission')
+                  .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
                 .col-6
                   .pull-right
-                    - if current_user && current_user.id == show.user_id
-                      = link_to 'View Submissions', show_applications_path(show), class: 'btn btn-outline-success'
+                    - if current_user && current_user.id == call.user_id
+                      = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
                     - else
-                      = link_to 'Show Details', public_show_details_path(id: show.id), class: 'btn btn-outline-primary'
+                      = link_to 'Call Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'

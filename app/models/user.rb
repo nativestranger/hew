@@ -3,7 +3,9 @@
 # Table name: users
 #
 #  id                     :bigint           not null, primary key
+#  artist_statement       :text             default(""), not null
 #  artist_website         :string           default(""), not null
+#  bio                    :text             default(""), not null
 #  confirmation_sent_at   :datetime
 #  confirmation_token     :string
 #  confirmed_at           :datetime
@@ -51,8 +53,8 @@ class User < ApplicationRecord
 
   has_many :carousels, dependent: :destroy
   has_many :venues, dependent: :destroy
-  has_many :shows, dependent: :destroy
-  has_many :show_applications, dependent: :destroy
+  has_many :calls, dependent: :destroy
+  has_many :call_applications, dependent: :destroy
 
   has_many :chat_users
   has_many :chats, through: :chat_users
@@ -83,6 +85,6 @@ class User < ApplicationRecord
 
   def set_gravatar_url
     gravatar_id = Digest::MD5.hexdigest(email.downcase)
-    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=48"
+    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=200"
   end
 end

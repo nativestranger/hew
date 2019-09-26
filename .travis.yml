@@ -3,7 +3,7 @@ dist: xenial
 group: edge
 language: node_js
 node_js:
-  - 8.10.0
+  - 10.15.3
 services:
   - postgresql
 addons:

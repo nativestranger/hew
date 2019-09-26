@@ -23,6 +23,7 @@ class SettingsController < ApplicationController
 
   def profile_params
     params.require(:user).permit(
+      :artist_statement,
       :artist_website,
       :instagram_url,
       :first_name,
@@ -30,7 +31,8 @@ class SettingsController < ApplicationController
       :is_curator,
       :is_artist,
       :locale,
-      :email
+      :email,
+      :bio
     )
   end
 

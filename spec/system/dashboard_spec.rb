@@ -2,15 +2,15 @@ require 'rails_helper'
 
 RSpec.describe 'dashboard', type: :system do
   let(:user) { FactoryBot.create(:user) }
-  let!(:upcoming_show) { FactoryBot.create(:show, :upcoming, user: user) }
-  let!(:current_show) { FactoryBot.create(:show, :current, user: user) }
-  let!(:old_show) { FactoryBot.create(:show, :old, user: user) }
-  let!(:show) { FactoryBot.create(:show, :accepting_applications, user: user) }
+  let!(:upcoming_call) { FactoryBot.create(:call, :upcoming, user: user) }
+  let!(:current_call) { FactoryBot.create(:call, :current, user: user) }
+  let!(:old_call) { FactoryBot.create(:call, :old, user: user) }
+  let!(:call) { FactoryBot.create(:call, :accepting_applications, user: user) }
 
-  let!(:accepted_application) { FactoryBot.create(:show_application, status_id: :accepted, show: FactoryBot.create(:show, :current), user: user) }
-  let!(:pending_application) { FactoryBot.create(:show_application, status_id: [:fresh, :maybe].sample, show: FactoryBot.create(:show, :accepting_applications), user: user) }
-  let!(:past_application) { FactoryBot.create(:show_application, user: user, show: FactoryBot.create(:show, :old)) }
-  let!(:past_accepted_application) { FactoryBot.create(:show_application, status_id: :accepted, user: user, show: FactoryBot.create(:show, :old)) }
+  let!(:accepted_application) { FactoryBot.create(:call_application, status_id: :accepted, call: FactoryBot.create(:call, :current), user: user) }
+  let!(:pending_application) { FactoryBot.create(:call_application, status_id: [:fresh, :maybe].sample, call: FactoryBot.create(:call, :accepting_applications), user: user) }
+  let!(:past_application) { FactoryBot.create(:call_application, user: user, call: FactoryBot.create(:call, :old)) }
+  let!(:past_accepted_application) { FactoryBot.create(:call_application, status_id: :accepted, user: user, call: FactoryBot.create(:call, :old)) }
 
   before do
     login_as(user, scope: :user)
@@ -19,30 +19,30 @@ RSpec.describe 'dashboard', type: :system do
   describe 'curator dashboard' do
     it 'renders the curator dashboard' do
       visit dashboard_path
-      expect(page.body).to have_content(show.name)
+      expect(page.body).to have_content(call.name)
       find(:css, '#current').click
       sleep 0.5
-      expect(page.body).to have_content(current_show.name)
+      expect(page.body).to have_content(current_call.name)
       find(:css, '#upcoming').click
       sleep 0.5
-      expect(page.body).to have_content(upcoming_show.name)
+      expect(page.body).to have_content(upcoming_call.name)
       find(:css, '#past').click
       sleep 0.5
-      expect(page.body).to have_content(old_show.name)
+      expect(page.body).to have_content(old_call.name)
     end
   end
 
   describe 'artist dashboard' do
     it 'renders the artist dashboard' do
       visit dashboard_path(as_artist: true)
-      expect(page.body).to have_content(pending_application.show.name)
+      expect(page.body).to have_content(pending_application.call.name)
       find(:css, '#accepted_and_active').click
       sleep 0.5
-      expect(page.body).to have_content(accepted_application.show.name)
+      expect(page.body).to have_content(accepted_application.call.name)
       find(:css, '#past').click
       sleep 0.5
-      expect(page.body).to have_content(past_application.show.name)
-      expect(page.body).to have_content(past_accepted_application.show.name)
+      expect(page.body).to have_content(past_application.call.name)
+      expect(page.body).to have_content(past_accepted_application.call.name)
     end
   end
 end

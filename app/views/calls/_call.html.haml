@@ -1,0 +1,15 @@
+.card.fun-card
+  .card-header
+    %h5.text-center
+      = call.name
+      = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+        edit_call_path(call),
+        class: 'float-right'
+
+  .card-body
+    %h3= "#{call.name} @ #{call.venue.name}"
+    %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
+    %p.text-muted= call.overview
+
+    %h4 Description
+    %p= call.full_description.html_safe
