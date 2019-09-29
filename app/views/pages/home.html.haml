@@ -23,9 +23,9 @@
                 #mc_embed_signup_scroll
                   .form-row.align-items-center
                     .col-auto
-                      %input#mce-FNAME.required.form-control.form-control-sm.mb-2{:name => "FNAME", :type => "text", :value => "", :placeholder => "First Name"}/
+                      %input#mce-FNAME.required.form-control.form-control.mb-2{:name => "FNAME", :type => "text", :value => "", :placeholder => "First Name"}/
                     .col-auto
-                      %input#mce-EMAIL.required.email.form-control.form-control-sm.mb-2{:name => "EMAIL", :type => "email", :value => "", :placeholder => "Email"}/
+                      %input#mce-EMAIL.required.email.form-control.form-control.mb-2{:name => "EMAIL", :type => "email", :value => "", :placeholder => "Email"}/
                     #mce-responses.clear
                       #mce-error-response.response{:style => "display:none"}
                       #mce-success-response.response{:style => "display:none"}
@@ -34,7 +34,7 @@
                       %input{:name => "b_0594ea2524305c1314abff2fa_55beb62341", :tabindex => "-1", :type => "text", :value => ""}/
                     .clear
                     .col-auto
-                      %input#mc-embedded-subscribe.button.btn.btn-sm.btn-outline-light.mb-2{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
+                      %input#mc-embedded-subscribe.button.btn.btn-outline-light.mb-2{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
                   %small.form-text.text-muted.hero-helper.pt-0.mt-0
                     We keep your email private and you can unsubscribe any time.
             / End mc_embed_signup
@@ -61,25 +61,28 @@
   - @calls.each do |call|
     .row
       .col-12.mx-auto.mb-4
-        .card.fun-card
+        .card.fun-card.home-card
           .card-header
             .row
               .col-8
                 %h5.d-inline= call.name
                 @
                 %h6.d-inline= call.venue.name
-              .col-4
-                %h6.pull-right= I18n.l(call.start_at, format: :long)
-          .card-body
+              .col-4.my-auto
+                %span.pull-right
+                  %h6.text-muted.d-inline
+                    Opens: 
+                  %h6.d-inline= I18n.l(call.start_at, format: :short)
+          .card-body.text-truncate
             = call.overview
           .card-footer
             .row
               .col-6
                 = pluralize(call.applications.count, 'Submission')
                 .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
-              .col-6
+              .col-6.my-auto
                 .pull-right
                   - if current_user && current_user.id == call.user_id
                     = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
                   - else
-                    = link_to 'Call Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'
+                    = link_to 'View Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'

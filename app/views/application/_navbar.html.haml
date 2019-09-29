@@ -29,9 +29,9 @@
             = link_to "Sign In", new_user_session_path, class: "dropdown-item"
             = link_to t('sign_up'), new_user_registration_path, class: "dropdown-item"
       - if current_user
-        = button_to 'Add Call for Art', new_call_path, class: 'btn btn-outline-success py-2 px-3 mr-2', method: :get
+        = button_to 'Add Call for Art', new_call_path, class: 'btn btn-outline-light py-2 px-3 mr-2', method: :get
       - else
-        = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-sm btn-outline-warning py-2 px-3 mr-2', method: :get
+        = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-sm btn-outline-light py-2 px-3 mr-2', method: :get
   -# %form.form-inline.my-2.my-lg-0
   -#   %input.form-control.mr-sm-2{placeholder: 'search', type: "search"}
   -#   %button.btn.btn-outline-success.my-2.my-sm-0{:type => "submit"}
