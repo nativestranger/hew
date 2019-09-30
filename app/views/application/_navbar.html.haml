@@ -19,7 +19,6 @@
           = link_to "Messages", messages_path, class: "nav-link text-light"
         %li.nav-item
           = link_to t('sign_out'), destroy_user_session_path, method: :delete, class: "nav-link"
-
       - else
         %li.nav-item
           = link_to "Log In", new_user_session_path, class: "nav-link text-light"

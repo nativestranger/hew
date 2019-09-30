@@ -71,15 +71,15 @@
               .col-4.my-auto
                 %span.pull-right
                   %h6.text-muted.d-inline
-                    Opens: 
-                  %h6.d-inline= I18n.l(call.start_at, format: :short)
+                    Show opens: 
+                  %h6.d-inline= call.start_at.to_date.strftime("%d %B %Y")
           .card-body.text-truncate
             = call.overview
           .card-footer
             .row
               .col-6
                 = pluralize(call.applications.count, 'Submission')
-                .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
+                .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
               .col-6.my-auto
                 .pull-right
                   - if current_user && current_user.id == call.user_id
