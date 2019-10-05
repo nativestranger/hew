@@ -1,4 +1,4 @@
-.container-fluid.header.mt-n5
+.container-fluid.homepage-header.mt-n5
   .row.py-5
     .col-10.mx-auto
       .row.py-3
@@ -11,8 +11,8 @@
                     Calls for Art
                 .row
                   %span.heading-primary-sub
-                    in 
-                    %span.heading-location 
+                    in
+                    %span.heading-location
                       Mexico City
           .row.mt-4.mb-5
             / Begin Mailchimp Signup Form
@@ -71,7 +71,7 @@
               .col-4.my-auto
                 %span.pull-right
                   %h6.text-muted.d-inline
-                    Show opens: 
+                    Show opens:
                   %h6.d-inline= call.start_at.to_date.strftime("%d %B %Y")
           .card-body.text-truncate
             = call.overview

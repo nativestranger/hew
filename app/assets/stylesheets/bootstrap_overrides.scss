@@ -13,57 +13,54 @@ body {
   font-family: 'Playfair Display', serif;
 }
 
-.container-fluid {
-  padding: 0;
-}
-
-.header {
+.homepage-header {
   background-image: linear-gradient(
-    to right bottom, 
-    rgba(0, 0, 220, 1), 
-    rgba(0, 0, 150, .85)), 
+    to right bottom,
+    rgba(0, 0, 220, 1),
+    rgba(0, 0, 150, .85)),
     url('header-bg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   position: relative;
   clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
-}
 
-.heading-primary {
-  color: $white;
-  text-transform: uppercase;
-}
+  .heading-primary {
+    color: $white;
+    text-transform: uppercase;
+  }
 
-.heading-primary-main {
-  font-size: 4.4rem;
-  font-family: IMFell DW, Times, Georgia, serif;
-  font-weight: 900;
-  line-height: 1em;
-}
+  .heading-primary-main {
+    font-size: 4.4rem;
+    font-family: IMFell DW, Times, Georgia, serif;
+    font-weight: 900;
+    line-height: 1em;
+  }
 
-.heading-primary-sub {
-  font-size: 1.1rem;
-  font-weight: 300;
-  letter-spacing: .3rem;
-  line-height: 1.5em;
-}
+  .heading-primary-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: .3rem;
+    line-height: 1.5em;
+  }
 
-.heading-location {
-  font-weight: 700;
-}
+  .heading-location {
+    font-weight: 700;
+  }
 
-.hero-headings {
-  border-bottom: 2px ridge $white;
-}
+  .hero-headings {
+    border-bottom: 2px ridge $white;
+  }
 
-.hero-subscribe-label {
-  color: $white;
-  font-size: 1.2rem;
-}
+  .hero-subscribe-label {
+    color: $white;
+    font-size: 1.2rem;
+  }
 
-.hero-helper {
-  font-style: italic;
+  .hero-helper {
+    font-style: italic;
+  }
+
 }
 
 .form-control, .form-control:focus {
