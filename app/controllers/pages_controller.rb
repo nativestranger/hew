@@ -4,6 +4,7 @@ class PagesController < ApplicationController
   before_action :authenticate_user!, except: %i[home application_submitted]
 
   def home
+    @app_layout_container_class_additions = 'p-0'
     params[:call_sort_by] ||= 'Application Deadline'
     set_homepage_calls
   end

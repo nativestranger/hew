@@ -3,29 +3,73 @@ $darkslategray: #2f4f4f;
 $lightgray: #d3d3d3;
 $blue: #0000ff;
 $yellow: #ffff00;
+$lightyellow: #ffffd5;
 $white: #fff;
 $red: red;
 $pink: pink;
 
 body {
   color: $darkslategray;
-  font-family: "Lucida Console", Monaco, monospace;
+  font-family: 'Playfair Display', serif;
 }
 
-.navbar {
-  margin-bottom: 0;
+.homepage-header {
+  background-image: linear-gradient(
+    to right bottom,
+    rgba(0, 0, 220, 1),
+    rgba(0, 0, 150, .85)),
+    url('header-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+
+  .heading-primary {
+    color: $white;
+    text-transform: uppercase;
+  }
+
+  .heading-primary-main {
+    font-size: 4.4rem;
+    font-family: IMFell DW, Times, Georgia, serif;
+    font-weight: 900;
+    line-height: 1em;
+  }
+
+  .heading-primary-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.3rem;
+    line-height: 1.5em;
+  }
+
+  .heading-location {
+    font-weight: 700;
+  }
+
+  .hero-headings {
+    border-bottom: 2px ridge $white;
+  }
+
+  .hero-subscribe-label {
+    color: $white;
+    font-size: 1.2rem;
+  }
+
+  .hero-helper {
+    font-style: italic;
+  }
+
 }
 
-.jumbotron.funmotron {
-  background: $white;
-  color: $blue;
+.form-control, .form-control:focus {
+  background-color: transparent;
   border-radius: 0;
-  border-left: 3rem $red solid;
-  border-bottom: 0.8rem $pink solid;
-  padding-top: 0;
-  padding-bottom: 1rem;
-  margin-top: 3rem;
-  margin-bottom: 5rem;
+}
+
+.form-control.hero-form, .form-control:focus.hero-form {
+  color: $white;
 }
 
 h1,
@@ -40,8 +84,9 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-weight: 900;
+  font-weight: 700;
   margin-bottom: 0.5rem;
+  font-family: "Lato", Arial, sans-serif;
 
   @media (max-width: 576px) {
     font-size: 90%;
@@ -50,22 +95,41 @@ h6,
 
 // CARDS
 .card.fun-card {
-  border-color: $black;
+  border-color: $lightgray;
   border-radius: 0;
-  box-shadow: 5px 10px $lightgray;
+  box-shadow: 4px 4px $lightgray;
 
   .card-header {
-    background-color: $yellow;
-    font-weight: 900px;
+    background-color: $lightyellow;
+    color: $black;
+  }
+
+  .card-footer {
+    border-top: 0;
   }
 }
 
 // BUTTONS
 .btn:not(.submit-message) {
   border-radius: 0;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 0.9rem;
-  font-weight: 800;
-  padding: 10px 20px;
+  font-weight: 900;
+  letter-spacing: 0.05rem;
   text-transform: uppercase;
+}
+
+// FORMS
+.input-group-text {
+  border-radius: 0;
+}
+
+trix-toolbar .button_groups {
+  button.code {
+    display: none;
+  }
+  button.increase {
+    display: none;
+  }
+  button.decrease {
+    display: none;
+  }
 }
