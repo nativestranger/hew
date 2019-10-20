@@ -1,1 +1,1 @@
-iterating on an app for artists&curators/venues to connect
+iterating on an app for artists&curators/venues to connect.
