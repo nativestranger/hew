@@ -9,7 +9,7 @@
 
           .card-body
             %h3= "#{@call.name} @ #{@call.venue.name}"
-            %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"
+            %p= "#{@call.start_at.strftime("%d %B %Y")} - #{@call.end_at.strftime("%d %B %Y")}"
             %p.text-muted= @call.overview
 
             %h4 Description
@@ -21,7 +21,7 @@
             %h5.text-center Application Info
           .card-body
             %h6 Deadline
-            %p= I18n.l(@call.application_deadline, format: :long)
+            %p= @call.application_deadline.strftime("%d %B %Y")
 
             %h6 Details to Include
             %p= @call.application_details.html_safe

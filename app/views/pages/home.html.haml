@@ -1,49 +1,88 @@
-.row
-  .col-lg-10.mx-auto
-    .jumbotron.funmotron.mb-4
-      .container-fluid
-        %h3 Open Calls for Art in Mexico City
+.container-fluid.homepage-header.mt-n5
+  .row.py-5
+    .col-10.mx-auto
+      .row.py-3
+        .col-10
+          .row.py-4.hero-headings
+            .col-sm
+              %h1.heading-primary
+                .row
+                  %span.heading-primary-main
+                    Calls for Art
+                .row
+                  %span.heading-primary-sub
+                    in
+                    %span.heading-location
+                      Mexico City
+          -# .row.mt-4.mb-5
+          -#   / Begin Mailchimp Signup Form
+          -#   #mc_embed_signup
+          -#     %form#mc-embedded-subscribe-form.validate{:action => "https://gmail.us20.list-manage.com/subscribe/post?u=0594ea2524305c1314abff2fa&id=55beb62341", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
+          -#       %label.col-form-label.hero-subscribe-label
+          -#         Want to be notified when new calls are added?
+          -#       #mc_embed_signup_scroll
+          -#         .form-row.align-items-center
+          -#           .col-auto
+          -#             %input#mce-FNAME.required.form-control.hero-form.form-control.mb-2{:name => "FNAME", :type => "text", :value => "", :placeholder => "First Name"}/
+          -#           .col-auto
+          -#             %input#mce-EMAIL.required.email.form-control.hero-form.form-control.mb-2{:name => "EMAIL", :type => "email", :value => "", :placeholder => "Email"}/
+          -#           #mce-responses.clear
+          -#             #mce-error-response.response{:style => "display:none"}
+          -#             #mce-success-response.response{:style => "display:none"}
+          -#           / real people should not fill this in and expect good things - do not remove this or risk form bot signups
+          -#           %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
+          -#             %input{:name => "b_0594ea2524305c1314abff2fa_55beb62341", :tabindex => "-1", :type => "text", :value => ""}/
+          -#           .clear
+          -#           .col-auto
+          -#             %input#mc-embedded-subscribe.button.btn.btn-outline-light.mb-2{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
+          -#         %small.form-text.text-muted.hero-helper.pt-0.mt-0
+          -#           We keep your email private and you can unsubscribe any time.
+          -#   / End mc_embed_signup
+.container
+  .row
+    .col
+      .pull-right
+        %span.text-muted Sort by:
+        .btn-group.mb-1
+          %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
+            = params[:call_sort_by]
+            %span.caret
+          %ul.dropdown-menu.dropdown-menu-right
+            - ['Application Deadline', 'Recently Created'].each do |call_sort_by|
+              - next if params[:call_sort_by] == call_sort_by
+              %li= link_to call_sort_by, root_path({ call_sort_by: call_sort_by }), class: 'dropdown-item'
+
+  - if @calls.none?
     .row
-      .col
-        .pull-right
-          %span.text-muted Sort by:
-          .btn-group.mb-1
-            %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
-              = params[:call_sort_by]
-              %span.caret
-            %ul.dropdown-menu.dropdown-menu-right
-              - ['Application Deadline', 'Recently Created'].each do |call_sort_by|
-                - next if params[:call_sort_by] == call_sort_by
-                %li= link_to call_sort_by, root_path({ call_sort_by: call_sort_by }), class: 'dropdown-item'
+      .col-12
+        .alert.alert-warning.w-100
+          %p Darn, no available calls found.
 
-    - if @calls.none?
-      .row
-        .col-12
-          .alert.alert-warning.w-100
-            %p Darn, no available calls found.
-
-    - @calls.each do |call|
-      .row
-        .col-12.mx-auto.mb-4
-          .card.fun-card
-            .card-header
-              .row
-                .col-8
-                  %h5.d-inline= call.name
-                  @
-                  %h6.d-inline= call.venue.name
-                .col-4
-                  %h6.pull-right= I18n.l(call.start_at, format: :long)
-            .card-body
-              = call.overview
-            .card-footer
-              .row
-                .col-6
-                  = pluralize(call.applications.count, 'Submission')
-                  .text-muted Deadline #{I18n.l(call.application_deadline, format: :long)}
-                .col-6
-                  .pull-right
-                    - if current_user && current_user.id == call.user_id
-                      = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
-                    - else
-                      = link_to 'Call Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'
+  - @calls.each do |call|
+    .row
+      .col-12.mx-auto.mb-4
+        .card.fun-card.home-card
+          .card-header
+            .row
+              .col-8
+                %h5.d-inline= call.name
+                @
+                %h6.d-inline= call.venue.name
+              .col-4.my-auto
+                %span.pull-right
+                  %h6.text-muted.d-inline
+                    Show opens:
+                  %h6.d-inline= call.start_at.to_date.strftime("%d %B %Y")
+          .card-body.text-truncate
+            = call.overview
+          .card-footer
+            .row
+              .col-6
+                = pluralize(call.applications.count, 'Submission')
+                .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
+              .col-6.my-auto
+                .pull-right
+                  - if current_user && current_user.id == call.user_id
+                    = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
+                  - else
+                    = link_to 'View Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'
