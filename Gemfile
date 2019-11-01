@@ -48,7 +48,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.3.1'
 gem 'carmen'
 gem 'country_select', '~> 4.0'
-gem 'devise'
+gem "devise", ">= 4.7.1"
 gem 'devise-bootstrap-views'
 gem 'devise-i18n'
 gem 'font-awesome-rails'
