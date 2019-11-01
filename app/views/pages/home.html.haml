@@ -80,7 +80,7 @@
             .row
               - if call.external?
                 .col-6
-                  = pluralize(call.view_count, 'Views')
+                  = pluralize(call.view_count, 'View')
                   .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
                 .col-6.my-auto
                   .pull-right
