@@ -6,16 +6,19 @@
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
 #  end_at               :datetime         not null
+#  external             :boolean          default(FALSE), not null
+#  external_url         :string           default(""), not null
 #  full_description     :text             default(""), not null
 #  is_approved          :boolean          default(FALSE), not null
 #  is_public            :boolean          default(FALSE), not null
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
 #  start_at             :datetime         not null
+#  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  user_id              :bigint           not null
-#  venue_id             :bigint           not null
+#  venue_id             :bigint
 #
 # Indexes
 #
@@ -30,17 +33,18 @@
 
 class Call < ApplicationRecord
   belongs_to :user
-  belongs_to :venue
+  belongs_to :venue, optional: :external
 
-  accepts_nested_attributes_for :venue
+  accepts_nested_attributes_for :venue, reject_if: :all_blank
 
   validates :name, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true
   validates :overview, presence: true
-  validates :full_description, presence: true
+  validates :full_description, presence: true, unless: :external
   validates :application_deadline, presence: true
-  validates :application_details, presence: true
+  validates :application_details, presence: true, unless: :external
+  validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
 
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at

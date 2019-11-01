@@ -28,7 +28,7 @@ class PagesController < ApplicationController
     when 'Application Deadline'
       @calls = Call.accepting_applications.order(application_deadline: :asc)
     when 'Recently Created'
-      @calls = Call.accepting_applications.order(created_at: :asc)
+      @calls = Call.accepting_applications.order(created_at: :desc)
     end
 
     @calls = @calls.approved.published
