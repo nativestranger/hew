@@ -79,6 +79,8 @@ class CallDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   def display_resource(call)
-    "Call #{call.id} - #{call.name} @ #{call.venue.name}"
+    result = "Call #{call.id} - #{call.name}"
+    result += " @ #{call.venue.name}" if call.venue
+    result
   end
 end
