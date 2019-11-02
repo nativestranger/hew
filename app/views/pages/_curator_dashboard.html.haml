@@ -40,7 +40,7 @@
           %p.text-muted= call.overview
 
           - if call.external?
-            %p= link_to call.external_url
+            %p= link_to call.external_url, call.external_url
           - else
             %h4 Description
             %p= call.full_description.html_safe
