@@ -33,10 +33,11 @@
 
 class Call < ApplicationRecord
   belongs_to :user
-  belongs_to :venue, optional: :external
+  belongs_to :venue, optional: true
 
-  accepts_nested_attributes_for :venue, reject_if: :all_blank
+  accepts_nested_attributes_for :venue
 
+  validates :venue, presence: true, unless: :external
   validates :name, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true

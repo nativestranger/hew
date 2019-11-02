@@ -4,9 +4,8 @@ class CallsController < ApplicationController
   before_action :authorize_user!, except: %i[new create index]
 
   def new
-    address = Address.new(city: 'Mexico City', state: 'Mexico City', country: 'MX')
-    @venue = Venue.new(address: address)
-    @call = Call.new(venue: @venue, is_public: true)
+    @call = Call.new(is_public: true)
+    ensure_venue
   end
 
   def create
@@ -17,21 +16,28 @@ class CallsController < ApplicationController
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
     else
+      ensure_venue
       render :new
     end
   end
 
   def show; end
 
-  def edit; end
+  def edit
+    ensure_venue
+  end
 
   def update
     private_before_update = !@call.is_public
 
-    if @call.update(permitted_params)
+    @call.assign_attributes(permitted_params)
+    @call&.venue&.user ||= current_user
+
+    if @call.save
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
       redirect_to @call, notice: t('success')
     else
+      ensure_venue
       render :edit
     end
   end
@@ -55,24 +61,32 @@ class CallsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:call).permit(
-      :name,
-      :start_at,
-      :end_at,
-      :overview,
-      :is_public,
-      :external,
-      :external_url,
-      :full_description,
-      :application_details,
-      :application_deadline,
-      venue_attributes: [
-        :id,
+    result = \
+      params.require(:call).permit(
         :name,
-        :website,
-        { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
-      ]
-    )
+        :start_at,
+        :end_at,
+        :overview,
+        :is_public,
+        :external,
+        :external_url,
+        :full_description,
+        :application_details,
+        :application_deadline,
+        venue_attributes: [
+          :id,
+          :name,
+          :website,
+          { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
+        ]
+      )
+
+    if result[:external] == '1' && result[:venue_attributes].slice('name', 'website').values.all?(&:blank?)
+      result.delete(:venue_attributes)
+      result[:venue_id] = nil
+    end
+
+    result
   end
 
   def set_call
@@ -81,5 +95,13 @@ class CallsController < ApplicationController
 
   def authorize_user!
     redirect_to root_path unless current_user.id == @call.user_id
+  end
+
+  def ensure_venue
+    if @call.venue.blank?
+      address = Address.new(city: 'Mexico City', state: 'Mexico City', country: 'MX')
+      @venue = Venue.new(address: address)
+      @call.venue = @venue
+    end
   end
 end
