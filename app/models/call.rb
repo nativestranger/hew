@@ -48,6 +48,7 @@ class Call < ApplicationRecord
 
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
+  validate :owned_by_admin, if: :external
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
@@ -93,5 +94,11 @@ class Call < ApplicationRecord
     return unless application_deadline && start_at && application_deadline > start_at
 
     errors.add(:base, 'The application deadline must be before the start date')
+  end
+
+  def owned_by_admin
+    if extenal? && !user&.is_admin?
+      erros.add(:base, 'Only admins can create external calls')
+    end
   end
 end

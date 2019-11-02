@@ -11,7 +11,7 @@ class CallsController < ApplicationController
 
   def create
     @call = Call.new(permitted_params.merge(user: current_user))
-    @call.venue.user ||= current_user
+    @call&.venue&.user ||= current_user
 
     if @call.save
       AdminMailer.new_call(@call).deliver_later if @call.is_public
@@ -61,6 +61,8 @@ class CallsController < ApplicationController
       :end_at,
       :overview,
       :is_public,
+      :external,
+      :external_url,
       :full_description,
       :application_details,
       :application_deadline,
