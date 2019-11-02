@@ -97,7 +97,7 @@ class Call < ApplicationRecord
   end
 
   def owned_by_admin
-    if extenal? && !user&.is_admin?
+    if external? && !user&.is_admin?
       erros.add(:base, 'Only admins can create external calls')
     end
   end
