@@ -64,13 +64,13 @@
         .card.fun-card.home-card
           .card-header
             .row
-              .col-8
+              .col-sm-8
                 %h5.d-inline= call.name
                 - if call.venue
                   @
                   %h6.d-inline= call.venue.name
-              .col-4.my-auto
-                %span.pull-right
+              .col-sm-4.my-auto
+                %span.float-md-right
                   %h6.text-muted.d-inline
                     Show opens:
                   %h6.d-inline= call.start_at.to_date.strftime("%d %B %Y")
