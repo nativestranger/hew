@@ -2,11 +2,11 @@ document.addEventListener("turbolinks:load", function() {
   (function() {
     let showAndHide = function() {
       if ($('#call_external').is(':checked')) {
-        $('.external-calls-only').show()
-        $('.internal-calls-only').hide()
+        $('.external-calls-only').show();
+        $('.internal-calls-only').hide();
       } else {
-        $('.external-calls-only').hide()
-        $('.internal-calls-only').show()
+        $('.external-calls-only').hide();
+        $('.internal-calls-only').show();
       }
     }
 
@@ -16,4 +16,4 @@ document.addEventListener("turbolinks:load", function() {
 
     showAndHide();
   }).call(this);
-})
+});
