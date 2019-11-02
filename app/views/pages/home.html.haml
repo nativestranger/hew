@@ -66,8 +66,9 @@
             .row
               .col-8
                 %h5.d-inline= call.name
-                @
-                %h6.d-inline= call.venue.name
+                - if call.venue
+                  @
+                  %h6.d-inline= call.venue.name
               .col-4.my-auto
                 %span.pull-right
                   %h6.text-muted.d-inline
@@ -77,12 +78,20 @@
             = call.overview
           .card-footer
             .row
-              .col-6
-                = pluralize(call.applications.count, 'Submission')
-                .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
-              .col-6.my-auto
-                .pull-right
-                  - if current_user && current_user.id == call.user_id
-                    = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
-                  - else
-                    = link_to 'View Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'
+              - if call.external?
+                .col-6
+                  = pluralize(call.view_count, 'View')
+                  .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
+                .col-6.my-auto
+                  .pull-right
+                    = link_to 'View Details', public_call_details_path(call), class: 'btn btn-outline-primary', target: :_blank
+              - else
+                .col-6
+                  = pluralize(call.applications.count, 'Submission')
+                  .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
+                .col-6.my-auto
+                  .pull-right
+                    - if current_user&.id == call.user_id
+                      = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
+                    - else
+                      = link_to 'View Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'

@@ -2,7 +2,12 @@ class PublicCallsController < ApplicationController
   before_action :set_call
   before_action :ensure_public!
 
-  def details; end
+  def details
+    if @call.external?
+      @call.increment!(:view_count)
+      redirect_to @call.external_url
+    end
+  end
 
   private
 

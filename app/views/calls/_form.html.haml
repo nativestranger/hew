@@ -27,7 +27,7 @@
         .form-group
           = f.input :overview, input_html: { class: 'form-control' }, as: :text
 
-    .row
+    .row.internal-calls-only
       .col-md-12
         .form-group
           %label{ for: 'call_full_description' } Full Description
@@ -39,11 +39,20 @@
 
     %hr
 
-    .row
+    .row.external-calls-only
+      .col-12
+        = f.input :external_url, wrapper: :vertical_input_group, label: "External URL" do
+          .input-group-prepend
+            .input-group-text
+              %span.fa.fa-globe
+          = f.input_field :external_url, class: "form-control"
+          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :external_url
+
+    .row.internal-calls-only
       .col
         %h4 Application Details
 
-    .row
+    .row.internal-calls-only
       .col-md-12
         .form-group
           -# %label{ for: 'call_application_details' }
@@ -60,6 +69,19 @@
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
           = react_component 'ReactDatePicker', { startDate: @call.application_deadline, formFieldId: 'call_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:application_deadline].present? }
 
+      .col-md-2
+        .form-group
+          %label{ for: 'call_is_public' }
+            Publish
+            = f.input :is_public, label: false
+
+      - if current_user.is_admin?
+        .col-md-2
+          .form-group
+            %label{ for: 'call_external' }
+              External
+              = f.input :external, label: false
+
     %hr
 
     .row
@@ -67,11 +89,7 @@
         %h4 Venue Details
         = f.simple_fields_for :venue do |venue|
           = render '/venues/venue_fields', f: venue
+
     .row
       .col-md-2
         = f.button :submit, t('save'), class: 'btn btn-primary'
-
-      .col
-        .form-group
-          %label
-            = f.input :is_public, label: 'Publish'

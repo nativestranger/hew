@@ -7,9 +7,15 @@
         class: 'float-right'
 
   .card-body
-    %h3= "#{call.name} @ #{call.venue.name}"
+    %h3
+      = call.name
+      = "@ #{call.venue.name}" if call.venue
     %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
     %p.text-muted= call.overview
 
-    %h4 Description
-    %p= call.full_description.html_safe
+    - if call.external?
+      %h4 External URL
+      %p= link_to @call.external_url, @call.external_url
+    - else
+      %h4 Description
+      %p= call.full_description.html_safe

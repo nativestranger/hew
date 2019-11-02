@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_23_225240) do
+ActiveRecord::Schema.define(version: 2019_10_28_001327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -165,7 +165,7 @@ ActiveRecord::Schema.define(version: 2019_09_23_225240) do
 
   create_table "calls", force: :cascade do |t|
     t.string "name", default: "", null: false
-    t.bigint "venue_id", null: false
+    t.bigint "venue_id"
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.string "overview", default: "", null: false
@@ -177,6 +177,9 @@ ActiveRecord::Schema.define(version: 2019_09_23_225240) do
     t.boolean "is_public", default: false, null: false
     t.bigint "user_id", null: false
     t.boolean "is_approved", default: false, null: false
+    t.boolean "external", default: false, null: false
+    t.string "external_url", default: "", null: false
+    t.integer "view_count", default: 0, null: false
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
   end
