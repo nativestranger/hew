@@ -10,15 +10,11 @@ $pink: pink;
 
 body {
   color: $darkslategray;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Lato', sans-serif;
 }
 
 .homepage-header {
-  background-image: linear-gradient(
-    to right bottom,
-    rgba(0, 0, 220, 1),
-    rgba(0, 0, 150, .85)),
-    url('header-bg.jpg');
+  background-color: $primary;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -31,7 +27,6 @@ body {
   }
 
   .heading-primary-main {
-    font-family: IMFell DW, Times, Georgia, serif;
     font-weight: 900;
     @media (min-width: 576px) {
       font-size: 3.4rem;
