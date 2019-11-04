@@ -33,7 +33,8 @@ FactoryBot.create(:carousel_image, carousel: big_dogs, name: 'big_dog4', image_f
 venue = FactoryBot.create(:venue, user: admin)
 
 2.times { FactoryBot.create(:call, is_public: true, is_approved: true) }
-3.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true) }
+2.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true) }
+FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
 FactoryBot.create(:call, user: admin, venue: venue)
 FactoryBot.create(:call, :current, user: admin, venue: venue, is_public: true)
 2.times { FactoryBot.create(:call, :old, user: admin, venue: venue, is_public: true) }

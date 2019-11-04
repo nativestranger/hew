@@ -135,7 +135,7 @@ export default class Chat extends React.Component {
       			  </div>
 
       				<div className="card bg-sohbet border-0 m-0 p-0" style={ { height: '60vh' } }>
-        			  <div ref='messagesDiv' className="messages card border-0 m-0 p-0 position-relative bg-transparent" style={ { overflowY: 'auto', height: '60vh' } }>
+        			  <div ref='messagesDiv' className="messages card border-0 m-0 p-1 position-relative bg-transparent" style={ { overflowY: 'auto', height: '60vh' } }>
                   { this.state.messages.map(renderMessage) }
         			  </div>
       			  </div>

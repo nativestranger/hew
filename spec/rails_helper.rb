@@ -24,7 +24,9 @@ require 'rspec/rails'
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
-unless ENV['TRAVIS_JOB_NUMBER']
+if ENV['TRAVIS_JOB_NUMBER']
+  system "RAILS_ENV=test bundle exec rails runner 'Webdrivers::Chromedriver.update'"
+else
   Webdrivers::Chromedriver.required_version = '77.0.3865.40'
 end
 

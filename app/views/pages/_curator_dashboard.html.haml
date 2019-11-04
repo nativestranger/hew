@@ -26,21 +26,28 @@
     - else
       - @calls.each do |call|
         .list-group-item.list-group-item-action.border-left-0.border-right-0
-          %h5.text-center
+          %h5
             = link_to content_tag(:i, '', class: 'fa fa-pencil'),
               edit_call_path(call),
               class: 'float-right'
 
-          %h3= "#{call.name} @ #{call.venue.name}"
+          %h3
+            = call.name
+            = "@ #{call.venue.name}" if call.venue
+            - if call.external?
+              %i.fa.fa-flag.text-warning
           %p= "#{call.start_at.strftime("%d %B %Y")} - #{call.end_at.strftime("%d %B %Y")}"
           %p.text-muted= call.overview
 
-          %h4 Description
-          %p= call.full_description.html_safe
+          - if call.external?
+            %p= link_to call.external_url, call.external_url
+          - else
+            %h4 Description
+            %p= call.full_description.html_safe
 
-          .row
-            .col-6
-              = pluralize(call.applications.count, 'Submission')
-              .text-muted Deadline: #{call.application_deadline.strftime("%d %B %Y")}
-            .col-6
-              .pull-right= link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
+            .row
+              .col-6
+                = pluralize(call.applications.count, 'Submission')
+                .text-muted Deadline: #{call.application_deadline.strftime("%d %B %Y")}
+              .col-6
+                .pull-right= link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
