@@ -3,7 +3,7 @@
 en:
   devise:
     confirmations:
-      confirmed: "Your account is now confirmed! Log in to get started."
+      confirmed: "Your account is now confirmed!"
       send_instructions: "You will receive an email with instructions for how to confirm your email address in a few minutes."
       send_paranoid_instructions: "If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes."
     failure:
