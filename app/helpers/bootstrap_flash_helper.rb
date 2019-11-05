@@ -18,7 +18,7 @@ module BootstrapFlashHelper
 
       tag_class = options.extract!(:class)[:class]
       tag_options = {
-        class: "alert alert-#{type} #{tag_class} fade show"
+        class: "alert alert-#{type} #{tag_class} fade show mb-0"
       }.merge(options)
 
       close_button = content_tag(:button, raw("&times;"), type: "button", class: "close", "data-dismiss" => "alert")
