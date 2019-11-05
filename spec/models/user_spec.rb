@@ -48,5 +48,12 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#set_reset_password_token' do
+    it 'returns the plaintext token' do
+      potential_token = subject.send(:set_reset_password_token)
+      potential_token_digest = Devise.token_generator.digest(subject, :reset_password_token, potential_token)
+      actual_token_digest = subject.reset_password_token
+      expect(potential_token_digest).to eql(actual_token_digest)
+    end
+  end
 end
