@@ -1,0 +1,29 @@
+.form-inputs
+  = simple_form_for @piece do |f|
+    = f.error_notification
+    = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+    .row
+      .col-md-6
+        .row
+          .col-md-12
+            .form-group
+              %label{ for: 'piece_title' }= t('title')
+              = f.input :title, input_html: { class: 'form-control' }, label: false
+          .col-md-12
+            .form-group
+              %label{ for: 'piece_medium' }= t('medium')
+              = f.input :medium, input_html: { class: 'form-control' }, label: false
+
+      .col-md-6
+        = f.input :description, as: :trix_editor
+
+    .row
+      .col-md-12
+        - if @piece.persisted?
+          = f.input :image_ids_in_position_order, as: :hidden, default: @piece.piece_images.map(&:id).join(',')
+          = render 'sortable_piece_images', piece: @piece
+        - else
+          %p.text-muted You must submit your pieces's title before adding images.
+
+    .mt-4= f.button :submit, 'Submit', class: 'btn btn-primary'
