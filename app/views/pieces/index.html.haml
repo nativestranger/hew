@@ -1,0 +1,22 @@
+.row
+  .col-lg-10.mx-auto
+
+    %h2.pull-left My Work
+    = button_to 'New Piece', new_piece_path, class: 'btn btn-default btn-primary pull-right', method: :get
+    .clearfix
+    %hr
+
+    - @pieces.in_groups_of(4).each do |piece_group|
+      .row
+        - piece_group.each do |piece|
+          - next unless piece && piece.piece_images.first # TODO: placeholder image when no images
+
+          .col-md-3.mb-4
+            .clearfix
+              %h6.pull-left.text-center= piece.name
+              = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+                edit_piece_path(piece),
+                class: 'float-right'
+
+            = link_to public_piece_path(piece) do
+              = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')

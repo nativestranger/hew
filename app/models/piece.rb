@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: carousels
+# Table name: pieces
 #
 #  id          :bigint           not null, primary key
 #  description :string           default(""), not null
@@ -11,22 +11,19 @@
 #
 # Indexes
 #
-#  index_carousels_on_user_id  (user_id)
+#  index_pieces_on_user_id  (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
 #
 
-class CarouselSerializer < ActiveModel::Serializer
-  attributes :id,
-             :name,
-             :description,
-             :carousel_images
+class Piece < ApplicationRecord
+  belongs_to :user
+  has_many :piece_images, -> { order('position ASC') }, dependent: :destroy
+  accepts_nested_attributes_for :piece_images, allow_destroy: true
 
-  def carousel_images
-    object.carousel_images.map do |carousel_image|
-      CarouselImageSerializer.new(carousel_image).serializable_hash
-    end
-  end
+  validates :name, presence: true
+
+  attr_accessor :image_ids_in_position_order
 end

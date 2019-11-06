@@ -1,22 +1,22 @@
 .form-inputs
-  = simple_form_for @carousel do |f|
+  = simple_form_for @piece do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .row
       .col-md-12
         .form-group
-          %label{ for: 'carousel_name' }= t('name')
+          %label{ for: 'piece_name' }= t('name')
           = f.input :name, input_html: { class: 'form-control' }, label: false
 
         = f.input :description, as: :trix_editor
 
     .row
       .col-md-12
-        - if @carousel.persisted?
-          = f.input :image_ids_in_position_order, as: :hidden, default: @carousel.carousel_images.map(&:id).join(',')
-          = render 'sortable_carousel_images', carousel: @carousel
+        - if @piece.persisted?
+          = f.input :image_ids_in_position_order, as: :hidden, default: @piece.piece_images.map(&:id).join(',')
+          = render 'sortable_piece_images', piece: @piece
         - else
-          %p.text-muted You must submit your work's name before adding images.
+          %p.text-muted You must submit your pieces's name before adding images.
 
     .mt-4= f.button :submit, 'Submit', class: 'btn btn-primary'

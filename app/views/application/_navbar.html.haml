@@ -12,7 +12,7 @@
         %li.nav-item
           = link_to 'Profile', settings_profile_path, class: "nav-link text-light"
         %li.nav-item
-          = link_to 'My Work', carousels_path, class: "nav-link text-light" if current_user.is_artist? # TODO: or dont redirect on public call...
+          = link_to 'My Pieces', pieces_path, class: "nav-link text-light" if current_user.is_artist? # TODO: or dont redirect on public call...
         %li.nav-item
           = link_to 'Dashboard', dashboard_path, class: "nav-link text-light"
         %li.nav-item

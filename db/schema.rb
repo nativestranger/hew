@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_28_001327) do
+ActiveRecord::Schema.define(version: 2019_10_28_001328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -184,27 +184,6 @@ ActiveRecord::Schema.define(version: 2019_10_28_001327) do
     t.index ["venue_id"], name: "index_calls_on_venue_id"
   end
 
-  create_table "carousel_images", force: :cascade do |t|
-    t.string "name", default: "", null: false
-    t.string "description", default: "", null: false
-    t.string "alt", default: "", null: false
-    t.bigint "carousel_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "position", null: false
-    t.index ["carousel_id", "position"], name: "index_carousel_images_on_carousel_id_and_position", unique: true
-    t.index ["carousel_id"], name: "index_carousel_images_on_carousel_id"
-  end
-
-  create_table "carousels", force: :cascade do |t|
-    t.string "name", default: "", null: false
-    t.bigint "user_id", null: false
-    t.string "description", default: "", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_carousels_on_user_id"
-  end
-
   create_table "chat_users", force: :cascade do |t|
     t.bigint "chat_id", null: false
     t.bigint "user_id", null: false
@@ -238,6 +217,27 @@ ActiveRecord::Schema.define(version: 2019_10_28_001327) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["chat_user_id"], name: "index_messages_on_chat_user_id"
+  end
+
+  create_table "piece_images", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "description", default: "", null: false
+    t.string "alt", default: "", null: false
+    t.bigint "piece_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "position", null: false
+    t.index ["piece_id", "position"], name: "index_piece_images_on_piece_id_and_position", unique: true
+    t.index ["piece_id"], name: "index_piece_images_on_piece_id"
+  end
+
+  create_table "pieces", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.bigint "user_id", null: false
+    t.string "description", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_pieces_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -293,10 +293,10 @@ ActiveRecord::Schema.define(version: 2019_10_28_001327) do
   add_foreign_key "call_applications", "users"
   add_foreign_key "calls", "users"
   add_foreign_key "calls", "venues"
-  add_foreign_key "carousel_images", "carousels"
-  add_foreign_key "carousels", "users"
   add_foreign_key "connections", "users", column: "user1_id"
   add_foreign_key "connections", "users", column: "user2_id"
+  add_foreign_key "piece_images", "pieces"
+  add_foreign_key "pieces", "users"
   add_foreign_key "venues", "addresses"
   add_foreign_key "venues", "users"
 end

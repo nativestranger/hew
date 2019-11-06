@@ -25,19 +25,19 @@ export default class SortableComponent extends Component {
   renderItem = (item) => {
     let thisComponent = this;
 
-    let deleteCarouselImage = () => {
+    let deletePieceImage = () => {
       return axios({
         method: 'delete',
-        url: `/v1/carousels/${this.props.carousel_id}/carousel_images/${item.id}/`
+        url: `/v1/pieces/${this.props.piece_id}/piece_images/${item.id}/`
       });
     }
 
     let removeImage = function(e) {
       if (confirm("This will delete the image for good. Are you sure?")) {
-        deleteCarouselImage().then(response => {
+        deletePieceImage().then(response => {
           thisComponent.setState({
-            carouselImages: thisComponent.state.carouselImages.filter(function(carouselImage) {
-              return carouselImage.id != item.id;
+            pieceImages: thisComponent.state.pieceImages.filter(function(pieceImage) {
+              return pieceImage.id != item.id;
             })
           });
         }).catch(error => {
@@ -54,15 +54,15 @@ export default class SortableComponent extends Component {
     )
   };
   state = {
-    carouselImages: this.props.items,
+    pieceImages: this.props.items,
   };
   onSortStart = () => {
     this.setState({ sorting: true });
   };
   onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({items, carouselImages}) => ({
+    this.setState(({items, pieceImages}) => ({
       sorting: false,
-      carouselImages: arrayMove(carouselImages, oldIndex, newIndex),
+      pieceImages: arrayMove(pieceImages, oldIndex, newIndex),
     }));
   };
 
@@ -70,10 +70,10 @@ export default class SortableComponent extends Component {
     this.refs.fileUploader.click();
   };
 
-  addCarouselImage = (formData) => {
+  addPieceImage = (formData) => {
     return axios({
       method: 'post',
-      url: `/v1/carousels/${this.props.carousel_id}/carousel_images`,
+      url: `/v1/pieces/${this.props.piece_id}/piece_images`,
       data: formData,
       config: { headers: {'Content-Type': 'multipart/form-data' }}
     });
@@ -85,11 +85,11 @@ export default class SortableComponent extends Component {
     let formData = new FormData();
     formData.append('image', e.target.files[0], e.target.files[0].name)
 
-    this.addCarouselImage(formData).then(response => {
+    this.addPieceImage(formData).then(response => {
       this.setState({ file: undefined });
-      let carouselImages = [...this.state.carouselImages, response.data.carousel_image];
+      let pieceImages = [...this.state.pieceImages, response.data.piece_image];
       this.setState({
-        carouselImages: carouselImages,
+        pieceImages: pieceImages,
       });
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
@@ -115,8 +115,8 @@ export default class SortableComponent extends Component {
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.carouselImages.map(i => i.id);
-    document.getElementById('carousel_image_ids_in_position_order').value = imagesByPosition;
+    let imagesByPosition = this.state.pieceImages.map(i => i.id);
+    document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;
 
     return (
       <div>
@@ -124,7 +124,7 @@ export default class SortableComponent extends Component {
 
         <div className='row mt-4'>
           <div className='col-lg-12'>
-            <SortableList items={this.state.carouselImages.map(this.renderItem)}
+            <SortableList items={this.state.pieceImages.map(this.renderItem)}
                           distance={1}
                           onSortStart={this.onSortStart}
                           onSortEnd={this.onSortEnd}

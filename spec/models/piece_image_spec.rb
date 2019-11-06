@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: carousel_images
+# Table name: piece_images
 #
 #  id          :bigint           not null, primary key
 #  alt         :string           default(""), not null
@@ -9,20 +9,20 @@
 #  position    :integer          not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  carousel_id :bigint
+#  piece_id    :bigint
 #
 # Indexes
 #
-#  index_carousel_images_on_carousel_id               (carousel_id)
-#  index_carousel_images_on_carousel_id_and_position  (carousel_id,position) UNIQUE
+#  index_piece_images_on_piece_id               (piece_id)
+#  index_piece_images_on_piece_id_and_position  (piece_id,position) UNIQUE
 #
 # Foreign Keys
 #
-#  fk_rails_...  (carousel_id => carousels.id)
+#  fk_rails_...  (piece_id => pieces.id)
 #
 
 require 'rails_helper'
 
-RSpec.describe CarouselImage, type: :model do
+RSpec.describe PieceImage, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

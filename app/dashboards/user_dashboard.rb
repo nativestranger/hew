@@ -10,7 +10,7 @@ class UserDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     avatar_attachment:      Field::HasOne,
     avatar_blob:            Field::HasOne,
-    carousels:              Field::HasMany,
+    pieces:                 Field::HasMany,
     venues:                 Field::HasMany,
     calls:                  Field::HasMany,
     call_applications:      Field::HasMany,

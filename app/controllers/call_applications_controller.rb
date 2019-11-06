@@ -67,8 +67,7 @@ class CallApplicationsController < ApplicationController
       @call_application.user.assign_attributes(
         is_artist:      true,
         artist_website: @call_application.artist_website,
-        instagram_url:  @call_application.artist_instagram_url,
-        password:       SecureRandom.uuid
+        instagram_url:  @call_application.artist_instagram_url
       )
     end
   end

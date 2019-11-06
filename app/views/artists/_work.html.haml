@@ -1,9 +1,9 @@
-- @user.carousels.in_groups_of(4).each do |carousel_group|
+- @user.pieces.in_groups_of(4).each do |piece_group|
   .row
-    - carousel_group.each do |carousel|
-      - next unless carousel && carousel.carousel_images.first
+    - piece_group.each do |piece|
+      - next unless piece && piece.piece_images.first
 
       .col-md-3
-        %h6.text-center= carousel.name
-        = link_to public_carousel_path(carousel) do
-          = image_tag(carousel.carousel_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
+        %h6.text-center= piece.name
+        = link_to public_piece_path(piece) do
+          = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
