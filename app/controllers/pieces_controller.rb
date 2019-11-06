@@ -39,7 +39,8 @@ class PiecesController < ApplicationController
 
   def permitted_params
     params.require(:piece).permit(
-      :name,
+      :title,
+      :medium,
       :image_ids_in_position_order,
       piece_images_attributes: %i[id name description alt _destroy]
     )

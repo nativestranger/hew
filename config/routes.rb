@@ -24,7 +24,7 @@ Rails.application.routes.draw do
   resources :pieces
 
   match 'images/:id', via: :get, to: 'public_piece_images#show', as: :public_piece_image
-  match 'works/:id', via: :get, to: 'public_pieces#show', as: :public_piece # TODO: is a work always a body/piece?
+  match 'works/:id', via: :get, to: 'public_pieces#show', as: :public_piece
 
   resources :chats, only: :show
   resources :venues, except: :destroy

@@ -1,7 +1,7 @@
 .row
   .col-md-4.mx-auto.text-center
     %h5= link_to @piece.user.full_name, artist_profile_path(@piece.user, artist_profile_section: 'Work')
-    %h6= @piece.name
+    %h6= @piece.title
 
 -# %i.fa.fa-chevron-right
 -# %i.fa.fa-camera-retro

@@ -10,3 +10,24 @@
 @import "stimulus";
 @import "trix";
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap'); // TODO: change
+
+// custom trix
+trix-toolbar .button_groups {
+  button.code {
+    display: none;
+  }
+  button.increase {
+    display: none;
+  }
+  button.decrease {
+    display: none;
+  }
+}
+
+trix-toolbar .trix-button--icon {
+    width: 2em;
+}
+
+trix-toolbar .trix-button-group--history-tools {
+  display: none;
+}

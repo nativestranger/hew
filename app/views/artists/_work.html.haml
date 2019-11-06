@@ -4,6 +4,6 @@
       - next unless piece && piece.piece_images.first
 
       .col-md-3
-        %h6.text-center= piece.name
+        %h6.text-center= piece.title
         = link_to public_piece_path(piece) do
           = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')

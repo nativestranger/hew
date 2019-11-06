@@ -4,7 +4,8 @@
 #
 #  id          :bigint           not null, primary key
 #  description :string           default(""), not null
-#  name        :string           default(""), not null
+#  medium      :string           default(""), not null
+#  title       :string           default(""), not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  user_id     :bigint           not null
@@ -20,7 +21,7 @@
 
 FactoryBot.define do
   factory :piece do
-    name { Faker::Name.name }
+    title { Faker::Name.name }
     user { create(:user) }
   end
 end

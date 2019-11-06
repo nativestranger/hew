@@ -232,11 +232,12 @@ ActiveRecord::Schema.define(version: 2019_10_28_001328) do
   end
 
   create_table "pieces", force: :cascade do |t|
-    t.string "name", default: "", null: false
+    t.string "title", default: "", null: false
     t.bigint "user_id", null: false
     t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "medium", default: "", null: false
     t.index ["user_id"], name: "index_pieces_on_user_id"
   end
 
