@@ -26,6 +26,19 @@ RSpec.describe 'CallApplications', type: :system do
         expect(call_application.photos_url).to eq('https://photos.com')
         expect(call_application.supplemental_material_url).to eq('https://things.com')
         expect(call_application.artist_statement).to eq('statement')
+
+        sleep 0.5
+        new_user = User.find_by(email: "john@doe.com")
+        expect(ActionMailer::Base.deliveries.count).to eq 2
+        new_artist_email = ActionMailer::Base.deliveries.find { |e| e.to == [new_user.email] }
+        expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address to get started.")
+
+        visit user_confirmation_path(confirmation_token: new_user.confirmation_token)
+        fill_in "user_password", with: 'INSECUREPASSWORD!'
+        fill_in "user_password_confirmation", with: 'INSECUREPASSWORD!'
+        click_button "Set Your Password"
+
+        expect(page).to have_content("Your password has been changed successfully. You are now signed in.")
       end
     end
     context 'logged in' do

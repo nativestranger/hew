@@ -69,6 +69,8 @@ class CallApplicationsController < ApplicationController
         artist_website: @call_application.artist_website,
         instagram_url:  @call_application.artist_instagram_url
       )
+
+      @call_application.user.skip_confirmation_notification!
     end
   end
 
