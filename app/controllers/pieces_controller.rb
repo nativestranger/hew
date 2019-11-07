@@ -53,9 +53,9 @@ class PiecesController < ApplicationController
 
   def update_image_order
     image_count = @piece.piece_images.count
-    @piece.piece_images.each { |gi| gi.update(position: gi.position + image_count) }
-    @piece.image_ids_in_position_order.split(',').each_with_index do |gi_index, i|
-      @piece.piece_images.where(id: gi_index).update(position: i + 1)
+    @piece.piece_images.each { |piece_image| piece_image.update(position: piece_image.position + image_count) }
+    @piece.image_ids_in_position_order.split(',').each_with_index do |piece_image_index, i|
+      @piece.piece_images.where(id: piece_image_index).update(position: i + 1)
     end
   end
 

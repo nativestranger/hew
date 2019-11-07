@@ -24,6 +24,6 @@
           = f.input :image_ids_in_position_order, as: :hidden, default: @piece.piece_images.map(&:id).join(',')
           = render 'sortable_piece_images', piece: @piece
         - else
-          %p.text-muted You must submit your pieces's title before adding images.
+          %p.text-muted You must submit your pieces' title before adding images.
 
     .mt-4= f.button :submit, 'Submit', class: 'btn btn-primary'
