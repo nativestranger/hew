@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+git checkout master
+
+git pull
+
+bundle check || bundle install
+
+bundle exec rake db:migrate
+
+bundle exec rspec
+
+# TODO: add some frontend tests
+# yarn install
+# npm run test
+
+git push production master:master
