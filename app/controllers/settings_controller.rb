@@ -42,7 +42,7 @@ class SettingsController < ApplicationController
     result
   end
 
-  # TODO: use this
+  # https://devcenter.heroku.com/articles/direct-to-s3-image-uploads-in-rails#pre-signed-post
   def set_s3_direct_post
     @s3_direct_post = S3_BUCKET.presigned_post(
       key: "uploads/#{SecureRandom.uuid}/${filename}",

@@ -35,4 +35,6 @@ yarn-debug.log*
 
 .env
 
+latest.dump
+
 /vendor/bundle/

@@ -17,12 +17,14 @@ Rails.application.routes.draw do
 
   root 'pages#home'
 
-  devise_for :users
+  devise_for :users, controllers: {
+    confirmations: 'users/confirmations'
+  }
 
-  resources :carousels
+  resources :pieces
 
-  match 'images/:id', via: :get, to: 'public_carousel_images#show', as: :public_carousel_image
-  match 'works/:id', via: :get, to: 'public_carousels#show', as: :public_carousel # TODO: is a work always a body/carousel?
+  match 'images/:id', via: :get, to: 'public_piece_images#show', as: :public_piece_image
+  match 'works/:id', via: :get, to: 'public_pieces#show', as: :public_piece
 
   resources :chats, only: :show
   resources :venues, except: :destroy
@@ -42,8 +44,8 @@ Rails.application.routes.draw do
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings
 
   namespace :v1 do
-    resources :carousels, only: [] do
-      resources :carousel_images, only: %i[create destroy]
+    resources :pieces, only: [] do
+      resources :piece_images, only: %i[create destroy]
     end
     get '/chats/:id/messages' => "chats#messages", as: :chat_messages
     post '/chats/:id/create_message' => "chats#create_message", as: :chat_create_message

@@ -44,12 +44,13 @@
 
     <%= render 'navbar' %>
 
-    <div class="container-fluid <%= @app_layout_container_class_additions %>">
-      <div class='row'>
-        <div class='col-lg-10 mx-auto'>
-          <%= bootstrap_flash %>
-        </div>
+    <div class='row mb-5'>
+      <div class='col-12'>
+        <%= bootstrap_flash %>
       </div>
+    </div>
+
+    <div class="container-fluid <%= @app_layout_container_class_additions %>">
       <%= yield %>
     </div>
   </body>

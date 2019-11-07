@@ -51,7 +51,7 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
 
-  has_many :carousels, dependent: :destroy
+  has_many :pieces, dependent: :destroy
   has_many :venues, dependent: :destroy
   has_many :calls, dependent: :destroy
   has_many :call_applications, dependent: :destroy
@@ -86,5 +86,9 @@ class User < ApplicationRecord
   def set_gravatar_url
     gravatar_id = Digest::MD5.hexdigest(email.downcase)
     self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=200"
+  end
+
+  def password_required?
+    confirmed? ? super : false
   end
 end

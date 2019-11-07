@@ -1,4 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe CarouselsController, type: :controller do
+RSpec.describe PiecesController, type: :controller do
 end
