@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   namespace :admin do
-    resources :users
+    resources :users do
+      get :impersonate, on: :member
+    end
     resources :calls
     resources :call_applications
     root to: "users#index"

@@ -17,5 +17,10 @@ module Admin
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions
     # for more information
+
+    def impersonate
+      bypass_sign_in(User.find(params[:id]))
+      redirect_to root_url
+    end
   end
 end
