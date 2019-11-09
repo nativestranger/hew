@@ -1,4 +1,8 @@
 - if @user.artist_statement.present?
   = @user.artist_statement.html_safe
 - else
-  %p #{@user.full_name} hasn't completed their artist statement.
+  - if can_edit_resource?(@user)
+    %p You haven’t added your artist statement yet.
+    = link_to 'Add my statement', artist_profile_path(user_id: current_user.id, artist_profile_section: params[:artist_profile_section], edit: true), class: 'btn btn-primary'
+  - else
+    %p #{@user.full_name} hasn't completed their artist statement.

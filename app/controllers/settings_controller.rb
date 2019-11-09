@@ -13,9 +13,16 @@ class SettingsController < ApplicationController
       end
       set_locale
       flash.notice = success_notice
-      redirect_back(fallback_location: root_path)
+      redirect_to referer_without_param('edit')
     else
-      render :profile
+      referer_artist_profile_section_name = \
+        Rack::Utils.parse_nested_query(URI.parse(request.referer).query)['artist_profile_section']
+
+      if helpers.edit_supported_artist_profile_section?(section_name: referer_artist_profile_section_name)
+        redirect_to referer_without_param('edit'), alert: current_user.errors.full_messages
+      else
+        render :profile
+      end
     end
   end
 

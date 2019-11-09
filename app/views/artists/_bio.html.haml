@@ -1,4 +1,8 @@
 - if @user.bio.present?
   = @user.bio.html_safe
 - else
-  %p #{@user.full_name} hasn't completed their bio.
+  - if can_edit_resource?(@user)
+    %p You haven’t added your bio yet.
+    = link_to 'Add my bio', artist_profile_path(user_id: current_user.id, artist_profile_section: params[:artist_profile_section], edit: true), class: 'btn btn-primary'
+  - else
+    %p #{@user.full_name} hasn't completed their bio.

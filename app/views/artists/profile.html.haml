@@ -32,7 +32,16 @@
   .col-md-9
     .card.fun-card
       .card-header
-        %h5.text-center #{ current_artist_profile_section_name }
+        %h5.text-center.clearfix
+          - if can_edit_resource?(@user) && params[:edit].nil? && edit_supported_artist_profile_section?
+            = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+              artist_profile_path(user_id: current_user.id, artist_profile_section: params[:artist_profile_section], edit: true),
+              class: 'pull-left'
+
+          = current_artist_profile_section_name
       .card-body
-        = render current_artist_profile_section_name.downcase.gsub(' ', '_')
+        - if can_edit_resource?(@user) && params[:edit]
+          = render "#{current_artist_profile_section_name.downcase.gsub(' ', '_')}_edit"
+        - else
+          = render current_artist_profile_section_name.downcase.gsub(' ', '_')
       .card-footer.text-center

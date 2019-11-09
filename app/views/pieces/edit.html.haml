@@ -1,8 +1,13 @@
 .row
   .col-md-10.mx-auto
     .card.border-bootstrap.box-shadow
-      .card-header
+      .card-header.d-flex.justify-content-between
         %h3 Edit My Piece
+        = button_to "Delete",
+          piece_path(@piece),
+          class: 'btn btn-sm btn-danger',
+          method: :delete,
+          data: { confirm: "Are you sure?" }
 
       .card-body
         = render 'form'
