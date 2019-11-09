@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'artist_profile', type: :system do
   let!(:artist_user) { create(:user, is_artist: true) }
+  let!(:other_user) { create(:user) }
 
   context 'as the artist_user' do
     before do
@@ -36,6 +37,28 @@ RSpec.describe 'artist_profile', type: :system do
       expect(page).to have_content('Success')
       expect(page).to have_content('Bio')
       expect(artist_user.reload.bio).to eq('bio')
+    end
+  end
+
+  context 'as a different user' do
+    before do
+      login_as(other_user, scope: :user)
+    end
+
+    it 'shows the artist_user profile but does not allow editing' do
+      visit artist_profile_path(artist_user)
+      expect(page).to have_content("#{artist_user.full_name} hasn't added any pieces yet.")
+      click_link 'Bio'
+      expect(page).not_to have_content('Add my bio')
+    end
+  end
+
+  context 'unauthenticated' do
+    it 'shows the artist_user profile but does not allow editing' do
+      visit artist_profile_path(artist_user)
+      expect(page).to have_content("#{artist_user.full_name} hasn't added any pieces yet.")
+      click_link 'Bio'
+      expect(page).not_to have_content('Add my bio')
     end
   end
 end
