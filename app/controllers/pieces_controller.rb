@@ -1,6 +1,6 @@
 class PiecesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_piece, only: %i[show edit update]
+  before_action :set_piece, except: %i[new create index]
   before_action :authorize_user!, except: %i[new create index]
 
   def new
@@ -25,9 +25,17 @@ class PiecesController < ApplicationController
     # TODO: transaction
     if @piece.update(permitted_params)
       update_image_order
-      redirect_to @piece, notice: t('success')
+      redirect_to artist_profile_path(user_id: current_user.id, artist_profile_section: ArtistsHelper::WORK), notice: t('success')
     else
       render :edit
+    end
+  end
+
+  def destroy
+    if @piece.destroy
+      redirect_to artist_profile_path(user_id: current_user.id, artist_profile_section: ArtistsHelper::WORK), notice: t('success')
+    else
+      redirect_to edit_piece_path(@piece), error: 'Failed to delete your piece.'
     end
   end
 

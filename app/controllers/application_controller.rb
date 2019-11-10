@@ -51,4 +51,11 @@ class ApplicationController < ActionController::Base
       true
     end
   end
+
+  def referer_without_param(param_name)
+    referer_uri = URI.parse(request.referer)
+    referer_params = Rack::Utils.parse_nested_query(referer_uri.query).except(param_name)
+    referer_uri.query = referer_params.to_query
+    referer_uri.to_s
+  end
 end

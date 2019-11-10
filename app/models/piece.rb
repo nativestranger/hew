@@ -26,5 +26,7 @@ class Piece < ApplicationRecord
 
   validates :title, presence: true
 
+  scope :with_images, -> { joins(:piece_images).includes(:piece_images) }
+
   attr_accessor :image_ids_in_position_order
 end
