@@ -85,7 +85,7 @@ class User < ApplicationRecord
 
   def set_gravatar_url
     gravatar_id = Digest::MD5.hexdigest(email.downcase)
-    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=retro&s=200"
+    self.gravatar_url = "//gravatar.com/avatar/#{gravatar_id}.png?d=identicon&s=200"
   end
 
   def password_required?

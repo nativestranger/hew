@@ -1,9 +1,21 @@
-- @user.pieces.in_groups_of(4).each do |piece_group|
-  .row
-    - piece_group.each do |piece|
-      - next unless piece && piece.piece_images.first
+- if @user.pieces.with_images.any?
+  - @user.pieces.with_images.in_groups_of(4).each do |piece_group|
+    .row
+      - piece_group.each do |piece|
+        - break unless piece
 
-      .col-md-3
-        %h6.text-center= piece.title
-        = link_to public_piece_path(piece) do
-          = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
+        .col-md-3
+          %h6.text-center
+            = piece.title
+
+          = link_to public_piece_path(piece) do
+            = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
+- else
+  - if can_edit_resource?(@user)
+    %p You have not added any pieces yet.
+  - else
+    %p #{@user.full_name} hasn't added any pieces yet.
+
+- if can_edit_resource?(@user)
+  .row.mt-4
+    .col-12= button_to 'New Piece', new_piece_path, class: 'btn btn-sm btn-primary pull-left', method: :get

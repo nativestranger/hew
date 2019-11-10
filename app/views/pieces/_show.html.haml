@@ -1,12 +1,20 @@
 .row
   .col-md-4.mx-auto.text-center
     %h5= link_to @piece.user.full_name, artist_profile_path(@piece.user, artist_profile_section: 'Work')
-    %h6= @piece.title
+    %h6
+      = @piece.title
+      - if can_edit_resource?(@piece)
+        = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+          edit_piece_path(@piece)
 
 -# %i.fa.fa-chevron-right
 -# %i.fa.fa-camera-retro
 
 .row
   .col-md-10.mx-auto
-    .card.border-0.box-shadow.p-4
+    .card.border-0.box-shadow.p-1
       = react_component("Slider", { images: piece_image_hashes(@piece) })
+
+      - if @piece.description.present?
+        .text-center.m-4
+          = @piece.description.html_safe
