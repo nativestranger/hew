@@ -29,7 +29,7 @@
 FactoryBot.define do
   factory :call_application do
     call { create(:call) }
-    user { create(:user) }
+    user { create(:user, is_artist: true) }
     artist_statement { Faker::Movies::Lebowski.quote }
     artist_website { 'https://www.website.com/1' }
     sequence(:artist_instagram_url) { |n| "https://www.instagram.com/#{n}" }
