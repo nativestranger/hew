@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'artist_profile', type: :system do
-  let!(:artist_user) { create(:user, is_artist: true) }
+  let!(:artist_user) do
+    create(
+      :user,
+      is_artist: true,
+      artist_statement: ''
+    )
+  end
   let!(:other_user) { create(:user) }
 
   context 'as the artist_user' do
