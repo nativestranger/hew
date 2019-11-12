@@ -23,8 +23,9 @@
 #
 # Indexes
 #
-#  index_calls_on_user_id   (user_id)
-#  index_calls_on_venue_id  (venue_id)
+#  index_calls_on_call_type_id  (call_type_id)
+#  index_calls_on_user_id       (user_id)
+#  index_calls_on_venue_id      (venue_id)
 #
 # Foreign Keys
 #
