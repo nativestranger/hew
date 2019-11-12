@@ -38,7 +38,7 @@ class Call < ApplicationRecord
 
   accepts_nested_attributes_for :venue
 
-  validates :venue, presence: true, unless: :external
+  validates :venue, presence: true, if: :require_venue?
   validates :name, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true
@@ -89,6 +89,10 @@ class Call < ApplicationRecord
 
   private
 
+  def require_venue?
+    !external && call_type_id != "publication"
+  end
+
   def end_at_is_after_start_at
     return unless end_at && start_at && end_at < start_at
 
@@ -103,7 +107,7 @@ class Call < ApplicationRecord
 
   def owned_by_admin
     if external? && !user&.is_admin?
-      erros.add(:base, 'Only admins can create external calls')
+      errors.add(:base, 'Only admins can create external calls')
     end
   end
 end
