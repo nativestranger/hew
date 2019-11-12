@@ -17,6 +17,7 @@
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
 #  user_id              :bigint           not null
 #  venue_id             :bigint
 #
@@ -37,11 +38,12 @@ class Call < ApplicationRecord
 
   accepts_nested_attributes_for :venue
 
-  validates :venue, presence: true, unless: :external
+  validates :venue, presence: true, if: :require_venue?
   validates :name, presence: true
   validates :start_at, presence: true
   validates :end_at, presence: true
   validates :overview, presence: true
+  validates :call_type_id, presence: true
   validates :full_description, presence: true, unless: :external
   validates :application_deadline, presence: true
   validates :application_details, presence: true, unless: :external
@@ -52,6 +54,8 @@ class Call < ApplicationRecord
   validate :owned_by_admin, if: :external
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
+
+  enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
 
@@ -85,6 +89,10 @@ class Call < ApplicationRecord
 
   private
 
+  def require_venue?
+    !external && call_type_id != "publication"
+  end
+
   def end_at_is_after_start_at
     return unless end_at && start_at && end_at < start_at
 
@@ -99,7 +107,7 @@ class Call < ApplicationRecord
 
   def owned_by_admin
     if external? && !user&.is_admin?
-      erros.add(:base, 'Only admins can create external calls')
+      errors.add(:base, 'Only admins can create external calls')
     end
   end
 end

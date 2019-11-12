@@ -1,6 +1,6 @@
 document.addEventListener("turbolinks:load", function() {
   (function() {
-    let showAndHide = function() {
+    let showOrHideExternalAndInteralFields = function() {
       if ($('#call_external').is(':checked')) {
         $('.external-calls-only').show();
         $('.internal-calls-only').hide();
@@ -10,10 +10,23 @@ document.addEventListener("turbolinks:load", function() {
       }
     }
 
+    let showOrHideVenueFields = function() {
+      if ($('#call_call_type_id')[0] && $('#call_call_type_id')[0].value === "publication") {
+        $('#venue_fields').hide();
+      } else {
+        $('#venue_fields').show();
+      }
+    }
+
     $('#call_external').on('change', function(e) {
-      showAndHide();
+      showOrHideExternalAndInteralFields();
     });
 
-    showAndHide();
+    $('#call_call_type_id').on('change', function(e) {
+      showOrHideVenueFields();
+    });
+
+    showOrHideExternalAndInteralFields();
+    showOrHideVenueFields();
   }).call(this);
 });
