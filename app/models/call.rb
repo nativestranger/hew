@@ -17,6 +17,7 @@
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
 #  user_id              :bigint           not null
 #  venue_id             :bigint
 #
@@ -42,6 +43,7 @@ class Call < ApplicationRecord
   validates :start_at, presence: true
   validates :end_at, presence: true
   validates :overview, presence: true
+  validates :call_type_id, presence: true
   validates :full_description, presence: true, unless: :external
   validates :application_deadline, presence: true
   validates :application_details, presence: true, unless: :external
@@ -52,6 +54,8 @@ class Call < ApplicationRecord
   validate :owned_by_admin, if: :external
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
+
+  enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
 

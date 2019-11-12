@@ -70,6 +70,7 @@ class CallsController < ApplicationController
         :is_public,
         :external,
         :external_url,
+        :call_type_id,
         :full_description,
         :application_details,
         :application_deadline,

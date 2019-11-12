@@ -17,6 +17,7 @@
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
 #  user_id              :bigint           not null
 #  venue_id             :bigint
 #
