@@ -65,6 +65,7 @@
           .card-header
             .row
               .col-sm-8
+                %span.fa.fa-lg{ class: fa_class_for_call(call) }
                 %h5.d-inline= call.name
                 - if call.venue
                   @
