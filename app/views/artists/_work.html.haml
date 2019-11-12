@@ -9,7 +9,7 @@
             = piece.title
 
           = link_to public_piece_path(piece) do
-            = image_tag(piece.piece_images.first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
+            = image_tag(piece.piece_images.order(position: :asc).first.img_upload.attachment, class: 'img-fluid mx-auto d-block')
 - else
   - if can_edit_resource?(@user)
     %p You have not added any pieces yet.
