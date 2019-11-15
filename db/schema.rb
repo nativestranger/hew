@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_07_021703) do
+ActiveRecord::Schema.define(version: 2019_11_12_033130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -180,6 +180,8 @@ ActiveRecord::Schema.define(version: 2019_11_07_021703) do
     t.boolean "external", default: false, null: false
     t.string "external_url", default: "", null: false
     t.integer "view_count", default: 0, null: false
+    t.integer "call_type_id", null: false
+    t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
   end

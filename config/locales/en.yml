@@ -30,6 +30,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  activerecord:
+    attributes:
+      call:
+        call_type_id: 'Call Type'
   artists: "Artists"
   city: "City"
   curators: "Curators"

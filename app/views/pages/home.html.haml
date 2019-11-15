@@ -11,9 +11,8 @@
                     Calls for Art
                 .row
                   %span.heading-primary-sub
-                    in
                     %span.heading-location
-                      Mexico City
+                      Made easy
           -# .row.mt-4.mb-5
           -#   / Begin Mailchimp Signup Form
           -#   #mc_embed_signup
@@ -65,6 +64,7 @@
           .card-header
             .row
               .col-sm-8
+                %span.fa.fa-lg{ class: fa_class_for_call(call) }
                 %h5.d-inline= call.name
                 - if call.venue
                   @

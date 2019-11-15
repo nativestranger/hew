@@ -17,13 +17,15 @@
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
 #  user_id              :bigint           not null
 #  venue_id             :bigint
 #
 # Indexes
 #
-#  index_calls_on_user_id   (user_id)
-#  index_calls_on_venue_id  (venue_id)
+#  index_calls_on_call_type_id  (call_type_id)
+#  index_calls_on_user_id       (user_id)
+#  index_calls_on_venue_id      (venue_id)
 #
 # Foreign Keys
 #
@@ -40,6 +42,7 @@ FactoryBot.define do
     end_at { start_at + rand(8..10).days }
     overview { Faker::Movies::Lebowski.quote }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
+    call_type_id { [1,2,3].sample }
     full_description { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     application_deadline { start_at - rand(1..7.days) }
     application_details { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }

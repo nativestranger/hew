@@ -7,16 +7,20 @@
       .col
         %h3 Call Details
     .row
-      .col-md-4
+      .col-6
         .form-group
           %label{ for: 'call_name' }= t('name')
           = f.input :name, input_html: { class: 'form-control' }, label: false
-      .col-md-4.col-6
+      .col-6
+        .form-group
+          = f.input :call_type_id, collection: options_for_enum(Call, :call_type_id)
+    .row
+      .col-6
         .form-group
           %label Start Date
           = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
           = react_component 'ReactDatePicker', { startDate: @call.start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
-      .col-md-4.col-6
+      .col-6
         .form-group
           %label End Date
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
@@ -84,7 +88,7 @@
 
     %hr
 
-    .row
+    #venue_fields.row
       .col-md-12
         %h4 Venue Details
         = f.simple_fields_for :venue do |venue|
