@@ -41,20 +41,21 @@ export default class ReactDatePicker extends React.Component {
   }
 
   render() {
-    let selectedContainer = {}
-    if (this.state.startDate) {
-      selectedContainer.selected = this.state.startDate
+    let propsContainer = {
+      className: this.props.formFieldId || ''
     }
 
-    let classNameContainer = { className: this.props.formFieldId }
+    if (this.state.startDate) {
+      propsContainer.selected = this.state.startDate
+    }
+
     if (this.props.invalidInput && !this.state.startDate) {
-      selectedContainer.className += ' is-invalid'
+      propsContainer.className += ' is-invalid'
     }
 
     return (
       <DatePicker
-        { ...selectedContainer }
-        { ...classNameContainer }
+        { ...propsContainer }
         onChange={this.handleChange}
         showTimeSelect={this.props.showTimeSelect}
         isClearable={this.props.isClearable}
