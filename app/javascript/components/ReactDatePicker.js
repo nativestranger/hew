@@ -46,9 +46,9 @@ export default class ReactDatePicker extends React.Component {
       selectedContainer.selected = this.state.startDate
     }
 
-    let classNameContainer = {}
+    let classNameContainer = { className: this.props.formFieldId }
     if (this.props.invalidInput && !this.state.startDate) {
-      selectedContainer.className = 'is-invalid'
+      selectedContainer.className += ' is-invalid'
     }
 
     return (
