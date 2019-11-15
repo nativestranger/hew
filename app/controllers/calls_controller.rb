@@ -10,7 +10,7 @@ class CallsController < ApplicationController
 
   def create
     @call = Call.new(permitted_params.merge(user: current_user))
-    @call&.venue&.user ||= current_user
+    modify_venue_maybe
 
     if @call.save
       AdminMailer.new_call(@call).deliver_later if @call.is_public
@@ -31,7 +31,7 @@ class CallsController < ApplicationController
     private_before_update = !@call.is_public
 
     @call.assign_attributes(permitted_params)
-    @call&.venue&.user ||= current_user
+    modify_venue_maybe
 
     if @call.save
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
@@ -61,33 +61,33 @@ class CallsController < ApplicationController
   private
 
   def permitted_params
-    result = \
-      params.require(:call).permit(
+    params.require(:call).permit(
+      :name,
+      :start_at,
+      :end_at,
+      :overview,
+      :is_public,
+      :external,
+      :external_url,
+      :call_type_id,
+      :full_description,
+      :application_details,
+      :application_deadline,
+      venue_attributes: [
+        :id,
         :name,
-        :start_at,
-        :end_at,
-        :overview,
-        :is_public,
-        :external,
-        :external_url,
-        :call_type_id,
-        :full_description,
-        :application_details,
-        :application_deadline,
-        venue_attributes: [
-          :id,
-          :name,
-          :website,
-          { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
-        ]
-      )
+        :website,
+        { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
+      ]
+    )
+  end
 
-    if result[:external] == '1' && result[:venue_attributes].slice('name', 'website').values.all?(&:blank?)
-      result.delete(:venue_attributes)
-      result[:venue_id] = nil
+  def modify_venue_maybe
+    if @call.call_type_id_publication? || @call.external? && @call.venue.attributes.slice('name', 'website').values.all?(&:blank?)
+      @call.venue = nil
+    else
+      @call&.venue&.user ||= current_user
     end
-
-    result
   end
 
   def set_call

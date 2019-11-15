@@ -56,7 +56,7 @@ class Call < ApplicationRecord
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
-  enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }
+  enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }, _prefix: true
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
 
