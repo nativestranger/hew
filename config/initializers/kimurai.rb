@@ -21,5 +21,6 @@ Kimurai.configure do |config|
 
   if Rails.env.production?
     config.selenium_chrome_path = "/app/.apt/opt/google/chrome/chrome"
+    config.chromedriver_path = "/app/.chromedriver/bin/chromedriver"
   end
 end
