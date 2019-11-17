@@ -18,7 +18,7 @@ class CallForEntrySpider < Kimurai::Base
 
       browser.all(:xpath, "//*[text() = 'MORE INFO']")[attempt_count].click
 
-      if create_maybe(call_type_id: 'exhibition')
+      if create_maybe
         call_count += 1
       end
 
@@ -57,7 +57,7 @@ class CallForEntrySpider < Kimurai::Base
     end
   end
 
-  def create_maybe(call_type_id:)
+  def create_maybe
     return if User.system.calls.where(external_url: browser.current_url).exists?
 
     event_dates = browser.text.split('Event Dates:').last.strip.split('Entry Deadline').first.split(' - ')
@@ -98,6 +98,15 @@ class CallForEntrySpider < Kimurai::Base
 
   def call_type
     ENV['call_type'] || "Exhibitions"
+  end
+
+  def call_type_id
+    case call_type
+    when "Exhibitions"
+      'exhibition'
+    when "Residencies"
+      'residency'
+    end
   end
 
   def eligibility_filter
