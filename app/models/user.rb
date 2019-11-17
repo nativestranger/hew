@@ -69,6 +69,23 @@ class User < ApplicationRecord
 
   scope :admins, -> { where(is_admin: true) }
 
+  def self.system
+    @system_user ||= User.find_or_initialize_by(email: 'system_user@hew.mx')
+
+    if @system_user.persisted?
+      @system_user
+    else
+      @system_user.update!(
+        first_name: 'System',
+        last_name: 'User',
+        password: SecureRandom.uuid,
+        is_admin: true
+      )
+      @system_user.confirm
+      @system_user
+    end
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end

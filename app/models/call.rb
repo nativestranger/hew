@@ -5,6 +5,7 @@
 #  id                   :bigint           not null, primary key
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
+#  eligibility          :integer          default("unspecified"), not null
 #  end_at               :datetime         not null
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
@@ -57,6 +58,7 @@ class Call < ApplicationRecord
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
   enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }, _prefix: true
+  enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, local: 5 }, _prefix: true
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
 

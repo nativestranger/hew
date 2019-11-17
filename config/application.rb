@@ -27,6 +27,10 @@ module Hew
     config.i18n.available_locales = %i[en es]
     config.i18n.default_locale = ENV['locale'] || 'en'
 
+    config.eager_load_paths += %W[
+      #{config.root}/services
+    ]
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
