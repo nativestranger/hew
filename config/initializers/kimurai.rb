@@ -13,14 +13,10 @@ Kimurai.configure do |config|
   # config.time_zone = "UTC"
   # config.time_zone = "Europe/Moscow"
 
-  # Provide custom chrome binary path (default is any available chrome/chromium in the PATH):
-  # config.selenium_chrome_path = "/usr/bin/chromium-browser"
-
-  # Provide custom selenium chromedriver path (default is "/usr/local/bin/chromedriver"):
-  # config.chromedriver_path = "~/.local/bin/chromedriver"
-
   if Rails.env.production?
-    config.selenium_chrome_path = "/app/.apt/opt/google/chrome/chrome"
+    # Provide custom chrome binary path (default is any available chrome/chromium in the PATH):
+    config.selenium_chrome_path = "/app/.apt/usr/bin/google-chrome"
+    # Provide custom selenium chromedriver path (default is "/usr/local/bin/chromedriver"):
     config.chromedriver_path = "/app/.chromedriver/bin/chromedriver"
   end
 end
