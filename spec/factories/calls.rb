@@ -5,6 +5,7 @@
 #  id                   :bigint           not null, primary key
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
+#  eligibility          :integer          default("unspecified"), not null
 #  end_at               :datetime         not null
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
