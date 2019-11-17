@@ -1,5 +1,3 @@
-require 'kimurai'
-
 class CallForEntrySpider < Kimurai::Base
   URL = "https://artist.callforentry.org/festivals.php?reset=1&apply=yes".freeze
 

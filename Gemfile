@@ -55,7 +55,7 @@ gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails'
-gem 'kimurai', require: false
+gem 'kimurai'
 gem 'rack-canonical-host'
 gem 'react-rails'
 gem 'sentry-raven'
