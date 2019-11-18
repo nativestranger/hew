@@ -21,9 +21,9 @@
         %li.nav-item
           = link_to t('sign_out'), destroy_user_session_path, method: :delete, class: "nav-link"
       - else
+        -# %li.nav-item
+        -#   = link_to 'Add Call for Art', new_user_registration_path, class: 'nav-link text-light'
         %li.nav-item
           = link_to "Log In", new_user_session_path, class: "nav-link text-light"
         %li.nav-item
           = link_to t('sign_up'), new_user_registration_path, class: "nav-link text-light"
-        %li.nav-item
-          = button_to 'Add Call for Art', new_user_registration_path, class: 'btn btn-outline-light my-2 ml-2 my-sm-0', method: :get
