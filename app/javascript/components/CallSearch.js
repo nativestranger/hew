@@ -4,20 +4,28 @@ import PropTypes from "prop-types";
 export default class CallSearch extends React.Component {
   static propTypes = {
     call_types: PropTypes.array.isRequired,
-    call_type_icons: PropTypes.array.isRequired
+    call_type_icons: PropTypes.object.isRequired
   }
 
   constructor(props) {
     super(props);
     this.getCalls = this.getCalls.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.toggleCallType = this.toggleCallType.bind(this);
     this.selectedCallTypes = this.selectedCallTypes.bind(this);
+    this.selectedOrderOption = this.selectedOrderOption.bind(this);
+    this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
+    this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
   }
 
   componentWillMount() {
     this.setState({
       call_types: this.props.call_types,
-      calls: []
+      calls: [],
+      orderOptions: [
+        { name: 'Deadline', direction: 'desc', selected: true },
+        { name: 'Created', direction: 'asc' },
+      ]
     });
   }
 
@@ -29,9 +37,9 @@ export default class CallSearch extends React.Component {
     let thisComponent = this;
     $.get("/v1/public/calls.json",
            { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
+             order_option: this.selectedOrderOption(),
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
-                  console.log(data);
                   thisComponent.setState({ getError: false, calls: data.calls });
                   // thisComponent.refs.submit.blur();
                 })
@@ -49,6 +57,10 @@ export default class CallSearch extends React.Component {
 
   selectedCallTypes() {
     return this.state.call_types.filter(type => type.selected);
+  }
+
+  selectedOrderOption() {
+    return this.state.orderOptions.find(option => option.selected);
   }
 
   render() {
@@ -100,23 +112,11 @@ export default class CallSearch extends React.Component {
 
     let renderCallType = function(callType) {
       return (
-        <span key={callType.id} className="d-inline badge badge-primary mr-1 c-pointer" onClick={function(){toggleCallType(callType.name)}}>
+        <span key={callType.id} className="d-inline badge badge-primary mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
           {callType.name}
           <span className="fa fa-times fa-sm pl-1"></span>
         </span>
       );
-    }
-
-    let isSelected = function(callTypeName) {
-      return thisComponent.selectedCallTypes().find(type => type.name === callTypeName);
-    }
-
-    let toggleCallType = function(callType) {
-      let call_types = [...thisComponent.state.call_types];
-      callType = call_types.find(type => type.name === callType);
-      callType.selected = !callType.selected;
-      thisComponent.setState({ call_types: call_types });
-      thisComponent.getCalls();
     }
 
     return (
@@ -126,29 +126,90 @@ export default class CallSearch extends React.Component {
         </div>
         <hr className="m-0"/>
         <div className="dropdowns">
-          <div className="dropdown">
-              <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Call Types
-              <span className="caret"></span></button>
-              <ul className="dropdown-menu text-center">
-                <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); toggleCallType('Exhibition') } }>
-                  Exhibitions
-                  { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-                  { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
-                </li>
-                <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); toggleCallType('Residency') } }>
-                  Residencies
-                  { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-                  { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
-                </li>
-                <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); toggleCallType('Publication') } }>
-                  Publications
-                  { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-                  { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
-                </li>
-              </ul>
-          </div>
+          { thisComponent.renderCallTypeDropdown() }
+          { thisComponent.renderSortByDropdown() }
         </div>
       </div>
     )
+  }
+
+  toggleCallType(callType) {
+    let call_types = [...this.state.call_types];
+    callType = call_types.find(type => type.name === callType);
+    callType.selected = !callType.selected;
+    this.setState({ call_types: call_types });
+    this.getCalls();
+  }
+
+  renderCallTypeDropdown() {
+    let thisComponent = this;
+
+    let isSelected = function(callTypeName) {
+      return thisComponent.selectedCallTypes().find(type => type.name === callTypeName);
+    }
+
+    return (
+      <div className="dropdown d-inline border-right">
+          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Call Types
+          <span className="caret"></span></button>
+          <ul className="dropdown-menu text-center">
+            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
+              Exhibitions
+              { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+              { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
+            </li>
+            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Residency') } }>
+              Residencies
+              { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+              { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
+            </li>
+            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Publication') } }>
+              Publications
+              { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+              { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
+            </li>
+          </ul>
+      </div>
+    );
+  }
+
+  renderSortByDropdown() {
+    let thisComponent = this;
+
+    let isSelected = function(orderOptionName) {
+      return thisComponent.selectedOrderOption().name == orderOptionName;
+    }
+
+    let selectOrderOption = function(orderOptionName) {
+      let orderOptions = [...thisComponent.state.orderOptions];
+      orderOptions.forEach(option => {
+        if (option.name === orderOptionName) {
+          option.selected = true;
+        } else {
+          option.selected = false;
+        }
+      });
+      thisComponent.setState({ orderOptions: orderOptions });
+      thisComponent.getCalls();
+    }
+
+    return (
+      <div className="dropdown d-inline">
+          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Sort By {this.selectedOrderOption().name}
+          <span className="caret"></span></button>
+          <ul className="dropdown-menu text-center">
+            { thisComponent.state.orderOptions.map(orderOption => {
+              return (
+                <li key={orderOption.name} className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
+                  <span className="switch switch-sm">
+                    <input type="checkbox" checked={isSelected(orderOption.name)} readOnly={true} className="switch" id="switch-id" />
+                    <label htmlFor="switch-id">{orderOption.name}</label>
+                  </span>
+                </li>
+              )
+            }) }
+          </ul>
+      </div>
+    );
   }
 }
