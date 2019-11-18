@@ -23,4 +23,13 @@ module CallsHelper
       "fa-globe"
     end
   end
+
+  def call_type_icons
+    {
+      "exhibition" => "fa-paint-brush",
+      "residency" => "fa-home",
+      "publication" => "fa-newspaper-o",
+      "default"   => "fa-globe",
+    }
+  end
 end

@@ -34,25 +34,17 @@
 
 .container
   .row.mb-1.mt-1
-    .col
-      .pull-right
-        %span.text-muted Sort by:
-        .btn-group.mb-1
-          %a{ class: "dropdown-toggle", 'data-toggle' => 'dropdown', href: '#' }
-            = params[:call_sort_by]
-            %span.caret
-          %ul.dropdown-menu.dropdown-menu-right
-            - ['Application Deadline', 'Recently Created'].each do |call_sort_by|
-              - next if params[:call_sort_by] == call_sort_by
-              %li= link_to call_sort_by, root_path({ call_sort_by: call_sort_by }), class: 'dropdown-item'
+    .col-12.search-options
+      - call_types = [{ id: 1, name: 'Exhibition', selected: true }, { id: 2, name: 'Residency', selected: true }, { id: 3, name: 'Publication', selected: true }]
+      = react_component "CallSearch", { call_types: call_types, call_type_icons: call_type_icons }
 
-  - if @calls.none?
-    .row
-      .col-12
-        .alert.alert-warning.w-100
-          %p Darn, no available calls found.
+  -# - if @calls.none?
+  -#   .row
+  -#     .col-12
+  -#       .alert.alert-warning.w-100
+  -#         %p Darn, no available calls found.
 
-  - @calls.each do |call|
+  - false && @calls.each do |call|
     .row.mb-4.mt-2
       .col-12.mx-auto
         .card.border-0
@@ -60,7 +52,7 @@
             .row
               .col-12
                 %h5.mb-0
-                  -# %span.rounded.p-2.fa.fa-sm{ class: fa_class_for_call(call) }
+                  %span.rounded.p-2.fa.fa-sm{ class: fa_class_for_call(call) }
                   = link_to public_call_details_path(call) do
                     = call.name
                     - if call.venue

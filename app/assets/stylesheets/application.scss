@@ -1,6 +1,7 @@
 // Custom bootstrap variables must be set or imported *before* bootstrap.
 @import "bootstrap";
 @import "bootstrap_overrides";
+@import "homepage";
 @import "users";
 @import "carousels";
 @import "call_applications";
@@ -31,4 +32,10 @@ trix-toolbar .trix-button--icon {
 
 trix-toolbar .trix-button-group--history-tools {
   display: none;
+}
+
+// misc
+
+.c-pointer {
+  cursor: pointer;
 }
