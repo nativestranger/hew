@@ -90,6 +90,10 @@ class Call < ApplicationRecord
     applications.where(user: user).exists?
   end
 
+  def internal?
+    !external?
+  end
+
   private
 
   def require_venue?

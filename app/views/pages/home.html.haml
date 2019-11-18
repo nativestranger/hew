@@ -1,7 +1,7 @@
 .container-fluid.homepage-header.mt-n5
-  .row.py-5
+  .row
     .col-10.mx-auto
-      .row.py-3
+      .row
         .col-10
           .row.py-4.hero-headings
             .col-sm
@@ -58,40 +58,40 @@
           %p Darn, no available calls found.
 
   - @calls.each do |call|
-    .row
-      .col-12.mx-auto.mb-4
-        .card.fun-card.home-card
-          .card-header
+    .row.mb-4.mt-2
+      .col-12.mx-auto
+        .card.border-0
+          .card-header.bg-white.border-0.p-0
             .row
-              .col-sm-8
-                %span.fa.fa-lg{ class: fa_class_for_call(call) }
-                %h5.d-inline= call.name
-                - if call.venue
-                  @
-                  %h6.d-inline= call.venue.name
-              .col-sm-4.my-auto
-                %span.float-md-right
-                  %h6.text-muted.d-inline
-                    Show opens:
-                  %h6.d-inline= call.start_at.to_date.strftime("%d %B %Y")
-          .card-body.text-truncate
-            = call.overview
-          .card-footer
+              .col-12
+                %h5.mb-0
+                  -# %span.rounded.p-2.fa.fa-sm{ class: fa_class_for_call(call) }
+                  = link_to public_call_details_path(call) do
+                    = call.name
+                    - if call.venue
+                      %h6.d-inline @ #{call.venue.name}
+
+              -# .col-2.clearfix
+              -#   .float-right
+              -#     - if !call.internal? && current_user&.id == call.user_id
+              -#       = link_to 'View Entries', call_applications_path(call)
+              -#     - else
+              -#       = link_to 'More Info', public_call_details_path(id: call.id)
+
+              -# %span.float-md-right
+              -#   %h7.text-muted.d-inline
+              -#     Show opens:
+              -#   %h7.d-inline= call.start_at.to_date.strftime("%B %d, %Y")
+          .card-body.my-1.p-0
+            %p.mb-0.text-truncate.text-muted= call.overview
+          .card-footer.bg-white.border-0.p-0.text-muted
             .row
-              - if call.external?
-                .col-6
-                  = pluralize(call.view_count, 'View')
-                  .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
-                .col-6.my-auto
-                  .pull-right
-                    = link_to 'View Details', public_call_details_path(call), class: 'btn btn-outline-primary', target: :_blank
-              - else
-                .col-6
-                  = pluralize(call.applications.count, 'Submission')
-                  .text-muted Deadline: #{call.application_deadline.to_date.strftime("%d %B %Y")}
-                .col-6.my-auto
-                  .pull-right
-                    - if current_user&.id == call.user_id
-                      = link_to 'View Submissions', call_applications_path(call), class: 'btn btn-outline-success'
-                    - else
-                      = link_to 'View Details', public_call_details_path(id: call.id), class: 'btn btn-outline-primary'
+              .col-12
+                .text-muted.small
+                  -# Expires: #{call.application_deadline.to_date.strftime("%B %d, %Y")}
+                  %span #{distance_of_time_in_words(Time.current, call.application_deadline)} left
+                  -# = ' - '
+                  -# - if call.external?
+                  -#   %span= pluralize(call.view_count, 'View')
+                  -# - else
+                  -#   %span= pluralize(call.applications.count, 'Entry')
