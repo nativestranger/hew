@@ -123,7 +123,7 @@ export default class CallSearch extends React.Component {
           )) }
         </div>
 
-        { this.state.pagination && <Pagination pagination={this.state.pagination} /> }
+        { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
 	    </div>
     );
   }
