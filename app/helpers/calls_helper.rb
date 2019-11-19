@@ -20,6 +20,7 @@ module CallsHelper
       "exhibition" => "fa-paint-brush",
       "residency" => "fa-home",
       "publication" => "fa-newspaper-o",
+      "competition" => "fa-trophy",
       "default"   => "fa-globe",
     }
   end

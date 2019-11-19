@@ -177,6 +177,11 @@ export default class CallSearch extends React.Component {
           <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Call Types
           <span className="caret"></span></button>
           <ul className="dropdown-menu text-center">
+            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Competition') } }>
+              Competitions
+              { isSelected('Competition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+              { !isSelected('Competition') && <span className="fa fa-times fa-sm p-2"></span> }
+            </li>
             <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
               Exhibitions
               { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
