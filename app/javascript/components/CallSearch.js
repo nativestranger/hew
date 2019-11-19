@@ -86,7 +86,7 @@ export default class CallSearch extends React.Component {
                                 <div className="col-12">
                                     <h5 className="mb-0">
                                       <span className={ `fa ${this.props.call_type_icons[call.call_type.name] || this.props.call_type_icons['default']} fa-sm p-2` }></span>
-                                      <a href="/calls/7/details">{call.name}
+                                      <a href={`/calls/${call.id}/details`}>{call.name}
                                         { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
                                       </a>
                                     </h5>
