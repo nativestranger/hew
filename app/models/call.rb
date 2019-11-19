@@ -97,7 +97,7 @@ class Call < ApplicationRecord
   private
 
   def require_venue?
-    !external && call_type_id != "publication"
+    internal? && !['publication', 'competition'].include?(call_type_id)
   end
 
   def end_at_is_after_start_at

@@ -25,8 +25,8 @@ export default class CallSearch extends React.Component {
       call_types: this.props.call_types,
       calls: [],
       orderOptions: [
-        { name: 'Deadline', direction: 'desc', selected: true },
-        { name: 'Created', direction: 'asc' },
+        { name: 'Deadline', selected: true },
+        { name: 'Created' },
       ]
     });
   }
