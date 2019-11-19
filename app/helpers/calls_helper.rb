@@ -12,16 +12,7 @@ module CallsHelper
   end
 
   def fa_class_for_call(call)
-    case call.call_type_id
-    when "exhibition"
-      "fa-paint-brush"
-    when "residency"
-      "fa-home"
-    when "publication"
-      "fa-newspaper-o"
-    else
-      "fa-globe"
-    end
+    call_type_icons[call.call_type_id] || "fa-globe"
   end
 
   def call_type_icons
