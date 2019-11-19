@@ -36,7 +36,7 @@
   .row.mb-1.mt-1
     .col-12.search-options
       - call_types = [{ id: 1, name: 'Exhibition', selected: true }, { id: 2, name: 'Residency', selected: true }, { id: 3, name: 'Publication', selected: true }]
-      = react_component "CallSearch", { call_types: call_types, call_type_icons: call_type_icons }
+      = react_component "CallSearch", { call_types: call_types, call_type_icons: call_type_icons, page: (params[:page]&.to_i || 1) }
 
   -# - if @calls.none?
   -#   .row

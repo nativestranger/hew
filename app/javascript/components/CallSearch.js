@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Pagination from "./Pagination";
 
 export default class CallSearch extends React.Component {
   static propTypes = {
+    page: PropTypes.number.isRequired,
     call_types: PropTypes.array.isRequired,
     call_type_icons: PropTypes.object.isRequired
   }
@@ -35,12 +37,22 @@ export default class CallSearch extends React.Component {
 
   getCalls() {
     let thisComponent = this;
+
+    let currentPage = (
+      (this.state.pagination && this.state.pagination.current) || thisComponent.props.page
+    );
+
     $.get("/v1/public/calls.json",
            { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
              order_option: this.selectedOrderOption(),
+             page: currentPage,
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
-                  thisComponent.setState({ getError: false, calls: data.calls });
+                  thisComponent.setState({
+                    getError: false,
+                    calls: data.records,
+                    pagination: data.pagination,
+                  });
                   // thisComponent.refs.submit.blur();
                 })
         .fail(function(data) {
@@ -70,9 +82,9 @@ export default class CallSearch extends React.Component {
       <div className="call-searcher">
         { this.renderFilterSection() }
 
-        { this.state.calls && (
+        { this.state.pagination && (
           <div>
-            <p className="text-muted m-1 text-right">{this.state.calls.length} calls</p>
+            <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} calls</p>
           </div>
         ) }
 
@@ -110,6 +122,8 @@ export default class CallSearch extends React.Component {
             </div>
           )) }
         </div>
+
+        { this.state.pagination && <Pagination pagination={this.state.pagination} /> }
 	    </div>
     );
   }
