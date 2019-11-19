@@ -70,6 +70,12 @@ export default class CallSearch extends React.Component {
       <div className="call-searcher">
         { this.renderFilterSection() }
 
+        { this.state.calls && (
+          <div>
+            <p className="text-muted m-1 text-right">{this.state.calls.length} calls</p>
+          </div>
+        ) }
+
         <div className="calls">
           { this.state.calls && this.state.calls.map(call => (
             <div className="row mb-4 mt-2" key={call.id}>
@@ -123,12 +129,15 @@ export default class CallSearch extends React.Component {
     return (
       <div className="filters card">
         <div className="search-container p-1">
+          <span className="fa fa-search fa-sm p-2"></span>
           { this.selectedCallTypes().map(renderCallType) }
         </div>
-        <hr className="m-0"/>
-        <div className="dropdowns d-flex justify-content-between">
-          { thisComponent.renderCallTypeDropdown() }
-          { thisComponent.renderSortByDropdown() }
+
+        <div className="card-footer bg-white p-0">
+          <div className="dropdowns d-flex justify-content-between">
+            { thisComponent.renderCallTypeDropdown() }
+            { thisComponent.renderSortByDropdown() }
+          </div>
         </div>
       </div>
     )

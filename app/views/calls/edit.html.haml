@@ -1,8 +1,10 @@
 .row
   .col-lg-10.mx-auto
     .card.fun-card
-      .card-body
-        %h4.text-center
+      .card-header
+        %h3.mb-0
           = t('edit')
-          My Call
+          Call
+
+      .card-body
         = render 'form'

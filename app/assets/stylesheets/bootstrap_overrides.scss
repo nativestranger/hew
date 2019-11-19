@@ -86,7 +86,6 @@ h6,
 // CARDS
 .card.fun-card {
   border-color: $lightgray;
-  border-radius: 0;
   box-shadow: 4px 4px $lightgray;
 
   .card-header {
@@ -101,9 +100,6 @@ h6,
 
 // BUTTONS
 .btn:not(.submit-message) {
-  border-radius: 0;
-  font-weight: 900;
-  letter-spacing: 0.05rem;
   text-transform: uppercase;
 }
 

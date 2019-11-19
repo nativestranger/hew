@@ -24,34 +24,35 @@
       .list-group
         - @applications.each do |call_application|
           .list-group-item.list-group-item-action.border-left-0.border-right-0.call-application-line-item
-            .row
-              .col-5.artist-details
+            .row.no-gutters
+              .col-4.artist-details
                 .d-inline-block.mr-1
                   = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
                 %h5.d-inline-block.mb-0.align-middle
                   = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
                 -# %small.text-muted= time_ago_in_words(call_application.created_at)
-              .col-7.btns.d-flex.align-items-end.flex-column
+              .col-8.btns.d-flex.align-items-end.flex-column
                 .btns
                   .d-inline-block= button_to 'Accept', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
                   .d-inline-block= button_to 'Maybe', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:maybe], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-warning', method: :patch#, disabled: curator_application_status_scope == :maybe
                   .d-inline-block= button_to 'Reject', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:rejected], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
 
             - if call_application.artist_statement.present?
-              %blockquote.text-truncate
+              %blockquote.text-truncate.mt-3
                 #{call_application.artist_statement.html_safe}
                 %footer.blockquote-footer= call_application.user.full_name
 
-            .row.text-center
-              .col-3
-                %i.fa.fa-globe
-                = link_to 'Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?
-              .col-3
-                %i.fa.fa-camera-retro
-                = link_to 'Photos', call_application.photos_url, target: :_blank if call_application.photos_url.present?
-              .col-3
-                %i.fa.fa-instagram
-                = link_to 'Instagram', call_application.artist_instagram_url, target: :_blank if call_application.artist_instagram_url.present?
-              .col-3
-                %i.fa.fa-plus
-                = link_to 'Extras', call_application.supplemental_material_url, target: :_blank if call_application.supplemental_material_url.present?
+            .row.text-center.small
+              .col-12.d-flex.justify-content-between
+                .resources-link
+                  %i.fa.fa-globe
+                  .d-block= link_to 'Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?
+                .resources-link
+                  %i.fa.fa-camera-retro
+                  .d-block= link_to 'Photos', call_application.photos_url, target: :_blank if call_application.photos_url.present?
+                .resources-link
+                  %i.fa.fa-instagram
+                  .d-block= link_to 'Instagram', call_application.artist_instagram_url, target: :_blank if call_application.artist_instagram_url.present?
+                .resources-link
+                  %i.fa.fa-plus
+                  .d-block= link_to 'Extras', call_application.supplemental_material_url, target: :_blank if call_application.supplemental_material_url.present?

@@ -4,9 +4,6 @@
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .row
-      .col
-        %h3 Call Details
-    .row
       .col-6
         .form-group
           %label{ for: 'call_name' }= t('name')
