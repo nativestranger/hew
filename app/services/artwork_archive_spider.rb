@@ -90,7 +90,8 @@ class ArtworkArchiveSpider < Kimurai::Base
       end_at: Date.strptime(event_dates.last, "%B %d, %Y"),
       application_deadline: Date.strptime(deadline_str, "%B %d, %Y"),
       overview: possible_overview&.text || "View details to find out more...",
-      eligibility: eligibility
+      eligibility: eligibility,
+      is_public: true
     ).persisted?
   rescue => e
     Rails.logger.debug e.message
