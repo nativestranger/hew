@@ -69,7 +69,7 @@ class ArtworkArchiveSpider < Kimurai::Base
   def create_maybe
     return if User.system.calls.where(external_url: browser.current_url).exists?
 
-    event_dates = browser.text.split('Event Dates:').last.strip.split('Entry').first.strip.split(' - ')
+    event_dates = browser.text.split('Event Dates:').last.strip.split(/(?:Entry|Type\:)/).first.strip.split(' - ')
     # TODO: rescue but log when this fails. come won't have dates...
 
     deadline_str = browser.find(:xpath, "//p[@class='call-date']").text.split(' ').first(3).join(' ')
@@ -77,8 +77,6 @@ class ArtworkArchiveSpider < Kimurai::Base
     eligibility = \
       browser.text.split('Eligibility:').last.strip.
         match(/^(?:International|National|Regional|State|Local|Unspecified)/)&.to_s&.downcase
-
-    # TODO: add entry fee
 
     User.system.calls.create(
       user: User.system,
@@ -91,6 +89,7 @@ class ArtworkArchiveSpider < Kimurai::Base
       application_deadline: Date.strptime(deadline_str, "%B %d, %Y"),
       overview: possible_overview&.text || "View details to find out more...",
       eligibility: eligibility,
+      entry_fee: entry_fee_in_cents,
       is_public: true
     ).persisted?
   rescue => e
@@ -100,6 +99,17 @@ class ArtworkArchiveSpider < Kimurai::Base
 
   def possible_overview
     call_hero_container.all(:xpath, "//div[@class='row']")[2]
+  end
+
+  def entry_fee_in_cents
+    # TODO: handle exceptions in euros or other... €, CAD
+
+    browser.text.split('Entry Fee:').
+      last.strip.split(' ').first.gsub('$', '').
+        match(/\A[+-]?\d+(\.[\d]+)?\z/)&.to_s&.to_f * 100
+  rescue => e
+    Rails.logger.debug "ENTRY FEE ERROR #{e.message}"
+    nil
   end
 
   def call_type_filter

@@ -7,6 +7,7 @@
 #  application_details  :text             default(""), not null
 #  eligibility          :integer          default("unspecified"), not null
 #  end_at               :datetime         not null
+#  entry_fee            :integer
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
 #  full_description     :text             default(""), not null
@@ -50,6 +51,7 @@ class Call < ApplicationRecord
   validates :application_deadline, presence: true
   validates :application_details, presence: true, unless: :external
   validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
+  validates :entry_fee, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
