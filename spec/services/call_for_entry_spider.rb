@@ -49,8 +49,10 @@ RSpec.describe CallForEntrySpider, type: :service do
         OpenStruct.new(text: browser_text)
       end
 
-      it "returns the expected array" do
+      it "returns the expected values" do
         expect(scraper.send(:event_dates)).to eq(["9/11/20", "1/18/21"])
+        expect(scraper.send(:start_at)).to eq(Date.new(2020, 9, 11))
+        expect(scraper.send(:end_at)).to eq(Date.new(2021, 1, 18))
       end
     end
 
@@ -65,8 +67,10 @@ RSpec.describe CallForEntrySpider, type: :service do
         OpenStruct.new(text: browser_text)
       end
 
-      it "returns the expected array" do
+      it "returns the expected values" do
         expect(scraper.send(:event_dates)).to eq(["4/3/2020", "4/24/2020"])
+        expect(scraper.send(:start_at)).to eq(Date.new(2020, 4, 3))
+        expect(scraper.send(:end_at)).to eq(Date.new(2020, 4, 24))
       end
     end
   end
