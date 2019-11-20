@@ -70,13 +70,7 @@ class ArtworkArchiveSpider < Kimurai::Base
     return if User.system.calls.where(external_url: browser.current_url).exists?
 
     event_dates = browser.text.split('Event Dates:').last.strip.split(/(?:Entry|Type\:)/).first.strip.split(' - ')
-    # TODO: rescue but log when this fails. come won't have dates...
-
-    deadline_str = browser.find(:xpath, "//p[@class='call-date']").text.split(' ').first(3).join(' ')
-
-    eligibility = \
-      browser.text.split('Eligibility:').last.strip.
-        match(/^(?:International|National|Regional|State|Local|Unspecified)/)&.to_s&.downcase
+    # TODO: rescue but log when this fails. some won't have dates...
 
     User.system.calls.create(
       user: User.system,
@@ -86,7 +80,7 @@ class ArtworkArchiveSpider < Kimurai::Base
       name: call_hero_container.find(:xpath, "//h2").text.strip,
       start_at: Date.strptime(event_dates.first, "%B %d, %Y"),
       end_at: Date.strptime(event_dates.last, "%B %d, %Y"),
-      application_deadline: Date.strptime(deadline_str, "%B %d, %Y"),
+      application_deadline: application_deadline,
       overview: possible_overview&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
@@ -97,6 +91,16 @@ class ArtworkArchiveSpider < Kimurai::Base
     false
   end
 
+  def application_deadline # TODO: handle ongoing
+    deadline_str = browser.find(:xpath, "//p[@class='call-date']").text.split(' ').first(3).join(' ')
+    Date.strptime(deadline_str, "%B %d, %Y")
+  end
+
+  def eligibility
+    browser.text.split('Eligibility:').last.strip.
+      match(/^(?:International|National|Regional|State|Local|Unspecified)/)&.to_s&.downcase
+  end
+
   def possible_overview
     call_hero_container.all(:xpath, "//div[@class='row']")[2]
   end
@@ -104,7 +108,7 @@ class ArtworkArchiveSpider < Kimurai::Base
   def entry_fee_in_cents
     # TODO: handle exceptions in euros or other... €, CAD
 
-    browser.text.split('Entry Fee:').
+    browser.text.split('Fee:').
       last.strip.split(' ').first.gsub('$', '').
         match(/\A[+-]?\d+(\.[\d]+)?\z/)&.to_s&.to_f * 100
   rescue => e

@@ -43,9 +43,7 @@ class CallForEntrySpider < Kimurai::Base
 
   def choose_sort_option
     browser.select sort_option, from: 'sort'
-
-    # TODO support state sort
-
+    # TODO support state sort...
     if sort_option == 'DEADLINE'
       deadline_sort_labels.find { |element| element.text == deadline_sort_by }.click
     end
@@ -60,34 +58,30 @@ class CallForEntrySpider < Kimurai::Base
   def create_maybe
     return if User.system.calls.where(external_url: browser.current_url).exists?
 
-    event_dates = browser.text.split('Event Dates:').last.strip.split('Entry Deadline').first.split(' - ')
-    # TODO: report but continue when this fails. some will not have dates.
-
-    deadline_str = browser.text.split('Entry Deadline:').last.strip.split('D').first
-
-    eligibility = \
-      browser.text.split('Eligibility:').last.strip.
-        match(/^(?:International|National|Regional|Local|Unspecified)/)&.to_s&.downcase
-
-    User.system.calls.create(
+    persisted = User.system.calls.create(
       user: User.system,
       external: true,
       external_url: browser.current_url,
       call_type_id: call_type_id,
       name: browser.find(:xpath, "//*[@class='fairname']").text,
-      start_at: Date.strptime(event_dates.first, "%m/%d/%y"),
-      end_at: Date.strptime(event_dates.last, "%m/%d/%y"),
-      application_deadline: Date.strptime(deadline_str, "%m/%d/%y"),
+      start_at: start_at,
+      end_at: end_at,
+      application_deadline: application_deadline,
       overview: possible_overview&.text || "View details to find out more...",
       eligibility: eligibility,
+      entry_fee: entry_fee_in_cents,
       is_public: true
     ).persisted?
+
+    Rails.logger.info("CREATED CALL #{browser.current_url}")
+    persisted
   rescue => e
     Rails.logger.debug e.message
     puts e.message
     false
   end
 
+  # TODO: clean this up... or set a default?
   def possible_overview
     browser.all(:xpath, "//p").find do |paragraph|
       paragraph.text.include?('eligible') ||
@@ -95,6 +89,84 @@ class CallForEntrySpider < Kimurai::Base
         paragraph.text.include?('invite') ||
         paragraph.text.include?('present')
     end
+  end
+
+  # unsupported variations seen:
+  #
+  # 1) Exhibition Dates: 4/3/2020-4/24/2020 (2X)
+  # 2) Exhibition Runs: March 5, to March. 28, 2020
+  # 3) Exhibition Dates: March 28 – May 2, 2020
+  #
+  # 4) '... available for exhibition between February 20 – April 17, 2020.'
+  # 5) Exhibition Dates: Friday, February 14 – Saturday, March 7, 2020
+  # 6) Exhibition dates: May 2021 – September 2021
+  #
+  # 7) (separate lines, one not exactly 'start')
+  # Work Due at Yeiser Art Center By: April 4, 2020, by 5pm
+  # Close of Show: May 30, 2020
+  #
+  # 8)
+  # Gallery Exhibition: January 31– February 29, 2020 (2X - exact spacing)
+  #
+  # 9)
+  # Exhibition and Sale dates: January 24 – February 29, 2020
+  #
+  # 10) (separate lines)
+  # Opening Reception: February 8, 2020   6:00 to 9:00 pm.
+  # Close of Show and pick up of art: April 19 - 20, 2020
+  #
+  # EXHIBITION DATES:
+  # Opening Reception is in early January 2020 (exhibition runs through the month of January into early February 2020)
+  #
+  # 11) (separate lines)
+  # The opening reception will be on January 17th, 2020
+  # The show runs until February14th. (legit typo...?)
+  #
+  # Supported variations:
+  # 1) Event Dates: 9/11/20 - 1/18/21 (followed by 'Entry Deadline' ... how to avoid?)
+  def event_dates
+    # browser.text.split('Exhibition dates:').last.strip.split('Entry Deadline').first.split(' - ')
+    browser.text.split('Event Dates:').last.strip.split('Entry Deadline').first.split(' - ')
+  rescue => e
+    Rails.logger.debug("EVENT DATES ERROR: #{browser.current_url}")
+    # TODO: allow nil for dates if no text includes 'dates'?
+    nil
+  end
+
+  def start_at
+    Date.strptime(event_dates.first, "%m/%d/%y")
+  rescue => e
+    Rails.logger.debug("DATES start_at ERROR: #{browser.current_url}")
+    # binding.pry if browser.text.downcase.include?('dates')
+    nil
+  end
+
+  def end_at
+    Date.strptime(event_dates.last, "%m/%d/%y")
+  rescue => e
+    Rails.logger.debug("DATES end_at ERROR: #{browser.current_url}")
+    # binding.pry if browser.text.downcase.include?('dates')
+    nil
+  end
+
+  def application_deadline
+    deadline_str = browser.text.split('Entry Deadline:').last.strip.split('D').first
+    Date.strptime(deadline_str, "%m/%d/%y")
+  end
+
+  def eligibility
+    browser.text.split('Eligibility:').last.strip.
+      match(/^(?:International|National|Regional|Local|Unspecified)/)&.to_s&.downcase
+  end
+
+  def entry_fee_in_cents
+    # TODO: handle exceptions in euros or other... €, CAD
+
+    browser.text.split('Entry Fee').last.strip.
+      match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
+  rescue => e
+    Rails.logger.debug "ENTRY FEE ERROR #{e.message}"
+    nil
   end
 
   def call_type
