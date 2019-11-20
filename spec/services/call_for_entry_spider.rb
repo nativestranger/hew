@@ -18,8 +18,6 @@ RSpec.describe CallForEntrySpider, type: :service do
     # Work Due at Yeiser Art Center By: April 4, 2020, by 5pm
     # Close of Show: May 30, 2020
     #
-    # 8)
-    # Gallery Exhibition: January 31– February 29, 2020 (2X - exact spacing)
     #
     # 9) (match if same line?)
     # Exhibition and Sale dates: January 24 – February 29, 2020
@@ -38,6 +36,7 @@ RSpec.describe CallForEntrySpider, type: :service do
     # Supported variations:
     # 1) Event Dates: 9/11/20 - 1/18/21
     # 2) Exhibition Dates: 4/3/2020-4/24/2020
+    # 3) # Gallery Exhibition: January 31– February 29, 2020 (2X - exact spacing)
 
     context "Event Dates: 9/11/20 - 1/18/21" do
       let(:mock_browser) do
@@ -71,6 +70,23 @@ RSpec.describe CallForEntrySpider, type: :service do
         expect(scraper.send(:event_dates)).to eq(["4/3/2020", "4/24/2020"])
         expect(scraper.send(:start_at)).to eq(Date.new(2020, 4, 3))
         expect(scraper.send(:end_at)).to eq(Date.new(2020, 4, 24))
+      end
+    end
+
+    context "Gallery Exhibition: January 31– February 29, 2020" do
+      let(:mock_browser) do
+        browser_text = <<-SQL
+        Gallery Exhibition: January 31– February 29, 2020
+        Something
+        SQL
+
+        OpenStruct.new(text: browser_text)
+      end
+
+      it "returns the expected values" do
+        expect(scraper.send(:event_dates)).to eq(["January 31", "February 29, 2020"])
+        # expect(scraper.send(:start_at)).to eq(Date.new(2020, 1, 31))
+        # expect(scraper.send(:end_at)).to eq(Date.new(2020, 2, 29))
       end
     end
   end

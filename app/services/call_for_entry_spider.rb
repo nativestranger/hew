@@ -97,7 +97,7 @@ class CallForEntrySpider < Kimurai::Base
 
   def event_dates
     # browser.text.split('Exhibition dates:').last.strip.split('Entry Deadline').first.split(' - ')
-    browser.text.split(/(?:Event Dates:|Exhibition Dates:)/).last.strip.split("\n").first.split(/(?:-|to)/).map(&:strip)
+    browser.text.split(/(?:Event Dates:|Exhibition Dates:|Gallery Exhibition:)/).last.strip.split("\n").first.split(/(?:-|to|–)/).map(&:strip)
   rescue => e
     Rails.logger.debug("EVENT DATES ERROR: #{browser.current_url}")
     # TODO: allow nil for dates if no text includes 'dates'?
