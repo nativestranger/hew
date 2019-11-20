@@ -6,9 +6,7 @@ class CallForEntrySpider < Kimurai::Base
   @start_urls = [URL]
 
   def parse(response, url:, data: {})
-    choose_call_type
-    choose_eligibility if eligibility_filter
-    choose_sort_option if sort_option
+    apply_filters
 
     call_count = 0
     attempt_count = 0
@@ -28,6 +26,12 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   private
+
+  def apply_filters
+    choose_call_type
+    choose_eligibility if eligibility_filter
+    choose_sort_option if sort_option
+  end
 
   def choose_call_type
     browser.find(:xpath, "//*[@id='call-icon']").click
@@ -91,42 +95,9 @@ class CallForEntrySpider < Kimurai::Base
     end
   end
 
-  # unsupported variations seen:
-  #
-  # 1) Exhibition Dates: 4/3/2020-4/24/2020 (2X)
-  # 2) Exhibition Runs: March 5, to March. 28, 2020
-  # 3) Exhibition Dates: March 28 – May 2, 2020
-  #
-  # 4) '... available for exhibition between February 20 – April 17, 2020.'
-  # 5) Exhibition Dates: Friday, February 14 – Saturday, March 7, 2020
-  # 6) Exhibition dates: May 2021 – September 2021
-  #
-  # 7) (separate lines, one not exactly 'start')
-  # Work Due at Yeiser Art Center By: April 4, 2020, by 5pm
-  # Close of Show: May 30, 2020
-  #
-  # 8)
-  # Gallery Exhibition: January 31– February 29, 2020 (2X - exact spacing)
-  #
-  # 9)
-  # Exhibition and Sale dates: January 24 – February 29, 2020
-  #
-  # 10) (separate lines)
-  # Opening Reception: February 8, 2020   6:00 to 9:00 pm.
-  # Close of Show and pick up of art: April 19 - 20, 2020
-  #
-  # EXHIBITION DATES:
-  # Opening Reception is in early January 2020 (exhibition runs through the month of January into early February 2020)
-  #
-  # 11) (separate lines)
-  # The opening reception will be on January 17th, 2020
-  # The show runs until February14th. (legit typo...?)
-  #
-  # Supported variations:
-  # 1) Event Dates: 9/11/20 - 1/18/21 (followed by 'Entry Deadline' ... how to avoid?)
   def event_dates
     # browser.text.split('Exhibition dates:').last.strip.split('Entry Deadline').first.split(' - ')
-    browser.text.split('Event Dates:').last.strip.split('Entry Deadline').first.split(' - ')
+    browser.text.split(/(?:Event Dates:|Exhibition Dates:)/).last.strip.split("\n").first.split(/(?:-|to)/).map(&:strip)
   rescue => e
     Rails.logger.debug("EVENT DATES ERROR: #{browser.current_url}")
     # TODO: allow nil for dates if no text includes 'dates'?
