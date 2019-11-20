@@ -105,7 +105,14 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   def start_at
-    Date.strptime(event_dates.first, "%m/%d/%y")
+    if event_dates.first.scan(/[0-9]+/).size == 1 # January 31- Feb 22, 2020
+      start_at_str = event_dates.first
+      raise "uncertain numeric" unless event_dates.first.scan(/[0-9]+/).first.length == 2
+      start_at_str = "#{start_at_str} #{end_at.year}"
+      Date.strptime(start_at_str, "%B %d %y")
+    else
+      Date.strptime(event_dates.first, "%m/%d/%y")
+    end
   rescue => e
     Rails.logger.debug("DATES start_at ERROR: #{browser.current_url}")
     # binding.pry if browser.text.downcase.include?('dates')
@@ -113,7 +120,11 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   def end_at
-    Date.strptime(event_dates.last, "%m/%d/%y")
+    if event_dates.last.scan(/[0-9]+/).size == 2 # February 29, 2020
+      Date.strptime(event_dates.last, "%B %d, %y")
+    else
+      Date.strptime(event_dates.last, "%m/%d/%y")
+    end
   rescue => e
     Rails.logger.debug("DATES end_at ERROR: #{browser.current_url}")
     # binding.pry if browser.text.downcase.include?('dates')

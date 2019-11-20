@@ -85,8 +85,8 @@ RSpec.describe CallForEntrySpider, type: :service do
 
       it "returns the expected values" do
         expect(scraper.send(:event_dates)).to eq(["January 31", "February 29, 2020"])
-        # expect(scraper.send(:start_at)).to eq(Date.new(2020, 1, 31))
-        # expect(scraper.send(:end_at)).to eq(Date.new(2020, 2, 29))
+        expect(scraper.send(:start_at)).to eq(Date.new(2020, 1, 31))
+        expect(scraper.send(:end_at)).to eq(Date.new(2020, 2, 29))
       end
     end
   end
