@@ -29,6 +29,9 @@ RSpec.describe CallForEntrySpider, type: :service do
     # EXHIBITION DATES:
     # Opening Reception is in early January 2020 (exhibition runs through the month of January into early February 2020)
     #
+    # https://artist.callforentry.org/festivals_unique_info.php?ID=6601
+    # Exhibition and Sale dates: January 24 – February 29, 2020
+    #
     # 11) (separate lines)
     # The opening reception will be on January 17th, 2020
     # The show runs until February14th. (legit typo...?)
@@ -38,6 +41,7 @@ RSpec.describe CallForEntrySpider, type: :service do
     # 2) Exhibition Dates: 4/3/2020-4/24/2020
     # 3) # Gallery Exhibition: January 31– February 29, 2020 (2X - exact spacing)
 
+    # assumes two to 3 numbers for now
     context "Event Dates: 9/11/20 - 1/18/21" do
       let(:mock_browser) do
         browser_text = <<-SQL

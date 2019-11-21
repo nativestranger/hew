@@ -95,14 +95,36 @@ class CallForEntrySpider < Kimurai::Base
     end
   end
 
+  def month_names
+    Date::MONTHNAMES.compact
+  end
+
+  def day_names
+    Date::DAYNAMES
+  end
+
   def event_dates
-    # browser.text.split('Exhibition dates:').last.strip.split('Entry Deadline').first.split(' - ')
-    browser.text.split(/(?:Event Dates:|Exhibition Dates:|Gallery Exhibition:)/).last.strip.split("\n").first.split(/(?:-|to|–)/).map(&:strip)
+    result = browser.text.split(/(?:Event Dates:|Exhibition Dates:|Exhibition and Sale dates:|Gallery Exhibition:)/)[1].strip.split("\n").first.split(/(?:-|to|–)/).map(&:strip).first(2)
+
+    numbers_in_end_str = result[1].scan(/[0-9]+/)
+
+    if (month_names + day_names).any? { |month_or_day| result[1].starts_with?(month_or_day) }
+      digit = numbers_in_end_str[1] || numbers_in_end_str[0]
+    else
+      digit = numbers_in_end_str[2] || numbers_in_end_str[1] || numbers_in_end_str[0]
+    end
+
+    result[1] = result[1].partition(digit).first(2).join('')
+
+    result
   rescue => e
     Rails.logger.debug("EVENT DATES ERROR: #{browser.current_url}")
     # TODO: allow nil for dates if no text includes 'dates'?
     nil
   end
+
+  # TODO: https://artist.callforentry.org/festivals_unique_info.php?ID=7224
+  # Exhibition Dates: Friday, February 14 – Saturday, March 7, 2020
 
   def start_at
     if event_dates.first.scan(/[0-9]+/).size == 1 # January 31- Feb 22, 2020
@@ -137,7 +159,7 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   def eligibility
-    browser.text.split('Eligibility:').last.strip.
+    browser.text.split('Eligibility:')[1].strip.
       match(/^(?:International|National|Regional|Local|Unspecified)/)&.to_s&.downcase
   end
 
