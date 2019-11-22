@@ -18,16 +18,37 @@ export default class CallSearch extends React.Component {
     this.selectedOrderOption = this.selectedOrderOption.bind(this);
     this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
     this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
+    this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+  }
+
+  setLocalStorageFilters(property, value) {
+    let filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    filters[property] = value;
+    localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
   }
 
   componentWillMount() {
+    let filters;
+    // TODO: clear on deploy
+
+    if (localStorage.getItem('hew_call_search_filters')) {
+      filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    } else {
+      filters = {
+        call_types: this.props.call_types,
+        orderOptions: [
+          { name: 'Deadline', selected: true },
+          { name: 'Created' },
+        ]
+      }
+
+      localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
+    }
+
     this.setState({
-      call_types: this.props.call_types,
+      call_types: filters.call_types,
       calls: [],
-      orderOptions: [
-        { name: 'Deadline', selected: true },
-        { name: 'Created' },
-      ]
+      orderOptions: filters.orderOptions
     });
   }
 
@@ -158,10 +179,14 @@ export default class CallSearch extends React.Component {
   }
 
   toggleCallType(callType) {
+    let thisComponent = this;
+
     let call_types = [...this.state.call_types];
     callType = call_types.find(type => type.name === callType);
     callType.selected = !callType.selected;
-    this.setState({ call_types: call_types });
+    this.setState({ call_types: call_types }, function() {
+      thisComponent.setLocalStorageFilters('call_types', call_types);
+    });
     this.getCalls();
   }
 
@@ -218,7 +243,9 @@ export default class CallSearch extends React.Component {
           option.selected = false;
         }
       });
-      thisComponent.setState({ orderOptions: orderOptions });
+      thisComponent.setState({ orderOptions: orderOptions }, function() {
+        thisComponent.setLocalStorageFilters('orderOptions', orderOptions);
+      });
       thisComponent.getCalls();
     }
 
