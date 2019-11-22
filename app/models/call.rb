@@ -6,7 +6,7 @@
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
 #  eligibility          :integer          default("unspecified"), not null
-#  end_at               :datetime         not null
+#  end_at               :datetime
 #  entry_fee            :integer
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
@@ -15,7 +15,7 @@
 #  is_public            :boolean          default(FALSE), not null
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
-#  start_at             :datetime         not null
+#  start_at             :datetime
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -39,12 +39,17 @@ class Call < ApplicationRecord
   belongs_to :user
   belongs_to :venue, optional: true
 
+  attr_accessor :skip_start_and_end
+
   accepts_nested_attributes_for :venue
 
   validates :venue, presence: true, if: :require_venue?
   validates :name, presence: true
-  validates :start_at, presence: true
-  validates :end_at, presence: true
+
+  START_END_EXCEPTION = proc { |c| (c.skip_start_and_end || c.user_id == User.system.id) && c.external? }
+  validates :start_at, presence: true, unless: START_END_EXCEPTION
+  validates :end_at, presence: true, unless: START_END_EXCEPTION
+
   validates :overview, presence: true
   validates :call_type_id, presence: true
   validates :full_description, presence: true, unless: :external
@@ -80,7 +85,7 @@ class Call < ApplicationRecord
 
   scope :active, -> { accepting_applications.or(current).or(upcoming) }
 
-  scope :past, -> { where('end_at <= ?', Time.current) }
+  scope :past, -> { where('end_at <= ?', Time.current).or(where(end_at: nil).merge(past_deadline)) }
 
   scope :published, -> { where(is_public: true) }
 

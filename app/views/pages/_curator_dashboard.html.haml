@@ -36,7 +36,10 @@
             = "@ #{call.venue.name}" if call.venue
             - if call.external?
               %i.fa.fa-flag.text-warning
-          %p= "#{call.start_at.strftime("%d %B %Y")} - #{call.end_at.strftime("%d %B %Y")}"
+
+          - if call.start_at && call.end_at
+            %p= "#{call.start_at.strftime("%B %d, %Y")} - #{call.end_at.strftime("%B %d, %Y")}"
+
           %p.text-muted= call.overview
 
           - if call.external?

@@ -74,7 +74,8 @@ class CallForEntrySpider < Kimurai::Base
       overview: possible_overview&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
-      is_public: true
+      skip_start_and_end: no_dates,
+      is_public: true,
     ).persisted?
 
     Rails.logger.info("CREATED CALL #{browser.current_url}")
@@ -137,7 +138,7 @@ class CallForEntrySpider < Kimurai::Base
     end
   rescue => e
     Rails.logger.debug("DATES start_at ERROR: #{browser.current_url}")
-    # binding.pry if browser.text.downcase.include?('dates')
+    # binding.pry if !no_dates
     nil
   end
 
@@ -149,7 +150,7 @@ class CallForEntrySpider < Kimurai::Base
     end
   rescue => e
     Rails.logger.debug("DATES end_at ERROR: #{browser.current_url}")
-    # binding.pry if browser.text.downcase.include?('dates')
+    # binding.pry if !no_dates
     nil
   end
 
@@ -212,5 +213,9 @@ class CallForEntrySpider < Kimurai::Base
 
   def deadline_sort_by
     ENV['deadline_sort_by'] || "Latest Deadline"
+  end
+
+  def no_dates
+    !browser.text.downcase.include?('dates')
   end
 end
