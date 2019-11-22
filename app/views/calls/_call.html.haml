@@ -10,7 +10,10 @@
     %h3
       = call.name
       = "@ #{call.venue.name}" if call.venue
-    %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
+
+    - if call.start_at && call.end_at
+      %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
+
     %p.text-muted= call.overview
 
     - if call.external?
