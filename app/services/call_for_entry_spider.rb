@@ -76,6 +76,7 @@ class CallForEntrySpider < Kimurai::Base
       entry_fee: entry_fee_in_cents,
       skip_start_and_end: no_dates,
       is_public: true,
+      spider: :call_for_entry,
     ).persisted?
 
     Rails.logger.info("CREATED CALL #{browser.current_url}")

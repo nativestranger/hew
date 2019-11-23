@@ -84,7 +84,8 @@ class ArtworkArchiveSpider < Kimurai::Base
       overview: possible_overview&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
-      is_public: true
+      is_public: true,
+      spider: :artwork_archive,    
     ).persisted?
   rescue => e
     Rails.logger.debug e.message

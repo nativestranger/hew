@@ -15,6 +15,7 @@
 #  is_public            :boolean          default(FALSE), not null
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
+#  spider               :integer          default("none"), not null
 #  start_at             :datetime
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
