@@ -82,6 +82,8 @@ class ArtDeadlineSpider < Kimurai::Base
     case call_type_id
     when 'competition'
       browser.find(:xpath, "//*[@id='type-competitions']").click
+    when 'residency'
+      browser.find(:xpath, "//*[@id='type-residencies']").click
     else
       browser.find(:xpath, "//*[@id='type-call']").click
     end
