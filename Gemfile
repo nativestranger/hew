@@ -55,6 +55,7 @@ gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails'
+gem 'kimurai'
 gem 'rack-canonical-host'
 gem 'react-rails'
 gem 'sentry-raven'
@@ -63,6 +64,9 @@ gem 'sucker_punch'
 gem 'trix-rails', require: 'trix'
 gem 'validate_url'
 gem 'wicked'
+
+gem 'kaminari'
+gem 'bootstrap4-kaminari-views'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_033130) do
+ActiveRecord::Schema.define(version: 2019_11_23_163308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -166,8 +166,8 @@ ActiveRecord::Schema.define(version: 2019_11_12_033130) do
   create_table "calls", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "venue_id"
-    t.datetime "start_at", null: false
-    t.datetime "end_at", null: false
+    t.datetime "start_at"
+    t.datetime "end_at"
     t.string "overview", default: "", null: false
     t.text "full_description", default: "", null: false
     t.datetime "application_deadline", null: false
@@ -181,6 +181,9 @@ ActiveRecord::Schema.define(version: 2019_11_12_033130) do
     t.string "external_url", default: "", null: false
     t.integer "view_count", default: 0, null: false
     t.integer "call_type_id", null: false
+    t.integer "eligibility", default: 1, null: false
+    t.integer "entry_fee"
+    t.integer "spider", default: 0, null: false
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"

@@ -83,7 +83,7 @@ class CallsController < ApplicationController
   end
 
   def modify_venue_maybe
-    if @call.call_type_id_publication? || @call.external? && @call.venue.attributes.slice('name', 'website').values.all?(&:blank?)
+    if @call.call_type_id_publication? || @call.call_type_id_competition? || @call.external? && @call.venue.attributes.slice('name', 'website').values.all?(&:blank?)
       @call.venue = nil
     else
       @call&.venue&.user ||= current_user

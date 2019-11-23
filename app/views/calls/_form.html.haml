@@ -4,9 +4,6 @@
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .row
-      .col
-        %h3 Call Details
-    .row
       .col-6
         .form-group
           %label{ for: 'call_name' }= t('name')
@@ -86,13 +83,14 @@
               External
               = f.input :external, label: false
 
-    %hr
+    #venue_fields
+      %hr
 
-    #venue_fields.row
-      .col-md-12
-        %h4 Venue Details
-        = f.simple_fields_for :venue do |venue|
-          = render '/venues/venue_fields', f: venue
+      .row
+        .col-md-12
+          %h4 Venue Details
+          = f.simple_fields_for :venue do |venue|
+            = render '/venues/venue_fields', f: venue
 
     .row
       .col-md-2

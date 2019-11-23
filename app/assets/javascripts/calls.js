@@ -11,7 +11,7 @@ document.addEventListener("turbolinks:load", function() {
     }
 
     let showOrHideVenueFields = function() {
-      if ($('#call_call_type_id')[0] && $('#call_call_type_id')[0].value === "publication") {
+      if ($('#call_call_type_id')[0] && $('#call_call_type_id')[0].value === "publication" || $('#call_call_type_id')[0].value === "competition") {
         $('#venue_fields').hide();
       } else {
         $('#venue_fields').show();

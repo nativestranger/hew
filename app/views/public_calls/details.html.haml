@@ -3,32 +3,40 @@
     .row
       .col-md-8.mb-4
         .card.fun-card
-          .card-header
-            %h5.text-center
-              = @call.name
-
           .card-body
-            %h3= "#{@call.name} @ #{@call.venue.name}"
-            %p= "#{@call.start_at.strftime("%d %B %Y")} - #{@call.end_at.strftime("%d %B %Y")}"
+            %h3
+              = @call.name
+              - if @call.venue
+                @
+                = @call.venue.name
+            %hr
+
+            %h5 Event Dates
+            %p= "#{@call.start_at.strftime("%B %d, %Y")} - #{@call.end_at.strftime("%B %d, %Y")}"
+
+            %h5 Overview
             %p.text-muted= @call.overview
 
-            %h4 Description
+            %h5 Description
             %p= @call.full_description.html_safe
 
       .col-md-4
         .card.fun-card
-          .card-header
-            %h5.text-center Application Info
           .card-body
+            %h5.text-center Application Info
+            %hr
+
             %h6 Deadline
             %p= @call.application_deadline.strftime("%d %B %Y")
 
             %h6 Details to Include
             %p= @call.application_details.html_safe
-          .card-footer.text-center
-            = button_to 'Apply',
-                      new_call_application_path,
-                      class: 'btn btn-success',
-                      method: :get,
-                      params: { call_id: @call.id },
-                      disabled: @call.application_for?(current_user)
+
+            %hr
+            .text-center
+              = button_to 'Apply',
+                        new_call_application_path,
+                        class: 'btn btn-success',
+                        method: :get,
+                        params: { call_id: @call.id },
+                        disabled: @call.application_for?(current_user)

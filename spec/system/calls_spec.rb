@@ -79,6 +79,20 @@ RSpec.describe 'Calls', type: :system do
       expect(call.call_type_id).to eq('publication')
       expect(call.venue).to be_nil
     end
+
+    it 'allows the user to create a competition call' do
+      visit new_call_path
+      select 'Competition', from: 'call_call_type_id'
+      fill_in_call_details
+      click_button 'Save'
+
+      expect(page).to have_content 'Success!'
+
+      call = Call.find(page.current_url.split('calls/').last)
+      expect(call.name).to eq('Call name')
+      expect(call.call_type_id).to eq('competition')
+      expect(call.venue).to be_nil
+    end
   end
 
   describe 'edit' do

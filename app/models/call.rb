@@ -5,7 +5,9 @@
 #  id                   :bigint           not null, primary key
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
-#  end_at               :datetime         not null
+#  eligibility          :integer          default("unspecified"), not null
+#  end_at               :datetime
+#  entry_fee            :integer
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
 #  full_description     :text             default(""), not null
@@ -13,7 +15,8 @@
 #  is_public            :boolean          default(FALSE), not null
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
-#  start_at             :datetime         not null
+#  spider               :integer          default("none"), not null
+#  start_at             :datetime
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -37,18 +40,24 @@ class Call < ApplicationRecord
   belongs_to :user
   belongs_to :venue, optional: true
 
+  attr_accessor :skip_start_and_end
+
   accepts_nested_attributes_for :venue
 
   validates :venue, presence: true, if: :require_venue?
   validates :name, presence: true
-  validates :start_at, presence: true
-  validates :end_at, presence: true
+
+  START_END_EXCEPTION = proc { |c| (c.skip_start_and_end || c.user_id == User.system.id) && c.external? }
+  validates :start_at, presence: true, unless: START_END_EXCEPTION
+  validates :end_at, presence: true, unless: START_END_EXCEPTION
+
   validates :overview, presence: true
   validates :call_type_id, presence: true
   validates :full_description, presence: true, unless: :external
   validates :application_deadline, presence: true
   validates :application_details, presence: true, unless: :external
   validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
+  validates :entry_fee, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
@@ -56,7 +65,9 @@ class Call < ApplicationRecord
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
-  enum call_type_id: { exhibition: 1, residency: 2, publication: 3 }, _prefix: true
+  enum call_type_id: { exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
+  enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
+  enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
 
@@ -76,7 +87,7 @@ class Call < ApplicationRecord
 
   scope :active, -> { accepting_applications.or(current).or(upcoming) }
 
-  scope :past, -> { where('end_at <= ?', Time.current) }
+  scope :past, -> { where('end_at <= ?', Time.current).or(where(end_at: nil).merge(past_deadline)) }
 
   scope :published, -> { where(is_public: true) }
 
@@ -88,10 +99,14 @@ class Call < ApplicationRecord
     applications.where(user: user).exists?
   end
 
+  def internal?
+    !external?
+  end
+
   private
 
   def require_venue?
-    !external && call_type_id != "publication"
+    internal? && !['publication', 'competition'].include?(call_type_id)
   end
 
   def end_at_is_after_start_at

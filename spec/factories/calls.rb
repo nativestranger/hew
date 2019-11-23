@@ -5,7 +5,9 @@
 #  id                   :bigint           not null, primary key
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
-#  end_at               :datetime         not null
+#  eligibility          :integer          default("unspecified"), not null
+#  end_at               :datetime
+#  entry_fee            :integer
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
 #  full_description     :text             default(""), not null
@@ -13,7 +15,8 @@
 #  is_public            :boolean          default(FALSE), not null
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
-#  start_at             :datetime         not null
+#  spider               :integer          default("none"), not null
+#  start_at             :datetime
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -40,12 +43,12 @@ FactoryBot.define do
     venue { create(:venue) }
     start_at { Time.current + rand(2..7).days }
     end_at { start_at + rand(8..10).days }
-    overview { Faker::Movies::Lebowski.quote }
+    overview { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
-    full_description { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
+    full_description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
     application_deadline { start_at - rand(1..7.days) }
-    application_details { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
+    application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
   end
 
   trait :current do
