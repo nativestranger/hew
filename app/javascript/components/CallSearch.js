@@ -6,7 +6,7 @@ export default class CallSearch extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
     call_types: PropTypes.array.isRequired,
-    call_type_icons: PropTypes.object.isRequired
+    call_type_emojis: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -118,7 +118,7 @@ export default class CallSearch extends React.Component {
                             <div className="row">
                                 <div className="col-12">
                                     <h5 className="mb-0">
-                                      <span className={ `fa ${this.props.call_type_icons[call.call_type.name] || this.props.call_type_icons['default']} fa-sm p-2` }></span>
+                                      <span>{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
                                       <a href={`/calls/${call.id}/details`}>{call.name}
                                         { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
                                       </a>

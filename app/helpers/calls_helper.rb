@@ -24,4 +24,14 @@ module CallsHelper
       "default"   => "fa-globe",
     }
   end
+
+  def call_type_emojis
+    {
+      "exhibition" => "🎨",
+      "residency" => "🏠",
+      "publication" => "📰",
+      "competition" => "🏆",
+      "default"   => "🌎",
+    }
+  end
 end
