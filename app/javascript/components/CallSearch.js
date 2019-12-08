@@ -118,7 +118,7 @@ export default class CallSearch extends React.Component {
                             <div className="row">
                                 <div className="col-12">
                                     <h5 className="mb-0">
-                                      <span>{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
+                                      <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
                                       <a href={`/calls/${call.id}/details`}>{call.name}
                                         { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
                                       </a>
@@ -154,7 +154,8 @@ export default class CallSearch extends React.Component {
 
     let renderCallType = function(callType) {
       return (
-        <span key={callType.id} className="d-inline badge badge-primary mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
+        <span key={callType.id} className="d-inline badge badge-light border mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
+          <span>{thisComponent.props.call_type_emojis[callType.enum_name] || thisComponent.props.call_type_emojis['default']}</span>
           {callType.name}
           <span className="fa fa-times fa-sm pl-1"></span>
         </span>

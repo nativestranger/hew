@@ -37,5 +37,4 @@
 .container
   .row.mb-1.mt-1
     .col-12.search-options
-      - call_types = [{ id: 1, name: 'Exhibition', selected: true }, { id: 2, name: 'Residency', selected: true }, { id: 3, name: 'Publication', selected: true }, { id: 4, name: 'Competition', selected: true }]
-      = react_component "CallSearch", { call_types: call_types, call_type_emojis: call_type_emojis, page: (params[:page]&.to_i || 1) }
+      = react_component "CallSearch", { call_types: call_search_call_types, call_type_emojis: call_type_emojis, page: (params[:page]&.to_i || 1) }

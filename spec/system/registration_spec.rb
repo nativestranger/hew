@@ -19,7 +19,7 @@ RSpec.describe 'Registration', type: :system do
 
       confirmation_email = ActionMailer::Base.deliveries.first
       expect(confirmation_email.to).to eq([new_user.email])
-      expect(confirmation_email.subject).to eq("Confirm your account on Hew")
+      expect(confirmation_email.subject).to eq("Confirm your account on Mox")
 
       visit user_confirmation_path(confirmation_token: new_user.confirmation_token)
       fill_in "user_password", with: 'INSECUREPASSWORD!'
