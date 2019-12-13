@@ -20,7 +20,7 @@ class CallForEntrySpider < Kimurai::Base
         call_count += 1
       end
 
-      attempt_count += 1
+      attempt_count += 1 # change?
       browser.go_back
     end
   end
@@ -195,11 +195,11 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   def max_call_count
-    ENV['max_call_count']&.to_i || 10
+    ENV['max_call_count']&.to_i || 40
   end
 
   def max_attempt_count
-    ENV['max_attempt_count']&.to_i || 40
+    ENV['max_attempt_count']&.to_i || 80
   end
 
   def sort_option
