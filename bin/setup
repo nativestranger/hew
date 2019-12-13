@@ -27,22 +27,22 @@ fi
 # if [ -z "$CI" ]; then
 # fi
 
-if heroku join --app hew-staging > /dev/null 2>&1; then
-  git remote add staging git@heroku.com:hew-staging.git || true
-  printf 'You are a collaborator on the "hew-staging" Heroku app
+if heroku join --app mox-staging > /dev/null 2>&1; then
+  git remote add staging git@heroku.com:mox-staging.git || true
+  printf 'You are a collaborator on the "mox-staging" Heroku app
 '
 else
-  printf 'Ask for access to the "hew-staging" Heroku app
+  printf 'Ask for access to the "mox-staging" Heroku app
 '
 fi
 
 
-if heroku join --app hew-production > /dev/null 2>&1; then
-  git remote add production git@heroku.com:hew-production.git || true
-  printf 'You are a collaborator on the "hew-production" Heroku app
+if heroku join --app mox-production > /dev/null 2>&1; then
+  git remote add production git@heroku.com:mox-production.git || true
+  printf 'You are a collaborator on the "mox-production" Heroku app
 '
 else
-  printf 'Ask for access to the "hew-production" Heroku app
+  printf 'Ask for access to the "mox-production" Heroku app
 '
 fi
 

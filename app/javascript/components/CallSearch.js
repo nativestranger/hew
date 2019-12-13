@@ -22,17 +22,17 @@ export default class CallSearch extends React.Component {
   }
 
   setLocalStorageFilters(property, value) {
-    let filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    let filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     filters[property] = value;
-    localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
+    localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
   }
 
   componentWillMount() {
     let filters;
     // TODO: clear on deploy
 
-    if (localStorage.getItem('hew_call_search_filters')) {
-      filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    if (localStorage.getItem('mox_call_search_filters')) {
+      filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     } else {
       filters = {
         call_types: this.props.call_types,
@@ -42,7 +42,7 @@ export default class CallSearch extends React.Component {
         ]
       }
 
-      localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
+      localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
     }
 
     this.setState({

@@ -70,7 +70,7 @@ class User < ApplicationRecord
   scope :admins, -> { where(is_admin: true) }
 
   def self.system
-    @system_user ||= User.find_or_initialize_by(email: 'system_user@hew.mx')
+    @system_user ||= User.find_or_initialize_by(email: 'system_user@mox.mx')
 
     if @system_user.persisted?
       @system_user
