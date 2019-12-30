@@ -1,84 +1,40 @@
 .container-fluid.homepage-header.mt-n5
-  .row.py-4.hero-headings
-    .col-12
-      %h1.heading-primary.text-center
-        -# .heading-primary-main
-        -#   Calls for Art
-        .heading-primary-sub
-          .heading-location
-            Calls for Art
-      -# .row.mt-4.mb-5
-      -#   / Begin Mailchimp Signup Form
-      -#   #mc_embed_signup
-      -#     %form#mc-embedded-subscribe-form.validate{:action => "https://gmail.us20.list-manage.com/subscribe/post?u=0594ea2524305c1314abff2fa&id=55beb62341", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
-      -#       %label.col-form-label.hero-subscribe-label
-      -#         Want to be notified when new calls are added?
-      -#       #mc_embed_signup_scroll
-      -#         .form-row.align-items-center
-      -#           .col-auto
-      -#             %input#mce-FNAME.required.form-control.hero-form.form-control.mb-2{:name => "FNAME", :type => "text", :value => "", :placeholder => "First Name"}/
-      -#           .col-auto
-      -#             %input#mce-EMAIL.required.email.form-control.hero-form.form-control.mb-2{:name => "EMAIL", :type => "email", :value => "", :placeholder => "Email"}/
-      -#           #mce-responses.clear
-      -#             #mce-error-response.response{:style => "display:none"}
-      -#             #mce-success-response.response{:style => "display:none"}
-      -#           / real people should not fill this in and expect good things - do not remove this or risk form bot signups
-      -#           %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
-      -#             %input{:name => "b_0594ea2524305c1314abff2fa_55beb62341", :tabindex => "-1", :type => "text", :value => ""}/
-      -#           .clear
-      -#           .col-auto
-      -#             %input#mc-embedded-subscribe.button.btn.btn-outline-light.mb-2{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
-      -#         %small.form-text.text-muted.hero-helper.pt-0.mt-0
-      -#           We keep your email private and you can unsubscribe any time.
-      -#   / End mc_embed_signup
+  -# .row.py-3.hero-headings
+  -#   .col-12
+  -#     %h6.heading-primary.text-center
+  -#       .heading-primary-main
+  -#         Calls for Art
+  -#       .heading-primary-sub
+  -#         .heading-location
+  -#           Calls for Art
+  -#     .row.mt-4.mb-5
+  -#       / Begin Mailchimp Signup Form
+  -#       #mc_embed_signup
+  -#         %form#mc-embedded-subscribe-form.validate{:action => "https://gmail.us20.list-manage.com/subscribe/post?u=0594ea2524305c1314abff2fa&id=55beb62341", :method => "post", :name => "mc-embedded-subscribe-form", :novalidate => "", :target => "_blank"}
+  -#           %label.col-form-label.hero-subscribe-label
+  -#             Want to be notified when new calls are added?
+  -#           #mc_embed_signup_scroll
+  -#             .form-row.align-items-center
+  -#               .col-auto
+  -#                 %input#mce-FNAME.required.form-control.hero-form.form-control.mb-2{:name => "FNAME", :type => "text", :value => "", :placeholder => "First Name"}/
+  -#               .col-auto
+  -#                 %input#mce-EMAIL.required.email.form-control.hero-form.form-control.mb-2{:name => "EMAIL", :type => "email", :value => "", :placeholder => "Email"}/
+  -#               #mce-responses.clear
+  -#                 #mce-error-response.response{:style => "display:none"}
+  -#                 #mce-success-response.response{:style => "display:none"}
+  -#               / real people should not fill this in and expect good things - do not remove this or risk form bot signups
+  -#               %div{"aria-hidden" => "true", :style => "position: absolute; left: -5000px;"}
+  -#                 %input{:name => "b_0594ea2524305c1314abff2fa_55beb62341", :tabindex => "-1", :type => "text", :value => ""}/
+  -#               .clear
+  -#               .col-auto
+  -#                 %input#mc-embedded-subscribe.button.btn.btn-outline-light.mb-2{:name => "subscribe", :type => "submit", :value => "Subscribe"}/
+  -#             %small.form-text.text-muted.hero-helper.pt-0.mt-0
+  -#               We keep your email private and you can unsubscribe any time.
+  -#       / End mc_embed_signup
+
+%div.mt-3
 
 .container
   .row.mb-1.mt-1
     .col-12.search-options
-      - call_types = [{ id: 1, name: 'Exhibition', selected: true }, { id: 2, name: 'Residency', selected: true }, { id: 3, name: 'Publication', selected: true }, { id: 4, name: 'Competition', selected: true }]
-      = react_component "CallSearch", { call_types: call_types, call_type_icons: call_type_icons, page: (params[:page]&.to_i || 1) }
-
-  -# - if @calls.none?
-  -#   .row
-  -#     .col-12
-  -#       .alert.alert-warning.w-100
-  -#         %p Darn, no available calls found.
-
-  - false && @calls.each do |call|
-    .row.mb-4.mt-2
-      .col-12.mx-auto
-        .card.border-0
-          .card-header.bg-white.border-0.p-0
-            .row
-              .col-12
-                %h5.mb-0
-                  %span.rounded.p-2.fa.fa-sm{ class: fa_class_for_call(call) }
-                  = link_to public_call_details_path(call) do
-                    = call.name
-                    - if call.venue
-                      %h6.d-inline @ #{call.venue.name}
-
-              -# .col-2.clearfix
-              -#   .float-right
-              -#     - if !call.internal? && current_user&.id == call.user_id
-              -#       = link_to 'View Entries', call_applications_path(call)
-              -#     - else
-              -#       = link_to 'More Info', public_call_details_path(id: call.id)
-
-              -# %span.float-md-right
-              -#   %h7.text-muted.d-inline
-              -#     Show opens:
-              -#   %h7.d-inline= call.start_at.to_date.strftime("%B %d, %Y")
-          .card-body.my-1.p-0
-            %p.mb-0.text-truncate.text-muted= call.overview
-          .card-footer.bg-white.border-0.p-0.text-muted
-            .row
-              .col-12
-                .text-muted.small
-                  -# Expires: #{call.application_deadline.to_date.strftime("%B %d, %Y")}
-                  %span #{distance_of_time_in_words(Time.current, call.application_deadline)} left
-                  -# = ' - '
-                  -# - if call.external?
-                  -#   %span= pluralize(call.view_count, 'View')
-                  -# - else
-                  -#   %span= pluralize(call.applications.count, 'Entry')
+      = react_component "CallSearch", { call_types: call_search_call_types, call_type_emojis: call_type_emojis, page: (params[:page]&.to_i || 1) }

@@ -85,7 +85,7 @@ class ArtworkArchiveSpider < Kimurai::Base
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
       is_public: true,
-      spider: :artwork_archive,    
+      spider: :artwork_archive,
     ).persisted?
   rescue => e
     Rails.logger.debug e.message
@@ -144,12 +144,6 @@ class ArtworkArchiveSpider < Kimurai::Base
 
   def max_attempt_count
     ENV['max_attempt_count']&.to_i || 40
-  end
-
-  def sort_option
-    return if ENV['ignore_sort_option'].present?
-
-    ENV['sort_option'] || 'DEADLINE'
   end
 
   def deadline_sort_labels

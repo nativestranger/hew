@@ -6,7 +6,7 @@ export default class CallSearch extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
     call_types: PropTypes.array.isRequired,
-    call_type_icons: PropTypes.object.isRequired
+    call_type_emojis: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -22,17 +22,17 @@ export default class CallSearch extends React.Component {
   }
 
   setLocalStorageFilters(property, value) {
-    let filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    let filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     filters[property] = value;
-    localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
+    localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
   }
 
   componentWillMount() {
     let filters;
     // TODO: clear on deploy
 
-    if (localStorage.getItem('hew_call_search_filters')) {
-      filters = JSON.parse(localStorage.getItem('hew_call_search_filters'));
+    if (localStorage.getItem('mox_call_search_filters')) {
+      filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     } else {
       filters = {
         call_types: this.props.call_types,
@@ -42,7 +42,7 @@ export default class CallSearch extends React.Component {
         ]
       }
 
-      localStorage.setItem('hew_call_search_filters', JSON.stringify(filters));
+      localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
     }
 
     this.setState({
@@ -118,7 +118,7 @@ export default class CallSearch extends React.Component {
                             <div className="row">
                                 <div className="col-12">
                                     <h5 className="mb-0">
-                                      <span className={ `fa ${this.props.call_type_icons[call.call_type.name] || this.props.call_type_icons['default']} fa-sm p-2` }></span>
+                                      <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
                                       <a href={`/calls/${call.id}/details`}>{call.name}
                                         { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
                                       </a>
@@ -154,7 +154,8 @@ export default class CallSearch extends React.Component {
 
     let renderCallType = function(callType) {
       return (
-        <span key={callType.id} className="d-inline badge badge-primary mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
+        <span key={callType.id} className="d-inline badge badge-light border mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
+          <span>{thisComponent.props.call_type_emojis[callType.enum_name] || thisComponent.props.call_type_emojis['default']}</span>
           {callType.name}
           <span className="fa fa-times fa-sm pl-1"></span>
         </span>

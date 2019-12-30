@@ -10,4 +10,4 @@ heroku pg:backups:download --app "$1"
 
 bundle exec rake db:drop db:create
 
-pg_restore --verbose --clean --no-acl --no-owner -h localhost -d hew_development latest.dump
+pg_restore --verbose --clean --no-acl --no-owner -h localhost -d mox_development latest.dump
