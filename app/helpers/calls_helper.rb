@@ -28,7 +28,7 @@ module CallsHelper
 
   def call_type_emojis
     {
-      "exhibition" => "🎨",
+      "exhibition" => "👀",
       "residency" => "🏠",
       "publication" => "📰",
       "competition" => "🏆",
