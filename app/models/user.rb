@@ -75,12 +75,13 @@ class User < ApplicationRecord
     if @system_user.persisted?
       @system_user
     else
-      @system_user.update!(
+      @system_user.assign_attributes(
         first_name: 'System',
         last_name: 'User',
         password: SecureRandom.uuid,
         is_admin: true
       )
+      @system_user.save!
       @system_user.confirm
       @system_user
     end

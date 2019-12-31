@@ -6,7 +6,7 @@
 #  application_deadline :datetime         not null
 #  application_details  :text             default(""), not null
 #  eligibility          :integer          default("unspecified"), not null
-#  end_at               :datetime
+#  end_at               :date
 #  entry_fee            :integer
 #  external             :boolean          default(FALSE), not null
 #  external_url         :string           default(""), not null
@@ -16,7 +16,7 @@
 #  name                 :string           default(""), not null
 #  overview             :string           default(""), not null
 #  spider               :integer          default("none"), not null
-#  start_at             :datetime
+#  start_at             :date
 #  view_count           :integer          default(0), not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

@@ -30,7 +30,11 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :local
+  if ENV['local_storage']
+    config.active_storage.service = :local
+  else
+    config.active_storage.service = :amazon
+  end
 
   config.active_job.queue_adapter = :sucker_punch
 
