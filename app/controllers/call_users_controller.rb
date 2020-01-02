@@ -16,8 +16,12 @@ class CallUsersController < ApplicationController
     end
 
     if @call_user.save
-      CallUserMailer.new_user(@call_user).deliver_later if existing_user.nil?
-      # TODO: email existing users?
+      if existing_user.nil?
+        CallUserMailer.new_user(@call_user).deliver_later
+      else
+        CallUserMailer.invited(@call_user).deliver_later
+      end
+
       redirect_to call_call_users_path(@call), notice: t('success')
     else
       @call_users = @call.call_users.order(created_at: :desc).includes(:user)

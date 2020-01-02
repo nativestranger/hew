@@ -11,4 +11,14 @@ class CallUserMailer < ApplicationMailer # :nodoc:
       body:    user_confirmation_url(confirmation_token: user.confirmation_token)
     )
   end
+
+  def invited(call_user)
+    acts_as = "a#{'n' if call_user.role_admin? } #{call_user.role}"
+
+    mail(
+      to:      call_user.user.email,
+      subject: "You're invited to act as #{acts_as} on Mox. Congrats!",
+      body:    call_url(call_user.call)
+    )
+  end
 end

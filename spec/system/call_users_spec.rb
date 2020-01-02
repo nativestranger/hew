@@ -19,6 +19,11 @@ RSpec.describe 'CallUsers', type: :system do
         call_user = CallUser.last
         expect(call_user.user.email).to eq('newuser@example.com')
         expect(call_user.role).to eq('juror')
+
+        confirmation_email = ActionMailer::Base.deliveries.first
+        expect(confirmation_email.to).to eq(['newuser@example.com'])
+        expect(confirmation_email.subject).to eq("You're invited to act as a juror on Mox. Congrats! Confirm your email address to get started.")
+
         select 'Admin', from: "call_user_#{call_user.id}_role"
         sleep 0.2
         expect(call_user.reload.role).to eq('admin')
@@ -34,6 +39,10 @@ RSpec.describe 'CallUsers', type: :system do
         expect(page).to have_content('Success')
         call_user = CallUser.last
         expect(call_user.user.email).to eq(user2.email)
+
+        confirmation_email = ActionMailer::Base.deliveries.first
+        expect(confirmation_email.to).to eq([user2.email])
+        expect(confirmation_email.subject).to eq("You're invited to act as a juror on Mox. Congrats!")
       end
     end
   end
