@@ -61,8 +61,8 @@ class User < ApplicationRecord
 
   before_save :set_gravatar_url, if: :email_changed?
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates :first_name, presence: { message: "can't be blank when last name is present" }, if: proc { |u| u.last_name.present? }
+  validates :last_name, presence: { message: "can't be blank when first name is present" }, if: proc { |u| u.first_name.present? }
 
   validates :artist_website, url: { allow_blank: true, public_suffix: true }
   validates :instagram_url, url: { allow_blank: true, public_suffix: true }
@@ -88,6 +88,8 @@ class User < ApplicationRecord
   end
 
   def full_name
+    return email unless first_name.present?
+
     "#{first_name} #{last_name}"
   end
 

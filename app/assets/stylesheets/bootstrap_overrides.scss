@@ -57,6 +57,13 @@ body {
 
 }
 
+.bg-fadein {
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+
 .form-group {
   label {
     font-weight: 600;
@@ -65,7 +72,6 @@ body {
 
 .form-control, .form-control:focus {
   background-color: transparent;
-  border-radius: 0;
 }
 
 .form-control.hero-form, .form-control:focus.hero-form {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_30_231825) do
+ActiveRecord::Schema.define(version: 2020_01_01_022606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -163,6 +163,17 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
     t.index ["user_id"], name: "index_call_applications_on_user_id"
   end
 
+  create_table "call_users", force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id", "user_id"], name: "index_call_users_on_call_id_and_user_id", unique: true
+    t.index ["call_id"], name: "index_call_users_on_call_id"
+    t.index ["user_id"], name: "index_call_users_on_user_id"
+  end
+
   create_table "calls", force: :cascade do |t|
     t.string "name", default: "", null: false
     t.bigint "venue_id"
@@ -297,6 +308,8 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "call_applications", "calls"
   add_foreign_key "call_applications", "users"
+  add_foreign_key "call_users", "calls"
+  add_foreign_key "call_users", "users"
   add_foreign_key "calls", "users"
   add_foreign_key "calls", "venues"
   add_foreign_key "connections", "users", column: "user1_id"

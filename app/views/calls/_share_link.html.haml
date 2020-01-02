@@ -3,10 +3,6 @@
     .card-body
       %p
         %small
-          - if !@call.is_approved
-            Your call will not appear on the the homepage until it has been approved by an administrator.
-            %br
-
           To share your call with your audience, copy the following link:
 
       %div{ "data-controller" => "clipboard" }

@@ -1,0 +1,31 @@
+.row
+  .col-lg-10.mx-auto
+    %h3.mb-4 #{@call.name} - Users
+
+    = simple_form_for @call_user, url: call_call_users_path(@call) do |f|
+      = f.error_notification message: f.object.errors[:user_id].to_sentence.capitalize if f.object.errors[:user_id].present?
+
+      .row
+        = f.simple_fields_for :user do |user|
+          .col-md-6
+            = user.input :email, placeholder: 'Enter an email address...', input_html: { class: 'form-control' }, label: false
+        .col-md-3
+          = f.input :role, collection: options_for_enum(CallUser, :role), label: false
+        .col-md-3
+          .form-group
+            = f.button :submit, 'Add User', class: 'btn btn-primary d-block'
+
+    - #TODO mobile view
+    - if @call_users.any?
+      %table.table.mt-2
+        %tr.row
+          %th.col-3 Name
+          %th.col-3 Role
+          %th.col-6 Status
+
+        - @call_users.each do |call_user|
+          %tr.row
+            %td.col-3= call_user.user.full_name # TODO: show gravatar
+            %td.col-3.bg-fadein{ id: "call_user_#{call_user.id}_role_select_td" }
+              = select_tag "call_user_#{call_user.id}_role", options_for_select(options_for_enum(CallUser, :role), selected: call_user.role), class: 'form-control call_user_role_select bg-white', data: { call_user_id: call_user.id }, remote: true
+            %td.col-6= call_user.user.confirmed? ? 'Joined' : 'Pending'
