@@ -59,7 +59,7 @@ class CallUsersController < ApplicationController
     @call_user = @call.call_users.find(params[:id])
   end
 
-  # handle json auth proper
+  # TODO: handle json auth proper
   def authorize_user!
     redirect_to root_path unless current_user.id == @call.user_id
   end
