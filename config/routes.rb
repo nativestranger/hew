@@ -29,8 +29,12 @@ Rails.application.routes.draw do
   match 'works/:id', via: :get, to: 'public_pieces#show', as: :public_piece
 
   resources :chats, only: :show
+
   resources :venues, except: :destroy
-  resources :calls, except: :destroy
+
+  resources :calls, except: :destroy do
+    resources :call_users, only: %i[create update index]
+  end
 
   match 'calls/:id/applications', via: :get, to: 'calls#applications', as: :call_applications
   match 'calls/:id/applications/:call_application_id', via: :patch, to: 'calls#update_application_status', as: :update_call_application_status

@@ -1,19 +1,19 @@
 .row
+  .col-lg-1
   .col-lg-3.border-right
     .card.border-0
       .card-body.p-0.m-0
-        .profile-avatar= image_tag @user.avatar_url, class: 'img-fluid rounded mx-auto d-block'
+        .profile-avatar= image_tag @user.avatar_url, class: 'img-fluid rounded d-block'
 
-        %h6.text-center
-          .p-1= @user.full_name
+        .pt-1= @user.full_name
 
         .d-none.d-lg-block
           %ul.list-group.list-group-flush
-            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Work' ? 'disabled' : '' }
+            %li.list-group-item.text-left.pl-0.btn{ class: current_artist_profile_section_name == 'Work' ? 'disabled' : '' }
               = link_to 'Work', artist_profile_path(@user, artist_profile_section: 'Work')
-            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Artist Statement' ? 'disabled' : '' }
+            %li.list-group-item.text-left.pl-0.btn{ class: current_artist_profile_section_name == 'Artist Statement' ? 'disabled' : '' }
               = link_to 'Statement', artist_profile_path(@user, artist_profile_section: 'Artist Statement')
-            %li.list-group-item.btn{ class: current_artist_profile_section_name == 'Bio' ? 'disabled' : '' }
+            %li.list-group-item.text-left.pl-0.btn{ class: current_artist_profile_section_name == 'Bio' ? 'disabled' : '' }
               = link_to 'Bio', artist_profile_path(@user, artist_profile_section: 'Bio')
 
         .d-block.d-lg-none
@@ -28,19 +28,21 @@
               %a.nav-link{ href: artist_profile_path(@user, artist_profile_section: 'Bio'), class: current_artist_profile_section_name == 'Bio' ? 'active' : '' }
                 Bio
 
-  .col-lg-9
+  .col-lg-7
     .card.border-0
-      .card-header.bg-white.border-bottom-0.p-0.d-none.d-lg-block
-        %h5.text-center.clearfix.m-0
+      .card-header.bg-white.border-bottom-0.p-0.d-none.d-flex.justify-content-between
+        %h5.clearfix.m-0
           = current_artist_profile_section_name
-      .card-body.pt-0
+
+        - if can_edit_resource?(@user) && params[:edit].nil? && edit_supported_artist_profile_section?
+          = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+            artist_profile_path(user_id: current_user.id, artist_profile_section: params[:artist_profile_section], edit: true)
+      .card-body.pt-0.pl-0
         %hr
 
         - if can_edit_resource?(@user) && params[:edit]
           = render "#{current_artist_profile_section_name.downcase.gsub(' ', '_')}_edit"
         - else
-          - if can_edit_resource?(@user) && params[:edit].nil? && edit_supported_artist_profile_section?
-            .mb-2= link_to content_tag(:i, '', class: 'fa fa-pencil'),
-              artist_profile_path(user_id: current_user.id, artist_profile_section: params[:artist_profile_section], edit: true)
-
           = render current_artist_profile_section_name.downcase.gsub(' ', '_')
+
+-# TODO: cleanup mobile view

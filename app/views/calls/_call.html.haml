@@ -2,9 +2,13 @@
   .card-header
     %h5.text-center
       = call.name
-      = link_to content_tag(:i, '', class: 'fa fa-pencil'),
-        edit_call_path(call),
-        class: 'float-right'
+
+      .pull-right
+        = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+          edit_call_path(call)
+
+        = link_to content_tag(:i, '', class: 'fa fa-user'),
+          call_call_users_path(call)
 
   .card-body
     %h3

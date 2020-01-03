@@ -39,6 +39,8 @@
 class Call < ApplicationRecord
   belongs_to :user
   belongs_to :venue, optional: true
+  has_many :call_users, dependent: :destroy
+  has_many :users, through: :call_users
 
   attr_accessor :skip_start_and_end
 

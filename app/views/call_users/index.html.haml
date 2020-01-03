@@ -1,0 +1,44 @@
+.row
+  .col-lg-10.mx-auto
+    %h3.mb-4
+      = link_to @call.name, @call
+      = '- Users'
+
+    = simple_form_for @call_user, url: call_call_users_path(@call) do |f|
+      = f.error_notification message: f.object.errors[:user_id].to_sentence.capitalize if f.object.errors[:user_id].present?
+
+      .row
+        = f.simple_fields_for :user do |user|
+          .col-md-4
+            = user.input :email, placeholder: 'Enter an email address...', input_html: { class: 'form-control' }, label: false
+        .col-md-4
+          = f.input :role, collection: options_for_enum(CallUser, :role), label: false
+        .col-md-4
+          .form-group
+            = f.button :submit, 'Add User', class: 'btn btn-primary d-block'
+
+    - # TODO mobile view
+    - if @call_users.any?
+      %table.table.mt-2.ml-3
+        %tr.row
+          %th.col-4.pl-0.pr-0 Name
+          %th.col-4.pl-0 Role
+          %th.col-4.pl-0 Status
+
+        - #TODO: show last seen
+        - # TODO no users messaging...?
+        - @call_users.each do |call_user|
+          %tr.row
+            %td.col-4.pl-0.pt-3
+              .pt-1= call_user.user.full_name # TODO: show gravatar
+            %td.col-4.pl-0{ id: "call_user_#{call_user.id}_role_select_td" }
+              = select_tag "call_user_#{call_user.id}_role", options_for_select(options_for_enum(CallUser, :role), selected: call_user.role), class: 'form-control call_user_role_select bg-fadein', data: { call_user_id: call_user.id }, remote: true
+            %td.col-4.pl-0.pt-3
+              .pt-1
+                - if call_user.user.confirmed?
+                  %span Joined
+                - else
+                  %span Pending
+                  %span.fa-stack{ 'data-toggle' => "tooltip", title: "This user hasn't set up their account." }
+                    %i.fa.fa-circle-thin.fa-stack-2x
+                    %i.fa.fa-question.fa-stack-1x
