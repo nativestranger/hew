@@ -1,7 +1,7 @@
 document.addEventListener("turbolinks:load", function() {
   $(document).on('change', '.call_user_role_select', function(event) {
     let roleSelect = this;
-    let callUserId = $(roleSelect).data().callUserId.toString()
+    let callUserId = $(roleSelect).data().callUserId.toString();
     $(roleSelect).blur();
 
     $.ajax({
