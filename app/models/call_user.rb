@@ -21,11 +21,13 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
+# TODO: prevent adding oneself. OR autocreate call_user for creator and disabled editing role.
+
 class CallUser < ApplicationRecord
   belongs_to :call
   belongs_to :user
 
-  validates :user_id, uniqueness: { scope: :call_id, message: "already exists" }
+  validates :user_id, uniqueness: { scope: :call_id, message: "this user has already been added to this call." }
 
   enum role: { admin: 1, juror: 2, director: 3 }, _prefix: true
   validates :role, presence: true
