@@ -1,7 +1,7 @@
 .row
   .col-lg-10.mx-auto
-    -# - if @call.is_public
-    -#   = render 'share_link'
+    - if @call.is_public
+      = render 'share_link'
 
     .row
       .col-md-8.mb-4= render 'call', call: @call
