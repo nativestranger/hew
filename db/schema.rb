@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_01_022606) do
+ActiveRecord::Schema.define(version: 2020_01_04_011356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(version: 2020_01_01_022606) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "medium", default: "", null: false
+    t.bigint "call_application_id"
+    t.index ["call_application_id"], name: "index_pieces_on_call_application_id"
     t.index ["user_id"], name: "index_pieces_on_user_id"
   end
 
@@ -315,6 +317,7 @@ ActiveRecord::Schema.define(version: 2020_01_01_022606) do
   add_foreign_key "connections", "users", column: "user1_id"
   add_foreign_key "connections", "users", column: "user2_id"
   add_foreign_key "piece_images", "pieces"
+  add_foreign_key "pieces", "call_applications"
   add_foreign_key "pieces", "users"
   add_foreign_key "venues", "addresses"
   add_foreign_key "venues", "users"

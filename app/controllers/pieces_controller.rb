@@ -40,7 +40,7 @@ class PiecesController < ApplicationController
   end
 
   def index
-    @pieces = current_user.pieces
+    @pieces = current_user.pieces.for_profile
   end
 
   private

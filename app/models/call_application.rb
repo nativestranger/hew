@@ -29,6 +29,7 @@
 class CallApplication < ApplicationRecord
   belongs_to :call
   belongs_to :user
+  has_many :pieces, dependent: :destroy
 
   accepts_nested_attributes_for :user
 
