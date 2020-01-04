@@ -9,4 +9,4 @@
 
     = call_application_progress_bar
 
-    .mt-5= render @call_application.creation_status
+    .mt-5= render step&.to_s || @call_application.creation_status

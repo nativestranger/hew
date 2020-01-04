@@ -8,9 +8,40 @@
 }
 
 .navigator {
+  .divider {
+    flex-grow: 1;
+    border-bottom: 3px solid $primary;
+    border-radius: 50px;
+    margin: 10px;
+  }
+  .divider.incomplete {
+    border-bottom: 3px solid gray;
+  }
+
   ol {
-    @extend .pl-3;
+    @extend .pl-0;
     @extend .d-flex;
     @extend .justify-content-between;
+    list-style-type: none;
+    align-items: center;
+
+    li {
+      text-align: center;
+    }
+
+    li.finished {
+      @extend .text-success;
+      a { @extend .text-success; }
+    }
+
+    li.current {
+      @extend .text-primary;
+      a { @extend .text-primary; }
+    }
+
+    li.unfinished {
+      @extend .text-muted;
+      a { @extend .text-muted; }
+    }
   }
 }
