@@ -158,6 +158,7 @@ ActiveRecord::Schema.define(version: 2020_01_04_011356) do
     t.integer "status_id", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "creation_status", default: 0, null: false
     t.index ["call_id", "user_id"], name: "index_call_applications_on_call_id_and_user_id", unique: true
     t.index ["call_id"], name: "index_call_applications_on_call_id"
     t.index ["user_id"], name: "index_call_applications_on_user_id"

@@ -95,10 +95,10 @@ class Call < ApplicationRecord
 
   scope :approved, -> { where(is_approved: true) }
 
-  def application_for?(user)
+  def application_for(user)
     return false unless user
 
-    applications.where(user: user).exists?
+    applications.find_by(user: user)
   end
 
   def internal?

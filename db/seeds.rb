@@ -45,6 +45,6 @@ Call.all.each do |call|
 end
 
 # not applied to
-5.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true) }
+5.times { FactoryBot.create(:call, :accepting_applications, user: admin, venue: venue, is_public: true, is_approved: true) }
 
 admin.calls.first.update!(is_approved: true)

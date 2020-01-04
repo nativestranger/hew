@@ -6,6 +6,7 @@
 #  artist_instagram_url      :string           default(""), not null
 #  artist_statement          :text             default(""), not null
 #  artist_website            :string           default(""), not null
+#  creation_status           :integer          default("start"), not null
 #  photos_url                :string           default(""), not null
 #  supplemental_material_url :string           default(""), not null
 #  created_at                :datetime         not null
@@ -26,12 +27,21 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
+# TODO: rename to CallEntry
 class CallApplication < ApplicationRecord
   belongs_to :call
   belongs_to :user
+
   has_many :pieces, dependent: :destroy
 
   accepts_nested_attributes_for :user
+
+  enum creation_status: {
+    start: 0,
+    add_pieces: 1,
+    review: 2,
+    submit: 3,
+  }, _prefix: true
 
   enum status_id: {
     fresh:    0,
@@ -55,5 +65,17 @@ class CallApplication < ApplicationRecord
   validates :photos_url, url: { allow_blank: true, public_suffix: true }
   validates :supplemental_material_url, url: { allow_blank: true, public_suffix: true }
 
-  # what validations?
+  # TODO: require no artist_statement or minimal info?
+  validates :artist_statement, presence: true
+
+  # TODO: change to if 'past x status?'
+  validate :has_valid_pieces, if: :creation_status_review?
+
+  private
+
+  def has_valid_pieces
+    return if pieces.with_images.any?
+
+    errors.add(:base, 'You must add at least one piece to your call.')
+  end
 end

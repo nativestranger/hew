@@ -1,0 +1,12 @@
+.row
+  .col-lg-10.mx-auto
+    %h4.text-center
+      = t(@call_application.creation_status)
+      Entry
+      = ' - '
+      = @call_application.call.name
+    %hr
+
+    = call_application_progress_bar
+
+    .mt-5= render @call_application.creation_status

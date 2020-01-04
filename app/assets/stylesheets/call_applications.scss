@@ -6,3 +6,11 @@
     }
   }
 }
+
+.navigator {
+  ol {
+    @extend .pl-3;
+    @extend .d-flex;
+    @extend .justify-content-between;
+  }
+}

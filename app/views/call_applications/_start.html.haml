@@ -1,9 +1,13 @@
 .form-inputs
-  = simple_form_for @call_application, url: "/call_applications?call_id=#{@call_application.call_id}" do |f|
+  - url = @call_application.persisted? ? wizard_path(@call_application.creation_status, call_application_id: @call_application.id) : "/call_applications?call_id=#{@call_application.call_id}"
+
+  = simple_form_for @call_application, url: url do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .d-none= f.input :call_id, input_html: { class: 'form-control' }, label: false
+    - def @call_application.call_application_id; id; end
+    .d-none= f.input :call_application_id, input_html: { class: 'form-control' }, label: false
 
     - if current_user.nil?
       = f.simple_fields_for :user do |user|
@@ -27,26 +31,10 @@
           = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :artist_instagram_url
 
     .row
-      .col-md-6
-        = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Link to Photos" do
-          .input-group-prepend
-            .input-group-text
-              %span.fa.fa-globe
-          = f.input_field :photos_url, class: "form-control"
-          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :photos_url
-
-      .col-md-6
-        = f.input :artist_instagram_url, wrapper: :vertical_input_group, label: "Supplemental Material" do
-          .input-group-prepend
-            .input-group-text
-              %span.fa.fa-globe
-          = f.input_field :supplemental_material_url, class: "form-control"
-          = render 'application/forms/url_validation_error_modifier', f: f, attr_name: :supplemental_material_url
-
-    .row
+      -# TODO display error for artist_statement
       .col-md-12
         .form-group
           %label{ for: 'call_application_artist_statement' } Artist Statement
           = f.input :artist_statement, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
-    = f.button :submit, 'Submit', class: 'btn btn-primary'
+    = f.button :submit, 'Continue', class: 'btn btn-primary'

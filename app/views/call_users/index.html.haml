@@ -42,3 +42,6 @@
                   %span.fa-stack{ 'data-toggle' => "tooltip", title: "This user hasn't set up their account." }
                     %i.fa.fa-circle-thin.fa-stack-2x
                     %i.fa.fa-question.fa-stack-1x
+
+    - if @call_users.none?
+      %p No users have been added to this call yet.
