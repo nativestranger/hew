@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import ManagePieceModal from "./ManagePieceModal";
 
 export default class EditEntryPieces extends React.Component {
   static propTypes = {
@@ -10,7 +11,6 @@ export default class EditEntryPieces extends React.Component {
     super(props);
     this.getPieces = this.getPieces.bind(this);
     this.renderPieces = this.renderPieces.bind(this);
-    this.openNewPieceModel = this.openNewPieceModel.bind(this);
   };
 
   componentWillMount() {
@@ -59,14 +59,11 @@ export default class EditEntryPieces extends React.Component {
             Add one or more pieces to your entry.
           </p>
         ) }
-        <button className="btn btn-primary btn-sm" onClick={ this.openNewPieceModel() }>
-          Click to add a piece
-        </button>
+
+        { <ManagePieceModal buttonLabel='Add a piece' /> }
+
       </div>
     )
-  }
-
-  openNewPieceModel() {
   }
 
   render() {

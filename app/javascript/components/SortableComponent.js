@@ -11,6 +11,7 @@ axios.defaults.headers.common = {
 
 const SortableItem = SortableElement(({value}) => <span>{value}</span>);
 
+// TODO: could append + image icon here
 const SortableList = SortableContainer(({items}) => {
   return (
     <div className='sortable-list'>
@@ -115,8 +116,10 @@ export default class SortableComponent extends Component {
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.pieceImages.map(i => i.id);
-    document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;
+    if (this.state.pieceImages.length) {
+      let imagesByPosition = this.state.pieceImages.map(i => i.id);
+      document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;  
+    }
 
     return (
       <div>
