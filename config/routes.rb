@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings
 
   namespace :v1 do
-    resources :pieces, only: [] do
+    resources :pieces, only: %i[index create update destroy] do
       resources :piece_images, only: %i[create destroy]
     end
     get '/chats/:id/messages' => "chats#messages", as: :chat_messages

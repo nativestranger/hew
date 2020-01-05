@@ -24,7 +24,8 @@
 
 class PieceSerializer < ActiveModel::Serializer
   attributes :id,
-             :name,
+             :title,
+             :medium,
              :description,
              :piece_images
 
