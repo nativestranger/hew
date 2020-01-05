@@ -99,13 +99,13 @@ export default class SortableComponent extends Component {
   uploadBoxOrSpinner = () => {
     if (this.state.file) {
       return (
-        <div className='loader'></div>
+        <div className='loader mb-4'></div>
       )
     } else {
       return (
-        <div className='carousel-img-upload' onClick={this.openfileUploader}>
+        <div className='carousel-img-upload p-2 w-100 border rounded' onClick={this.openfileUploader}>
           <i className='fa fa-camera fa-2x'></i>
-          <span> Add a photo</span>
+          <p className='mb-0'>Click to add a photo</p>
           <input type="file" onChange={this.handleFileUpload} ref="fileUploader" style={{display: "none"}}/>
         </div>
       )
@@ -120,9 +120,13 @@ export default class SortableComponent extends Component {
 
     return (
       <div>
-        { this.uploadBoxOrSpinner() }
+        <div className='row'>
+          <div className='col-12 text-center mb-4'>
+            { this.uploadBoxOrSpinner() }
+          </div>
+        </div>
 
-        <div className='row mt-4'>
+        <div className='row'>
           <div className='col-lg-12'>
             <SortableList items={this.state.pieceImages.map(this.renderItem)}
                           distance={1}

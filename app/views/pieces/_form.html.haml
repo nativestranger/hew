@@ -21,9 +21,11 @@
     .row
       .col-md-12
         - if @piece.persisted?
-          = f.input :image_ids_in_position_order, as: :hidden, default: @piece.piece_images.map(&:id).join(',')
+          .d-none= f.input :image_ids_in_position_order, as: :hidden, default: @piece.piece_images.map(&:id).join(',')
           = render 'sortable_piece_images', piece: @piece
         - else
           %p.text-muted You must submit your pieces' title before adding images.
 
-    .mt-4= f.button :submit, 'Save', class: 'btn btn-primary'
+    .row.mt-4
+      .col-md-12
+        = f.button :submit, 'Save', class: 'btn btn-primary'
