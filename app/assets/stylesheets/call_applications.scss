@@ -30,8 +30,8 @@
     }
 
     li.finished {
-      @extend .text-success;
-      a { @extend .text-success; }
+      @extend .text-primary;
+      a { @extend .text-primary; }
     }
 
     li.current {
