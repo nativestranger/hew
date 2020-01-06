@@ -13,6 +13,7 @@ export default class EditEntryPieces extends React.Component {
     this.renderPieces = this.renderPieces.bind(this);
     this.pieceRemoved = this.pieceRemoved.bind(this);
     this.pieceChanged = this.pieceChanged.bind(this);
+    this.newPieceModal = this.newPieceModal.bind(this);
   };
 
   componentWillMount() {
@@ -26,7 +27,6 @@ export default class EditEntryPieces extends React.Component {
   }
 
   pieceRemoved(pieceId) {
-    console.log(pieceId);
     this.setState({
       pieces: this.state.pieces.filter(function(piece) {
         return piece.id != pieceId;
@@ -41,14 +41,41 @@ export default class EditEntryPieces extends React.Component {
 
     let newPieceCallback = function() {
       if (existingPiece) { return }
-      thisComponent.refs[`piece-modal-${piece.id}`].setState({ modal: true });
+      // thisComponent.refs[`piece-modal-${piece.id}`].setState({ modal: true });
     }
 
-    if (!existingPiece) {
-      pieces.push(piece);
+    if (existingPiece) {
+      pieces = this.state.pieces.map(function(somePiece) {
+        if (somePiece.id === piece.id) {
+          return piece;
+        } else {
+          return somePiece;
+        }
+      }); // why not updating?? .. because child is managing it's state..!
+    } else {
+      // pieces.push(piece);
+
+      pieces = this.state.pieces.map(function(somePiece) {
+        if (somePiece.id === undefined) {
+          return piece;
+        } else {
+          return somePiece;
+        }
+      });
     }
 
     this.setState({ pieces: pieces }, newPieceCallback);
+  }
+
+  newPieceModal() {
+    let thisComponent = this;
+    let newPiece = { created: false, position: 99 };
+    let openNewPieceModal = function() {
+      thisComponent.refs["piece-modal-undefined"].setState({ modal: true });
+    }
+    let pieces = Object.assign([], this.state.pieces);
+    pieces.push(newPiece);
+    this.setState({ pieces: pieces }, openNewPieceModal);
   }
 
   getPieces() {
@@ -73,7 +100,7 @@ export default class EditEntryPieces extends React.Component {
 
     let renderPiece = function(piece) {
       return (
-        <ManagePieceModal key={piece.id} piece={piece} entry_id={thisComponent.props.entry_id} ref={`piece-modal-${piece.id}`} parentComponent={thisComponent} />
+        <ManagePieceModal key={piece.id || 'new'} piece={piece} entry_id={thisComponent.props.entry_id} ref={`piece-modal-${piece.id}`} parentComponent={thisComponent} />
       );
     }
 
@@ -89,7 +116,9 @@ export default class EditEntryPieces extends React.Component {
           { this.state.pieces.map(renderPiece) }
         </div>
 
-        { <ManagePieceModal buttonLabel='Add a piece' entry_id={this.props.entry_id} parentComponent={this} /> }
+        <button className='btn btn-primary' onClick={ this.newPieceModal }>
+          Add a piece
+        </button>
       </div>
     );
   }

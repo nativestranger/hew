@@ -39,15 +39,22 @@ export default class ManagePieceModal extends React.Component {
   }
 
   toggle() {
-    if (this.state.created) {
-      this.setState({
-        piece: {}
-      });
-    } // TODO: destructure unless better flow...
+    let thisComponent = this;
+    let closing = new Boolean(thisComponent.state.modal);
+
+    let updateParent = function() {
+      if (!closing) { return }
+
+      if (!thisComponent.state.piece.id) {
+        thisComponent.props.parentComponent.pieceRemoved(undefined);
+      } else {
+        thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
+      }
+    }
 
     this.setState({
       modal: !this.state.modal
-    });
+    }, updateParent);
   }
 
   createOrUpdate(e) {
@@ -89,12 +96,33 @@ export default class ManagePieceModal extends React.Component {
     }
 
     makeRequest().then(response => {
-      thisComponent.props.parentComponent.pieceChanged(response.data.piece);
+      // TODO: change the below to piece added??
+      // TODO: update piece order when applicable...
+      // thisComponent.props.parentComponent.pieceChanged(response.data.piece); // TODO: switch dummy here?
 
-      this.setState({
-        errors: response.errors,
-      });
-      this.toggle();
+      if (!updating) {
+        // thisComponent.props.parentComponent.pieceRemoved(undefined); // dummy removed
+      }
+
+      // the below was closing it...
+      // thisComponent.setState({
+      //   errors: response.errors,
+      //   piece: response.data.piece
+      // });
+
+      // TODO: why does it close and reopen on create?
+      if (updating) {
+        console.log(response);
+        thisComponent.setState({
+          errors: response.data.errors,
+          piece: response.data.piece
+        }, this.toggle);
+      } else {
+        thisComponent.setState({
+          errors: response.data.errors,
+          piece: response.data.piece
+        }); // why is toggling?
+      }
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
     });
@@ -208,12 +236,7 @@ export default class ManagePieceModal extends React.Component {
         </div>
       );
     } else {
-      return (
-        <div>
-          <Button size="sm" color="primary" onClick={this.toggle}>Add a piece</Button>
-          { this.renderModal() }
-        </div>
-      )
+      return this.renderModal();
     }
   }
 };
