@@ -45,3 +45,15 @@
     }
   }
 }
+
+.add-pieces {
+  .piece {
+    img {
+      max-height: 100px;
+    }
+  }
+}
+
+.modal-sortable {
+  z-index: 1100;
+}

@@ -113,13 +113,15 @@ export default class SortableComponent extends Component {
     }
   }
 
-  render() {
-    let thisComponent = this;
-
+  componentDidUpdate() {
     if (this.state.pieceImages.length) {
       let imagesByPosition = this.state.pieceImages.map(i => i.id);
-      document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;  
+      document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;
     }
+  }
+
+  render() {
+    let thisComponent = this;
 
     return (
       <div>

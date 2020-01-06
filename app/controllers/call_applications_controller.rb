@@ -37,8 +37,12 @@ class CallApplicationsController < ApplicationController
     create_call_application!
 
     if @call_application.persisted?
-      CallApplicationMailer.new_application(@call_application).deliver_later
-      CallApplicationMailer.new_artist(@call_application).deliver_later if current_user.nil?
+      if current_user
+        CallApplicationMailer.new_application(@call_application).deliver_later
+      else
+        CallApplicationMailer.new_artist(@call_application).deliver_later
+        # TODO: bypass signin to allow finish applying
+      end
 
       redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
     else
