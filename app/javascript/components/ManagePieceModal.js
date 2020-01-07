@@ -44,7 +44,7 @@ export default class ManagePieceModal extends React.Component {
     let closing = new Boolean(thisComponent.state.modal);
 
     let updateParent = function() {
-      if (closing) {
+      if (closing) { // handle deleting here too instead of in deleteRequest? 
         thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
       }
     }
