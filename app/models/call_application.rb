@@ -40,7 +40,7 @@ class CallApplication < ApplicationRecord
     start: 0,
     add_pieces: 1,
     review: 2,
-    submit: 3,
+    submitted: 3,
   }, _prefix: true
 
   enum status_id: {

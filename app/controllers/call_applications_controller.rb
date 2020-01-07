@@ -4,7 +4,7 @@ class CallApplicationsController < ApplicationController
 
   include Wicked::Wizard
 
-  steps :start, :add_pieces, :review, :submit
+  steps :start, :add_pieces, :review, :submitted
 
   def new
     @call_application = CallApplication.new(
@@ -28,8 +28,8 @@ class CallApplicationsController < ApplicationController
       end
     when :add_pieces
     when :review
-    when :submitted
-      redirect_to application_submitted_path, notice: "Success!"
+    when :submittedted
+      redirect_to application_submittedted_path, notice: "Success!"
     end
   end
 

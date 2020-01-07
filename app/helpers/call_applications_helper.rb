@@ -18,7 +18,7 @@ module CallApplicationsHelper
             end
 
             divider = nil
-            unless every_step == :submit # last
+            unless every_step == :submitted # last
               divider = "<div class='divider #{ 'incomplete' unless past_step?(every_step) }'></div>"
             end
 
