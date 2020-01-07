@@ -25,9 +25,8 @@ RSpec.describe 'CallApplications', type: :system do
 
         sleep 0.5
         new_user = User.find_by(email: "john@doe.com")
-        expect(ActionMailer::Base.deliveries.count).to eq 2
         new_artist_email = ActionMailer::Base.deliveries.find { |e| e.to == [new_user.email] }
-        expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address to get started.")
+        expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address with this magic link.")
       end
     end
     context 'logged in' do

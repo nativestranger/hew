@@ -20,7 +20,7 @@ RSpec.describe 'CallUsers', type: :system do
         expect(call_user.user.email).to eq('newuser@example.com')
         expect(call_user.role).to eq('juror')
 
-        confirmation_email = ActionMailer::Base.deliveries.first
+        confirmation_email = ActionMailer::Base.deliveries.last
         expect(confirmation_email.to).to eq(['newuser@example.com'])
         expect(confirmation_email.subject).to eq("You're invited to act as a juror on Mox. Congrats! Confirm your email address to get started.")
 
@@ -40,7 +40,7 @@ RSpec.describe 'CallUsers', type: :system do
         call_user = CallUser.last
         expect(call_user.user.email).to eq(user2.email)
 
-        confirmation_email = ActionMailer::Base.deliveries.first
+        confirmation_email = ActionMailer::Base.deliveries.last
         expect(confirmation_email.to).to eq([user2.email])
         expect(confirmation_email.subject).to eq("You're invited to act as a juror on Mox. Congrats!")
       end
