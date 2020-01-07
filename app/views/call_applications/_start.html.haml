@@ -1,11 +1,13 @@
 .form-inputs
-  - url = @call_application.persisted? ? wizard_path(@call_application.creation_status, call_application_id: @call_application.id) : "/call_applications?call_id=#{@call_application.call_id}"
+  - url = @call_application.persisted? ? wizard_path(@next_step, call_application_id: @call_application.id) : "/call_applications?call_id=#{@call_application.call_id}"
 
   = simple_form_for @call_application, url: url do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .d-none= f.input :call_id, input_html: { class: 'form-control' }, label: false
+    %p= @next_step
+    .d-none= f.input :creation_status, input_html: { value: @next_step || CallApplication.creation_statuses.keys.first, type: 'string' }
     - def @call_application.call_application_id; id; end
     .d-none= f.input :call_application_id, input_html: { class: 'form-control' }, label: false
 
