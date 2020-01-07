@@ -11,4 +11,7 @@
 
     .row
       .col-12
-        .pull-right= f.button :submit, 'Continue', class: 'btn btn-primary', data: { confirm: 'Are you sure?' }
+        .pull-right
+          = f.button :submit, 'Submit',
+                     class: 'btn btn-primary',
+                     data: { confirm: "Are you sure? You can't make any changes after submitting." }
