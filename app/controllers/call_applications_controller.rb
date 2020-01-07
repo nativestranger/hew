@@ -4,7 +4,7 @@ class CallApplicationsController < ApplicationController
 
   include Wicked::Wizard
 
-  steps :start, :add_pieces, :review, :submit
+  steps :start, :add_pieces, :review, :submitted
 
   def new
     @call_application = CallApplication.new(
@@ -29,7 +29,7 @@ class CallApplicationsController < ApplicationController
     when :add_pieces
     when :review
     when :submitted
-      redirect_to application_submitted_path, notice: "Success!"
+      # redirect_to application_submitted_path, notice: "Success!"
     end
   end
 
@@ -58,10 +58,28 @@ class CallApplicationsController < ApplicationController
     @call = @call_application.call
 
     if @call_application.update(permitted_params)
-      redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
+      respond_to do |format|
+        format.json do
+          render json: {
+            redirectPath: wizard_path(@call_application.creation_status)
+          }
+        end
+        format.html do
+          redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
+        end
+      end
     else
-      @call_application.creation_status = step
-      render :show
+      respond_to do |format|
+        format.json do
+          render json: {
+            errors: @call_application.errors
+          }
+        end
+        format.html do
+          @call_application.creation_status = step
+          render :show
+        end
+      end
     end
   end
 

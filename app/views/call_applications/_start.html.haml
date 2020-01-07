@@ -38,4 +38,6 @@
           %label{ for: 'call_application_artist_statement' } Artist Statement
           = f.input :artist_statement, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
-    = f.button :submit, 'Continue', class: 'btn btn-primary'
+    .row
+      .col-12
+        .pull-right= f.button :submit, 'Continue', class: 'btn btn-primary'

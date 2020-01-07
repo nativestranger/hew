@@ -11,11 +11,13 @@ axios.defaults.headers.common = {
 
 export default class EditEntryPieces extends React.Component {
   static propTypes = {
-    entry_id: PropTypes.number.isRequired
+    entry: PropTypes.object.isRequired,
+    next_step: PropTypes.string.isRequired
   };
 
   constructor(props) {
     super(props);
+    this.nextStep = this.nextStep.bind(this);
     this.getPieces = this.getPieces.bind(this);
     this.renderPieces = this.renderPieces.bind(this);
     this.pieceRemoved = this.pieceRemoved.bind(this);
@@ -64,7 +66,7 @@ export default class EditEntryPieces extends React.Component {
       method: 'post',
       url: `/v1/pieces`,
       data: {
-        entry_id: thisComponent.props.entry_id,
+        entry_id: thisComponent.props.entry.id,
         piece: { title: null }
       },
       config: { headers: { 'Content-Type': 'application/json' } }
@@ -86,7 +88,7 @@ export default class EditEntryPieces extends React.Component {
     let thisComponent = this;
 
     $.get("/v1/pieces.json",
-           { entry_id: this.props.entry_id,
+           { entry_id: this.props.entry.id,
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
           thisComponent.setState({
@@ -98,13 +100,41 @@ export default class EditEntryPieces extends React.Component {
         });
   }
 
+  nextStep() {
+    let thisComponent = this;
+
+    let makeRequest = function() {
+      return axios({
+        method: 'patch',
+        url: `/call_applications/${thisComponent.props.next_step}?call_application_id=${thisComponent.props.entry.id}`,
+        data: {
+          call_application: { creation_status: thisComponent.props.next_step }
+        },
+        config: { headers: { 'Content-Type': 'application/json' } }
+      });
+    }
+
+    this.setState({ nextStepRequest: true });
+    makeRequest().then(response => {
+      if (response.data.redirectPath) {
+        window.location.pathname = response.data.redirectPath;
+      } else {
+        this.setState({ nextStepRequest: false });
+        alert(response.data.errors);
+      }
+    }).catch(error => {
+      this.setState({ nextStepRequest: false });
+      alert(error)
+    })
+  }
+
   renderPieces() {
     if (!this.state.pieces) { return; }
     let thisComponent = this;
 
     let renderPiece = function(piece) {
       return (
-        <ManagePieceModal key={piece.id || 'new'} piece={piece} entry_id={thisComponent.props.entry_id} ref={`piece-modal-${piece.id}`} parentComponent={thisComponent} />
+        <ManagePieceModal key={piece.id} piece={piece} entry_id={thisComponent.props.entry.id} ref={`piece-modal-${piece.id}`} parentComponent={thisComponent} />
       );
     }
 
@@ -120,9 +150,16 @@ export default class EditEntryPieces extends React.Component {
           { this.state.pieces.map(renderPiece) }
         </div>
 
-        <button className='btn btn-primary' disabled={ this.state.creatingPiece } onClick={ this.createNewPiece }>
-          Add a piece
-        </button>
+        <div className='row'>
+          <div className='col-12 d-flex justify-content-between'>
+            <button className='btn btn-primary' disabled={ this.state.creatingPiece } onClick={ this.createNewPiece }>
+              Add a piece
+            </button>
+            <button className='btn btn-primary' disabled={ this.state.nextStepRequest || !this.state.pieces.filter(p => p.piece_images.length).length } onClick={ this.nextStep }>
+              Continue
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
