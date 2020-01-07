@@ -28,14 +28,6 @@ RSpec.describe 'CallApplications', type: :system do
         expect(ActionMailer::Base.deliveries.count).to eq 2
         new_artist_email = ActionMailer::Base.deliveries.find { |e| e.to == [new_user.email] }
         expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address to get started.")
-
-        # TODO: change the below to test elsewhere
-        visit user_confirmation_path(confirmation_token: new_user.confirmation_token)
-        fill_in "user_password", with: 'INSECUREPASSWORD!'
-        fill_in "user_password_confirmation", with: 'INSECUREPASSWORD!'
-        click_button "Set Your Password"
-
-        expect(page).to have_content("Your password has been changed successfully. You are now signed in.")
       end
     end
     context 'logged in' do

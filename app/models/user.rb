@@ -111,4 +111,12 @@ class User < ApplicationRecord
   def password_required?
     confirmed? ? super : false
   end
+
+  def confirmation_required?
+    if created_at > 7.days.ago && call_applications.exists?
+      false # allow new users created with applications to be unconfirmed
+    else
+      true
+    end
+  end
 end
