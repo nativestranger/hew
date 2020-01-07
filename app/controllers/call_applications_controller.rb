@@ -28,7 +28,7 @@ class CallApplicationsController < ApplicationController
       end
     when :add_pieces
     when :review
-    when :submittedted
+    when :submitted
       redirect_to application_submittedted_path, notice: "Success!"
     end
   end
