@@ -136,7 +136,7 @@ class CallApplicationsController < ApplicationController
   private
 
   def ensure_new_application!
-    # TODO: redirect elsewhere?
+    # TODO: redirect elsewhere .. or allow multiple entries if multiple categories?
     return unless @call.application_for(current_user)
 
     redirect_to public_call_details_path(@call), notice: "You've already applied to this call."
