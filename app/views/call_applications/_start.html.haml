@@ -6,7 +6,6 @@
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .d-none= f.input :call_id, input_html: { class: 'form-control' }, label: false
-    %p= @next_step
     .d-none= f.input :creation_status, input_html: { value: @next_step || CallApplication.creation_statuses.keys.first, type: 'string' }
     - def @call_application.call_application_id; id; end
     .d-none= f.input :call_application_id, input_html: { class: 'form-control' }, label: false
