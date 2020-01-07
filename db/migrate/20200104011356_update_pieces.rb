@@ -5,5 +5,6 @@ class UpdatePieces < ActiveRecord::Migration[5.2]
     add_foreign_key 'pieces', 'call_applications'
 
     add_column :call_applications, :creation_status, :integer, null: false, default: 0
+    change_column_null :pieces, :title, true
   end
 end

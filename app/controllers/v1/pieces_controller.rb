@@ -16,25 +16,33 @@ class V1::PiecesController < V1Controller
   end
 
   def create
-    # @piece_image = @piece.piece_images.new
-    # @piece_image.img_upload.attach(params[:image])
-    #
-    # raise 'oops' unless @piece_image.save
-    #
-    # render json: {
-    #   piece_image: PieceSerializer.new(@piece_image).serializable_hash
-    # }
+    @call_application = CallApplication.find(params.fetch(:entry_id)) # TODO: authorize
+    @piece = @call_application.pieces.build(user: current_user)
+
+    if @piece.update(permitted_params)
+      render json: {
+        piece: PieceSerializer.new(@piece).serializable_hash
+      }
+    else
+      render json: {
+        errors: @piece.errors
+      }
+    end
   end
 
   def update
-    # @piece_image = @piece.piece_images.new
-    # @piece_image.img_upload.attach(params[:image])
-    #
-    # raise 'oops' unless @piece_image.save
-    #
-    # render json: {
-    #   piece_image: PieceSerializer.new(@piece_image).serializable_hash
-    # }
+    @call_application = @piece.call_application # TODO: authorize
+
+    # TODO: transaction
+    if @piece.update(permitted_params) && helpers.update_piece_image_order
+      render json: {
+        piece: PieceSerializer.new(@piece).serializable_hash
+      }
+    else
+      render json: {
+        errors: @piece.errors
+      }
+    end
   end
 
   def destroy
@@ -46,10 +54,19 @@ class V1::PiecesController < V1Controller
   private
 
   def set_piece
-    @piece = Piece.find(params[:piece_id])
+    @piece = Piece.find(params[:id])
   end
 
   def authorize_user!
     raise 'NAUGHTY!' unless @piece.user_id == current_user.id
+  end
+
+  def permitted_params
+    params.require(:piece).permit(
+      :title,
+      :medium,
+      :description,
+      :image_ids_in_position_order
+    )
   end
 end

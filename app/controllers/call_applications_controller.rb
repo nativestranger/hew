@@ -37,8 +37,12 @@ class CallApplicationsController < ApplicationController
     create_call_application!
 
     if @call_application.persisted?
-      CallApplicationMailer.new_application(@call_application).deliver_later
-      CallApplicationMailer.new_artist(@call_application).deliver_later if current_user.nil?
+      if current_user
+        CallApplicationMailer.new_application(@call_application).deliver_later
+      else
+        CallApplicationMailer.new_artist(@call_application).deliver_later
+        # TODO: bypass signin to allow finish applying
+      end
 
       redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
     else
@@ -53,7 +57,6 @@ class CallApplicationsController < ApplicationController
     @call_application = CallApplication.find(params[:call_application_id])
     @call = @call_application.call
 
-    @call_application.creation_status = next_step # need in form?
     if @call_application.update(permitted_params)
       redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
     else
@@ -67,6 +70,7 @@ class CallApplicationsController < ApplicationController
   def permitted_params
     params.require(:call_application).permit(
       :call_id,
+      :creation_status,
       :artist_statement,
       :artist_website,
       :artist_instagram_url,

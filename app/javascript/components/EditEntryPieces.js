@@ -1,16 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
+import ManagePieceModal from "./ManagePieceModal";
+
+import axios from 'axios';
+
+axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
 
 export default class EditEntryPieces extends React.Component {
   static propTypes = {
-    entry_id: PropTypes.number
+    entry_id: PropTypes.number.isRequired
   };
 
   constructor(props) {
     super(props);
     this.getPieces = this.getPieces.bind(this);
     this.renderPieces = this.renderPieces.bind(this);
-    this.openNewPieceModel = this.openNewPieceModel.bind(this);
+    this.pieceRemoved = this.pieceRemoved.bind(this);
+    this.pieceChanged = this.pieceChanged.bind(this);
+    this.createNewPiece = this.createNewPiece.bind(this);
   };
 
   componentWillMount() {
@@ -23,6 +33,55 @@ export default class EditEntryPieces extends React.Component {
     this.getPieces();
   }
 
+  pieceRemoved(pieceId) {
+    this.setState({
+      pieces: this.state.pieces.filter(function(piece) {
+        return piece.id != pieceId;
+      })
+    });
+  }
+
+  pieceChanged(piece) {
+    let thisComponent = this;
+    let pieces = Object.assign([], this.state.pieces);
+
+    pieces = this.state.pieces.map(function(somePiece) {
+      if (somePiece.id === piece.id) {
+        return piece;
+      } else {
+        return somePiece;
+      }
+    });
+
+    this.setState({ pieces: pieces });
+  }
+
+  createNewPiece() {
+    let thisComponent = this;
+    thisComponent.setState({ creatingPiece: true });
+
+    axios({
+      method: 'post',
+      url: `/v1/pieces`,
+      data: {
+        entry_id: thisComponent.props.entry_id,
+        piece: { title: null }
+      },
+      config: { headers: { 'Content-Type': 'application/json' } }
+    }).then(response => {
+      let piece = response.data.piece;
+      let openNewPieceModal = function() {
+        thisComponent.refs[`piece-modal-${piece.id}`].setState({ modal: true });
+      }
+      let pieces = Object.assign([], this.state.pieces);
+      pieces.push(piece);
+      this.setState({ pieces: pieces, creatingPiece: false }, openNewPieceModal);
+    }).catch(error => {
+      alert(`Something went wrong: ${error}`);
+      this.setState({ creatingPiece: false });
+    });
+  }
+
   getPieces() {
     let thisComponent = this;
 
@@ -30,43 +89,42 @@ export default class EditEntryPieces extends React.Component {
            { entry_id: this.props.entry_id,
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
-                  thisComponent.setState({
-                    getError: false,
-                    pieces: data.pieces
-                  });
-                })
-        .fail(function(data) {
-                thisComponent.setState({ getError: 'Oops, something went wrong.'});
+          thisComponent.setState({
+            getError: false,
+            pieces: data.pieces
+          });
+        }).fail(function(data) {
+          thisComponent.setState({ getError: 'Oops, something went wrong.'});
         });
   }
 
   renderPieces() {
     if (!this.state.pieces) { return; }
+    let thisComponent = this;
 
     let renderPiece = function(piece) {
       return (
-        <div key={piece.id}>
-          { piece.title }
-        </div>
-      )
+        <ManagePieceModal key={piece.id || 'new'} piece={piece} entry_id={thisComponent.props.entry_id} ref={`piece-modal-${piece.id}`} parentComponent={thisComponent} />
+      );
     }
 
     return (
       <div>
-        { this.state.pieces.map(renderPiece) }
         { this.state.pieces && !this.state.pieces.length && (
           <p className='text-muted'>
             Add one or more pieces to your entry.
           </p>
         ) }
-        <button className="btn btn-primary btn-sm" onClick={ this.openNewPieceModel() }>
-          Click to add a piece
+
+        <div className="row mb-4">
+          { this.state.pieces.map(renderPiece) }
+        </div>
+
+        <button className='btn btn-primary' disabled={ this.state.creatingPiece } onClick={ this.createNewPiece }>
+          Add a piece
         </button>
       </div>
-    )
-  }
-
-  openNewPieceModel() {
+    );
   }
 
   render() {

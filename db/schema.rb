@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 2020_01_04_011356) do
   end
 
   create_table "pieces", force: :cascade do |t|
-    t.string "title", default: "", null: false
+    t.string "title", default: ""
     t.bigint "user_id", null: false
     t.string "description", default: "", null: false
     t.datetime "created_at", null: false

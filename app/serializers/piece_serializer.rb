@@ -5,7 +5,7 @@
 #  id                  :bigint           not null, primary key
 #  description         :string           default(""), not null
 #  medium              :string           default(""), not null
-#  title               :string           default(""), not null
+#  title               :string           default("")
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  call_application_id :bigint
@@ -30,7 +30,7 @@ class PieceSerializer < ActiveModel::Serializer
              :piece_images
 
   def piece_images
-    object.piece_images.map do |piece_image|
+    object.piece_images.order(position: :asc).map do |piece_image|
       PieceImageSerializer.new(piece_image).serializable_hash
     end
   end
