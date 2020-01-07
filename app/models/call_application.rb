@@ -71,6 +71,10 @@ class CallApplication < ApplicationRecord
   # TODO: change to if 'past x status?'
   validate :has_valid_pieces, if: :creation_status_review?
 
+  def future_creation_status?(some_status)
+    CallApplication.creation_statuses[some_status] > CallApplication.creation_statuses[creation_status]
+  end
+
   private
 
   def has_valid_pieces

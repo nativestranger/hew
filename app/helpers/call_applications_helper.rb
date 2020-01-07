@@ -9,7 +9,12 @@ module CallApplicationsHelper
             class_str = "finished" if past_step?(every_step)
 
             li_tag = content_tag(:li, class: class_str) do
-              link_to I18n.t(every_step), wizard_path(every_step, call_application_id: @call_application.id)
+              path = if @call_application.future_creation_status?(every_step)
+                '#'
+              else
+                wizard_path(every_step, call_application_id: @call_application.id)
+              end
+              link_to I18n.t(every_step), path
             end
 
             divider = nil
