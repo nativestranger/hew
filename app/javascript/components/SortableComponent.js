@@ -40,7 +40,7 @@ export default class SortableComponent extends Component {
             pieceImages: thisComponent.state.pieceImages.filter(function(pieceImage) {
               return pieceImage.id != item.id;
             })
-          });
+          }, thisComponent.updateParent);
         }).catch(error => {
           alert(`Something went wrong: ${error}`);
         });
@@ -67,6 +67,10 @@ export default class SortableComponent extends Component {
     }));
   };
 
+  updateParent = () => {
+    this.props.parentComponent && this.props.parentComponent.resetPieceImages();
+  }
+
   openfileUploader = (e) => {
     this.refs.fileUploader.click();
   };
@@ -81,6 +85,7 @@ export default class SortableComponent extends Component {
   };
 
   handleFileUpload = (e) => {
+    let thisComponent = this;
     this.setState({ file: e.target.files[0] });
 
     let formData = new FormData();
@@ -91,7 +96,7 @@ export default class SortableComponent extends Component {
       let pieceImages = [...this.state.pieceImages, response.data.piece_image];
       this.setState({
         pieceImages: pieceImages,
-      });
+      }, thisComponent.updateParent);
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
     });

@@ -29,7 +29,7 @@ export default class ManagePieceModal extends React.Component {
     this.renderModal = this.renderModal.bind(this);
     this.deletePiece = this.deletePiece.bind(this);
     this.updatePiece = this.updatePiece.bind(this);
-    this.setPieceImages = this.setPieceImages.bind(this);
+    this.resetPieceImages = this.resetPieceImages.bind(this);
   }
 
   componentWillMount() {
@@ -121,7 +121,7 @@ export default class ManagePieceModal extends React.Component {
             </div>
           </div>
           <div className='carousel-images'>
-            <SortableComponent ref='sortableImages' piece_id={ thisComponent.state.piece.id } items={ thisComponent.state.piece.piece_images } helperClass='modal-sortable' />
+            <SortableComponent ref='sortableImages' parentComponent={thisComponent} piece_id={ thisComponent.state.piece.id } items={ thisComponent.state.piece.piece_images } helperClass='modal-sortable' />
           </div>
         </div>
       );
@@ -151,20 +151,20 @@ export default class ManagePieceModal extends React.Component {
     );
   }
 
-  setPieceImages() {
+  resetPieceImages() {
     // TODO: only if added/deleted AND NOT reordered without save??...
     // OR set child state before closing and setting this state to ensure parent has new order?...
 
-    // let piece = Object.assign({}, this.state.piece);
-    // piece.piece_images = this.refs.sortableImages.state.pieceImages.sort(
-    //   function(a, b) { return a.position - b.position; }
-    // );
-    // this.setState({ piece: piece });
+    let piece = Object.assign({}, this.state.piece);
+    piece.piece_images = this.refs.sortableImages.state.pieceImages.sort(
+      function(a, b) { return a.position - b.position; }
+    );
+    this.setState({ piece: piece });
   }
 
   renderModal() {
     return (
-      <Modal isOpen={this.state.modal} onClosed={this.setPieceImages} size='lg' toggle={this.toggle} className={this.props.className}>
+      <Modal isOpen={this.state.modal} size='lg' toggle={this.toggle} className={this.props.className}>
         <ModalHeader toggle={this.toggle}>Manage Piece</ModalHeader>
         <ModalBody>
           { this.renderForm() }
