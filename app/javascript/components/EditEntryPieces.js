@@ -114,13 +114,16 @@ export default class EditEntryPieces extends React.Component {
       });
     }
 
+    this.setState({ nextStepRequest: true });
     makeRequest().then(response => {
       if (response.data.redirectPath) {
         window.location.pathname = response.data.redirectPath;
       } else {
+        this.setState({ nextStepRequest: false });
         alert(response.data.errors);
       }
     }).catch(error => {
+      this.setState({ nextStepRequest: false });
       alert(error)
     })
   }
@@ -152,7 +155,7 @@ export default class EditEntryPieces extends React.Component {
             <button className='btn btn-primary' disabled={ this.state.creatingPiece } onClick={ this.createNewPiece }>
               Add a piece
             </button>
-            <button className='btn btn-primary' disabled={ !this.state.pieces.filter(p => p.piece_images.length).length } onClick={ this.nextStep }>
+            <button className='btn btn-primary' disabled={ this.state.nextStepRequest || !this.state.pieces.filter(p => p.piece_images.length).length } onClick={ this.nextStep }>
               Continue
             </button>
           </div>

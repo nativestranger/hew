@@ -45,7 +45,7 @@ export default class ManagePieceModal extends React.Component {
 
     let updateParent = function() {
       if (closing) {
-        // thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
+        thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
       }
     }
 
