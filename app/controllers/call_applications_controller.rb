@@ -23,9 +23,6 @@ class CallApplicationsController < ApplicationController
 
     case step
     when :start
-      if current_user.nil?
-        flash.now.notice = "Success! You should receive a confirmation email shortly. In the meantime, complete the steps below to finish your entry."
-      end
     when :add_pieces
     when :review
     when :submitted
@@ -37,11 +34,12 @@ class CallApplicationsController < ApplicationController
     create_call_application!
 
     if @call_application.persisted?
-      if current_user
-        CallApplicationMailer.new_application(@call_application).deliver_later
-      else
+      CallApplicationMailer.new_application(@call_application).deliver_later # if notify?
+
+      if current_user.nil?
         CallApplicationMailer.new_artist(@call_application).deliver_later
-        # TODO: bypass signin to allow finish applying
+        bypass_sign_in(@call_application.user)
+        flash.notice = "Success! We sent you an email with a link to confirm your address. In the meantime, complete the steps below to finish your entry."
       end
 
       redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
