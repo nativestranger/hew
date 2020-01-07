@@ -11,7 +11,8 @@ axios.defaults.headers.common = {
 
 export default class EditEntryPieces extends React.Component {
   static propTypes = {
-    entry: PropTypes.object.isRequired
+    entry: PropTypes.object.isRequired,
+    next_step: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -105,9 +106,9 @@ export default class EditEntryPieces extends React.Component {
     let makeRequest = function() {
       return axios({
         method: 'patch',
-        url: `/call_applications/review?call_application_id=${thisComponent.props.entry.id}`,
+        url: `/call_applications/${thisComponent.props.next_step}?call_application_id=${thisComponent.props.entry.id}`,
         data: {
-          call_application: { creation_status: 'review' }
+          call_application: { creation_status: thisComponent.props.next_step }
         },
         config: { headers: { 'Content-Type': 'application/json' } }
       });
