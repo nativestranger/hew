@@ -24,7 +24,7 @@ class PiecesController < ApplicationController
   def update
     # TODO: transaction
     if @piece.update(permitted_params)
-      update_image_order
+      helpers.update_piece_image_order
       redirect_to artist_profile_path(user_id: current_user.id, artist_profile_section: ArtistsHelper::WORK), notice: t('success')
     else
       render :edit
@@ -57,14 +57,6 @@ class PiecesController < ApplicationController
 
   def set_piece
     @piece = Piece.find(params[:id])
-  end
-
-  def update_image_order
-    image_count = @piece.piece_images.count
-    @piece.piece_images.each { |piece_image| piece_image.update(position: piece_image.position + image_count) }
-    @piece.image_ids_in_position_order.split(',').each_with_index do |piece_image_index, i|
-      @piece.piece_images.where(id: piece_image_index).update(position: i + 1)
-    end
   end
 
   def authorize_user!

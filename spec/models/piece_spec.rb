@@ -5,7 +5,7 @@
 #  id                  :bigint           not null, primary key
 #  description         :string           default(""), not null
 #  medium              :string           default(""), not null
-#  title               :string           default(""), not null
+#  title               :string           default("")
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  call_application_id :bigint

@@ -5,7 +5,7 @@
 #  id                  :bigint           not null, primary key
 #  description         :string           default(""), not null
 #  medium              :string           default(""), not null
-#  title               :string           default(""), not null
+#  title               :string           default("")
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  call_application_id :bigint
@@ -29,7 +29,7 @@ class Piece < ApplicationRecord
   has_many :piece_images, -> { order('position ASC') }, dependent: :destroy
   accepts_nested_attributes_for :piece_images, allow_destroy: true
 
-  validates :title, presence: true
+  validates :title, presence: true, unless: :call_application_id
 
   scope :with_images, -> { joins(:piece_images).includes(:piece_images) }
   scope :for_profile, -> { where(call_application_id: nil) }

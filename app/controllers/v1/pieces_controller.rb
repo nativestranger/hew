@@ -33,7 +33,8 @@ class V1::PiecesController < V1Controller
   def update
     @call_application = @piece.call_application # TODO: authorize
 
-    if @piece.update(permitted_params)
+    # TODO: transaction
+    if @piece.update(permitted_params) && helpers.update_piece_image_order
       render json: {
         piece: PieceSerializer.new(@piece).serializable_hash
       }
@@ -64,7 +65,8 @@ class V1::PiecesController < V1Controller
     params.require(:piece).permit(
       :title,
       :medium,
-      :description
+      :description,
+      :image_ids_in_position_order
     )
   end
 end

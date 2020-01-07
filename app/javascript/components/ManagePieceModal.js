@@ -28,13 +28,14 @@ export default class ManagePieceModal extends React.Component {
     this.renderForm = this.renderForm.bind(this);
     this.renderModal = this.renderModal.bind(this);
     this.deletePiece = this.deletePiece.bind(this);
-    this.createOrUpdate = this.createOrUpdate.bind(this);
+    this.updatePiece = this.updatePiece.bind(this);
+    this.setPieceImages = this.setPieceImages.bind(this);
   }
 
   componentWillMount() {
     this.setState({
       modal: false,
-      piece: this.props.piece || {}
+      piece: this.props.piece
     });
   }
 
@@ -43,12 +44,8 @@ export default class ManagePieceModal extends React.Component {
     let closing = new Boolean(thisComponent.state.modal);
 
     let updateParent = function() {
-      if (!closing) { return }
-
-      if (!thisComponent.state.piece.id) {
-        thisComponent.props.parentComponent.pieceRemoved(undefined);
-      } else {
-        thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
+      if (closing) {
+        // thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
       }
     }
 
@@ -57,7 +54,7 @@ export default class ManagePieceModal extends React.Component {
     }, updateParent);
   }
 
-  createOrUpdate(e) {
+  updatePiece(e) {
     e.preventDefault();
     let thisComponent = this;
 
@@ -65,64 +62,28 @@ export default class ManagePieceModal extends React.Component {
       title: document.getElementById('piece_title').value,
       medium: document.getElementById('piece_medium').value,
       description: document.getElementById('piece_description').value,
+      image_ids_in_position_order: document.getElementById('piece_image_ids_in_position_order').value,
     }
-
-    let updating;
 
     let makeRequest = function() {
-      if (thisComponent.state.piece.id) {
-        updating = true;
-
-        return axios({
-          method: 'patch',
-          url: `/v1/pieces/${thisComponent.state.piece.id}`,
-          data: {
-            entry_id: thisComponent.props.entry_id,
-            piece: pieceData
-          },
-          config: { headers: { 'Content-Type': 'application/json' } }
-        });
-      } else {
-        return axios({
-          method: 'post',
-          url: `/v1/pieces`,
-          data: {
-            entry_id: thisComponent.props.entry_id,
-            piece: pieceData
-          },
-          config: { headers: { 'Content-Type': 'application/json' } }
-        });
-      }
-    }
+      return axios({
+        method: 'patch',
+        url: `/v1/pieces/${thisComponent.state.piece.id}`,
+        data: {
+          entry_id: thisComponent.props.entry_id,
+          piece: pieceData
+        },
+        config: { headers: { 'Content-Type': 'application/json' } }
+      });
+    };
 
     makeRequest().then(response => {
-      // TODO: change the below to piece added??
-      // TODO: update piece order when applicable...
-      // thisComponent.props.parentComponent.pieceChanged(response.data.piece); // TODO: switch dummy here?
+      // set state on child? - ensure we can update parent with same values...
 
-      if (!updating) {
-        // thisComponent.props.parentComponent.pieceRemoved(undefined); // dummy removed
-      }
-
-      // the below was closing it...
-      // thisComponent.setState({
-      //   errors: response.errors,
-      //   piece: response.data.piece
-      // });
-
-      // TODO: why does it close and reopen on create?
-      if (updating) {
-        console.log(response);
-        thisComponent.setState({
-          errors: response.data.errors,
-          piece: response.data.piece
-        }, this.toggle);
-      } else {
-        thisComponent.setState({
-          errors: response.data.errors,
-          piece: response.data.piece
-        }); // why is toggling?
-      }
+      thisComponent.setState({
+        errors: response.data.errors,
+        piece: response.data.piece
+      }, this.toggle);
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
     });
@@ -138,25 +99,20 @@ export default class ManagePieceModal extends React.Component {
       });
     }
 
-    if (confirm("Are you sure?")) {
-      deleteRequest().then(response => {
-        thisComponent.toggle();
-        thisComponent.props.parentComponent.pieceRemoved(this.state.piece.id);
-      }).catch(error => {
-        alert(`Something went wrong: ${error}`);
-      });
-    }
+    deleteRequest().then(response => {
+      thisComponent.toggle();
+      thisComponent.props.parentComponent.pieceRemoved(this.state.piece.id);
+    }).catch(error => {
+      alert(`Something went wrong: ${error}`);
+    });
   }
+
+
 
   renderForm() {
     let thisComponent = this;
 
     let renderPieceImages = function() {
-      let items = []
-      if (thisComponent.state.piece.id) {
-        items = thisComponent.state.piece.piece_images;
-      }
-
       return (
         <div>
           <div className="d-none">
@@ -165,7 +121,7 @@ export default class ManagePieceModal extends React.Component {
             </div>
           </div>
           <div className='carousel-images'>
-            <SortableComponent piece_id={ thisComponent.state.piece.id } items={ items } helperClass='modal-sortable' />
+            <SortableComponent ref='sortableImages' piece_id={ thisComponent.state.piece.id } items={ thisComponent.state.piece.piece_images } helperClass='modal-sortable' />
           </div>
         </div>
       );
@@ -195,23 +151,28 @@ export default class ManagePieceModal extends React.Component {
     );
   }
 
+  setPieceImages() {
+    // TODO: only if added/deleted AND NOT reordered without save??...
+    // OR set child state before closing and setting this state to ensure parent has new order?...
+
+    // let piece = Object.assign({}, this.state.piece);
+    // piece.piece_images = this.refs.sortableImages.state.pieceImages.sort(
+    //   function(a, b) { return a.position - b.position; }
+    // );
+    // this.setState({ piece: piece });
+  }
+
   renderModal() {
     return (
-      <Modal isOpen={this.state.modal} size='lg' toggle={this.toggle} className={this.props.className}>
+      <Modal isOpen={this.state.modal} onClosed={this.setPieceImages} size='lg' toggle={this.toggle} className={this.props.className}>
         <ModalHeader toggle={this.toggle}>Manage Piece</ModalHeader>
         <ModalBody>
           { this.renderForm() }
         </ModalBody>
         <ModalFooter className='d-flex justify-content-between'>
-          { !this.state.piece.id && (
-            <Button color="primary" onClick={ this.createOrUpdate }>Add Images</Button>
-          ) }
+          <Button color="primary" onClick={this.updatePiece}>Save</Button>
 
-          { this.state.piece.id && (
-            <Button color="primary" onClick={this.createOrUpdate} disabled={!this.state.piece.id}>Save</Button>
-          ) }
-
-          <Button color="danger" onClick={this.deletePiece} disabled={!this.state.piece.id} >Delete</Button>
+          <Button color="danger" onClick={this.deletePiece}>Delete</Button>
         </ModalFooter>
       </Modal>
     );
@@ -222,7 +183,7 @@ export default class ManagePieceModal extends React.Component {
       return (
         <div key={this.state.piece.id} className="col-md-2 mb-4 piece">
           <h6 onClick={this.toggle}>
-            { this.state.piece.title }
+            { this.state.piece.title || 'Untitled' }
           </h6>
           <div onClick={this.toggle}>
             { this.state.piece.piece_images[0] && (

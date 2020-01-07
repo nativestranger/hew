@@ -2,6 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import ManagePieceModal from "./ManagePieceModal";
 
+import axios from 'axios';
+
+axios.defaults.headers.common = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+};
+
 export default class EditEntryPieces extends React.Component {
   static propTypes = {
     entry_id: PropTypes.number.isRequired
@@ -13,7 +20,7 @@ export default class EditEntryPieces extends React.Component {
     this.renderPieces = this.renderPieces.bind(this);
     this.pieceRemoved = this.pieceRemoved.bind(this);
     this.pieceChanged = this.pieceChanged.bind(this);
-    this.newPieceModal = this.newPieceModal.bind(this);
+    this.createNewPiece = this.createNewPiece.bind(this);
   };
 
   componentWillMount() {
@@ -36,46 +43,43 @@ export default class EditEntryPieces extends React.Component {
 
   pieceChanged(piece) {
     let thisComponent = this;
-    let existingPiece = this.state.pieces.find(p => p.id === piece.id);
     let pieces = Object.assign([], this.state.pieces);
 
-    let newPieceCallback = function() {
-      if (existingPiece) { return }
-      // thisComponent.refs[`piece-modal-${piece.id}`].setState({ modal: true });
-    }
+    pieces = this.state.pieces.map(function(somePiece) {
+      if (somePiece.id === piece.id) {
+        return piece;
+      } else {
+        return somePiece;
+      }
+    });
 
-    if (existingPiece) {
-      pieces = this.state.pieces.map(function(somePiece) {
-        if (somePiece.id === piece.id) {
-          return piece;
-        } else {
-          return somePiece;
-        }
-      }); // why not updating?? .. because child is managing it's state..!
-    } else {
-      // pieces.push(piece);
-
-      pieces = this.state.pieces.map(function(somePiece) {
-        if (somePiece.id === undefined) {
-          return piece;
-        } else {
-          return somePiece;
-        }
-      });
-    }
-
-    this.setState({ pieces: pieces }, newPieceCallback);
+    this.setState({ pieces: pieces });
   }
 
-  newPieceModal() {
+  createNewPiece() {
     let thisComponent = this;
-    let newPiece = { created: false, position: 99 };
-    let openNewPieceModal = function() {
-      thisComponent.refs["piece-modal-undefined"].setState({ modal: true });
-    }
-    let pieces = Object.assign([], this.state.pieces);
-    pieces.push(newPiece);
-    this.setState({ pieces: pieces }, openNewPieceModal);
+    thisComponent.setState({ creatingPiece: true });
+
+    axios({
+      method: 'post',
+      url: `/v1/pieces`,
+      data: {
+        entry_id: thisComponent.props.entry_id,
+        piece: { title: null }
+      },
+      config: { headers: { 'Content-Type': 'application/json' } }
+    }).then(response => {
+      let piece = response.data.piece;
+      let openNewPieceModal = function() {
+        thisComponent.refs[`piece-modal-${piece.id}`].setState({ modal: true });
+      }
+      let pieces = Object.assign([], this.state.pieces);
+      pieces.push(piece);
+      this.setState({ pieces: pieces, creatingPiece: false }, openNewPieceModal);
+    }).catch(error => {
+      alert(`Something went wrong: ${error}`);
+      this.setState({ creatingPiece: false });
+    });
   }
 
   getPieces() {
@@ -116,7 +120,7 @@ export default class EditEntryPieces extends React.Component {
           { this.state.pieces.map(renderPiece) }
         </div>
 
-        <button className='btn btn-primary' onClick={ this.newPieceModal }>
+        <button className='btn btn-primary' disabled={ this.state.creatingPiece } onClick={ this.createNewPiece }>
           Add a piece
         </button>
       </div>
