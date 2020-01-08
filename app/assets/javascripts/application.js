@@ -14,7 +14,7 @@
 //= require activestorage
 //= require turbolinks
 //= require jquery3
-//= require chosen-jquery
+//= require select2
 //= require ahoy
 //= require popper
 //= require bootstrap-sprockets
