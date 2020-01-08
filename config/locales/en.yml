@@ -34,6 +34,7 @@ en:
     attributes:
       call:
         call_type_id: 'Call Type'
+  add_pieces: "Add Pieces"
   artists: "Artists"
   city: "City"
   curators: "Curators"
@@ -48,12 +49,15 @@ en:
   menu: "Menu"
   name: "Name"
   new: "New"
-  spanish: "Spanish"
+  review: "Review"
   save: "Save"
   search: "Search"
   settings: "Settings"
   sign_in: "Sign in"
   sign_out: "Sign out"
+  spanish: "Spanish"
+  start: "Start"
+  submitted: "Submitted"
   success: "Success!"
   venue: "Venue"
   venues: "Venues"

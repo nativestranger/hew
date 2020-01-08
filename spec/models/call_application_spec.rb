@@ -6,6 +6,7 @@
 #  artist_instagram_url      :string           default(""), not null
 #  artist_statement          :text             default(""), not null
 #  artist_website            :string           default(""), not null
+#  creation_status           :integer          default("start"), not null
 #  photos_url                :string           default(""), not null
 #  supplemental_material_url :string           default(""), not null
 #  created_at                :datetime         not null

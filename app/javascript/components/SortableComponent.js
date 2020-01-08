@@ -11,6 +11,7 @@ axios.defaults.headers.common = {
 
 const SortableItem = SortableElement(({value}) => <span>{value}</span>);
 
+// TODO: could append + image icon here
 const SortableList = SortableContainer(({items}) => {
   return (
     <div className='sortable-list'>
@@ -39,7 +40,7 @@ export default class SortableComponent extends Component {
             pieceImages: thisComponent.state.pieceImages.filter(function(pieceImage) {
               return pieceImage.id != item.id;
             })
-          });
+          }, thisComponent.updateParent);
         }).catch(error => {
           alert(`Something went wrong: ${error}`);
         });
@@ -66,6 +67,10 @@ export default class SortableComponent extends Component {
     }));
   };
 
+  updateParent = () => { // updates when adding/deleting
+    this.props.parentComponent && this.props.parentComponent.resetPieceImages();
+  }
+
   openfileUploader = (e) => {
     this.refs.fileUploader.click();
   };
@@ -80,6 +85,7 @@ export default class SortableComponent extends Component {
   };
 
   handleFileUpload = (e) => {
+    let thisComponent = this;
     this.setState({ file: e.target.files[0] });
 
     let formData = new FormData();
@@ -90,7 +96,7 @@ export default class SortableComponent extends Component {
       let pieceImages = [...this.state.pieceImages, response.data.piece_image];
       this.setState({
         pieceImages: pieceImages,
-      });
+      }, thisComponent.updateParent);
     }).catch(error => {
       alert(`Something went wrong: ${error}`);
     });
@@ -99,30 +105,38 @@ export default class SortableComponent extends Component {
   uploadBoxOrSpinner = () => {
     if (this.state.file) {
       return (
-        <div className='loader'></div>
+        <div className='loader mb-4'></div>
       )
     } else {
       return (
-        <div className='carousel-img-upload' onClick={this.openfileUploader}>
+        <div className='carousel-img-upload p-2 w-100 border rounded' onClick={this.openfileUploader}>
           <i className='fa fa-camera fa-2x'></i>
-          <span> Add a photo</span>
+          <p className='mb-0'>Click to add a photo</p>
           <input type="file" onChange={this.handleFileUpload} ref="fileUploader" style={{display: "none"}}/>
         </div>
       )
     }
   }
 
+  componentDidUpdate() {
+    if (this.state.pieceImages.length) {
+      let imagesByPosition = this.state.pieceImages.map(i => i.id);
+      document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;
+    }
+  }
+
   render() {
     let thisComponent = this;
 
-    let imagesByPosition = this.state.pieceImages.map(i => i.id);
-    document.getElementById('piece_image_ids_in_position_order').value = imagesByPosition;
-
     return (
       <div>
-        { this.uploadBoxOrSpinner() }
+        <div className='row'>
+          <div className='col-12 text-center mb-4'>
+            { this.uploadBoxOrSpinner() }
+          </div>
+        </div>
 
-        <div className='row mt-4'>
+        <div className='row'>
           <div className='col-lg-12'>
             <SortableList items={this.state.pieceImages.map(this.renderItem)}
                           distance={1}

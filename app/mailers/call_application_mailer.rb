@@ -13,7 +13,7 @@ class CallApplicationMailer < ApplicationMailer # :nodoc:
 
     mail(
       to:      call_application.user.email,
-      subject: "Thanks for applying to #{call_application.call.name}. Confirm your email address to get started.",
+      subject: "Thanks for applying to #{call_application.call.name}. Confirm your email address with this magic link.",
       body:    user_confirmation_url(confirmation_token: user.confirmation_token)
     )
   end
