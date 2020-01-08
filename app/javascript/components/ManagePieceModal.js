@@ -175,25 +175,21 @@ export default class ManagePieceModal extends React.Component {
   }
 
   render() {
-    if (this.state.piece.id) {
-      return (
-        <div key={this.state.piece.id} className="col-md-2 mb-4 piece">
-          <h6 onClick={this.toggle}>
-            { this.state.piece.title || 'Untitled' }
-          </h6>
-          <div onClick={this.toggle}>
-            { this.state.piece.piece_images[0] && (
-              <img className="img-fluid" src={ this.state.piece.piece_images[0].src } />
-            ) }
-            { !this.state.piece.piece_images[0] && (
-              <i className='fa fa-image fa-5x p-4 border'></i>
-            ) }
-          </div>
-          { this.renderModal() }
+    return (
+      <div key={this.state.piece.id} className="col-md-2 mb-4 piece">
+        <h6 onClick={this.toggle}>
+          { this.state.piece.title || 'Untitled' }
+        </h6>
+        <div onClick={this.toggle}>
+          { this.state.piece.piece_images[0] && (
+            <img className="img-fluid" src={ this.state.piece.piece_images[0].src } />
+          ) }
+          { !this.state.piece.piece_images[0] && (
+            <i className='fa fa-image fa-5x p-4 border'></i>
+          ) }
         </div>
-      );
-    } else {
-      return this.renderModal();
-    }
+        { this.renderModal() }
+      </div>
+    );
   }
 };
