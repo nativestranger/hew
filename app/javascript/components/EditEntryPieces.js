@@ -124,7 +124,7 @@ export default class EditEntryPieces extends React.Component {
       }
     }).catch(error => {
       this.setState({ nextStepRequest: false });
-      alert(error)
+      alert(error); // TODO test error states
     })
   }
 
