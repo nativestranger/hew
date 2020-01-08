@@ -73,6 +73,7 @@ class CallsController < ApplicationController
       :full_description,
       :application_details,
       :application_deadline,
+      category_ids: [],
       venue_attributes: [
         :id,
         :name,

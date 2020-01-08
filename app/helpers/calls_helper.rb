@@ -35,4 +35,9 @@ module CallsHelper
       "default"   => "🌎",
     }
   end
+
+  def category_options
+    categories = Category.default # todo: select from past used for user...
+    categories.map { |k| [k.name, k.id] }
+  end
 end
