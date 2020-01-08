@@ -19,7 +19,7 @@ export default class ManagePieceModal extends React.Component {
   static propTypes = {
     parentComponent: PropTypes.object.isRequired,
     className: PropTypes.string,
-    piece: PropTypes.object
+    piece: PropTypes.object.isRequired
   }
 
   constructor(props) {
@@ -44,7 +44,7 @@ export default class ManagePieceModal extends React.Component {
     let closing = new Boolean(thisComponent.state.modal);
 
     let updateParent = function() {
-      if (closing) { // handle deleting here too instead of in deleteRequest? 
+      if (closing) { // handle deleting here too instead of in deleteRequest?
         thisComponent.props.parentComponent.pieceChanged(thisComponent.state.piece);
       }
     }
@@ -78,8 +78,6 @@ export default class ManagePieceModal extends React.Component {
     };
 
     makeRequest().then(response => {
-      // set state on child? - ensure we can update parent with same values...
-
       thisComponent.setState({
         errors: response.data.errors,
         piece: response.data.piece
@@ -152,9 +150,7 @@ export default class ManagePieceModal extends React.Component {
   }
 
   resetPieceImages() {
-    // TODO: only if added/deleted AND NOT reordered without save??...
-    // OR set child state before closing and setting this state to ensure parent has new order?...
-
+    // TODO; cleanup.
     let piece = Object.assign({}, this.state.piece);
     piece.piece_images = this.refs.sortableImages.state.pieceImages.sort(
       function(a, b) { return a.position - b.position; }

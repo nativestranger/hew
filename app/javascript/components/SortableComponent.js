@@ -67,7 +67,7 @@ export default class SortableComponent extends Component {
     }));
   };
 
-  updateParent = () => {
+  updateParent = () => { // updates when adding/deleting
     this.props.parentComponent && this.props.parentComponent.resetPieceImages();
   }
 
