@@ -1,11 +1,12 @@
 class V1::PiecesController < V1Controller
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   before_action :set_piece, only: %i[update destroy]
-  # before_action :authorize_user!
+  before_action :set_call_application
+  before_action :authorize_user!
 
-  # TODO authority
+  # TODO: authority
   def index
-    @pieces = Piece.where(call_application_id: params.fetch(:entry_id))
+    @pieces = @call_application.pieces
 
     render json: {
       pieces: ActiveModel::Serializer::CollectionSerializer.new(
@@ -16,7 +17,6 @@ class V1::PiecesController < V1Controller
   end
 
   def create
-    @call_application = CallApplication.find(params.fetch(:entry_id)) # TODO: authorize
     @piece = @call_application.pieces.build(user: current_user)
 
     if @piece.update(permitted_params)
@@ -31,8 +31,6 @@ class V1::PiecesController < V1Controller
   end
 
   def update
-    @call_application = @piece.call_application # TODO: authorize
-
     # TODO: transaction
     if @piece.update(permitted_params) && helpers.update_piece_image_order
       render json: {
@@ -46,7 +44,7 @@ class V1::PiecesController < V1Controller
   end
 
   def destroy
-    Piece.find(params[:id]).destroy!
+    @piece.destroy!
 
     render json: {}
   end
@@ -57,8 +55,16 @@ class V1::PiecesController < V1Controller
     @piece = Piece.find(params[:id])
   end
 
+  def set_call_application
+    if params[:id]
+      @call_application = @piece.call_application
+    else
+      @call_application = CallApplication.find(params.fetch(:entry_id))
+    end
+  end
+
   def authorize_user!
-    raise 'NAUGHTY!' unless @piece.user_id == current_user.id
+    raise 'NAUGHTY!' unless @call_application.user_id == current_user.id
   end
 
   def permitted_params

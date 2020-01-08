@@ -1,6 +1,8 @@
 class CallApplicationsController < ApplicationController
-  before_action :set_call, except: %i[show update]
-  before_action :ensure_new_application!, except: %i[show update]
+  before_action :set_call, only: %i[new create]
+  before_action :ensure_new_application!, only: %i[new create]
+  before_action :set_call_application, only: %i[show update]
+  before_action :authorize_user!, only: %i[show update]
 
   include Wicked::Wizard
 
@@ -18,7 +20,6 @@ class CallApplicationsController < ApplicationController
   end
 
   def show
-    @call_application = CallApplication.find(params[:call_application_id])
     @call = @call_application.call
 
     case step
@@ -52,7 +53,6 @@ class CallApplicationsController < ApplicationController
   end
 
   def update
-    @call_application = CallApplication.find(params[:call_application_id])
     @call = @call_application.call
 
     if @call_application.update(permitted_params)
@@ -98,6 +98,10 @@ class CallApplicationsController < ApplicationController
     @call = Call.find(params[:call_id])
   end
 
+  def set_call_application
+    @call_application = CallApplication.find(params[:call_application_id])
+  end
+
   def create_call_application!
     CallApplication.transaction do
       build_call_application
@@ -137,8 +141,12 @@ class CallApplicationsController < ApplicationController
 
   def ensure_new_application!
     # TODO: redirect elsewhere .. or allow multiple entries if multiple categories?
-    return unless @call.application_for(current_user)
+    if @call.application_for(current_user)
+      redirect_to public_call_details_path(@call), notice: "You've already applied to this call."
+    end
+  end
 
-    redirect_to public_call_details_path(@call), notice: "You've already applied to this call."
+  def authorize_user!
+    redirect_to root_path unless @call_application.user_id == current_user.id
   end
 end
