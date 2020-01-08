@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_04_011356) do
+ActiveRecord::Schema.define(version: 2020_01_08_005340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -164,6 +164,16 @@ ActiveRecord::Schema.define(version: 2020_01_04_011356) do
     t.index ["user_id"], name: "index_call_applications_on_user_id"
   end
 
+  create_table "call_categories", force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id", "category_id"], name: "index_call_categories_on_call_id_and_category_id", unique: true
+    t.index ["call_id"], name: "index_call_categories_on_call_id"
+    t.index ["category_id"], name: "index_call_categories_on_category_id"
+  end
+
   create_table "call_users", force: :cascade do |t|
     t.bigint "call_id", null: false
     t.bigint "user_id", null: false
@@ -199,6 +209,13 @@ ActiveRecord::Schema.define(version: 2020_01_04_011356) do
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name"
   end
 
   create_table "chat_users", force: :cascade do |t|
@@ -311,6 +328,8 @@ ActiveRecord::Schema.define(version: 2020_01_04_011356) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "call_applications", "calls"
   add_foreign_key "call_applications", "users"
+  add_foreign_key "call_categories", "calls"
+  add_foreign_key "call_categories", "categories"
   add_foreign_key "call_users", "calls"
   add_foreign_key "call_users", "users"
   add_foreign_key "calls", "users"
