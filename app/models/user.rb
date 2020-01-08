@@ -70,20 +70,20 @@ class User < ApplicationRecord
   scope :admins, -> { where(is_admin: true) }
 
   def self.system
-    @system_user ||= User.find_or_initialize_by(email: 'system_user@mox.mx')
+    system_user ||= User.find_or_initialize_by(email: 'system_user@mox.mx')
 
-    if @system_user.persisted?
-      @system_user
+    if system_user.persisted?
+      system_user
     else
-      @system_user.assign_attributes(
+      system_user.assign_attributes(
         first_name: 'System',
         last_name: 'User',
         password: SecureRandom.uuid,
         is_admin: true
       )
-      @system_user.save!
-      @system_user.confirm
-      @system_user
+      system_user.save!
+      system_user.confirm
+      system_user
     end
   end
 
