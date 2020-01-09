@@ -110,11 +110,26 @@ export default class AuthCallSearch extends React.Component {
   }
 
   renderCall(call) {
+    const capitalize = (s) => {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    }
+
+    let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
+
     return (
       <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
-        <h4 className='card-title'>{ call.name }</h4>
+        <h4 className='card-title mb-0'>{ call.name }</h4>
+
         <div className="card-body p-0">
-          { call.application_deadline }
+          <p className='text-muted'>
+            { call.time_until_deadline_in_words } left for entries
+          </p>
+
+          <span className="d-inline badge badge-light border c-pointer pull-right">
+            {capitalize(callUser.role)}
+          </span>
+          <div className='clearfix mb-2' />
         </div>
       </a>
     );

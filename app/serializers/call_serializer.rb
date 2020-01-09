@@ -44,6 +44,7 @@ class CallSerializer < ActiveModel::Serializer
              :name,
              :overview,
              :call_type,
+             :call_users,
              :time_until_deadline_in_words
 
   def path
