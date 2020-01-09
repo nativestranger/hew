@@ -12,7 +12,7 @@ class CallsController < ApplicationController
     @call = Call.new(permitted_params.merge(user: current_user))
     modify_venue_maybe
 
-    if @call.save
+    if create_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
     else
@@ -114,6 +114,15 @@ class CallsController < ApplicationController
       address = Address.new(city: 'Mexico City', state: 'Mexico City', country: 'MX')
       @venue = Venue.new(address: address)
       @call.venue = @venue
+    end
+  end
+
+  def create_call
+    Call.transaction do
+      @call.save!
+      @call.call_users.create!(user: current_user, role: 'owner')
+    rescue ActiveRecord::RecordInvalid => e
+      raise ActiveRecord::Rollback
     end
   end
 end

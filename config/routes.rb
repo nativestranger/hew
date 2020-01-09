@@ -55,6 +55,8 @@ Rails.application.routes.draw do
     end
     get '/chats/:id/messages' => "chats#messages", as: :chat_messages
     post '/chats/:id/create_message' => "chats#create_message", as: :chat_create_message
+    resources :calls, only: :index
+
     namespace :public do
       resources :calls, only: :index
     end

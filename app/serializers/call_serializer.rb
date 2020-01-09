@@ -40,10 +40,15 @@ class CallSerializer < ActiveModel::Serializer
   include ActionView::Helpers::DateHelper
 
   attributes :id,
+             :path,
              :name,
              :overview,
              :call_type,
              :time_until_deadline_in_words
+
+  def path
+    Rails.application.routes.url_helpers.call_path(object)
+  end
 
   def call_type
     { name: object.call_type_id }

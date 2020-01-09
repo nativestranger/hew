@@ -29,8 +29,11 @@ class CallUser < ApplicationRecord
 
   validates :user_id, uniqueness: { scope: :call_id, message: "this user has already been added to this call." }
 
-  enum role: { admin: 1, juror: 2, director: 3 }, _prefix: true
-  validates :role, presence: true
+  # TODO: unique index if owner
+  validates :call_id, uniqueness: { scope: :role, message: "cannot have more than one owner." }, if: :role_owner?
+
+  enum role: { owner: 0, admin: 1, juror: 2, director: 3 }, _prefix: true
+  validates :role, presence: true # is judge a director? - https://artcall.org/pages/faq
 
   accepts_nested_attributes_for :user
 end

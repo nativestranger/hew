@@ -1060,6 +1060,8 @@ GEM
       pry (>= 0.10.4)
     public_suffix (4.0.1)
     puma (3.12.1)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
@@ -1276,6 +1278,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry-rails
   puma (~> 3.11)
+  pundit
   rack-canonical-host
   rails (~> 5.2.3)
   rails-i18n (~> 5.1)
