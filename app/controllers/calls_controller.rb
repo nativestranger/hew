@@ -61,7 +61,7 @@ class CallsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:call).permit(
+    result = params.require(:call).permit(
       :name,
       :start_at,
       :end_at,
@@ -73,6 +73,7 @@ class CallsController < ApplicationController
       :full_description,
       :application_details,
       :application_deadline,
+      category_ids: [],
       venue_attributes: [
         :id,
         :name,
@@ -80,6 +81,16 @@ class CallsController < ApplicationController
         { address_attributes: %i[id city state country street_address street_address_2 postal_code] }
       ]
     )
+
+    result[:category_ids] = result[:category_ids].dup.reject(&:blank?).map do |category_id|
+      if /^\d+$/.match(category_id)
+        category_id
+      else
+        Category.find_or_create_by!(name: category_id).id # TODO: lock or retry on race
+      end
+    end
+
+    result
   end
 
   def modify_venue_maybe

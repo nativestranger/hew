@@ -21,6 +21,8 @@
 #  fk_rails_...  (piece_id => pieces.id)
 #
 
+# TODO: longest side 2000 pixels max (1000 default?)
+
 class PieceImage < ApplicationRecord
   belongs_to :piece
   has_one_attached :img_upload

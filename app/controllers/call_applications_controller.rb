@@ -86,6 +86,7 @@ class CallApplicationsController < ApplicationController
   def permitted_params
     params.require(:call_application).permit(
       :call_id,
+      :category_id,
       :creation_status,
       :artist_statement,
       :artist_website,

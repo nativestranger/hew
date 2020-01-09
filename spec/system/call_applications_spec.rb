@@ -38,6 +38,22 @@ RSpec.describe 'CallApplications', type: :system do
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
         click_button 'Continue'
         call_application = CallApplication.last
+        expect(call_application.category).to be_nil
+        expect(call_application.artist_website).to eq('https://website.com')
+        expect(call_application.artist_instagram_url).to eq('https://instagram.com')
+        expect(call_application.artist_statement).to eq('statement')
+      end
+      it 'creates with a category' do
+        login_as(user, scope: :user)
+        call.categories << Category.painting
+        visit new_call_application_path(call_id: call.id)
+        fill_in 'call_application_artist_website', with: 'https://website.com'
+        fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
+        select 'Painting', from: 'call_application_category_id'
+        page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
+        click_button 'Continue'
+        call_application = CallApplication.last
+        expect(call_application.category).to eq(Category.painting)
         expect(call_application.artist_website).to eq('https://website.com')
         expect(call_application.artist_instagram_url).to eq('https://instagram.com')
         expect(call_application.artist_statement).to eq('statement')
