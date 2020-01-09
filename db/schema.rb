@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 2020_01_09_032218) do
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_categories_on_name"
+    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "chat_users", force: :cascade do |t|

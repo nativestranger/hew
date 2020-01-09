@@ -1,9 +1,10 @@
 class AddCategories < ActiveRecord::Migration[5.2]
   def change
     create_table :categories do |t|
-      t.string :name, null: false, default: '', index: true
+      t.string :name, null: false, default: ''
       t.timestamps null: false
     end
+    add_index :categories, :name, unique: true
 
     create_table :call_categories do |t|
       t.bigint :call_id, null: false, index: true
