@@ -148,6 +148,6 @@ class CallApplicationsController < ApplicationController
   end
 
   def authorize_user!
-    redirect_to root_path unless @call_application.user_id == current_user.id
+    redirect_to root_path unless @call_application.user_id == current_user&.id
   end
 end
