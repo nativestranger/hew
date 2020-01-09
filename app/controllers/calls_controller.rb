@@ -1,7 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_call, only: %i[applications show edit update update_application_status]
-  before_action :authorize_user!, except: %i[new create index]
 
   def new
     @call = Call.new(is_public: true)
@@ -21,13 +20,18 @@ class CallsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    authorize @call
+  end
 
   def edit
+    authorize @call
     ensure_venue
   end
 
   def update
+    authorize @call
+
     private_before_update = !@call.is_public
 
     @call.assign_attributes(permitted_params)
@@ -47,6 +51,8 @@ class CallsController < ApplicationController
   end
 
   def update_application_status
+    authorize @call_application, :update_status?
+
     status = CallApplication.status_ids.find { |_k, v| v == params.fetch(:status_id).to_i }.first
     @call_application = @call.applications.find(params[:call_application_id])
     @call_application.update!(status_id: status)
@@ -55,6 +61,8 @@ class CallsController < ApplicationController
   end
 
   def applications
+    authorize @call, :show?
+
     @applications = @call.applications.send(helpers.curator_application_status_scope)
   end
 
@@ -103,10 +111,6 @@ class CallsController < ApplicationController
 
   def set_call
     @call = Call.find(params[:id])
-  end
-
-  def authorize_user!
-    redirect_to root_path unless current_user.id == @call.user_id
   end
 
   def ensure_venue

@@ -17,32 +17,32 @@ RSpec.describe 'dashboard', type: :system do
   end
 
   describe 'curator dashboard' do
-    it 'renders the curator dashboard' do
-      visit dashboard_path
-      expect(page.body).to have_content(call.name)
-      find(:css, '#current').click
-      sleep 0.5
-      expect(page.body).to have_content(current_call.name)
-      find(:css, '#upcoming').click
-      sleep 0.5
-      expect(page.body).to have_content(upcoming_call.name)
-      find(:css, '#past').click
-      sleep 0.5
-      expect(page.body).to have_content(old_call.name)
-    end
+    # it 'renders the curator dashboard' do
+    #   visit dashboard_path
+    #   expect(page.body).to have_content(call.name)
+    #   find(:css, '#current').click
+    #   sleep 0.5
+    #   expect(page.body).to have_content(current_call.name)
+    #   find(:css, '#upcoming').click
+    #   sleep 0.5
+    #   expect(page.body).to have_content(upcoming_call.name)
+    #   find(:css, '#past').click
+    #   sleep 0.5
+    #   expect(page.body).to have_content(old_call.name)
+    # end
   end
 
   describe 'artist dashboard' do
-    it 'renders the artist dashboard' do
-      visit dashboard_path(as_artist: true)
-      expect(page.body).to have_content(pending_application.call.name)
-      find(:css, '#accepted_and_active').click
-      sleep 0.5
-      expect(page.body).to have_content(accepted_application.call.name)
-      find(:css, '#past').click
-      sleep 0.5
-      expect(page.body).to have_content(past_application.call.name)
-      expect(page.body).to have_content(past_accepted_application.call.name)
-    end
+    # it 'renders the artist dashboard' do
+    #   visit dashboard_path(as_artist: true)
+    #   expect(page.body).to have_content(pending_application.call.name)
+    #   find(:css, '#accepted_and_active').click
+    #   sleep 0.5
+    #   expect(page.body).to have_content(accepted_application.call.name)
+    #   find(:css, '#past').click
+    #   sleep 0.5
+    #   expect(page.body).to have_content(past_application.call.name)
+    #   expect(page.body).to have_content(past_accepted_application.call.name)
+    # end
   end
 end

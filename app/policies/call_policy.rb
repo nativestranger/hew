@@ -7,12 +7,14 @@ class CallPolicy
   end
 
   def show?
-    user.id == call.user_id ||
-      call.call_users.role_juror.where(user_id: user.id).exists?
+    call.call_users.where(user_id: user.id).exists?
+  end
+
+  def edit?
+    call.call_users.where(user_id: user.id, role: %w[owner admin]).exists?
   end
 
   def update?
-    user.id == call.user_id ||
-      call.call_users.role_admin.where(user_id: user.id).exists?
+    edit?
   end
 end

@@ -37,7 +37,7 @@
 #
 
 class Call < ApplicationRecord
-  belongs_to :user
+  belongs_to :user # TODO: remove?
   belongs_to :venue, optional: true
 
   has_many :call_users, dependent: :destroy

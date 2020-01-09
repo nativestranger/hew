@@ -49,6 +49,10 @@ FactoryBot.define do
     full_description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
     application_deadline { (start_at - rand(1..7.days)).to_datetime }
     application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
+
+    after(:create) do |call|
+      create :call_user, call: call, user: call.user, role: 'owner'
+    end
   end
 
   trait :current do
