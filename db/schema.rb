@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_08_005340) do
+ActiveRecord::Schema.define(version: 2020_01_09_032218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -159,8 +159,10 @@ ActiveRecord::Schema.define(version: 2020_01_08_005340) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "creation_status", default: 0, null: false
+    t.bigint "category_id"
     t.index ["call_id", "user_id"], name: "index_call_applications_on_call_id_and_user_id", unique: true
     t.index ["call_id"], name: "index_call_applications_on_call_id"
+    t.index ["category_id"], name: "index_call_applications_on_category_id"
     t.index ["user_id"], name: "index_call_applications_on_user_id"
   end
 
@@ -327,6 +329,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_005340) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "call_applications", "calls"
+  add_foreign_key "call_applications", "categories"
   add_foreign_key "call_applications", "users"
   add_foreign_key "call_categories", "calls"
   add_foreign_key "call_categories", "categories"

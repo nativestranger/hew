@@ -36,6 +36,14 @@ trix-toolbar .trix-button-group--history-tools {
   display: none;
 }
 
+.trix-md {
+  .trix-content{
+    min-height: 173px;
+    // overflow-y: auto;
+  }
+}
+
+
 // misc
 
 .c-pointer {
