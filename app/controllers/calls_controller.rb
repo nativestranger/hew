@@ -22,6 +22,12 @@ class CallsController < ApplicationController
 
   def show
     authorize @call
+    @call_user = @call.call_users.find_by(user: current_user)
+
+    case @call_user.role
+    when 'juror'
+      @call_applications = @call.applications
+    end
   end
 
   def edit

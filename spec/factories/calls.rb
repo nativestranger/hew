@@ -53,29 +53,29 @@ FactoryBot.define do
     after(:create) do |call|
       create :call_user, call: call, user: call.user, role: 'owner'
     end
-  end
 
-  trait :current do
-    application_deadline { rand(2..4).days.ago }
-    start_at { application_deadline + 1.day }
-    end_at { Date.current + rand(2..4).days }
-  end
+    trait :current do
+      application_deadline { rand(2..4).days.ago }
+      start_at { application_deadline + 1.day }
+      end_at { Date.current + rand(2..4).days }
+    end
 
-  trait :old do
-    application_deadline { 15.days.ago }
-    start_at { rand(7..14).days.ago }
-    end_at { start_at + rand(1..4).days }
-  end
+    trait :old do
+      application_deadline { 15.days.ago }
+      start_at { rand(7..14).days.ago }
+      end_at { start_at + rand(1..4).days }
+    end
 
-  trait :upcoming do
-    application_deadline { rand(1..4).days.ago }
-    start_at { Date.current + rand(1..2).days }
-    end_at { start_at + rand(1.7).days }
-  end
+    trait :upcoming do
+      application_deadline { rand(1..4).days.ago }
+      start_at { Date.current + rand(1..2).days }
+      end_at { start_at + rand(1.7).days }
+    end
 
-  trait :accepting_applications do
-    application_deadline { Time.current + rand(1..2).days }
-    start_at { (application_deadline + rand(1..2).days).to_datetime }
-    end_at { start_at + rand(3..4).days }
+    trait :accepting_applications do
+      application_deadline { Time.current + rand(1..2).days }
+      start_at { (application_deadline + rand(1..2).days).to_datetime }
+      end_at { start_at + rand(3..4).days }
+    end
   end
 end

@@ -1,0 +1,11 @@
+.row
+  .col-lg-10.mx-auto
+    .row
+      .col-12
+        %h3= @call.name
+
+        - @call_applications.each do |call_application|
+          = call_application
+
+        - if @call_applications.none?
+          %p There are no applications for you to view right now.

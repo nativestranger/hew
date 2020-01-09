@@ -32,9 +32,12 @@
             %td.col-4.pl-0.pt-3
               .pt-1= call_user.user.full_name # TODO: show gravatar
             %td.col-4.pl-0{ id: "call_user_#{call_user.id}_role_select_td" }
+              - role_options = options_for_enum(CallUser, :role, except: ['owner'])
+              - if call_user.role_owner?
+                - role_options = options_for_enum(CallUser, :role) # show disabled 'owner' option
+
               = select_tag "call_user_#{call_user.id}_role",
-                           options_for_select(options_for_enum(CallUser, :role, except: ['owner']),
-                           selected: call_user.role),
+                           options_for_select(role_options, selected: call_user.role),
                            class: 'form-control call_user_role_select bg-fadein',
                            data: { call_user_id: call_user.id },
                            remote: true,

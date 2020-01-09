@@ -22,7 +22,7 @@ class CallUsersController < ApplicationController
         CallUserMailer.invited(@call_user).deliver_later
       end
 
-      redirect_to call_call_users_path(@call), notice: t('success')
+      redirect_to call_call_users_path(@call)
     else
       @call_users = @call.call_users.order(created_at: :desc).includes(:user)
       render :index
