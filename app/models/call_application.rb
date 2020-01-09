@@ -72,6 +72,8 @@ class CallApplication < ApplicationRecord
   # TODO: require no artist_statement or minimal info?
   validates :artist_statement, presence: true
 
+  validates :category_id, presence: true, if: proc { |call_application| call_application&.call&.categories.exists? }
+
   # TODO: change to if 'past x status?'
   validate :has_valid_pieces, if: :creation_status_review?
 
