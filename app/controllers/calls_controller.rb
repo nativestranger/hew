@@ -86,7 +86,7 @@ class CallsController < ApplicationController
       if /^\d+$/.match(category_id)
         category_id
       else
-        Category.find_or_create_by!(name: category_id).id
+        Category.find_or_create_by!(name: category_id).id # TODO: lock or retry on race
       end
     end
 
