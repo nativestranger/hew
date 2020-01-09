@@ -2,7 +2,7 @@
 
 set -e
 
-git checkout master
+git checkout staging
 
 git pull
 
@@ -14,4 +14,4 @@ bundle exec rspec
 # yarn install
 # npm run test
 
-git push production master:master
+git push staging staging:master
