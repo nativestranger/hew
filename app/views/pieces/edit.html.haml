@@ -1,13 +1,13 @@
 .row
   .col-md-10.mx-auto
-    .card.border-bootstrap.box-shadow
-      .card-header.d-flex.justify-content-between
-        %h3 Edit My Piece
+    .row
+      .col-11
+        %h3 Editing '#{@piece.title}'
+      .col-1
         = button_to "Delete",
           piece_path(@piece),
-          class: 'btn btn-sm btn-danger',
+          class: 'btn btn-sm btn-danger pull-right',
           method: :delete,
           data: { confirm: "Are you sure?" }
-
-      .card-body
-        = render 'form'
+    %hr
+    = render 'form'

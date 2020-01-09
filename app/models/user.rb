@@ -61,8 +61,8 @@ class User < ApplicationRecord
 
   before_save :set_gravatar_url, if: :email_changed?
 
-  validates :first_name, presence: true
-  validates :last_name, presence: true
+  validates :first_name, presence: { message: "can't be blank when last name is present" }, if: proc { |u| u.last_name.present? }
+  validates :last_name, presence: { message: "can't be blank when first name is present" }, if: proc { |u| u.first_name.present? }
 
   validates :artist_website, url: { allow_blank: true, public_suffix: true }
   validates :instagram_url, url: { allow_blank: true, public_suffix: true }
@@ -70,24 +70,26 @@ class User < ApplicationRecord
   scope :admins, -> { where(is_admin: true) }
 
   def self.system
-    @system_user ||= User.find_or_initialize_by(email: 'system_user@mox.mx')
+    system_user ||= User.find_or_initialize_by(email: 'system_user@mox.mx')
 
-    if @system_user.persisted?
-      @system_user
+    if system_user.persisted?
+      system_user
     else
-      @system_user.assign_attributes(
+      system_user.assign_attributes(
         first_name: 'System',
         last_name: 'User',
         password: SecureRandom.uuid,
         is_admin: true
       )
-      @system_user.save!
-      @system_user.confirm
-      @system_user
+      system_user.save!
+      system_user.confirm
+      system_user
     end
   end
 
   def full_name
+    return email unless first_name.present?
+
     "#{first_name} #{last_name}"
   end
 
@@ -108,5 +110,13 @@ class User < ApplicationRecord
 
   def password_required?
     confirmed? ? super : false
+  end
+
+  def confirmation_required?
+    if created_at > 7.days.ago && call_applications.exists?
+      false # allow new users created with applications to be unconfirmed
+    else
+      true
+    end
   end
 end

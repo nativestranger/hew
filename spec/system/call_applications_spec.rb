@@ -13,49 +13,49 @@ RSpec.describe 'CallApplications', type: :system do
         fill_in 'call_application_user_attributes_email', with: 'john@doe.com'
         fill_in 'call_application_artist_website', with: 'https://website.com'
         fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
-        fill_in 'call_application_photos_url', with: 'https://photos.com'
-        fill_in 'call_application_supplemental_material_url', with: 'https://things.com'
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
-        click_button 'Submit'
+        click_button 'Continue'
         call_application = CallApplication.last
         expect(call_application.user.first_name).to eq('John')
         expect(call_application.user.last_name).to eq('Doe')
         expect(call_application.user.email).to eq('john@doe.com')
         expect(call_application.artist_website).to eq('https://website.com')
         expect(call_application.artist_instagram_url).to eq('https://instagram.com')
-        expect(call_application.photos_url).to eq('https://photos.com')
-        expect(call_application.supplemental_material_url).to eq('https://things.com')
         expect(call_application.artist_statement).to eq('statement')
 
         sleep 0.5
         new_user = User.find_by(email: "john@doe.com")
-        expect(ActionMailer::Base.deliveries.count).to eq 2
         new_artist_email = ActionMailer::Base.deliveries.find { |e| e.to == [new_user.email] }
-        expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address to get started.")
-
-        visit user_confirmation_path(confirmation_token: new_user.confirmation_token)
-        fill_in "user_password", with: 'INSECUREPASSWORD!'
-        fill_in "user_password_confirmation", with: 'INSECUREPASSWORD!'
-        click_button "Set Your Password"
-
-        expect(page).to have_content("Your password has been changed successfully. You are now signed in.")
+        expect(new_artist_email.subject).to eq("Thanks for applying to #{call.name}. Confirm your email address with this magic link.")
       end
     end
     context 'logged in' do
-      it 'creates a new call application and user' do
+      it 'creates a new call_application for the user' do
         login_as(user, scope: :user)
         visit new_call_application_path(call_id: call.id)
         fill_in 'call_application_artist_website', with: 'https://website.com'
         fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
-        fill_in 'call_application_photos_url', with: 'https://photos.com'
-        fill_in 'call_application_supplemental_material_url', with: 'https://things.com'
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
-        click_button 'Submit'
+        click_button 'Continue'
         call_application = CallApplication.last
+        expect(call_application.category).to be_nil
         expect(call_application.artist_website).to eq('https://website.com')
         expect(call_application.artist_instagram_url).to eq('https://instagram.com')
-        expect(call_application.photos_url).to eq('https://photos.com')
-        expect(call_application.supplemental_material_url).to eq('https://things.com')
+        expect(call_application.artist_statement).to eq('statement')
+      end
+      it 'creates with a category' do
+        login_as(user, scope: :user)
+        call.categories << Category.painting
+        visit new_call_application_path(call_id: call.id)
+        fill_in 'call_application_artist_website', with: 'https://website.com'
+        fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
+        select 'Painting', from: 'call_application_category_id'
+        page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
+        click_button 'Continue'
+        call_application = CallApplication.last
+        expect(call_application.category).to eq(Category.painting)
+        expect(call_application.artist_website).to eq('https://website.com')
+        expect(call_application.artist_instagram_url).to eq('https://instagram.com')
         expect(call_application.artist_statement).to eq('statement')
       end
     end

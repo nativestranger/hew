@@ -1,5 +1,5 @@
-- if @user.pieces.with_images.any?
-  - @user.pieces.with_images.in_groups_of(4).each do |piece_group|
+- if @user.pieces.for_profile.with_images.any?
+  - @user.pieces.for_profile.with_images.in_groups_of(4).each do |piece_group|
     .row
       - piece_group.each do |piece|
         - break unless piece

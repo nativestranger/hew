@@ -34,9 +34,6 @@
 
             %hr
             .text-center
-              = button_to 'Apply',
-                        new_call_application_path,
-                        class: 'btn btn-success',
-                        method: :get,
-                        params: { call_id: @call.id },
-                        disabled: @call.application_for?(current_user)
+              - apply_path = @call_application ? "/call_applications/#{@call_application.creation_status}?call_application_id=#{@call_application.id}" : new_call_application_path(call_id: @call.id)
+
+              = link_to 'Apply', apply_path, class: 'btn btn-success'

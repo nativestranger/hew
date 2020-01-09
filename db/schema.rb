@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_30_231825) do
+ActiveRecord::Schema.define(version: 2020_01_09_032218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -158,9 +158,33 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
     t.integer "status_id", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "creation_status", default: 0, null: false
+    t.bigint "category_id"
     t.index ["call_id", "user_id"], name: "index_call_applications_on_call_id_and_user_id", unique: true
     t.index ["call_id"], name: "index_call_applications_on_call_id"
+    t.index ["category_id"], name: "index_call_applications_on_category_id"
     t.index ["user_id"], name: "index_call_applications_on_user_id"
+  end
+
+  create_table "call_categories", force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id", "category_id"], name: "index_call_categories_on_call_id_and_category_id", unique: true
+    t.index ["call_id"], name: "index_call_categories_on_call_id"
+    t.index ["category_id"], name: "index_call_categories_on_category_id"
+  end
+
+  create_table "call_users", force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_id", "user_id"], name: "index_call_users_on_call_id_and_user_id", unique: true
+    t.index ["call_id"], name: "index_call_users_on_call_id"
+    t.index ["user_id"], name: "index_call_users_on_user_id"
   end
 
   create_table "calls", force: :cascade do |t|
@@ -187,6 +211,13 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
   end
 
   create_table "chat_users", force: :cascade do |t|
@@ -237,12 +268,14 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
   end
 
   create_table "pieces", force: :cascade do |t|
-    t.string "title", default: "", null: false
+    t.string "title", default: ""
     t.bigint "user_id", null: false
     t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "medium", default: "", null: false
+    t.bigint "call_application_id"
+    t.index ["call_application_id"], name: "index_pieces_on_call_application_id"
     t.index ["user_id"], name: "index_pieces_on_user_id"
   end
 
@@ -296,12 +329,18 @@ ActiveRecord::Schema.define(version: 2019_12_30_231825) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "call_applications", "calls"
+  add_foreign_key "call_applications", "categories"
   add_foreign_key "call_applications", "users"
+  add_foreign_key "call_categories", "calls"
+  add_foreign_key "call_categories", "categories"
+  add_foreign_key "call_users", "calls"
+  add_foreign_key "call_users", "users"
   add_foreign_key "calls", "users"
   add_foreign_key "calls", "venues"
   add_foreign_key "connections", "users", column: "user1_id"
   add_foreign_key "connections", "users", column: "user2_id"
   add_foreign_key "piece_images", "pieces"
+  add_foreign_key "pieces", "call_applications"
   add_foreign_key "pieces", "users"
   add_foreign_key "venues", "addresses"
   add_foreign_key "venues", "users"

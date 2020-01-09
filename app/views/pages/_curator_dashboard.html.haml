@@ -32,7 +32,7 @@
               class: 'float-right'
 
           %h3
-            = call.name
+            = link_to call.name, call
             = "@ #{call.venue.name}" if call.venue
             - if call.external?
               %i.fa.fa-flag.text-warning

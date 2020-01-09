@@ -40,6 +40,12 @@ class Call < ApplicationRecord
   belongs_to :user
   belongs_to :venue, optional: true
 
+  has_many :call_users, dependent: :destroy
+  has_many :users, through: :call_users
+
+  has_many :call_categories, dependent: :destroy
+  has_many :categories, through: :call_categories
+
   attr_accessor :skip_start_and_end
 
   accepts_nested_attributes_for :venue
@@ -93,10 +99,10 @@ class Call < ApplicationRecord
 
   scope :approved, -> { where(is_approved: true) }
 
-  def application_for?(user)
+  def application_for(user)
     return false unless user
 
-    applications.where(user: user).exists?
+    applications.find_by(user: user)
   end
 
   def internal?

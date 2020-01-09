@@ -6,11 +6,13 @@
 #  artist_instagram_url      :string           default(""), not null
 #  artist_statement          :text             default(""), not null
 #  artist_website            :string           default(""), not null
+#  creation_status           :integer          default("start"), not null
 #  photos_url                :string           default(""), not null
 #  supplemental_material_url :string           default(""), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #  call_id                   :bigint           not null
+#  category_id               :bigint
 #  status_id                 :integer          default("fresh"), not null
 #  user_id                   :bigint           not null
 #
@@ -18,11 +20,13 @@
 #
 #  index_call_applications_on_call_id              (call_id)
 #  index_call_applications_on_call_id_and_user_id  (call_id,user_id) UNIQUE
+#  index_call_applications_on_category_id          (category_id)
 #  index_call_applications_on_user_id              (user_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (call_id => calls.id)
+#  fk_rails_...  (category_id => categories.id)
 #  fk_rails_...  (user_id => users.id)
 #
 
