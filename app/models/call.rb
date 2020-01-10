@@ -45,6 +45,7 @@ class Call < ApplicationRecord
 
   has_many :call_categories, dependent: :destroy
   has_many :categories, through: :call_categories
+  has_many :call_category_users, through: :call_categories
 
   attr_accessor :skip_start_and_end
 

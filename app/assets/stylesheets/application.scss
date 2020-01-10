@@ -50,7 +50,12 @@ trix-toolbar .trix-button-group--history-tools {
   cursor: pointer;
 }
 
-.h200 {
+.h25 {
+  max-height: 25px;
+  max-width: 25px;
+}
+
+.h75 {
   max-height: 75px;
   max-width: 75px;
 }

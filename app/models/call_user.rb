@@ -26,6 +26,9 @@
 class CallUser < ApplicationRecord
   belongs_to :call
   belongs_to :user
+  has_many :call_category_users, dependent: :destroy
+  has_many :call_categories, through: :call_category_users
+  has_many :categories, through: :call_categories
 
   validates :user_id, uniqueness: { scope: :call_id, message: "this user has already been added to this call." }
 

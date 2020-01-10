@@ -41,4 +41,10 @@ module CallsHelper
     categories += @call.categories
     categories.uniq.map { |k| [k.name, k.id] }
   end
+
+  def call_user_category_options
+    categories = @call.categories # todo: select from past used for user...
+    # categories += @call_user.categories
+    categories.uniq.map { |k| [k.name, k.id] }
+  end
 end

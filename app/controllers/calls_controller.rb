@@ -40,10 +40,7 @@ class CallsController < ApplicationController
 
     private_before_update = !@call.is_public
 
-    @call.assign_attributes(permitted_params)
-    modify_venue_maybe
-
-    if @call.save
+    if update_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
       redirect_to @call, notice: t('success')
     else
@@ -131,6 +128,18 @@ class CallsController < ApplicationController
     Call.transaction do
       @call.save!
       @call.call_users.create!(user: current_user, role: 'owner')
+    rescue ActiveRecord::RecordInvalid => e
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def update_call
+    Call.transaction do
+      modify_venue_maybe
+      @call.call_category_users.where.not(
+        call_categories: { category_id: permitted_params[:category_ids]  }
+      ).each(&:destroy!)
+      @call.update!(permitted_params)
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
     end

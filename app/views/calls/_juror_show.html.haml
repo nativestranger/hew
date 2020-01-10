@@ -21,7 +21,7 @@
                       - pieces.each do |piece|
                         - break unless piece
                         .col-4.m-2.d-inline-block{ style: 'vertical-align: middle;' }
-                          = image_tag(piece.piece_images.first.img_upload, class: 'h200 img-thumbnail img-fluid p-0 border-0 rounded-0')
+                          = image_tag(piece.piece_images.first.img_upload, class: 'h75 img-thumbnail img-fluid p-0 border-0 rounded-0')
 
         - if @call_applications.none?
           %p There are no applications for you to view right now.

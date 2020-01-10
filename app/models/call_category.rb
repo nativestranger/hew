@@ -23,4 +23,7 @@
 class CallCategory < ApplicationRecord
   belongs_to :call
   belongs_to :category
+  has_many :call_category_users, dependent: :destroy
+  has_many :call_users, through: :call_category_users
+  has_many :users, through: :call_users
 end
