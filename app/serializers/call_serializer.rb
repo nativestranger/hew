@@ -45,6 +45,7 @@ class CallSerializer < ActiveModel::Serializer
              :overview,
              :call_type,
              :call_users,
+             :call_application_counts,
              :time_until_deadline_in_words
 
   def path
@@ -57,5 +58,12 @@ class CallSerializer < ActiveModel::Serializer
 
   def time_until_deadline_in_words
     distance_of_time_in_words(Time.current, object.application_deadline)
+  end
+
+  def call_application_counts
+    {
+      started: object.applications.count,
+      submitted: object.applications.creation_status_submitted.count,
+    }
   end
 end

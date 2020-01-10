@@ -26,7 +26,7 @@ class CallsController < ApplicationController
 
     case @call_user.role
     when 'juror'
-      @call_applications = @call.applications
+      @call_applications = @call.applications.creation_status_submitted
     end
   end
 

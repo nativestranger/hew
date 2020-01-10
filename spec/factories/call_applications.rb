@@ -32,6 +32,10 @@
 
 FactoryBot.define do
   factory :call_application do
+    transient do
+      submitted { nil }
+    end
+
     call { create(:call) }
     user { create(:user, is_artist: true) }
     artist_statement { Faker::Movies::Lebowski.quote }
@@ -41,11 +45,19 @@ FactoryBot.define do
     sequence(:supplemental_material_url) { |n| "https://www.supplemental_material_url.com/#{n}" }
     status_id { CallApplication.status_ids.values.sample }
 
-    after(:create) do |call_application|
+    after(:create) do |call_application, evaluator|
       unless call_application.call.user_id == call_application.user_id
         Connection.find_or_create_between!(
           call_application.call.user.id, call_application.user.id
         )
+      end
+    end
+
+    after(:build) do |call_application, evaluator|
+      if evaluator.submitted
+        call_application.creation_status = 'submitted'
+        big_dogs = FactoryBot.create(:piece, call_application: call_application, user: call_application.user, title: 'Big Dogs')
+        FactoryBot.create(:piece_image, piece: big_dogs, name: 'big_dog1', image_fixture_path: 'big_dogs/big_dog1.jpg')
       end
     end
   end

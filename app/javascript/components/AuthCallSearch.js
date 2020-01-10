@@ -126,9 +126,9 @@ export default class AuthCallSearch extends React.Component {
             { call.time_until_deadline_in_words } left for entries
           </p>
 
-          <span className="d-inline badge badge-light border c-pointer pull-right">
-            {capitalize(callUser.role)}
-          </span>
+          <a href={call.path}>
+            { call.call_application_counts.submitted } { pluralize('entry', call.call_application_counts.submitted) } submitted
+          </a>
           <div className='clearfix mb-2' />
         </div>
       </a>
