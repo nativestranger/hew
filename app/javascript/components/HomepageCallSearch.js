@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
 
-export default class CallSearch extends React.Component {
+export default class HomepageCallSearch extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
     call_types: PropTypes.array.isRequired,
