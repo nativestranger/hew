@@ -2,6 +2,7 @@ class CallSearcher < ActiveModel::Serializer
   attr_reader :call_type_ids
 
   def initialize(params)
+    @homepage_search = :homepage.in?(params.keys) ? params[:homepage] : true
     @call_type_ids = params[:call_type_ids]
     @order_option = params[:order_option]
 
@@ -9,18 +10,20 @@ class CallSearcher < ActiveModel::Serializer
   end
 
   def records
-    @calls = @calls.where(call_type_id: call_type_ids)
+    if call_type_ids
+      @calls = @calls.where(call_type_id: call_type_ids)
+    end
 
-    if !admin_search?
+    if @homepage_search
       @calls = @calls.accepting_applications.approved.published
     end
 
-    @calls.order(order_option(@order_option))
+    @calls.order(order_option)
   end
 
   private
 
-  def order_option(options_str)
+  def order_option
     case @order_option && @order_option[:name]
     when 'Deadline'
       'calls.application_deadline ASC'
@@ -29,9 +32,5 @@ class CallSearcher < ActiveModel::Serializer
     else
       'calls.id DESC'
     end
-  end
-
-  def admin_search?
-    false
   end
 end
