@@ -1,5 +1,6 @@
 document.addEventListener("turbolinks:load", function() {
   $( "#call_category_ids" ).select2({
+    placeholder: "No Categories Selected",
     tags: true,
     theme: "bootstrap",
     createTag: function (params) {
@@ -18,7 +19,7 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   $(".call_user_category_ids").select2({
-    placeholder: "No categories selected",
+    placeholder: "No Categories Selected",
     theme: "bootstrap"
   });
   $('.call_user_category_ids').on("select2:selecting", function(e) {
@@ -31,12 +32,12 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   $( "#entry_searcher_category_ids" ).select2({
-    placeholder: "No category filter",
+    placeholder: "No Category Filter",
     theme: "bootstrap",
   });
 
   $( "#entry_searcher_status_ids" ).select2({
-    placeholder: "No status filter",
+    placeholder: "No Status Filter",
     theme: "bootstrap",
   });
 });
