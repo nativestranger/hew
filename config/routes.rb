@@ -37,7 +37,6 @@ Rails.application.routes.draw do
   end
 
   match 'calls/:id/applications', via: :get, to: 'calls#applications', as: :call_applications
-  match 'calls/:id/applications/:call_application_id', via: :patch, to: 'calls#update_application_status', as: :update_call_application_status
   match 'calls/:id/details', via: :get, to: 'public_calls#details', as: :public_call_details
 
   resources :call_applications, only: %i[new create update show]
