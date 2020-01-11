@@ -66,7 +66,7 @@ class CallUsersController < ApplicationController
     )
 
 
-    # TODO: tranascation?
+    # TODO: transactions &&  move to specific action?
     CallCategoryUser.where(call_user: @call_user).delete_all
     params[:call_user][:category_ids]&.each do |category_id|
       next if category_id.blank?
