@@ -26,7 +26,14 @@
               = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-1"
 
     - if @applications.none?
-      %p.m-4.text-muted No applications here.
+      %p.text-muted No applications found.
+    - else
+      %p.text-muted
+        #{@applications.count}
+        of
+        #{ @call.applications.creation_status_submitted.count }
+        submitted entries displayed
+        -# TODO: paginate - distinguish total count vs filter
 
     .list-group
       - @applications.each do |call_application|
