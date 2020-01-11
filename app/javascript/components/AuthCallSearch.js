@@ -2,9 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
-// Consolidate call search?
-
-// TODO: private by default and rename other to public!!!
 export default class AuthCallSearch extends React.Component {
 
   static propTypes = {
