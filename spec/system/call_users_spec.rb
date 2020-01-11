@@ -15,7 +15,6 @@ RSpec.describe 'CallUsers', type: :system do
         fill_in 'call_user_user_attributes_email', with: 'newuser@example.com'
         select 'Juror', from: 'call_user_role'
         click_button 'Add User'
-        expect(page).to have_content('Success')
         call_user = CallUser.last
         expect(call_user.user.email).to eq('newuser@example.com')
         expect(call_user.role).to eq('juror')
@@ -36,7 +35,6 @@ RSpec.describe 'CallUsers', type: :system do
         fill_in 'call_user_user_attributes_email', with: user2.email
         select 'Juror', from: 'call_user_role'
         click_button 'Add User'
-        expect(page).to have_content('Success')
         call_user = CallUser.last
         expect(call_user.user.email).to eq(user2.email)
 
