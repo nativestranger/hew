@@ -76,8 +76,9 @@ export default class CallSearch extends React.Component {
                    required={ true }
                    ref='searchValInput'
                    defaultValue={ this.state.searchVal }
-                   placeholder='search...'>
+                   placeholder='Search Your Calls'>
             </input>
+            <div className='mt-4'></div>
           </div>
         </form>
 
