@@ -44,6 +44,7 @@ FactoryBot.define do
     sequence(:photos_url) { |n| "https://www.photos_url.com/#{n}" }
     sequence(:supplemental_material_url) { |n| "https://www.supplemental_material_url.com/#{n}" }
     status_id { CallApplication.status_ids.values.sample }
+    category_id { call.categories.sample if call.categories.any? }
 
     after(:create) do |call_application, evaluator|
       unless call_application.call.user_id == call_application.user_id

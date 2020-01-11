@@ -36,6 +36,8 @@
 #  fk_rails_...  (venue_id => venues.id)
 #
 
+# TODO: disable category editing when in certain statuses (unless maybe by owner?)
+
 class Call < ApplicationRecord
   belongs_to :user # TODO: remove?
   belongs_to :venue, optional: true
