@@ -52,8 +52,10 @@
                 - if call_user.role_juror? || call_user.role_director?
                   = simple_form_for(call_user, url: call_call_user_path(@call, call_user)) do |f|
                     .row.no-gutters
-                      .col-10= f.select :category_ids, call_user_category_options, { include_blank: true }, { multiple: true, class: 'form-control call_user_category_ids', data: { 'call-user-id' => call_user.id } }
-                      .d-none.col-1.pl-1{ id: "call_user_#{call_user.id}_category_ids_save" }= f.submit 'Save', class: 'btn btn-primary btn-sm h-100'
+                      .col-10{ id: "call_user_#{call_user.id}_category_ids" }
+                        = f.select :category_ids, call_user_category_options, { include_blank: true }, { multiple: true, class: 'form-control call_user_category_ids', id: '', data: { 'call-user-id' => call_user.id } }
+                      .col-1.pl-1
+                        = f.submit 'Save', class: 'btn btn-primary btn-sm h-100 d-none', id: "call_user_#{call_user.id}_category_ids_save"
 
             %td.col-4.pl-0.pt-3
               .pt-1

@@ -877,6 +877,7 @@ GEM
     capybara-mechanize (1.11.0)
       capybara (>= 2.4.4, < 4)
       mechanize (~> 2.7.0)
+    capybara-select-2 (0.4.3)
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
@@ -1257,6 +1258,7 @@ DEPENDENCIES
   bootstrap4-kaminari-views
   byebug
   capybara
+  capybara-select-2
   capybara-selenium
   carmen
   country_select (~> 4.0)

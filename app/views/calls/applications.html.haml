@@ -11,17 +11,17 @@
 
         -# TODO: show # of not submitted?
         .row.no-gutters
-          .col-8.mr-auto
+          .col-8
             .row.no-gutters
               - if @search_categories.any?
-                .col-6
+                .col-md-6
                   .form-group
                     = f.select :category_ids, entry_search_category_options, { include_blank: true }, { multiple: true, class: 'form-control' }
 
-              .col-6
+              .col-md-6
                 .form-group
                   = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control' }
-          .col-auto
+          .col-4
             .form-group
               = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-1"
 
