@@ -50,6 +50,7 @@ class CallsController < ApplicationController
   end
 
   def index
+    # TODO: render homepage search for unauthenticated?
     redirect_to dashboard_path
   end
 

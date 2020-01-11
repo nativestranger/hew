@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import pluralize from "pluralize";
 
-export default class AuthCallSearch extends React.Component {
+export default class CallSearch extends React.Component {
 
   static propTypes = {
     calls: PropTypes.array.isRequired,
