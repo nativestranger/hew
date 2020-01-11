@@ -32,9 +32,11 @@ class CallSearcher < ActiveModel::Serializer
 
   def order_option
     case @order_option && @order_option[:name]
-    when 'Deadline'
+    when 'Deadline (soonest)'
       'calls.application_deadline ASC'
-    when 'Created'
+    when 'Deadline (furthest)'
+      'calls.application_deadline DESC'
+    when 'Newest'
       'calls.created_at DESC'
     when 'Updated'
       'calls.updated_at DESC'

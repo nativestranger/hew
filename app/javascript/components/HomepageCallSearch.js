@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 export default class HomepageCallSearch extends React.Component {
   static propTypes = {
     page: PropTypes.number.isRequired,
+    orderOptions: PropTypes.array.isRequired,
     call_types: PropTypes.array.isRequired,
     call_type_emojis: PropTypes.object.isRequired
   }
@@ -29,17 +30,15 @@ export default class HomepageCallSearch extends React.Component {
 
   componentWillMount() {
     let filters;
-    // TODO: clear on deploy
 
-    if (localStorage.getItem('mox_call_search_filters')) {
+
+    // TODO: clear on deploy && renable localStorage
+    if (false && localStorage.getItem('mox_call_search_filters')) {
       filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     } else {
       filters = {
         call_types: this.props.call_types,
-        orderOptions: [
-          { name: 'Deadline', selected: true },
-          { name: 'Created' },
-        ]
+        orderOptions: this.props.orderOptions
       }
 
       localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
@@ -154,7 +153,7 @@ export default class HomepageCallSearch extends React.Component {
 
     let renderCallType = function(callType) {
       return (
-        <span key={callType.id} className="d-inline badge badge-light border mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
+        <span key={callType.id} className="d-inline badge badge-light border mr-1 p-1 c-pointer" onClick={function() { thisComponent.toggleCallType(callType.name)}}>
           <span>{thisComponent.props.call_type_emojis[callType.enum_name] || thisComponent.props.call_type_emojis['default']}</span>
           {callType.name}
           <span className="fa fa-times fa-sm pl-1"></span>
@@ -252,16 +251,14 @@ export default class HomepageCallSearch extends React.Component {
 
     return (
       <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Sort By {this.selectedOrderOption().name}
+          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
           <span className="caret"></span></button>
-          <ul className="dropdown-menu text-center">
+          <ul className="dropdown-menu dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
               return (
-                <li key={orderOption.name} className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
-                  <span className="switch switch-sm">
-                    <input type="checkbox" checked={isSelected(orderOption.name)} readOnly={true} className="switch" id="switch-id" />
-                    <label htmlFor="switch-id">{orderOption.name}</label>
-                  </span>
+                <li key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
+                  { isSelected(orderOption.name) && <strong>{orderOption.name}</strong> }
+                  { !isSelected(orderOption.name) && <span>{orderOption.name}</span> }
                 </li>
               )
             }) }

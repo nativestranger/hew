@@ -37,4 +37,4 @@
 .container
   .row.mb-1.mt-1
     .col-12.search-options
-      .mt-4= react_component "HomepageCallSearch", { call_types: call_search_call_types, call_type_emojis: call_type_emojis, page: (params[:page]&.to_i || 1) }
+      .mt-4= react_component "HomepageCallSearch", homepage_search_defaults
