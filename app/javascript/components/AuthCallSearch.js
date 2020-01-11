@@ -126,9 +126,9 @@ export default class AuthCallSearch extends React.Component {
             { call.time_until_deadline_in_words } left for entries
           </p>
 
-          <a href={call.path}>
+          <div className='text-primary'>
             { call.call_application_counts.submitted } { pluralize('entry', call.call_application_counts.submitted) } submitted
-          </a>
+          </div>
           <div className='clearfix mb-2' />
         </div>
       </a>
