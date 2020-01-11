@@ -9,7 +9,7 @@ class CallSearcher < ActiveModel::Serializer
   end
 
   def records
-    if @call_type_ids
+    if @call_type_ids&.any?
       @calls = @calls.where(call_type_id: @call_type_ids)
     end
 
