@@ -1,8 +1,8 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[applications show edit update update_application_status]
+  before_action :set_call, only: %i[applications show edit update]
 
-  def new
+  def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
     ensure_venue
   end
@@ -54,20 +54,28 @@ class CallsController < ApplicationController
     redirect_to dashboard_path
   end
 
-  def update_application_status
-    authorize @call_application, :update_status?
-
-    status = CallApplication.status_ids.find { |_k, v| v == params.fetch(:status_id).to_i }.first
-    @call_application = @call.applications.find(params[:call_application_id])
-    @call_application.update!(status_id: status)
-    flash[:notice] = "Moved #{@call_application.user.full_name} to '#{status.capitalize}'."
-    redirect_to call_applications_path(@call, helpers.curator_application_status_scope => true)
-  end
-
   def applications
     authorize @call, :show?
 
-    @applications = @call.applications.send(helpers.curator_application_status_scope)
+    category_ids = []
+    status_ids = []
+
+    if params[:entry_searcher]
+      category_ids = params[:entry_searcher][:category_ids].reject(&:blank?) if params[:entry_searcher][:category_ids]
+      status_ids = params[:entry_searcher][:status_ids].reject(&:blank?)
+    end
+
+    @entry_searcher = EntrySearcher.new(
+      call_id: @call.id,
+      category_ids: category_ids,
+      status_ids: status_ids,
+    )
+
+    @call_user = @call.call_users.find_by!(user: current_user)
+    # TODO: only if juror? // protect from url hacking?
+    @search_categories = @call_user.categories.presence || @call.categories
+
+    @applications = @entry_searcher.records
   end
 
   private

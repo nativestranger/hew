@@ -4,7 +4,8 @@ RSpec.describe EntrySearcher, type: :service do
   let(:searcher) do
     EntrySearcher.new(
        call_id: call_id,
-       category_ids: category_ids
+       category_ids: category_ids,
+       status_ids: status_ids
     )
   end
 
@@ -12,6 +13,7 @@ RSpec.describe EntrySearcher, type: :service do
   let(:other_call) { create(:call) }
   let(:call_id) { call.id }
   let(:category_ids) { nil }
+  let(:status_ids) { nil }
 
   let!(:call_application) { create(:call_application) }
 
@@ -41,6 +43,22 @@ RSpec.describe EntrySearcher, type: :service do
       expect(searcher.records.pluck(:id)).to include(painting_entry.id)
       expect(searcher.records.pluck(:id)).to include(new_media_entry.id)
       expect(searcher.records.pluck(:id)).not_to include(drawing_entry.id)
+    end
+  end
+
+  context 'with status_ids' do
+    let(:status_ids) do
+      [ CallApplication.status_ids['fresh'],
+        CallApplication.status_ids['accepted'] ]
+    end
+    let!(:fresh) { create(:call_application, call: call, status_id: 'fresh') }
+    let!(:accepted) { create(:call_application, call: call, status_id: 'accepted') }
+    let!(:rejected) { create(:call_application, call: call, status_id: 'rejected') }
+
+    it 'searches on status_ids' do
+      expect(searcher.records.pluck(:id)).to include(fresh.id)
+      expect(searcher.records.pluck(:id)).to include(accepted.id)
+      expect(searcher.records.pluck(:id)).not_to include(rejected.id)
     end
   end
 end

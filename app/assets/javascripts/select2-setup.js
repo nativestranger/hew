@@ -29,4 +29,14 @@ document.addEventListener("turbolinks:load", function() {
     let callUserId = e.currentTarget.dataset.callUserId;
     $(`#call_user_${callUserId}_category_ids_save`).removeClass('d-none');
   });
+
+  $( "#entry_searcher_category_ids" ).select2({
+    placeholder: "No category filter",
+    theme: "bootstrap",
+  });
+
+  $( "#entry_searcher_status_ids" ).select2({
+    placeholder: "No status filter",
+    theme: "bootstrap",
+  });
 });

@@ -31,7 +31,7 @@ RSpec.describe CallSearcher, type: :service do
     let(:call_name) { 'Media' }
     let!(:named_call) { create(:call, user: user, name: 'New Media Hackathon') }
 
-    it 'searchers on name' do
+    it 'searches on name' do
       expect(searcher.records.pluck(:id)).to include(named_call.id)
       named_call.update!(name: 'other')
       expect(searcher.records.pluck(:id)).not_to include(named_call.id)
@@ -47,7 +47,7 @@ RSpec.describe CallSearcher, type: :service do
     let!(:residency) { create(:call, user: user, call_type_id: 'residency') }
     let!(:publication) { create(:call, user: user, call_type_id: 'publication') }
 
-    it 'searchers on name' do
+    it 'searches on call_type_ids' do
       expect(searcher.records.pluck(:id)).to include(exhibition.id)
       expect(searcher.records.pluck(:id)).to include(publication.id)
       expect(searcher.records.pluck(:id)).not_to include(residency.id)

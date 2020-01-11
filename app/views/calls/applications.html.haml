@@ -1,58 +1,47 @@
 .row
   .col-lg-10.mx-auto
-    %h4 Artist Submissions: #{ @call.name }
-    .card.fun-card
-      .card-header.pb-0
+    %h3
+      = link_to @call.name, @call
+      Entries
 
-        %ul.nav.nav-tabs
-          %li.nav-item
-            %a.nav-link{ href: call_applications_path(@call, fresh: true), class: curator_application_status_scope == :fresh ? 'active' : '' }
-              Fresh (#{ @call.applications.fresh.count })
-          %li.nav-item
-            %a.nav-link{ href: call_applications_path(@call, accepted: true), class: curator_application_status_scope == :accepted ? 'active' : '' }
-              Accepted (#{ @call.applications.accepted.count })
-          %li.nav-item
-            %a.nav-link{ href: call_applications_path(@call, maybe: true), class: curator_application_status_scope == :maybe ? 'active' : '' }
-              Maybe (#{ @call.applications.maybe.count })
-          %li.nav-item
-            %a.nav-link{ href: call_applications_path(@call, rejected: true), class: curator_application_status_scope == :rejected ? 'active' : '' }
-              Rejected (#{ @call.applications.rejected.count })
+    %hr
 
-      - if @applications.none?
-        %p.m-4.text-muted No applications here.
+    .form-inputs
+      = simple_form_for :entry_searcher, url: call_applications_path(@call), method: "GET", html: {} do |f|
 
-      .list-group
-        - @applications.each do |call_application|
-          .list-group-item.list-group-item-action.border-left-0.border-right-0.call-application-line-item
+        -# TODO: show # of not submitted?
+        .row.no-gutters
+          .col-8.mr-auto
             .row.no-gutters
-              .col-4.artist-details
-                .d-inline-block.mr-1
-                  = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
-                %h5.d-inline-block.mb-0.align-middle
-                  = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
-                -# %small.text-muted= time_ago_in_words(call_application.created_at)
-              .col-8.btns.d-flex.align-items-end.flex-column
-                .btns
-                  .d-inline-block= button_to 'Accept', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
-                  .d-inline-block= button_to 'Maybe', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:maybe], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-warning', method: :patch#, disabled: curator_application_status_scope == :maybe
-                  .d-inline-block= button_to 'Reject', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:rejected], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
+              - if @search_categories.any?
+                .col-6
+                  .form-group
+                    = f.select :category_ids, entry_search_category_options, { include_blank: true }, { multiple: true, class: 'form-control' }
 
-            - if call_application.artist_statement.present?
-              %blockquote.text-truncate.mt-3
-                #{call_application.artist_statement.html_safe}
-                %footer.blockquote-footer= call_application.user.full_name
+              .col-6
+                .form-group
+                  = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control' }
+          .col-auto
+            .form-group
+              = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-1"
 
-            .row.text-center.small
-              .col-12.d-flex.justify-content-between
-                .resources-link
-                  %i.fa.fa-globe
-                  .d-block= link_to 'Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?
-                .resources-link
-                  %i.fa.fa-camera-retro
-                  .d-block= link_to 'Photos', call_application.photos_url, target: :_blank if call_application.photos_url.present?
-                .resources-link
-                  %i.fa.fa-instagram
-                  .d-block= link_to 'Instagram', call_application.artist_instagram_url, target: :_blank if call_application.artist_instagram_url.present?
-                .resources-link
-                  %i.fa.fa-plus
-                  .d-block= link_to 'Extras', call_application.supplemental_material_url, target: :_blank if call_application.supplemental_material_url.present?
+    - if @applications.none?
+      %p.m-4.text-muted No applications here.
+
+    .list-group
+      - @applications.each do |call_application|
+        .list-group-item.list-group-item-action.border-left-0.border-right-0.call-application-line-item.px-0
+          .row.no-gutters
+            .col-auto.mr-auto.artist-details
+              .d-inline-block.mr-1
+                = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
+              %h5.d-inline-block.mb-0.align-middle
+                = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
+
+              -# %small.text-muted= time_ago_in_words(call_application.created_at)
+
+            .col-auto
+              - if call_application.category
+                %span.badge.badge-success #{call_application.category}
+
+              -# = link_to 'Artist Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?

@@ -16,6 +16,8 @@ class Category < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  alias_attribute :to_s, :name
+
   def self.default # TODO: determine...
     [
       new_media,
