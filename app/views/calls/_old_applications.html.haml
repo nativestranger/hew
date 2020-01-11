@@ -12,9 +12,6 @@
             %a.nav-link{ href: call_applications_path(@call, accepted: true), class: curator_application_status_scope == :accepted ? 'active' : '' }
               Accepted (#{ @call.applications.accepted.count })
           %li.nav-item
-            %a.nav-link{ href: call_applications_path(@call, maybe: true), class: curator_application_status_scope == :maybe ? 'active' : '' }
-              Maybe (#{ @call.applications.maybe.count })
-          %li.nav-item
             %a.nav-link{ href: call_applications_path(@call, rejected: true), class: curator_application_status_scope == :rejected ? 'active' : '' }
               Rejected (#{ @call.applications.rejected.count })
 
@@ -34,7 +31,6 @@
               .col-8.btns.d-flex.align-items-end.flex-column
                 .btns
                   .d-inline-block= button_to 'Accept', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:accepted], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
-                  .d-inline-block= button_to 'Maybe', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:maybe], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-warning', method: :patch#, disabled: curator_application_status_scope == :maybe
                   .d-inline-block= button_to 'Reject', update_call_application_status_path(@call, call_application, { 'status_id' => CallApplication.status_ids[:rejected], curator_application_status_scope.to_s => true }), class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
 
             - if call_application.artist_statement.present?

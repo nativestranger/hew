@@ -50,11 +50,10 @@ class CallApplication < ApplicationRecord
   enum status_id: {
     fresh:    0,
     accepted: 1,
-    maybe:    2,
-    rejected: 3
+    rejected: 2
   }
 
-  scope :pending, -> { where(status_id: %i[fresh maybe]).joins(:call).merge(Call.accepting_applications) }
+  scope :pending, -> { where(status_id: %i[fresh]).joins(:call).merge(Call.accepting_applications) }
 
   scope :past, -> {
     rejected.joins(:call).

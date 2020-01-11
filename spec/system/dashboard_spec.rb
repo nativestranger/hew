@@ -8,7 +8,7 @@ RSpec.describe 'dashboard', type: :system do
   let!(:call) { FactoryBot.create(:call, :accepting_applications, user: user) }
 
   let!(:accepted_application) { FactoryBot.create(:call_application, status_id: :accepted, call: FactoryBot.create(:call, :current), user: user) }
-  let!(:pending_application) { FactoryBot.create(:call_application, status_id: [:fresh, :maybe].sample, call: FactoryBot.create(:call, :accepting_applications), user: user) }
+  let!(:pending_application) { FactoryBot.create(:call_application, status_id: :fresh, call: FactoryBot.create(:call, :accepting_applications), user: user) }
   let!(:past_application) { FactoryBot.create(:call_application, user: user, call: FactoryBot.create(:call, :old)) }
   let!(:past_accepted_application) { FactoryBot.create(:call_application, status_id: :accepted, user: user, call: FactoryBot.create(:call, :old)) }
 
