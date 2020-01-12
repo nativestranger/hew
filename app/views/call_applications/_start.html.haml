@@ -35,7 +35,7 @@
             .col-12
               - categories = @call.categories.to_a
               - categories << @call_application.category if @call_application.category
-              = f.input :category_id, collection: categories.uniq
+              = f.input :category_id, collection: categories.uniq, include_blank: @call_application.new_record?
 
       .col-md-6
         -# TODO display error for artist_statement
