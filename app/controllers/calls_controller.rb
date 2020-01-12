@@ -126,6 +126,7 @@ class CallsController < ApplicationController
 
   def create_call
     Call.transaction do
+      @call&.venue&.user ||= current_user
       @call.save!
       @call.call_users.create!(user: current_user, role: 'owner')
     rescue ActiveRecord::RecordInvalid => e
