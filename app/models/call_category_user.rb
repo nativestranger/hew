@@ -26,4 +26,14 @@ class CallCategoryUser < ApplicationRecord
   belongs_to :call_user
   has_one :user, through: :call_user
   validates :call_category_id, uniqueness: { scope: :call_user_id }
+
+  validate :call_ids_match
+
+  private
+
+  def call_ids_match
+    if call_user&.call_id != call_category&.call_id
+      errors.add(:base, 'must associate with one call')
+    end
+  end
 end
