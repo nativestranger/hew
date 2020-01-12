@@ -12,36 +12,60 @@
           .col-md-4
             = user.input :email, placeholder: 'Enter an email address...', input_html: { class: 'form-control' }, label: false
         .col-md-4
-          = f.input :role, collection: options_for_enum(CallUser, :role), label: false
+          = f.input :role, collection: options_for_enum(CallUser, :role, except: ['owner']), label: false
         .col-md-4
           .form-group
             = f.button :submit, 'Add User', class: 'btn btn-primary d-block'
 
-    - # TODO mobile view
+    - # TODO mobile view!
     - if @call_users.any?
       %table.table.mt-2.ml-3
         %tr.row
           %th.col-4.pl-0.pr-0 Name
-          %th.col-4.pl-0 Role
-          %th.col-4.pl-0 Status
+          %th.col-4.pl-0
+            %span{ 'data-toggle' => "tooltip", title: "Jurors and directors will be restricted to any categories selected for them." }
+              Role
+          %th.col-3.pl-0 Status
 
         - #TODO: show last seen
         - # TODO no users messaging...?
         - @call_users.each do |call_user|
           %tr.row
             %td.col-4.pl-0.pt-3
-              .pt-1= call_user.user.full_name # TODO: show gravatar
+              .d-inline-block.mr-1
+                = image_tag(call_user.user.avatar_url, class: 'img-fluid rounded-circle h25')
+              .d-inline-block= call_user.user.full_name
+
             %td.col-4.pl-0{ id: "call_user_#{call_user.id}_role_select_td" }
-              = select_tag "call_user_#{call_user.id}_role", options_for_select(options_for_enum(CallUser, :role), selected: call_user.role), class: 'form-control call_user_role_select bg-fadein', data: { call_user_id: call_user.id }, remote: true
+              - role_options = options_for_enum(CallUser, :role, except: ['owner'])
+              - if call_user.role_owner?
+                - role_options = options_for_enum(CallUser, :role) # show disabled 'owner' option
+
+              = select_tag "call_user_#{call_user.id}_role",
+                           options_for_select(role_options, selected: call_user.role),
+                           class: 'form-control call_user_role_select bg-fadein',
+                           data: { call_user_id: call_user.id },
+                           remote: true,
+                           disabled: call_user.role_owner?
+
+              .mt-4
+                - if call_user.supports_category_restrictions?
+                  = simple_form_for(call_user, url: call_call_user_path(@call, call_user)) do |f|
+                    .row.no-gutters
+                      .col-10{ id: "call_user_#{call_user.id}_category_ids" }
+                        = f.select :category_ids, call_user_category_options, { include_blank: true }, { multiple: true, class: 'form-control call_user_category_ids', id: '', data: { 'call-user-id' => call_user.id } }
+                      .col-1.pl-1
+                        = f.submit 'Save', class: 'btn btn-primary btn-sm h-100 d-none', id: "call_user_#{call_user.id}_category_ids_save"
+
             %td.col-4.pl-0.pt-3
               .pt-1
                 - if call_user.user.confirmed?
                   %span Joined
                 - else
-                  %span Pending
-                  %span.fa-stack{ 'data-toggle' => "tooltip", title: "This user hasn't set up their account." }
-                    %i.fa.fa-circle-thin.fa-stack-2x
-                    %i.fa.fa-question.fa-stack-1x
+                  %p Pending
+                  %small.text-muted.mt-4 This user hasn't set up their account.
+                  -# %span.pull-right{ 'data-toggle' => "tooltip", title: "This user hasn't set up their account." }
+                    %i.fa.fa-question.text-muted
 
     - if @call_users.none?
       %p No users have been added to this call yet.

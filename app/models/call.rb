@@ -36,8 +36,10 @@
 #  fk_rails_...  (venue_id => venues.id)
 #
 
+# TODO: disable category editing when in certain statuses (unless maybe by owner?)
+
 class Call < ApplicationRecord
-  belongs_to :user
+  belongs_to :user # TODO: remove?
   belongs_to :venue, optional: true
 
   has_many :call_users, dependent: :destroy
@@ -45,6 +47,7 @@ class Call < ApplicationRecord
 
   has_many :call_categories, dependent: :destroy
   has_many :categories, through: :call_categories
+  has_many :call_category_users, through: :call_categories
 
   attr_accessor :skip_start_and_end
 
@@ -68,6 +71,8 @@ class Call < ApplicationRecord
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
   validate :owned_by_admin, if: :external
+
+  before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
 
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
@@ -111,8 +116,16 @@ class Call < ApplicationRecord
 
   private
 
+  def remove_venue
+    self.venue = nil
+  end
+
   def require_venue?
-    internal? && !['publication', 'competition'].include?(call_type_id)
+    internal? && venue_supported?
+  end
+
+  def venue_supported?
+    ['exhibition', 'residency'].include?(call_type_id)
   end
 
   def end_at_is_after_start_at

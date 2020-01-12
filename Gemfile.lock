@@ -877,6 +877,7 @@ GEM
     capybara-mechanize (1.11.0)
       capybara (>= 2.4.4, < 4)
       mechanize (~> 2.7.0)
+    capybara-select-2 (0.4.3)
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
@@ -1060,6 +1061,8 @@ GEM
       pry (>= 0.10.4)
     public_suffix (4.0.1)
     puma (3.12.1)
+    pundit (2.1.0)
+      activesupport (>= 3.0.0)
     rack (2.0.7)
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
@@ -1255,6 +1258,7 @@ DEPENDENCIES
   bootstrap4-kaminari-views
   byebug
   capybara
+  capybara-select-2
   capybara-selenium
   carmen
   country_select (~> 4.0)
@@ -1276,6 +1280,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pry-rails
   puma (~> 3.11)
+  pundit
   rack-canonical-host
   rails (~> 5.2.3)
   rails-i18n (~> 5.1)

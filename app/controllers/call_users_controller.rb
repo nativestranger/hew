@@ -22,7 +22,7 @@ class CallUsersController < ApplicationController
         CallUserMailer.invited(@call_user).deliver_later
       end
 
-      redirect_to call_call_users_path(@call), notice: t('success')
+      redirect_to call_call_users_path(@call)
     else
       @call_users = @call.call_users.order(created_at: :desc).includes(:user)
       render :index
@@ -31,9 +31,24 @@ class CallUsersController < ApplicationController
 
   def update
     if @call_user.update(permitted_params)
-      render json: {}
+      respond_to do |format|
+        format.json do
+          render json: {}
+        end
+        format.html do
+          redirect_to call_call_users_path(@call)
+        end
+      end
     else
-      render json: { message: 'FAIL' }, status: 422
+      respond_to do |format|
+        format.json do
+          render json: { message: 'FAIL' }, status: 422
+        end
+        format.html do
+          @call_users = @call.call_users.order(created_at: :desc).includes(:user)
+          render :index
+        end
+      end
     end
   end
 
@@ -45,10 +60,24 @@ class CallUsersController < ApplicationController
   private
 
   def permitted_params
-    params.require(:call_user).permit(
+    result = params.require(:call_user).permit(
       :role,
       user_attributes: %i[email]
     )
+
+
+    # TODO: transactions &&  move to specific action?
+    CallCategoryUser.where(call_user: @call_user).delete_all
+    params[:call_user][:category_ids]&.each do |category_id|
+      next if category_id.blank?
+
+      CallCategoryUser.create!(
+        call_category: @call.call_categories.find_by!(category_id: category_id),
+        call_user: @call_user
+      )
+    end
+
+    result
   end
 
   def set_call

@@ -33,4 +33,8 @@ module CallApplicationsHelper
       end
     end
   end
+
+  def entry_search_category_options
+    @search_categories.map { |k| [k.name, k.id] }
+  end
 end

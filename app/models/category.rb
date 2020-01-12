@@ -16,8 +16,11 @@ class Category < ApplicationRecord
   validates :name, presence: true
   validates :name, uniqueness: true
 
+  alias_attribute :to_s, :name
+
   def self.default # TODO: determine...
     [
+      new_media,
       painting,
       drawing,
       other
@@ -30,6 +33,10 @@ class Category < ApplicationRecord
 
   def self.drawing
     find_or_create_by!(name: 'Drawing')
+  end
+
+  def self.new_media
+    find_or_create_by!(name: 'New Media')
   end
 
   def self.other

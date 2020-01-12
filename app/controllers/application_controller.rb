@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
+  include Pundit
+
+  protect_from_forgery prepend: true, with: :exception
   before_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
 

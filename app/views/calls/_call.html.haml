@@ -1,7 +1,8 @@
 .card.fun-card
   .card-header
-    %h5.text-center
+    %h3.text-center
       = call.name
+      = "@ #{call.venue.name}" if call.venue
 
       .pull-right
         = link_to content_tag(:i, '', class: 'fa fa-pencil'),
@@ -11,14 +12,13 @@
           call_call_users_path(call)
 
   .card-body
-    %h3
-      = call.name
-      = "@ #{call.venue.name}" if call.venue
-
     - if call.start_at && call.end_at
       %p= "#{I18n.l(call.start_at, format: :long)} - #{I18n.l(call.end_at, format: :long)}"
 
     %p.text-muted= call.overview
+
+    %h5 CallType
+    %p= @call.call_type_id.capitalize
 
     - if call.external?
       %h4 External URL
