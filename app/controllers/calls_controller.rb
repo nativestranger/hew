@@ -67,13 +67,13 @@ class CallsController < ApplicationController
       status_ids = params[:entry_searcher][:status_ids].reject(&:blank?)
     end
 
-    creation_status_ids = ['submitted']
+    creation_statuses = ['submitted']
 
     @entry_searcher = EntrySearcher.new(
       call_id: @call.id,
       category_ids: category_ids,
       status_ids: status_ids,
-      creation_status_ids: creation_status_ids,
+      creation_statuses: creation_statuses,
     )
 
     @applications = @entry_searcher.records

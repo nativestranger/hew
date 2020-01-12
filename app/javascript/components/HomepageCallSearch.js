@@ -58,6 +58,7 @@ export default class HomepageCallSearch extends React.Component {
   getCalls() {
     let thisComponent = this;
 
+    // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
     let currentPage = (
       (this.state.pagination && this.state.pagination.current) || thisComponent.props.page
     );
