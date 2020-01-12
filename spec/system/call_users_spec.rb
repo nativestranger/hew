@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe 'CallUsers', type: :system do
   let(:user) { FactoryBot.create(:user) }
   let(:call) { FactoryBot.create(:call, user: user) }
-  let!(:call_user) { FactoryBot.create(:call_user, call: call, role: 'juror') }
+  let!(:juror_call_user) { FactoryBot.create(:call_user, call: call, role: 'juror') }
+  let!(:director_call_user) { FactoryBot.create(:call_user, call: call, role: 'director') }
+  let!(:admin_call_user) { FactoryBot.create(:call_user, call: call, role: 'admin') }
 
   describe 'creating a call_user' do
     before do
@@ -23,10 +25,6 @@ RSpec.describe 'CallUsers', type: :system do
         confirmation_email = ActionMailer::Base.deliveries.last
         expect(confirmation_email.to).to eq(['newuser@example.com'])
         expect(confirmation_email.subject).to eq("You're invited to act as a juror on Mox. Congrats! Confirm your email address to get started.")
-
-        select 'Admin', from: "call_user_#{call_user.id}_role"
-        sleep 0.2
-        expect(call_user.reload.role).to eq('admin')
       end
     end
     context 'existing user' do
@@ -54,10 +52,17 @@ RSpec.describe 'CallUsers', type: :system do
     end
 
     it 'allows us to choose categories' do
-      expect(call_user.categories).to be_empty
-      select2 Category.painting.name, css: "#call_user_#{call_user.id}_category_ids"
-      click_button "call_user_#{call_user.id}_category_ids_save"
-      expect(call_user.categories.pluck(:name)).to eq([Category.painting.name])
+      expect(juror_call_user.categories).to be_empty
+      select2 Category.painting.name, css: "#call_user_#{juror_call_user.id}_category_ids"
+      click_button "call_user_#{juror_call_user.id}_category_ids_save"
+      expect(juror_call_user.categories.pluck(:name)).to eq([Category.painting.name])
+    end
+
+    it 'allows us to change role' do
+      expect(juror_call_user.role).to eq('juror')
+      select 'Admin', from: "call_user_#{juror_call_user.id}_role_ids"
+      click_button "call_user_#{juror_call_user.id}_category_ids_save"
+      expect(juror_call_user.reload.role).to eq('admin')
     end
   end
 end

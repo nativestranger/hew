@@ -19,7 +19,7 @@ document.addEventListener("turbolinks:load", function() {
   });
 
   $(".call_user_category_ids").select2({
-    placeholder: "No Categories Selected",
+    placeholder: "No Categories",
     theme: "bootstrap"
   });
   $('.call_user_category_ids').on("select2:selecting", function(e) {

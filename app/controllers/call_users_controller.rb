@@ -30,25 +30,11 @@ class CallUsersController < ApplicationController
   end
 
   def update
-    if @call_user.update(permitted_params)
-      respond_to do |format|
-        format.json do
-          render json: {}
-        end
-        format.html do
-          redirect_to call_call_users_path(@call)
-        end
-      end
+    if update_call_user
+      redirect_to call_call_users_path(@call)
     else
-      respond_to do |format|
-        format.json do
-          render json: { message: 'FAIL' }, status: 422
-        end
-        format.html do
-          @call_users = @call.call_users.order(created_at: :desc).includes(:user)
-          render :index
-        end
-      end
+      @call_users = @call.call_users.order(created_at: :desc).includes(:user)
+      render :index
     end
   end
 
@@ -60,24 +46,42 @@ class CallUsersController < ApplicationController
   private
 
   def permitted_params
-    result = params.require(:call_user).permit(
+    params.require(:call_user).permit(
       :role,
       user_attributes: %i[email]
     )
+  end
 
+  def update_call_user
+    CallUser.transaction do
+      @call_user.update!(permitted_params)
 
-    # TODO: transactions &&  move to specific action?
-    CallCategoryUser.where(call_user: @call_user).delete_all
-    params[:call_user][:category_ids]&.each do |category_id|
+      if @call_user.supports_category_restrictions?
+        reset_call_category_users!
+      end
+
+      true
+    rescue ActiveRecord::RecordInvalid => e
+      flash.now[:error] = e.message
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def reset_call_category_users!
+    @call_user.call_category_users.each(&:destroy!)
+
+    params[:call_user][:category_ids].each do |category_id|
       next if category_id.blank?
 
-      CallCategoryUser.create!(
-        call_category: @call.call_categories.find_by!(category_id: category_id),
-        call_user: @call_user
+      call_category = \
+        @call.call_categories.find { |cc| cc.category_id.to_s == category_id }
+
+      next unless call_category
+
+      @call_user.call_category_users.create!(
+        call_category: call_category
       )
     end
-
-    result
   end
 
   def set_call

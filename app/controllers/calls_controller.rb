@@ -21,12 +21,7 @@ class CallsController < ApplicationController
 
   def show
     authorize @call
-    @call_user = @call.call_users.find_by(user: current_user)
-
-    case @call_user.role
-    when 'juror'
-      @call_applications = @call.applications.creation_status_submitted
-    end
+    @call_user = @call.call_users.find_by!(user: current_user)
   end
 
   def edit
@@ -56,7 +51,12 @@ class CallsController < ApplicationController
   def applications
     authorize @call, :show?
 
-    category_ids = []
+    @call_user = @call.call_users.find_by!(user: current_user)
+
+    @search_categories = \
+      @call_user.category_restrictions.presence || @call.categories
+
+    category_ids = @search_categories.pluck(:id)
     status_ids = []
 
     if params[:entry_searcher]
@@ -64,19 +64,14 @@ class CallsController < ApplicationController
       status_ids = params[:entry_searcher][:status_ids].reject(&:blank?)
     end
 
+    creation_statuses = ['submitted']
+
     @entry_searcher = EntrySearcher.new(
       call_id: @call.id,
       category_ids: category_ids,
       status_ids: status_ids,
+      creation_statuses: creation_statuses,
     )
-
-    @call_user = @call.call_users.find_by!(user: current_user)
-
-    if @call.categories.exists? && @call_user.supports_category_restrictions?
-      @search_categories = @call_user.categories.presence || @call.categories
-    else
-      @search_categories = @call.categories
-    end
 
     @applications = @entry_searcher.records
   end

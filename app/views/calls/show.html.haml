@@ -1,1 +1,42 @@
-= render "#{@call_user.role}_show"
+.row
+  .col-lg-10.mx-auto
+    .row
+      .col
+        %h3
+          = @call.name
+          = "@ #{@call.venue.name}" if @call.venue
+    %br
+    .row.mb-4
+      .col-auto.mr-auto
+      .col-auto
+        = link_to content_tag(:i, '', class: 'fa fa-pencil'),
+          edit_call_path(@call)
+
+        = link_to content_tag(:i, '', class: 'fa fa-user'),
+          call_call_users_path(@call)
+
+        = link_to content_tag(:i, '', class: 'fa fa-envelope'),
+          call_applications_path(@call)
+
+    .row
+      .col
+        %h6 Deadline
+        %p= I18n.l(@call.application_deadline, format: :long)
+
+        - if @call.start_at && @call.end_at
+          %h6 Event Dates
+          %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"
+
+        %p.text-muted= @call.overview
+
+        - if @call.external?
+          %h6 External URL
+          %p= link_to @call.external_url, @call.external_url
+        - else
+          %h6 Description
+          %p= @call.full_description.html_safe
+
+    .row
+      .col-md-6
+        - if @call.is_public
+          .mt-4= render 'share_link'
