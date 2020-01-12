@@ -80,6 +80,19 @@ class CallApplication < ApplicationRecord
     CallApplication.creation_statuses[some_status] > CallApplication.creation_statuses[creation_status]
   end
 
+  # TODO: based on call config whenif dynamic steps
+  def next_creation_status(some_status = nil)
+    some_status = creation_status if some_status.nil?
+
+    next_value = CallApplication.creation_statuses[some_status] + 1
+
+    CallApplication.creation_statuses.each_pair do |key, value|
+      return key if value == next_value
+    end
+
+    nil # if some_status is last // off the map
+  end
+
   private
 
   def has_valid_pieces
