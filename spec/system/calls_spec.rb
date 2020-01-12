@@ -9,7 +9,7 @@ RSpec.describe 'Calls', type: :system do
 
   let(:juror) { create(:call_user, call: call, role: 'juror').user }
   let(:director) { create(:call_user, call: call, role: 'director').user }
-  let(:admin) { create(:call_user, call: call, role: 'admin').user }
+  let(:call_admin) { create(:call_user, call: call, role: 'admin').user }
 
   let!(:submitted_entry) do
     create(
@@ -19,6 +19,7 @@ RSpec.describe 'Calls', type: :system do
       category: Category.new_media
     )
   end
+
   let!(:started_entry) do
     create(
       :call_application,
@@ -218,6 +219,45 @@ RSpec.describe 'Calls', type: :system do
           submitted_entry.update!(category: Category.painting) # not in juror categories
           visit current_path
           expect(page).not_to have_content(submitted_entry.user.full_name)
+        end
+      end
+    end
+
+    # same as owner
+    context 'as an admin' do
+      before do
+        login_as(call_admin, scope: :user)
+        visit call_applications_path(call)
+      end
+
+      it 'shows the submitted call applications' do
+        expect(page).to have_content(submitted_entry.user.full_name)
+        expect(page).not_to have_content(started_entry.user.full_name)
+      end
+
+      context 'with categories' do
+        let(:categories) do
+          [Category.painting, Category.new_media]
+        end
+
+        it "shows all call applications regardless of acall_dmin's categories" do
+          expect(page).to have_content(Category.painting)
+          expect(page).to have_content(Category.new_media)
+          expect(page).to have_content(submitted_entry.user.full_name)
+          create(
+            :call_category_user,
+            call_user: call.call_users.find_by!(user: call_admin),
+            call_category: call.call_categories.find_by!(category: Category.new_media)
+          )
+
+          visit current_path
+          expect(page).to have_content(Category.painting)
+          expect(page).to have_content(Category.new_media)
+          expect(page).to have_content(submitted_entry.user.full_name)
+
+          submitted_entry.update!(category: Category.painting) # not in call_admin categories
+          visit current_path
+          expect(page).to have_content(submitted_entry.user.full_name)
         end
       end
     end
