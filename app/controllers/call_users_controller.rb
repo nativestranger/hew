@@ -31,25 +31,10 @@ class CallUsersController < ApplicationController
 
   def update
     if update_call_user
-      respond_to do |format|
-        format.json do
-          render json: {}
-        end
-        format.html do
-          redirect_to call_call_users_path(@call)
-        end
-      end
+      redirect_to call_call_users_path(@call)
     else
-      respond_to do |format|
-        format.json do
-          render json: { message: 'FAIL' }, status: 422
-        end
-        format.html do
-          @call_users = @call.call_users.order(created_at: :desc).includes(:user)
-          # TODO: error message
-          render :index
-        end
-      end
+      @call_users = @call.call_users.order(created_at: :desc).includes(:user)
+      render :index
     end
   end
 
@@ -76,7 +61,8 @@ class CallUsersController < ApplicationController
       end
 
       true
-    rescue ActiveRecord::RecordInvalid
+    rescue ActiveRecord::RecordInvalid => e
+      flash.now[:error] = e.message
       raise ActiveRecord::Rollback
     end
   end
