@@ -72,6 +72,8 @@ class Call < ApplicationRecord
   validate :application_deadline_is_before_start_at
   validate :owned_by_admin, if: :external
 
+  before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
+
   has_many :applications, class_name: 'CallApplication', dependent: :destroy
 
   enum call_type_id: { exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
@@ -114,8 +116,16 @@ class Call < ApplicationRecord
 
   private
 
+  def remove_venue
+    self.venue = nil
+  end
+
   def require_venue?
-    internal? && !['publication', 'competition'].include?(call_type_id)
+    internal? && venue_supported?
+  end
+
+  def venue_supported?
+    ['exhibition', 'residency'].include?(call_type_id)
   end
 
   def end_at_is_after_start_at

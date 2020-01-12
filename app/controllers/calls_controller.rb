@@ -9,7 +9,6 @@ class CallsController < ApplicationController
 
   def create
     @call = Call.new(permitted_params.merge(user: current_user))
-    modify_venue_maybe
 
     if create_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public
@@ -113,14 +112,6 @@ class CallsController < ApplicationController
     result
   end
 
-  def modify_venue_maybe
-    if @call.call_type_id_publication? || @call.call_type_id_competition? || @call.external? && @call.venue.attributes.slice('name', 'website').values.all?(&:blank?)
-      @call.venue = nil
-    else
-      @call&.venue&.user ||= current_user
-    end
-  end
-
   def set_call
     @call = Call.find(params[:id])
   end
@@ -144,11 +135,13 @@ class CallsController < ApplicationController
 
   def update_call
     Call.transaction do
-      modify_venue_maybe
       @call.call_category_users.where.not(
         call_categories: { category_id: permitted_params[:category_ids]  }
       ).each(&:destroy!)
-      @call.update!(permitted_params)
+
+      @call.assign_attributes(permitted_params)
+      @call&.venue&.user ||= current_user
+      @call.save!(permitted_params)
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
     end
