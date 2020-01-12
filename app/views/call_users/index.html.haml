@@ -49,7 +49,7 @@
                            disabled: call_user.role_owner?
 
               .mt-4
-                - if call_user.role_juror? || call_user.role_director?
+                - if call_user.supports_category_restrictions?
                   = simple_form_for(call_user, url: call_call_user_path(@call, call_user)) do |f|
                     .row.no-gutters
                       .col-10{ id: "call_user_#{call_user.id}_category_ids" }

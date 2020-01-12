@@ -39,4 +39,8 @@ class CallUser < ApplicationRecord
   validates :role, presence: true # is judge a director? - https://artcall.org/pages/faq
 
   accepts_nested_attributes_for :user
+
+  def supports_category_restrictions?
+    role_juror? || role_director?
+  end
 end

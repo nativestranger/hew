@@ -71,8 +71,12 @@ class CallsController < ApplicationController
     )
 
     @call_user = @call.call_users.find_by!(user: current_user)
-    # TODO: only if juror? // protect from url hacking?
-    @search_categories = @call_user.categories.presence || @call.categories
+
+    if @call.categories.exists? && @call_user.supports_category_restrictions?
+      @search_categories = @call_user.categories.presence || @call.categories
+    else
+      @search_categories = @call.categories
+    end
 
     @applications = @entry_searcher.records
   end
