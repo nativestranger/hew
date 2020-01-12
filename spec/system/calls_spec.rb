@@ -98,6 +98,18 @@ RSpec.describe 'Calls', type: :system do
   describe 'edit' do
     it 'renders the edit template' do
       visit edit_call_path(call)
+      find('.call_start_at').click
+      all(".react-datepicker__day").find { |day| day.text =="8" }.click
+      click_button 'Save'
+      expect(call.reload.start_at.day).to eq(8)
+      expect(call.reload.end_at.day).not_to eq(9) # need to fix datepicker issue & remove/change
+
+      visit edit_call_path(call)
+      find('.call_end_at').click
+      all(".react-datepicker__day").find { |day| day.text =="9" }.click
+      click_button 'Save'
+      expect(call.reload.start_at.day).to eq(8)
+      expect(call.reload.end_at.day).to eq(9)
     end
   end
 

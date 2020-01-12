@@ -16,12 +16,15 @@
         .form-group
           %label Start Date
           = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
-          = react_component 'ReactDatePicker', { startDate: @call.start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
+          - # TODO: fix date picker issue
+          - start_at = @call.start_at.present? ? @call.start_at + 1.day : nil
+          = react_component 'ReactDatePicker', { startDate: start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
       .col-6
         .form-group
           %label End Date
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
-          = react_component 'ReactDatePicker', { startDate: @call.end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
+          - end_at = @call.end_at.present? ? @call.end_at + 1.day : nil
+          = react_component 'ReactDatePicker', { startDate: end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
 
     .row
       .col-md-12

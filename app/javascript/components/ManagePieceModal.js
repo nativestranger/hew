@@ -160,7 +160,7 @@ export default class ManagePieceModal extends React.Component {
 
   renderModal() {
     return (
-      <Modal isOpen={this.state.modal} size='lg' toggle={this.toggle} className={this.props.className}>
+      <Modal isOpen={this.state.modal} size='xl' toggle={this.toggle} className={this.props.className}>
         <ModalHeader toggle={this.toggle}>Manage Piece</ModalHeader>
         <ModalBody>
           { this.renderForm() }

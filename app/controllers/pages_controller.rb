@@ -5,8 +5,6 @@ class PagesController < ApplicationController
 
   def home
     @app_layout_container_class_additions = 'p-0'
-    params[:call_sort_by] ||= 'Application Deadline'
-    set_homepage_calls
   end
 
   def dashboard
@@ -19,18 +17,5 @@ class PagesController < ApplicationController
 
   def messages
     @chats = current_user.chats.includes(:chat_users).order(updated_at: :desc)
-  end
-
-  private
-
-  def set_homepage_calls
-    case params[:call_sort_by]
-    when 'Application Deadline'
-      @calls = Call.accepting_applications.order(application_deadline: :asc)
-    when 'Recently Created'
-      @calls = Call.accepting_applications.order(created_at: :desc)
-    end
-
-    @calls = @calls.approved.published
   end
 end

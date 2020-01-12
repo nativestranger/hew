@@ -1,272 +1,136 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Pagination from "./Pagination";
+import pluralize from "pluralize";
 
 export default class CallSearch extends React.Component {
+
   static propTypes = {
-    page: PropTypes.number.isRequired,
-    call_types: PropTypes.array.isRequired,
-    call_type_emojis: PropTypes.object.isRequired
-  }
+    calls: PropTypes.array.isRequired,
+    searchVal: PropTypes.string
+  };
 
   constructor(props) {
     super(props);
-    this.getCalls = this.getCalls.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.toggleCallType = this.toggleCallType.bind(this);
-    this.selectedCallTypes = this.selectedCallTypes.bind(this);
-    this.selectedOrderOption = this.selectedOrderOption.bind(this);
-    this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
-    this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
-    this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
-  }
-
-  setLocalStorageFilters(property, value) {
-    let filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
-    filters[property] = value;
-    localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
-  }
-
-  componentWillMount() {
-    let filters;
-    // TODO: clear on deploy
-
-    if (localStorage.getItem('mox_call_search_filters')) {
-      filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
-    } else {
-      filters = {
-        call_types: this.props.call_types,
-        orderOptions: [
-          { name: 'Deadline', selected: true },
-          { name: 'Created' },
-        ]
-      }
-
-      localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
-    }
-
-    this.setState({
-      call_types: filters.call_types,
-      calls: [],
-      orderOptions: filters.orderOptions
-    });
+    this.state = Object.assign({}, props);
   }
 
   componentDidMount() {
-    this.getCalls();
+    this.all()
   }
 
-  getCalls() {
-    let thisComponent = this;
-
-    let currentPage = (
-      (this.state.pagination && this.state.pagination.current) || thisComponent.props.page
-    );
-
-    $.get("/v1/public/calls.json",
-           { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-             order_option: this.selectedOrderOption(),
-             page: currentPage,
-             authenticity_token: App.getMetaContent("csrf-token") })
-        .done(function(data) {
-                  thisComponent.setState({
-                    getError: false,
-                    calls: data.records,
-                    pagination: data.pagination,
-                  });
-                  // thisComponent.refs.submit.blur();
-                })
-        .fail(function(data) {
-                thisComponent.setState({ getError: 'Oops, something went wrong.'});
-              })
-        .always(function() { $(thisComponent.refs.submit).prop('disabled', false); });
-  }
-
-  handleSubmit(e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    $(this.refs.submit).prop('disabled', true);
-    this.getCalls();
-  }
+    var searchValInput = this.refs.searchValInput.value;
+    this.setState({ loading: true });
 
-  selectedCallTypes() {
-    return this.state.call_types.filter(type => type.selected);
-  }
+    var thisComponent = this;
 
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
+    $.get("/v1/calls", { name: searchValInput })
+      .done(function(response) {
+        console.log(response);
+        thisComponent.setState({ calls: response.calls,
+                                 searchVal: searchValInput,
+                                 errorMessage: '',
+                                 loading: false });
+      }).fail(function(data) {
+        thisComponent.setState({ errorMessage: 'Something went wrong...',
+                                 searchVal: searchValInput,
+                                 loading: false });
+      });
+    }
+
+  all = (e) => {
+    e && e.preventDefault();
+    this.setState({ loading: true });
+    var thisComponent = this;
+
+    $.get("/v1/calls")
+      .done(function(data) {
+        thisComponent
+          .setState({ calls: data.calls, searchVal: '', errorMessage: '', loading: false });
+      }).fail(function(data) {
+        thisComponent.setState({ errorMessage: App.utils.errorMessage, loading: false });
+      });
   }
 
   render() {
-    let thisComponent = this;
-
-    return (
-      <div className="call-searcher">
-        { this.renderFilterSection() }
-
-        { this.state.pagination && (
-          <div>
-            <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} calls</p>
-          </div>
-        ) }
-
-        <div className="calls">
-          { this.state.calls && this.state.calls.map(call => (
-            <div className="row mb-4 mt-2" key={call.id}>
-                <div className="col-12 mx-auto">
-                    <div className="card border-0">
-                        <div className="card-header bg-white border-0 p-0">
-                            <div className="row">
-                                <div className="col-12">
-                                    <h5 className="mb-0">
-                                      <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
-                                      <a href={`/calls/${call.id}/details`}>{call.name}
-                                        { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
-                                      </a>
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card-body my-1 p-0">
-                          <p className="mb-0 text-truncate text-muted">{call.overview}</p>
-                        </div>
-                        <div className="card-footer bg-white border-0 p-0 text-muted">
-                            <div className="row">
-                                <div className="col-12">
-                                    <div className="text-muted small">
-                                        <span>{call.time_until_deadline_in_words} left</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-          )) }
-        </div>
-
-        { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
-	    </div>
-    );
-  }
-
-  renderFilterSection() {
-    let thisComponent = this;
-
-    let renderCallType = function(callType) {
+    if (this.state.loading) {
       return (
-        <span key={callType.id} className="d-inline badge badge-light border mr-1 c-pointer" onClick={function(){thisComponent.toggleCallType(callType.name)}}>
-          <span>{thisComponent.props.call_type_emojis[callType.enum_name] || thisComponent.props.call_type_emojis['default']}</span>
-          {callType.name}
-          <span className="fa fa-times fa-sm pl-1"></span>
-        </span>
+        <div className='loader'></div>
       );
+    } else {
+      return this.renderContent();
     }
+  }
 
+  renderContent() {
+    var thisComponent = this;
     return (
-      <div className="filters card">
-        <div className="search-container p-1">
-          <span className="fa fa-search fa-sm p-2"></span>
-          { this.selectedCallTypes().map(renderCallType) }
-        </div>
-
-        <div className="card-footer bg-white p-0">
-          <div className="dropdowns d-flex justify-content-between">
-            { thisComponent.renderCallTypeDropdown() }
-            { thisComponent.renderSortByDropdown() }
+      <div>
+        <form onSubmit={ this.handleSubmit }>
+          <div className='form-group'>
+            <input id="search_bar"
+                   className="form-control mb-2"
+                   autoFocus={ true }
+                   type='search'
+                   required={ true }
+                   ref='searchValInput'
+                   defaultValue={ this.state.searchVal }
+                   placeholder='Search Your Calls'>
+            </input>
+            <div className='mt-4'></div>
           </div>
+        </form>
+
+        <div className='gray'>
+          { this.state.errorMessage }
+        </div>
+
+        <div className='clearfix'>
+          { (function() {
+            if (thisComponent.state.searchVal) {
+              var callCount = thisComponent.state.calls.length;
+              return (
+                <div>
+                  <p className='float-left gray'>{ callCount + pluralize(' call', callCount) }</p>
+                  <a id='all_calls' href='/' className='float-right' onClick={ thisComponent.all }>All Calls</a>
+                  <div className='clear'></div>
+                </div>);
+            }
+          })() }
+        </div>
+
+        <div className='mt-2'>
+         { this.state.calls.map(this.renderCall) }
         </div>
       </div>
-    )
-  }
-
-  toggleCallType(callType) {
-    let thisComponent = this;
-
-    let call_types = [...this.state.call_types];
-    callType = call_types.find(type => type.name === callType);
-    callType.selected = !callType.selected;
-    this.setState({ call_types: call_types }, function() {
-      thisComponent.setLocalStorageFilters('call_types', call_types);
-    });
-    this.getCalls();
-  }
-
-  renderCallTypeDropdown() {
-    let thisComponent = this;
-
-    let isSelected = function(callTypeName) {
-      return thisComponent.selectedCallTypes().find(type => type.name === callTypeName);
-    }
-
-    return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Call Types
-          <span className="caret"></span></button>
-          <ul className="dropdown-menu text-center">
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Competition') } }>
-              Competitions
-              { isSelected('Competition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Competition') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
-              Exhibitions
-              { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Residency') } }>
-              Residencies
-              { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Publication') } }>
-              Publications
-              { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-          </ul>
-      </div>
     );
   }
 
-  renderSortByDropdown() {
-    let thisComponent = this;
-
-    let isSelected = function(orderOptionName) {
-      return thisComponent.selectedOrderOption().name == orderOptionName;
+  renderCall(call) {
+    const capitalize = (s) => {
+      if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
     }
 
-    let selectOrderOption = function(orderOptionName) {
-      let orderOptions = [...thisComponent.state.orderOptions];
-      orderOptions.forEach(option => {
-        if (option.name === orderOptionName) {
-          option.selected = true;
-        } else {
-          option.selected = false;
-        }
-      });
-      thisComponent.setState({ orderOptions: orderOptions }, function() {
-        thisComponent.setLocalStorageFilters('orderOptions', orderOptions);
-      });
-      thisComponent.getCalls();
-    }
+    let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
     return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Sort By {this.selectedOrderOption().name}
-          <span className="caret"></span></button>
-          <ul className="dropdown-menu text-center">
-            { thisComponent.state.orderOptions.map(orderOption => {
-              return (
-                <li key={orderOption.name} className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
-                  <span className="switch switch-sm">
-                    <input type="checkbox" checked={isSelected(orderOption.name)} readOnly={true} className="switch" id="switch-id" />
-                    <label htmlFor="switch-id">{orderOption.name}</label>
-                  </span>
-                </li>
-              )
-            }) }
-          </ul>
-      </div>
+      <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
+        <h4 className='card-title mb-0'>{ call.name }</h4>
+
+        <div className="card-body p-0">
+          <p className='text-muted'>
+            { call.time_until_deadline_in_words } left for entries
+          </p>
+
+          <div className='text-primary'>
+            { call.call_application_counts.submitted } { pluralize('entry', call.call_application_counts.submitted) } submitted
+          </div>
+          <div className='clearfix mb-2' />
+        </div>
+      </a>
     );
   }
-}
+
+};

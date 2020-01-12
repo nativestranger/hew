@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_09_032218) do
+ActiveRecord::Schema.define(version: 2020_01_10_020340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -176,6 +176,16 @@ ActiveRecord::Schema.define(version: 2020_01_09_032218) do
     t.index ["category_id"], name: "index_call_categories_on_category_id"
   end
 
+  create_table "call_category_users", force: :cascade do |t|
+    t.bigint "call_category_id", null: false
+    t.bigint "call_user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["call_category_id", "call_user_id"], name: "index_call_category_users_on_call_category_id_and_call_user_id", unique: true
+    t.index ["call_category_id"], name: "index_call_category_users_on_call_category_id"
+    t.index ["call_user_id"], name: "index_call_category_users_on_call_user_id"
+  end
+
   create_table "call_users", force: :cascade do |t|
     t.bigint "call_id", null: false
     t.bigint "user_id", null: false
@@ -333,6 +343,8 @@ ActiveRecord::Schema.define(version: 2020_01_09_032218) do
   add_foreign_key "call_applications", "users"
   add_foreign_key "call_categories", "calls"
   add_foreign_key "call_categories", "categories"
+  add_foreign_key "call_category_users", "call_categories"
+  add_foreign_key "call_category_users", "call_users"
   add_foreign_key "call_users", "calls"
   add_foreign_key "call_users", "users"
   add_foreign_key "calls", "users"

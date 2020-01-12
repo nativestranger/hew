@@ -55,6 +55,7 @@ gem 'font-awesome-rails'
 gem 'geocoder'
 gem 'haml-rails', '~> 2.0'
 gem 'jquery-rails'
+gem 'pundit'
 gem 'select2-rails'
 gem 'kimurai'
 gem 'rack-canonical-host'
@@ -72,6 +73,7 @@ gem 'bootstrap4-kaminari-views'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'capybara-select-2'
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'faker'

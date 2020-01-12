@@ -1,16 +1,4 @@
 module CallsHelper
-  def curator_application_status_scope
-    if params[:accepted]
-      :accepted
-    elsif params[:maybe]
-      :maybe
-    elsif params[:rejected]
-      :rejected
-    else
-      :fresh
-    end
-  end
-
   def fa_class_for_call(call)
     call_type_icons[call.call_type_id] || "fa-globe"
   end
@@ -36,9 +24,31 @@ module CallsHelper
     }
   end
 
+  def call_order_options
+    [
+      { name: 'Deadline (soonest)', selected: true },
+      { name: 'Deadline (furthest)' },
+      { name: 'Newest' },
+    ]
+  end
+
   def category_options
-    categories = Category.default # todo: select from past used for user...
+    categories = Category.default # todo: select from past used for user
     categories += @call.categories
     categories.uniq.map { |k| [k.name, k.id] }
+  end
+
+  def call_user_category_options
+    categories = @call.categories
+    categories.map { |k| [k.name, k.id] }
+  end
+
+  def homepage_search_defaults
+    {
+      orderOptions: call_order_options,
+      call_types: call_search_call_types,
+      call_type_emojis: call_type_emojis,
+      page: (params[:page]&.to_i || 1)
+    }
   end
 end
