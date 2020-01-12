@@ -15,3 +15,4 @@ bundle exec rspec
 # npm run test
 
 git push production master:master
+heroku run rake db:migrate --app mox-production

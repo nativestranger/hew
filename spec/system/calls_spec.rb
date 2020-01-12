@@ -137,6 +137,27 @@ RSpec.describe 'Calls', type: :system do
       expect(call.reload.start_at.day).to eq(8)
       expect(call.reload.end_at.day).to eq(9)
     end
+
+    it 'deletes call_category_users when categories are removed' do
+      call.categories << Category.new_media
+
+      create(
+        :call_category_user,
+        call_user: call.call_users.find_by!(user: juror),
+        call_category: call.call_categories.find_by!(category: Category.new_media)
+      )
+
+      expect(call.call_users.find_by!(user: juror).categories).to eq([Category.new_media])
+      expect(call.categories).to eq([Category.new_media])
+
+      visit edit_call_path(call)
+      # TODO: add ability to remove specific categories
+      page.all(:xpath, "//span[@class='select2-selection__choice__remove']").first.click
+
+      click_button 'Save'
+      expect(call.call_users.find_by!(user: juror).reload.categories).to be_empty
+      expect(call.reload.categories).to be_empty
+    end
   end
 
   describe 'show' do
