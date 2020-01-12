@@ -7,7 +7,7 @@ document.addEventListener("turbolinks:load", function() {
     if (['juror', 'director'].includes($(roleSelect).val())) {
       $(`#call_user_${callUserId}_category_ids`).removeClass('d-none');
     } else {
-      $(`#call_user_${callUserId}_category_ids`).addClass('d-none'); // cleared on backend if submit
+      $(`#call_user_${callUserId}_category_ids`).addClass('d-none');
     }
 
     $(`#call_user_${callUserId}_category_ids_save`).removeClass('d-none');
