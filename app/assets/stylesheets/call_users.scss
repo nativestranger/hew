@@ -1,0 +1,9 @@
+.call-user-form {
+  .select2-selection__rendered {
+    .select2-search.select2-search--inline {
+      input {
+        @extend .w-100;
+      }
+    }
+  }
+} // fixes placeholder cutoff when showing an initially hidden select (d-none)

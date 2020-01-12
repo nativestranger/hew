@@ -53,11 +53,8 @@ class CallsController < ApplicationController
 
     @call_user = @call.call_users.find_by!(user: current_user)
 
-    if @call.categories.exists? && @call_user.supports_category_restrictions?
-      @search_categories = @call_user.categories.presence || @call.categories
-    else
-      @search_categories = @call.categories
-    end
+    @search_categories = \
+      @call_user.category_restrictions.presence || @call.categories
 
     category_ids = @search_categories.pluck(:id)
     status_ids = []

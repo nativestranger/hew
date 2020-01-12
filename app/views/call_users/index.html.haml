@@ -28,7 +28,6 @@
           %th.col-3.pl-0 Status
 
         - #TODO: show last seen
-        - # TODO no users messaging...?
         - @call_users.each do |call_user|
           %tr.row
             %td.col-4.pl-0.pt-3
@@ -37,25 +36,21 @@
               .d-inline-block= call_user.user.full_name
 
             %td.col-4.pl-0{ id: "call_user_#{call_user.id}_role_select_td" }
-              - role_options = options_for_enum(CallUser, :role, except: ['owner'])
-              - if call_user.role_owner?
-                - role_options = options_for_enum(CallUser, :role) # show disabled 'owner' option
+              .call-user-form
+                = simple_form_for(call_user, url: call_call_user_path(@call, call_user)) do |f|
+                  .mb-4
+                    - role_options = options_for_enum(CallUser, :role, except: ['owner'])
+                    - if call_user.role_owner?
+                      - role_options = options_for_enum(CallUser, :role) # show disabled 'owner' option
 
-              = select_tag "call_user_#{call_user.id}_role",
-                           options_for_select(role_options, selected: call_user.role),
-                           class: 'form-control call_user_role_select bg-fadein',
-                           data: { call_user_id: call_user.id },
-                           remote: true,
-                           disabled: call_user.role_owner?
+                    .form-group
+                      = f.input :role, collection: role_options, disabled: call_user.role_owner?, label: false, include_blank: false, input_html: { class: 'form-control call_user_role_select', id: "call_user_#{call_user.id}_role_ids", data: { 'call-user-id' => call_user.id } }
 
-              .mt-4
-                - if call_user.supports_category_restrictions?
-                  = simple_form_for(call_user, url: call_call_user_path(@call, call_user)) do |f|
-                    .row.no-gutters
-                      .col-10{ id: "call_user_#{call_user.id}_category_ids" }
-                        = f.select :category_ids, call_user_category_options, { include_blank: true }, { multiple: true, class: 'form-control call_user_category_ids', id: '', data: { 'call-user-id' => call_user.id } }
-                      .col-1.pl-1
-                        = f.submit 'Save', class: 'btn btn-primary btn-sm h-100 d-none', id: "call_user_#{call_user.id}_category_ids_save"
+                  .row.no-gutters.d-flex.justify-content-between
+                    .w-75{ id: "call_user_#{call_user.id}_category_ids", class: call_user.supports_category_restrictions? ? '' : 'd-none' }
+                      = f.select :category_ids, call_user_category_options, { include_blank: true }, { multiple: true, class: 'form-control call_user_category_ids', id: "call_user_#{call_user.id}_category_ids_select", data: { 'call-user-id' => call_user.id } }
+                    .c.pl-1
+                      = f.submit 'Save', class: 'btn btn-primary btn-sm h-100 d-none', id: "call_user_#{call_user.id}_category_ids_save"
 
             %td.col-4.pl-0.pt-3
               .pt-1
@@ -66,6 +61,3 @@
                   %small.text-muted.mt-4 This user hasn't set up their account.
                   -# %span.pull-right{ 'data-toggle' => "tooltip", title: "This user hasn't set up their account." }
                     %i.fa.fa-question.text-muted
-
-    - if @call_users.none?
-      %p No users have been added to this call yet.

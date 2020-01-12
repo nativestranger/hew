@@ -43,4 +43,12 @@ class CallUser < ApplicationRecord
   def supports_category_restrictions?
     role_juror? || role_director?
   end
+
+  def category_restrictions
+    if supports_category_restrictions?
+      categories.to_a
+    else
+      []
+    end
+  end
 end
