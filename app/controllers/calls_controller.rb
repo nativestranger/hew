@@ -64,8 +64,8 @@ class CallsController < ApplicationController
       status_ids = params[:entry_searcher][:status_ids].reject(&:blank?)
     end
 
-    - # TODO: filter from entry_searcher category_ids from @search_categories
-    - # similar for status_ids - set up whitelist per role
+    # TODO: filter from entry_searcher category_ids from @search_categories
+    # similar for status_ids - set up whitelist per role
 
     creation_statuses = ['submitted']
 
