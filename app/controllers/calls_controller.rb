@@ -49,7 +49,7 @@ class CallsController < ApplicationController
   end
 
   def applications
-    authorize @call, :show?
+    authorize @call, :view_entries?
 
     @call_user = @call.call_users.find_by!(user: current_user)
 

@@ -7,16 +7,25 @@
           = "@ #{@call.venue.name}" if @call.venue
     %br
     .row.mb-4
-      .col-auto.mr-auto
-      .col-auto
-        = link_to content_tag(:i, '', class: 'fa fa-pencil'),
-          edit_call_path(@call)
+      .col
+        .btn-group
+          - if policy(@call).edit?
+            = link_to edit_call_path(@call), class: 'btn btn-sm btn-light border' do
+              %span
+                %i.fa.fa-pencil
+                Edit
 
-        = link_to content_tag(:i, '', class: 'fa fa-user'),
-          call_call_users_path(@call)
+          - if policy(@call).manage_users?
+            = link_to call_call_users_path(@call), class: 'btn btn-sm btn-light border' do
+              %span
+                %i.fa.fa-user
+                Users
 
-        = link_to content_tag(:i, '', class: 'fa fa-envelope'),
-          call_applications_path(@call)
+          - if policy(@call).view_entries?
+            = link_to call_applications_path(@call), class: 'btn btn-sm btn-light border' do
+              %span
+                %i.fa.fa-envelope
+                Entries
 
     .row
       .col
