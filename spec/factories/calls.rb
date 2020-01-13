@@ -54,6 +54,10 @@ FactoryBot.define do
       create :call_user, call: call, user: call.user, role: 'owner'
     end
 
+    trait :categories do
+      category_ids { Category.default.sample(2).map(&:id) }
+    end
+
     trait :current do
       application_deadline { rand(2..4).days.ago }
       start_at { application_deadline + 1.day }
