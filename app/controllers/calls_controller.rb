@@ -1,18 +1,16 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[applications show edit update update_application_status]
-  before_action :authorize_user!, except: %i[new create index]
+  before_action :set_call, only: %i[applications show edit update]
 
-  def new
+  def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
     ensure_venue
   end
 
   def create
     @call = Call.new(permitted_params.merge(user: current_user))
-    modify_venue_maybe
 
-    if @call.save
+    if create_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
     else
@@ -21,19 +19,22 @@ class CallsController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    authorize @call
+    @call_user = @call.call_users.find_by!(user: current_user)
+  end
 
   def edit
+    authorize @call
     ensure_venue
   end
 
   def update
+    authorize @call
+
     private_before_update = !@call.is_public
 
-    @call.assign_attributes(permitted_params)
-    modify_venue_maybe
-
-    if @call.save
+    if update_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
       redirect_to @call, notice: t('success')
     else
@@ -43,19 +44,39 @@ class CallsController < ApplicationController
   end
 
   def index
+    # TODO: render homepage search for unauthenticated?
     redirect_to dashboard_path
   end
 
-  def update_application_status
-    status = CallApplication.status_ids.find { |_k, v| v == params.fetch(:status_id).to_i }.first
-    @call_application = @call.applications.find(params[:call_application_id])
-    @call_application.update!(status_id: status)
-    flash[:notice] = "Moved #{@call_application.user.full_name} to '#{status.capitalize}'."
-    redirect_to call_applications_path(@call, helpers.curator_application_status_scope => true)
-  end
-
   def applications
-    @applications = @call.applications.send(helpers.curator_application_status_scope)
+    authorize @call, :show?
+
+    @call_user = @call.call_users.find_by!(user: current_user)
+
+    @search_categories = \
+      @call_user.category_restrictions.presence || @call.categories
+
+    category_ids = @search_categories.pluck(:id)
+    status_ids = []
+
+    if params[:entry_searcher]
+      category_ids = params[:entry_searcher][:category_ids].reject(&:blank?) if params[:entry_searcher][:category_ids]
+      status_ids = params[:entry_searcher][:status_ids].reject(&:blank?)
+    end
+
+    - # TODO: filter from entry_searcher category_ids from @search_categories
+    - # similar for status_ids - set up whitelist per role
+
+    creation_statuses = ['submitted']
+
+    @entry_searcher = EntrySearcher.new(
+      call_id: @call.id,
+      category_ids: category_ids,
+      status_ids: status_ids,
+      creation_statuses: creation_statuses,
+    )
+
+    @applications = @entry_searcher.records
   end
 
   private
@@ -93,20 +114,8 @@ class CallsController < ApplicationController
     result
   end
 
-  def modify_venue_maybe
-    if @call.call_type_id_publication? || @call.call_type_id_competition? || @call.external? && @call.venue.attributes.slice('name', 'website').values.all?(&:blank?)
-      @call.venue = nil
-    else
-      @call&.venue&.user ||= current_user
-    end
-  end
-
   def set_call
     @call = Call.find(params[:id])
-  end
-
-  def authorize_user!
-    redirect_to root_path unless current_user.id == @call.user_id
   end
 
   def ensure_venue
@@ -114,6 +123,30 @@ class CallsController < ApplicationController
       address = Address.new(city: 'Mexico City', state: 'Mexico City', country: 'MX')
       @venue = Venue.new(address: address)
       @call.venue = @venue
+    end
+  end
+
+  def create_call
+    Call.transaction do
+      @call&.venue&.user ||= current_user
+      @call.save!
+      @call.call_users.create!(user: current_user, role: 'owner')
+    rescue ActiveRecord::RecordInvalid => e
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def update_call
+    Call.transaction do
+      @call.call_category_users.where.not(
+        call_categories: { category_id: permitted_params[:category_ids]  }
+      ).each(&:destroy!)
+
+      @call.assign_attributes(permitted_params)
+      @call&.venue&.user ||= current_user
+      @call.save!(permitted_params)
+    rescue ActiveRecord::RecordInvalid => e
+      raise ActiveRecord::Rollback
     end
   end
 end

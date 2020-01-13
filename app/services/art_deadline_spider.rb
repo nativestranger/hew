@@ -37,6 +37,8 @@ class ArtDeadlineSpider < Kimurai::Base
 
     # TODO: handle ongoing. add a start_at && end_at presence exception
 
+    # TODO: service to create calls with users- admins should own external calls with system user
+
     persisted = User.system.calls.create(
       user: User.system,
       external: true,

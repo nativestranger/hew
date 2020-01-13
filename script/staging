@@ -15,3 +15,4 @@ bundle exec rspec
 # npm run test
 
 git push staging staging:master
+heroku run rake db:migrate --app mox-staging

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
-  def options_for_enum(klass, enum)
+  def options_for_enum(klass, enum, except: [])
     enums = enum.to_s.pluralize
     enum_values = klass.send(enums)
     enum_values.map { |enum_value, _db_value|
       translated = enum_to_translated_option(klass, enums, enum_value)
       [translated, enum_value]
-    }.reject { |translated, _enum_value| translated.blank? }
+    }.reject { |translated, enum_value| translated.blank? || enum_value.in?(except) }
   end
 
   def enum_to_translated_option(klass, enum, enum_value, default = enum_value.to_s.titleize)

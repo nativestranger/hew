@@ -48,6 +48,8 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.before(:each, type: :system) do
+    include CapybaraSelect2::Helpers
+
     if ENV['show']
       driven_by :selenium, using: :chrome
     else

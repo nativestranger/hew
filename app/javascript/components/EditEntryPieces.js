@@ -15,6 +15,9 @@ export default class EditEntryPieces extends React.Component {
     next_step: PropTypes.string.isRequired
   };
 
+  // TODO: disable continue when a piece has no images...
+  // TODO: prevent deletion when last piece? - ensures at least one
+
   constructor(props) {
     super(props);
     this.nextStep = this.nextStep.bind(this);

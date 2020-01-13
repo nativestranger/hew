@@ -55,15 +55,15 @@ class CallApplicationsController < ApplicationController
   def update
     @call = @call_application.call
 
-    if @call_application.update(permitted_params)
+    if update_call_application!
       respond_to do |format|
         format.json do
           render json: {
-            redirectPath: wizard_path(@call_application.creation_status)
+            redirectPath: wizard_path(@step)
           }
         end
         format.html do
-          redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
+          redirect_to wizard_path(@step, call_application_id: @call_application.id)
         end
       end
     else
@@ -74,7 +74,6 @@ class CallApplicationsController < ApplicationController
           }
         end
         format.html do
-          @call_application.creation_status = step
           render :show
         end
       end
@@ -87,7 +86,6 @@ class CallApplicationsController < ApplicationController
     params.require(:call_application).permit(
       :call_id,
       :category_id,
-      :creation_status,
       :artist_statement,
       :artist_website,
       :artist_instagram_url,
@@ -107,8 +105,24 @@ class CallApplicationsController < ApplicationController
     CallApplication.transaction do
       build_call_application
       @call_application.save!
-      @call_application.update!(creation_status: :add_pieces)
-      setup_connection!
+      @call_application.update!(
+        creation_status: @call_application.next_creation_status
+      )
+      # setup_connection!
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
+    end
+  end
+
+  def update_call_application!
+    CallApplication.transaction do
+      @call_application.update!(permitted_params) if permitted_params.present?
+
+      if @call_application.future_creation_status?(@step)
+        @call_application.update!(creation_status: @step)
+      end
+
+      true
     rescue ActiveRecord::RecordInvalid
       raise ActiveRecord::Rollback
     end
@@ -148,6 +162,6 @@ class CallApplicationsController < ApplicationController
   end
 
   def authorize_user!
-    redirect_to root_path unless @call_application.user_id == current_user.id
+    redirect_to root_path unless @call_application.user_id == current_user&.id
   end
 end

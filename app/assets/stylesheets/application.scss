@@ -5,6 +5,7 @@
 @import "users";
 @import "carousels";
 @import "call_applications";
+@import "call_users";
 @import "chats";
 @import "font-awesome";
 @import "loader";
@@ -48,4 +49,14 @@ trix-toolbar .trix-button-group--history-tools {
 
 .c-pointer {
   cursor: pointer;
+}
+
+.h25 {
+  max-height: 25px;
+  max-width: 25px;
+}
+
+.h75 {
+  max-height: 75px;
+  max-width: 75px;
 }
