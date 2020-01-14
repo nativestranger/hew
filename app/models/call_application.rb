@@ -32,7 +32,7 @@
 
 # TODO: rename to CallEntry
 class CallApplication < ApplicationRecord
-  belongs_to :call
+  belongs_to :call, counter_cache: true
   belongs_to :user
   belongs_to :category, optional: true
 
