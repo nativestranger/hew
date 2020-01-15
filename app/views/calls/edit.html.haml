@@ -3,8 +3,8 @@
     .card.fun-card
       .card-header
         %h3.mb-0
-          = t('edit')
-          Call
+          Editing
+          = link_to @call.name, @call
 
       .card-body
         = render 'form'

@@ -17,4 +17,12 @@ class CallPolicy
   def update?
     edit?
   end
+
+  def manage_users?
+    edit?
+  end
+
+  def view_entries?
+    show? # TODO conditionally show to jury based on status?
+  end
 end

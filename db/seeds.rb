@@ -32,19 +32,19 @@ FactoryBot.create(:piece_image, piece: big_dogs, name: 'big_dog4', image_fixture
 
 venue = FactoryBot.create(:venue, user: admin)
 
-2.times { FactoryBot.create(:call, is_public: true, is_approved: true) }
-10.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true) }
-10.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true, external: true) }
-FactoryBot.create(:call, user: admin, venue: venue)
-FactoryBot.create(:call, :current, user: admin, venue: venue, is_public: true)
-2.times { FactoryBot.create(:call, :old, user: admin, venue: venue, is_public: true) }
+2.times { FactoryBot.create(:call, user: admin, venue: venue, is_public: true, is_approved: true, external: true) }
+2.times { FactoryBot.create(:call, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true) }
+
+2.times { FactoryBot.create(:call, :accepting_applications, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true) }
+2.times { FactoryBot.create(:call, :categories, :accepting_applications, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true) }
 
 Call.all.each do |call|
-  rand(3..4).times { FactoryBot.create(:call_application, call: call) }
-  FactoryBot.create(:call_application, call: call, user: user)
+  rand(3..4).times { FactoryBot.create(:call_application, call: call, creation_status: 'submitted') }
+  FactoryBot.create(:call_application, call: call, user: user, creation_status: 'submitted')
 end
 
 # not applied to
-28.times { FactoryBot.create(:call, :accepting_applications, user: admin, venue: venue, is_public: true, is_approved: true) }
+2.times { FactoryBot.create(:call, :accepting_applications, user: admin, venue: venue, is_public: true, is_approved: true) }
+12.times { FactoryBot.create(:call, :accepting_applications, is_public: true, is_approved: true) }
 
 admin.calls.first.update!(is_approved: true)
