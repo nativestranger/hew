@@ -44,7 +44,8 @@
                       - role_options = options_for_enum(CallUser, :role) # show disabled 'owner' option
 
                     .form-group
-                      = f.input :role, collection: role_options, disabled: call_user.role_owner?, label: false, include_blank: false, input_html: { class: 'form-control call_user_role_select', id: "call_user_#{call_user.id}_role_ids", data: { 'call-user-id' => call_user.id } }
+                      - disabled = call_user.role_owner? || call_user.role_admin? && call_user.user_id == current_user.id
+                      = f.input :role, collection: role_options, disabled: disabled, label: false, include_blank: false, input_html: { class: 'form-control call_user_role_select', id: "call_user_#{call_user.id}_role_ids", data: { 'call-user-id' => call_user.id } }
 
                   .row.no-gutters.d-flex.justify-content-between
                     .w-75{ id: "call_user_#{call_user.id}_category_ids", class: call_user.supports_category_restrictions? ? '' : 'd-none' }

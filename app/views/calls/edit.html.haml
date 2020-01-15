@@ -1,10 +1,7 @@
 .row
   .col-lg-10.mx-auto
-    .card.fun-card
-      .card-header
-        %h3.mb-0
-          = t('edit')
-          Call
+    %h3.mb-3
+      Editing
+      = link_to @call.name, call_path(@call)
 
-      .card-body
-        = render 'form'
+    = render 'form'

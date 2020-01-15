@@ -94,6 +94,6 @@ class CallUsersController < ApplicationController
 
   # TODO: handle json auth proper
   def authorize_user!
-    redirect_to root_path unless current_user.id == @call.user_id
+    authorize @call, :manage_users?
   end
 end

@@ -1,42 +1,68 @@
 .row
-  .col-lg-10.mx-auto
-    .row
-      .col
-        %h3
-          = @call.name
-          = "@ #{@call.venue.name}" if @call.venue
-    %br
+  .col-md-8.mx-auto
     .row.mb-4
       .col-auto.mr-auto
+        %h3
+          = @call.name
+          -# = "@ #{@call.venue.name}" if @call.venue
+
       .col-auto
-        = link_to content_tag(:i, '', class: 'fa fa-pencil'),
-          edit_call_path(@call)
+        .btn-group
+          - if policy(@call).edit?
+            = link_to edit_call_path(@call), class: 'btn btn-sm btn-white border px-3' do
+              %span
+                %i.fa.fa-pencil
+                -# Edit
 
-        = link_to content_tag(:i, '', class: 'fa fa-user'),
-          call_call_users_path(@call)
+          - if policy(@call).manage_users?
+            = link_to call_call_users_path(@call), class: 'btn btn-sm btn-white border px-3' do
+              %span
+                %i.fa.fa-user
+                -# Users
 
-        = link_to content_tag(:i, '', class: 'fa fa-envelope'),
-          call_applications_path(@call)
-
-    .row
-      .col
-        %h6 Deadline
-        %p= I18n.l(@call.application_deadline, format: :long)
-
-        - if @call.start_at && @call.end_at
-          %h6 Event Dates
-          %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"
-
-        %p.text-muted= @call.overview
-
-        - if @call.external?
-          %h6 External URL
-          %p= link_to @call.external_url, @call.external_url
-        - else
-          %h6 Description
-          %p= @call.full_description.html_safe
+          - if policy(@call).view_entries?
+            = link_to call_applications_path(@call), class: 'btn btn-sm btn-white border px-3' do
+              %span
+                %i.fa.fa-envelope
+                -# Entries
 
     .row
-      .col-md-6
-        - if @call.is_public
-          .mt-4= render 'share_link'
+      .col.mx-auto
+        .row
+          .col-md-6.mb-4
+            %h6 Deadline
+            %p= I18n.l(@call.application_deadline, format: :long)
+            - if @call.start_at && @call.end_at
+              %h6 Event Dates
+              %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"
+            - if @call.external?
+              %h6 External URL
+              %p= link_to @call.external_url, @call.external_url
+            - if @call.overview.present?
+              %h6 Overview
+              %p= @call.overview
+
+          - if @call.full_description.present? || @call.application_details.present?
+            .col-md-6
+              - if @call.categories.any?
+                %h6 Categories
+                %div.mb-4
+                  - @call.categories.each do |category|
+                    %span.badge.badge-success.p-2 #{category}
+              - if @call.full_description.present?
+                %h6 Description
+                %p= @call.full_description.html_safe
+
+              - if @call.application_details.present?
+                %h6 Application Details
+                %p= @call.application_details.html_safe
+
+        %br
+        %br
+        %br
+        %br
+
+        .row.mt-4
+          .col-md-8.mx-auto
+            - if @call.is_public && !@call.external
+              = render 'share_link'

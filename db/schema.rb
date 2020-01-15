@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_10_020340) do
+ActiveRecord::Schema.define(version: 2020_01_14_035318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -218,6 +218,7 @@ ActiveRecord::Schema.define(version: 2020_01_10_020340) do
     t.integer "eligibility", default: 1, null: false
     t.integer "entry_fee"
     t.integer "spider", default: 0, null: false
+    t.bigint "call_applications_count", default: 0, null: false
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
