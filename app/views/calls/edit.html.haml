@@ -1,7 +1,10 @@
 .row
   .col-lg-10.mx-auto
-    %h3.mb-3
-      Editing
-      = link_to @call.name, call_path(@call)
+    .card.fun-card
+      .card-header
+        %h3.mb-0
+          Editing
+          = link_to @call.name, @call
 
-    = render 'form'
+      .card-body
+        = render 'form'
