@@ -56,12 +56,7 @@
                 %h6 Application Details
                 %p= @call.application_details.html_safe
 
-        %br
-        %br
-        %br
-        %br
-
         .row.mt-4
-          .col-md-8.mx-auto
+          .col-md-6
             - if @call.is_public && !@call.external
               = render 'share_link'
