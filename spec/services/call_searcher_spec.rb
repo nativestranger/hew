@@ -27,6 +27,21 @@ RSpec.describe CallSearcher, type: :service do
     end
   end
 
+  context 'with a user' do
+    let!(:owner_call) { create(:call, user: user) }
+    let!(:juror_call) { create(:call_user, user: user, role: :juror).call }
+    let!(:director_call) { create(:call_user, user: user, role: :director).call }
+    let!(:admin_call) { create(:call_user, user: user, role: :admin).call }
+    it 'only returns calls with call_users' do
+      expect(searcher.records).not_to include(call)
+      expect(searcher.records).not_to include(public_call)
+      expect(searcher.records.pluck(:id)).to include(owner_call.id)
+      expect(searcher.records.pluck(:id)).to include(juror_call.id)
+      expect(searcher.records.pluck(:id)).to include(director_call.id)
+      expect(searcher.records.pluck(:id)).to include(admin_call.id)
+    end
+  end
+
   context 'without a call name' do
     let(:call_name) { 'Media' }
     let!(:named_call) { create(:call, user: user, name: 'New Media Hackathon') }
