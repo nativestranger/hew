@@ -1,54 +1,59 @@
 .row
-  .col-lg-10.mx-auto
+  -# TODO: fix back button selectpicker issue and dont disable turbolinks
+  .col-lg-10.mx-auto{ data: { turbolinks: "false"} }
     %h3
-      = link_to @call.name, @call
-      Entries
+      = link_to "#{@call.name} Entries", @call
+    .row
+      .col-md-4
+        .form-inputs
+          = simple_form_for :entry_searcher, url: call_applications_path(@call), method: "GET", html: {} do |f|
 
-    %hr
-
-    .form-inputs
-      = simple_form_for :entry_searcher, url: call_applications_path(@call), method: "GET", html: {} do |f|
-
-        -# TODO: show # of not submitted?
-        .row.no-gutters
-          .col-8
+            -# TODO: show # of not submitted?
             .row.no-gutters
-              - if @search_categories.any?
-                .col-md-6
-                  .form-group
-                    = f.select :category_ids, entry_search_category_options, { include_blank: true }, { multiple: true, class: 'form-control' }
+              .col-12
+                .row.no-gutters
+                  - if @search_categories.any?
+                    .col-xl
+                      .form-group
+                        %label Categories
+                        = f.select :category_ids, entry_search_category_options, { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
 
-              .col-md-6
+                  .col-xl
+                    .form-group
+                      %label Statuses
+                      = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
+              .col-12
                 .form-group
-                  = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control' }
-          .col-4
-            .form-group
-              = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-1"
+                  = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-2 rounded-0"
+      .col-md-8
+        .div
+          - if @applications.none?
+            %p.text-muted No entries found.
+          - else
+            %p.text-muted
+              #{@applications.count}
+              of
+              #{ @call.applications.creation_status_submitted.count }
+              submitted entries displayed
+              -# TODO: paginate - distinguish total count vs filter
 
-    - if @applications.none?
-      %p.text-muted No applications found.
-    - else
-      %p.text-muted
-        #{@applications.count}
-        of
-        #{ @call.applications.creation_status_submitted.count }
-        submitted entries displayed
-        -# TODO: paginate - distinguish total count vs filter
+          .list-group
+            - @applications.each do |call_application|
+              -# TODO: link to entry here
+              .list-group-item.list-group-item-action.border-left-0.border-right-0.border-top-0.call-application-line-item.px-0.mb-4
+                .row.no-gutters
+                  .col-auto.mr-auto.artist-details
+                    .d-inline-block.mr-1
+                      = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
+                    %h5.d-inline-block.mb-0.align-middle
+                      = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
 
-    .list-group
-      - @applications.each do |call_application|
-        .list-group-item.list-group-item-action.border-left-0.border-right-0.call-application-line-item.px-0
-          .row.no-gutters
-            .col-auto.mr-auto.artist-details
-              .d-inline-block.mr-1
-                = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
-              %h5.d-inline-block.mb-0.align-middle
-                = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
+                    - #TODO: track this
+                    -# %small.text-muted= time_ago_in_words(call_application.submitted_at)
+                    -# = truncate(call_application.artist_statement)
 
-              -# %small.text-muted= time_ago_in_words(call_application.created_at)
+                  .col-auto
+                    - if call_application.category
+                      %span.badge.badge-success #{call_application.category}
 
-            .col-auto
-              - if call_application.category
-                %span.badge.badge-success #{call_application.category}
-
-              -# = link_to 'Artist Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?
+                    = link_to 'Artist Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?

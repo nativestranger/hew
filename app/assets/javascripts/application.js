@@ -21,4 +21,5 @@
 //= require trix
 //= require jquery.ui.widget
 //= require z.jquery.fileupload
+//= require bootstrap-select
 //= require_tree .
