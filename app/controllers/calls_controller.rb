@@ -51,6 +51,8 @@ class CallsController < ApplicationController
   def applications
     authorize @call, :view_entries?
 
+    @disable_turbolinks = true
+
     @call_user = @call.call_users.find_by!(user: current_user)
 
     @search_categories = \
