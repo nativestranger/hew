@@ -5,6 +5,7 @@ import pluralize from "pluralize";
 export default class CallSearch extends React.Component {
 
   static propTypes = {
+    orderOptions: PropTypes.array.isRequired,
     calls: PropTypes.array.isRequired,
     searchVal: PropTypes.string
   };
@@ -15,19 +16,58 @@ export default class CallSearch extends React.Component {
   }
 
   componentDidMount() {
-    this.all()
+    this.getCalls()
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
+  selectedOrderOption() {
+    return this.state.orderOptions.find(option => option.selected);
+  }
+
+  renderSortByDropdown() {
+    let thisComponent = this;
+
+    let isSelected = function(orderOptionName) {
+      return thisComponent.selectedOrderOption().name == orderOptionName;
+    }
+    let selectOrderOption = function(orderOptionName) {
+      let orderOptions = [...thisComponent.state.orderOptions];
+      orderOptions.forEach(option => {
+        if (option.name === orderOptionName) {
+          option.selected = true;
+        } else {
+          option.selected = false;
+        }
+      });
+      thisComponent.setState({ orderOptions: orderOptions });
+      thisComponent.getCalls();
+    }
+
+    return (
+      <div className="dropdown d-inline">
+          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
+          <span className="caret"></span></button>
+          <ul className="dropdown-menu dropdown-menu-right text-center">
+            { thisComponent.state.orderOptions.map(orderOption => {
+              return (
+                <li key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
+                  { isSelected(orderOption.name) && <strong>{orderOption.name}</strong> }
+                  { !isSelected(orderOption.name) && <span>{orderOption.name}</span> }
+                </li>
+              )
+            }) }
+          </ul>
+      </div>
+    );
+  }
+
+  getCalls = () => {
     var searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
     var thisComponent = this;
 
-    $.get("/v1/calls", { name: searchValInput })
+    $.get("/v1/calls", { name: searchValInput, order_option: this.selectedOrderOption() })
       .done(function(response) {
-        console.log(response);
         thisComponent.setState({ calls: response.calls,
                                  searchVal: searchValInput,
                                  errorMessage: '',
@@ -39,18 +79,8 @@ export default class CallSearch extends React.Component {
       });
     }
 
-  all = (e) => {
-    e && e.preventDefault();
-    this.setState({ loading: true });
-    var thisComponent = this;
-
-    $.get("/v1/calls")
-      .done(function(data) {
-        thisComponent
-          .setState({ calls: data.calls, searchVal: '', errorMessage: '', loading: false });
-      }).fail(function(data) {
-        thisComponent.setState({ errorMessage: App.utils.errorMessage, loading: false });
-      });
+  selectedOrderOption() {
+    return this.state.orderOptions.find(option => option.selected);
   }
 
   render() {
@@ -67,18 +97,23 @@ export default class CallSearch extends React.Component {
     var thisComponent = this;
     return (
       <div>
-        <form onSubmit={ this.handleSubmit }>
+        <form onSubmit={ this.getCalls }>
           <div className='form-group'>
             <input id="search_bar"
                    className="form-control mb-2"
                    autoFocus={ true }
                    type='search'
-                   required={ true }
                    ref='searchValInput'
                    defaultValue={ this.state.searchVal }
                    placeholder='Search Your Calls'>
             </input>
-            <div className='mt-4'></div>
+            <div className='row'>
+              <div className='col-auto mr-auto'>
+              </div>
+              <div className='col-auto'>
+                { this.renderSortByDropdown() }
+              </div>
+            </div>
           </div>
         </form>
 
@@ -89,11 +124,10 @@ export default class CallSearch extends React.Component {
         <div className='clearfix'>
           { (function() {
             if (thisComponent.state.searchVal) {
-              var callCount = thisComponent.state.calls.length;
+              let callCount = thisComponent.state.calls.length;
               return (
                 <div>
                   <p className='float-left gray'>{ callCount + pluralize(' call', callCount) }</p>
-                  <a id='all_calls' href='/' className='float-right' onClick={ thisComponent.all }>All Calls</a>
                   <div className='clear'></div>
                 </div>);
             }

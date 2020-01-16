@@ -56,6 +56,9 @@ FactoryBot.define do
         big_dogs = FactoryBot.create(:piece, call_application: call_application, user: call_application.user, title: 'Big Dogs')
         FactoryBot.create(:piece_image, piece: big_dogs, name: 'big_dog1', image_fixture_path: 'big_dogs/big_dog1.jpg')
       end
+      if call_application&.call&.categories&.any?
+        call_application.category ||= call_application&.call.categories.sample
+      end
     end
   end
 end

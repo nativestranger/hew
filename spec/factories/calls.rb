@@ -42,13 +42,13 @@ FactoryBot.define do
     association :user
     name { Faker::Name.name }
     venue { create(:venue) }
-    start_at { Date.current + rand(2..7).days }
+    start_at { (10..90).to_a.sample.days.from_now.to_date }
     end_at { start_at + rand(8..10).days }
     overview { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
     full_description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
-    application_deadline { (start_at - rand(1..7.days)).to_datetime }
+    application_deadline { (1..9).to_a.sample.days.from_now }
     application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
 
     after(:create) do |call|
@@ -61,13 +61,13 @@ FactoryBot.define do
 
     trait :current do
       application_deadline { rand(2..4).days.ago }
-      start_at { application_deadline + 1.day }
+      start_at { (application_deadline + 1.day).to_date }
       end_at { Date.current + rand(2..4).days }
     end
 
     trait :old do
       application_deadline { 15.days.ago }
-      start_at { rand(7..14).days.ago }
+      start_at { rand(7..14).days.ago.to_date }
       end_at { start_at + rand(1..4).days }
     end
 
@@ -79,7 +79,7 @@ FactoryBot.define do
 
     trait :accepting_applications do
       application_deadline { Time.current + rand(1..2).days }
-      start_at { (application_deadline + rand(1..2).days).to_datetime }
+      start_at { (application_deadline + rand(1..2).days).to_date }
       end_at { start_at + rand(3..4).days }
     end
   end
