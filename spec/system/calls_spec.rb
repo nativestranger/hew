@@ -38,15 +38,15 @@ RSpec.describe 'Calls', type: :system do
     fill_in 'call_name', with: 'Call name'
     fill_in 'call_overview', with: 'Call overview'
 
+    find('.call_application_deadline').click
+    all(".react-datepicker__day").find { |day| day.text == "3" }.click
+    all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
+
     find('.call_start_at').click
-    all(".react-datepicker__day").find { |day| day.text == "7" }.click
+    all(".react-datepicker__day").find { |day| day.text == "4" }.click
 
     find('.call_end_at').click
-    all(".react-datepicker__day").find { |day| day.text == "14" }.click
-
-    find('.call_application_deadline').click
-    all(".react-datepicker__day").find { |day| day.text == "1" }.click
-    all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
+    all(".react-datepicker__day").find { |day| day.text == "5" }.click
 
     page.execute_script("document.getElementById('call_full_description').value = 'desc'")
     page.execute_script("document.getElementById('call_application_details').value = 'app details'")
