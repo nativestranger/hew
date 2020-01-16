@@ -47,8 +47,7 @@
               - if @call.categories.any?
                 %h6 Categories
                 %div.mb-4
-                  - @call.categories.each do |category|
-                    %span.badge.badge-success.p-2 #{category}
+                  = render 'categories/badges', categories: @call.categories
               - if @call.full_description.present?
                 %h6 Description
                 %p= @call.full_description.html_safe
