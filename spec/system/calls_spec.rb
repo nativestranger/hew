@@ -171,6 +171,25 @@ RSpec.describe 'Calls', type: :system do
     end
   end
 
+  describe 'index' do
+    let!(:juror_call) { create(:call_user, user: user, role: 'juror').call }
+    let!(:director_call) { create(:call_user, user: user, role: 'director').call }
+    let!(:admin_call) { create(:call_user, user: user, role: 'admin').call }
+    let!(:other_call) { create(:call) }
+
+    before { visit calls_path }
+
+    it 'displays calls the user has call_users with' do
+      expect(page).to have_content(call.name)
+      expect(page).to have_content(juror_call.name)
+      expect(page).to have_content(director_call.name)
+      expect(page).to have_content(admin_call.name)
+      expect(page).not_to have_content(other_call.name)
+    end
+
+    # TODO: test sorting/filtering
+  end
+
   describe '#applications' do
     context 'as a juror' do
       before do
