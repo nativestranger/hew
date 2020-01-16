@@ -4,6 +4,7 @@ class V1::CallsController < V1Controller
   def index
     @calls = CallSearcher.new(
       call_name: params[:name],
+      order_option: params[:order_option],
       user: current_user
     ).records
 

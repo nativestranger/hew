@@ -15,7 +15,7 @@ class CallSearcher < ActiveModel::Serializer
 
     if @user
       @calls = @calls.joins(:call_users).where(
-        call_users: { user_id: @user.id }
+        call_users: { user: @user }
       )
     else
       @calls = @calls.accepting_applications.approved.published
