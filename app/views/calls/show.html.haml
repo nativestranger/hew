@@ -41,27 +41,20 @@
             - if @call.overview.present?
               %h6 Overview
               %p= @call.overview
+            - if @call.full_description.present?
+              %h6 Description
+              %p= @call.full_description.html_safe
 
           - if @call.full_description.present? || @call.application_details.present?
             .col-md-6
-              - if @call.categories.any?
-                %h6 Categories
-                %div.mb-4
-                  = render 'categories/badges', categories: @call.categories
-              - if @call.full_description.present?
-                %h6 Description
-                %p= @call.full_description.html_safe
-
               - if @call.application_details.present?
                 %h6 Application Details
                 %p= @call.application_details.html_safe
 
-        %br
-        %br
-        %br
-        %br
+              - if @call.categories.any?
+                %h6 Categories
+                %div.mb-4
+                  = render 'categories/badges', categories: @call.categories
 
-        .row.mt-4
-          .col-md-8.mx-auto
-            - if @call.is_public && !@call.external
-              = render 'share_link'
+              - if @call.is_public && !@call.external
+                = render 'share_link'

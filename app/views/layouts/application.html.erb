@@ -28,7 +28,8 @@
     <%= javascript_pack_tag 'application' %>
   </head>
 
-  <body>
+  <% # TODO: fix back button selectpicker issue and dont disable turbolinks %>
+  <body data-turbolinks="<%= @disable_turbolinks ? 'false' : 'true' %>" >
     <% if Rails.env.production? %>
       <noscript><iframe src=<%= "https://www.googletagmanager.com/ns.html?id=#{ENV['GTM_ID']}" %>
       height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
