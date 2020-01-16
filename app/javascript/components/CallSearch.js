@@ -29,7 +29,6 @@ export default class CallSearch extends React.Component {
     let isSelected = function(orderOptionName) {
       return thisComponent.selectedOrderOption().name == orderOptionName;
     }
-    console.log(thisComponent.selectedOrderOption())
     let selectOrderOption = function(orderOptionName) {
       let orderOptions = [...thisComponent.state.orderOptions];
       orderOptions.forEach(option => {
@@ -143,7 +142,6 @@ export default class CallSearch extends React.Component {
   }
 
   renderCall(call) {
-    // console.log(call)
     const capitalize = (s) => {
       if (typeof s !== 'string') return ''
       return s.charAt(0).toUpperCase() + s.slice(1)
