@@ -72,6 +72,7 @@ class Call < ApplicationRecord
   validate :end_at_is_after_start_at
   validate :application_deadline_is_before_start_at
   validate :owned_by_admin, if: :external
+  validate :future_dates, on: :create
 
   before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
 
@@ -82,6 +83,7 @@ class Call < ApplicationRecord
   enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
+  scope :internal, -> { where(external: false) }
 
   scope :accepting_applications, lambda {
     where('application_deadline >= ?', Time.current)
@@ -116,6 +118,12 @@ class Call < ApplicationRecord
   end
 
   private
+
+  def future_dates
+    if application_deadline && application_deadline < Time.current
+      errors.add(:application_deadline, "can't be in the past")
+    end
+  end
 
   def remove_venue
     self.venue = nil

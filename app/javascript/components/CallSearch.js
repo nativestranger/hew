@@ -69,8 +69,6 @@ export default class CallSearch extends React.Component {
 
     $.get("/v1/calls", { name: searchValInput, order_option: this.selectedOrderOption() })
       .done(function(response) {
-          console.log(response.calls[0].time_until_deadline_in_words)
-          console.log(response.calls[1].time_until_deadline_in_words)
         thisComponent.setState({ calls: response.calls,
                                  searchVal: searchValInput,
                                  errorMessage: '',

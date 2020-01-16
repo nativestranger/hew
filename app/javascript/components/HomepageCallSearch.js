@@ -69,8 +69,6 @@ export default class HomepageCallSearch extends React.Component {
              page: currentPage,
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {
-          console.log(data.records[0].time_until_deadline_in_words)
-          console.log(data.records[1].time_until_deadline_in_words)
                   thisComponent.setState({
                     getError: false,
                     calls: data.records,
