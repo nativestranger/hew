@@ -109,9 +109,9 @@ export default class CallSearch extends React.Component {
             </input>
             <div className='row'>
               <div className='col-auto mr-auto'>
-              <a className='btn btn-sm btn-primary' href='/calls/new'>
-                New Call
-              </a>
+                <a className='btn btn-sm btn-primary' href='/calls/new'>
+                  New Call
+                </a>
               </div>
               <div className='col-auto'>
                 { this.renderSortByDropdown() }
