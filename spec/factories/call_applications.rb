@@ -44,11 +44,11 @@ FactoryBot.define do
     category_id { call.categories.sample if call.categories.any? }
 
     after(:create) do |call_application, evaluator|
-      unless call_application.call.user_id == call_application.user_id
-        Connection.find_or_create_between!(
-          call_application.call.user.id, call_application.user.id
-        )
-      end
+      # unless call_application.call.user_id == call_application.user_id
+      #   Connection.find_or_create_between!(
+      #     call_application.call.user.id, call_application.user.id
+      #   )
+      # end
     end
 
     after(:build) do |call_application|
