@@ -59,7 +59,7 @@ class V1::PiecesController < V1Controller
     if params[:id]
       @call_application = @piece.call_application
     else
-      @call_application = CallApplication.find(params.fetch(:entry_id))
+      @call_application = Entry.find(params.fetch(:entry_id))
     end
   end
 

@@ -76,7 +76,7 @@ class Call < ApplicationRecord
 
   before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
 
-  has_many :applications, class_name: 'CallApplication', dependent: :destroy
+  has_many :applications, class_name: 'Entry', dependent: :destroy
 
   enum call_type_id: { exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true

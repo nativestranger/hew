@@ -1,4 +1,4 @@
-class CallApplicationMailer < ApplicationMailer # :nodoc:
+class EntryMailer < ApplicationMailer # :nodoc:
   def new_application(call_application)
     mail(
       to:      call_application.call.user.email,

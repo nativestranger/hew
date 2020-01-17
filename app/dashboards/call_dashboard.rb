@@ -10,7 +10,7 @@ class CallDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     user:                 Field::BelongsTo,
     # venue: Field::BelongsTo,
-    applications:         Field::HasMany.with_options(class_name: "CallApplication"),
+    applications:         Field::HasMany.with_options(class_name: "Entry"),
     id:                   Field::Number,
     name:                 Field::String,
     start_at:             Field::DateTime,

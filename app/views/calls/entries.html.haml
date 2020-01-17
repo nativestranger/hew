@@ -20,7 +20,7 @@
                   .col-xl
                     .form-group
                       %label Statuses
-                      = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
+                      = f.select :status_ids, options_for_enum(Entry, :status_id), { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
               .col-12
                 .form-group
                   = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-2 rounded-0"

@@ -14,7 +14,7 @@ class EntriesController < ApplicationController
   end
 
   def new
-    @call_application = CallApplication.new(
+    @call_application = Entry.new(
       call:                 @call,
       artist_website:       current_user&.artist_website,
       artist_statement:     current_user&.artist_statement,
@@ -40,10 +40,10 @@ class EntriesController < ApplicationController
     create_call_application!
 
     if @call_application.persisted?
-      CallApplicationMailer.new_application(@call_application).deliver_later # if notify?
+      EntryMailer.new_application(@call_application).deliver_later # if notify?
 
       if current_user.nil?
-        CallApplicationMailer.new_artist(@call_application).deliver_later
+        EntryMailer.new_artist(@call_application).deliver_later
         bypass_sign_in(@call_application.user)
         flash.notice = "Success! We sent you an email with a link to confirm your address. In the meantime, complete the steps below to finish your entry."
       end
@@ -103,11 +103,11 @@ class EntriesController < ApplicationController
   end
 
   def set_call_application
-    @call_application = CallApplication.find(params[:call_application_id])
+    @call_application = Entry.find(params[:call_application_id])
   end
 
   def create_call_application!
-    CallApplication.transaction do
+    Entry.transaction do
       build_call_application
       @call_application.save!
       @call_application.update!(
@@ -120,7 +120,7 @@ class EntriesController < ApplicationController
   end
 
   def update_call_application!
-    CallApplication.transaction do
+    Entry.transaction do
       @call_application.update!(permitted_params) if permitted_params.present?
 
       if @call_application.future_creation_status?(@step)
@@ -134,7 +134,7 @@ class EntriesController < ApplicationController
   end
 
   def build_call_application
-    @call_application = CallApplication.new(permitted_params)
+    @call_application = Entry.new(permitted_params)
 
     if current_user
       @call_application.user = current_user

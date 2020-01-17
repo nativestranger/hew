@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class CallApplicationDashboard < Administrate::BaseDashboard
+class EntryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -66,6 +66,6 @@ class CallApplicationDashboard < Administrate::BaseDashboard
   # across all pages of the admin dashboard.
   #
   # def display_resource(call_application)
-  #   "CallApplication ##{call_application.id}"
+  #   "Entry ##{call_application.id}"
   # end
 end

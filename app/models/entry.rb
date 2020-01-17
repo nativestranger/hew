@@ -30,8 +30,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-# TODO: rename to CallEntry
-class CallApplication < ApplicationRecord
+class Entry < ApplicationRecord
   belongs_to :call, counter_cache: true
   belongs_to :user
   belongs_to :category, optional: true
@@ -77,16 +76,16 @@ class CallApplication < ApplicationRecord
   validate :has_valid_pieces, if: :creation_status_review?
 
   def future_creation_status?(some_status)
-    CallApplication.creation_statuses[some_status] > CallApplication.creation_statuses[creation_status]
+    Entry.creation_statuses[some_status] > Entry.creation_statuses[creation_status]
   end
 
   # TODO: based on call config whenif dynamic steps
   def next_creation_status(some_status = nil)
     some_status = creation_status if some_status.nil?
 
-    next_value = CallApplication.creation_statuses[some_status] + 1
+    next_value = Entry.creation_statuses[some_status] + 1
 
-    CallApplication.creation_statuses.each_pair do |key, value|
+    Entry.creation_statuses.each_pair do |key, value|
       return key if value == next_value
     end
 
