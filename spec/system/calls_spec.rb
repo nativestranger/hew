@@ -194,7 +194,7 @@ RSpec.describe 'Calls', type: :system do
     context 'as a juror' do
       before do
         login_as(juror, scope: :user)
-        visit call_applications_path(call)
+        visit call_entries_path(call)
       end
 
       it 'shows the submitted call applications' do
@@ -232,7 +232,7 @@ RSpec.describe 'Calls', type: :system do
     context 'as a director' do
       before do
         login_as(director, scope: :user)
-        visit call_applications_path(call)
+        visit call_entries_path(call)
       end
 
       it 'shows the submitted call applications' do
@@ -271,7 +271,7 @@ RSpec.describe 'Calls', type: :system do
     context 'as an admin' do
       before do
         login_as(call_admin, scope: :user)
-        visit call_applications_path(call)
+        visit call_entries_path(call)
       end
 
       it 'shows the submitted call applications' do
