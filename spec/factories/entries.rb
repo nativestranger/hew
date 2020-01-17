@@ -31,7 +31,7 @@
 #
 
 FactoryBot.define do
-  factory :call_application do
+  factory :entry do
     call { create(:call) }
     user { create(:user, is_artist: true) }
     artist_statement { Faker::Movies::Lebowski.quote }
@@ -43,21 +43,21 @@ FactoryBot.define do
     creation_status { 'start' }
     category_id { call.categories.sample if call.categories.any? }
 
-    after(:create) do |call_application, evaluator|
-      # unless call_application.call.user_id == call_application.user_id
+    after(:create) do |entry, evaluator|
+      # unless entry.call.user_id == entry.user_id
       #   Connection.find_or_create_between!(
-      #     call_application.call.user.id, call_application.user.id
+      #     entry.call.user.id, entry.user.id
       #   )
       # end
     end
 
-    after(:build) do |call_application|
-      if call_application.creation_status_submitted?
-        big_dogs = FactoryBot.create(:piece, call_application: call_application, user: call_application.user, title: 'Big Dogs')
+    after(:build) do |entry|
+      if entry.creation_status_submitted?
+        big_dogs = FactoryBot.create(:piece, entry: entry, user: entry.user, title: 'Big Dogs')
         FactoryBot.create(:piece_image, piece: big_dogs, name: 'big_dog1', image_fixture_path: 'big_dogs/big_dog1.jpg')
       end
-      if call_application&.call&.categories&.any?
-        call_application.category ||= call_application&.call.categories.sample
+      if entry&.call&.categories&.any?
+        entry.category ||= entry&.call.categories.sample
       end
     end
   end

@@ -18,7 +18,7 @@ class CallSearcher < ActiveModel::Serializer
         call_users: { user: @user }
       )
     else
-      @calls = @calls.accepting_applications.approved.published
+      @calls = @calls.accepting_entries.approved.published
     end
 
     if @call_name

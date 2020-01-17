@@ -13,7 +13,7 @@ RSpec.describe 'Calls', type: :system do
 
   let!(:submitted_entry) do
     create(
-      :call_application,
+      :entry,
       call: call,
       creation_status: 'submitted',
       category: Category.new_media
@@ -22,7 +22,7 @@ RSpec.describe 'Calls', type: :system do
 
   let!(:started_entry) do
     create(
-      :call_application,
+      :entry,
       call: call,
       category: Category.painting
     )
@@ -38,7 +38,7 @@ RSpec.describe 'Calls', type: :system do
     fill_in 'call_name', with: 'Call name'
     fill_in 'call_overview', with: 'Call overview'
 
-    find('.call_application_deadline').click
+    find('.entry_deadline').click
     find('.react-datepicker__navigation--next').click
     all(".react-datepicker__day").find { |day| day.text == "3" }.click
     all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
@@ -52,7 +52,7 @@ RSpec.describe 'Calls', type: :system do
     all(".react-datepicker__day").find { |day| day.text == "5" }.click
 
     page.execute_script("document.getElementById('call_full_description').value = 'desc'")
-    page.execute_script("document.getElementById('call_application_details').value = 'app details'")
+    page.execute_script("document.getElementById('entry_details').value = 'app details'")
   end
 
   def fill_in_venue_details
@@ -190,14 +190,14 @@ RSpec.describe 'Calls', type: :system do
     # TODO: test sorting/filtering
   end
 
-  describe '#applications' do
+  describe '#entries' do
     context 'as a juror' do
       before do
         login_as(juror, scope: :user)
         visit call_entries_path(call)
       end
 
-      it 'shows the submitted call applications' do
+      it 'shows the submitted call entries' do
         expect(page).to have_content(submitted_entry.user.full_name)
         expect(page).not_to have_content(started_entry.user.full_name)
       end
@@ -207,7 +207,7 @@ RSpec.describe 'Calls', type: :system do
           [Category.painting, Category.new_media]
         end
 
-        it "shows the call applications for the juror's categories if any" do
+        it "shows the call entries for the juror's categories if any" do
           expect(page).to have_content(Category.painting)
           expect(page).to have_content(Category.new_media)
           expect(page).to have_content(submitted_entry.user.full_name)
@@ -235,7 +235,7 @@ RSpec.describe 'Calls', type: :system do
         visit call_entries_path(call)
       end
 
-      it 'shows the submitted call applications' do
+      it 'shows the submitted call entries' do
         expect(page).to have_content(submitted_entry.user.full_name)
         expect(page).not_to have_content(started_entry.user.full_name)
       end
@@ -245,7 +245,7 @@ RSpec.describe 'Calls', type: :system do
           [Category.painting, Category.new_media]
         end
 
-        it "shows the call applications for the director's categories if any" do
+        it "shows the call entries for the director's categories if any" do
           expect(page).to have_content(Category.painting)
           expect(page).to have_content(Category.new_media)
           expect(page).to have_content(submitted_entry.user.full_name)
@@ -274,7 +274,7 @@ RSpec.describe 'Calls', type: :system do
         visit call_entries_path(call)
       end
 
-      it 'shows the submitted call applications' do
+      it 'shows the submitted call entries' do
         expect(page).to have_content(submitted_entry.user.full_name)
         expect(page).not_to have_content(started_entry.user.full_name)
       end
@@ -284,7 +284,7 @@ RSpec.describe 'Calls', type: :system do
           [Category.painting, Category.new_media]
         end
 
-        it "shows all call applications regardless of acall_dmin's categories" do
+        it "shows all call entries regardless of acall_dmin's categories" do
           expect(page).to have_content(Category.painting)
           expect(page).to have_content(Category.new_media)
           expect(page).to have_content(submitted_entry.user.full_name)

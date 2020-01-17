@@ -34,6 +34,6 @@
 
             %hr
             .text-center
-              - apply_path = @call_application ? "/entries/#{@call_application.creation_status}?call_application_id=#{@call_application.id}" : new_call_application_path(call_id: @call.id)
+              - apply_path = @entry ? "/entries/#{@entry.creation_status}?entry_id=#{@entry.id}" : new_entry_path(call_id: @call.id)
 
               = link_to 'Apply', apply_path, class: 'btn btn-success'

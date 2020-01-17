@@ -65,7 +65,7 @@
     .row.internal-calls-only
       .col-md-12
         .form-group
-          -# %label{ for: 'call_application_details' }
+          -# %label{ for: 'entry_details' }
           %sm.text-muted What should Artists include when applying?
           - if f.object.errors[:application_details].any?
             - f.object.errors[:application_details].each do |err|
@@ -77,7 +77,7 @@
         .form-group
           %label Application Deadline
           = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @call.application_deadline, formFieldId: 'call_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:application_deadline].present? }
+          = react_component 'ReactDatePicker', { startDate: @call.application_deadline, formFieldId: 'entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:application_deadline].present? }
 
       .col-md-2
         .form-group

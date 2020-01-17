@@ -114,7 +114,7 @@ class User < ApplicationRecord
 
   def confirmation_required?
     if created_at > 7.days.ago && entries.exists?
-      false # allow new users created with applications to be unconfirmed
+      false # allow new users created with entries to be unconfirmed
     else
       true
     end

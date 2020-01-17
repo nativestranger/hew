@@ -77,7 +77,7 @@ FactoryBot.define do
       end_at { start_at + rand(1.7).days }
     end
 
-    trait :accepting_applications do
+    trait :accepting_entries do
       application_deadline { Time.current + rand(1..2).days }
       start_at { (application_deadline + rand(1..2).days).to_date }
       end_at { start_at + rand(3..4).days }

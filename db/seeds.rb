@@ -19,21 +19,21 @@ venue = FactoryBot.create(:venue, user: admin)
 FactoryBot.create(:call, user: admin, is_public: true, is_approved: true, external: true)
 FactoryBot.create(:call, :categories, user: admin, is_public: true, is_approved: true, external: true)
 
-FactoryBot.create(:call, :accepting_applications, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
-FactoryBot.create(:call, :categories, :accepting_applications, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
+FactoryBot.create(:call, :accepting_entries, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
+FactoryBot.create(:call, :categories, :accepting_entries, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
 
 2.times do
   FactoryBot.create(:call, user: admin, is_public: true, is_approved: true)
 end
 
 Call.internal.each do |call|
-  rand(3..12).times { FactoryBot.create(:call_application, call: call, creation_status: 'submitted') }
-  FactoryBot.create(:call_application, call: call, user: [user,nil].sample, creation_status: 'submitted')
+  rand(3..12).times { FactoryBot.create(:entry, call: call, creation_status: 'submitted') }
+  FactoryBot.create(:entry, call: call, user: [user,nil].sample, creation_status: 'submitted')
 end
 
 # not applied to
 FactoryBot.create(:call, user: admin, is_public: true, is_approved: true)
-12.times { FactoryBot.create(:call, :accepting_applications, is_public: true, is_approved: true) }
+12.times { FactoryBot.create(:call, :accepting_entries, is_public: true, is_approved: true) }
 
 ###
 

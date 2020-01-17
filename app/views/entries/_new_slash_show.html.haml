@@ -3,15 +3,15 @@
     %h4.text-center
       New Entry
       = ' - '
-      = @call_application.call.name
+      = @entry.call.name
     %hr
 
-    = call_application_progress_bar
+    = entry_progress_bar
 
     .mt-5
-      - if @call_application.new_record?
+      - if @entry.new_record?
         = render 'start'
-      - elsif @call_application.invalid? # or other error from transaction - need if saving other records in it
+      - elsif @entry.invalid? # or other error from transaction - need if saving other records in it
         = render @previous_step.to_s
       - else
-        = render step&.to_s || @call_application.creation_status
+        = render step&.to_s || @entry.creation_status

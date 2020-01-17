@@ -17,7 +17,7 @@ RSpec.describe EntrySearcher, type: :service do
   let(:status_ids) { nil }
   let(:creation_statuses) { nil }
 
-  let!(:call_application) { create(:call_application) }
+  let!(:entry) { create(:entry) }
 
   context 'without a call_id' do
     let(:call_id) { nil }
@@ -37,9 +37,9 @@ RSpec.describe EntrySearcher, type: :service do
       call.update!(category_ids: call_category_ids)
     end
 
-    let!(:painting_entry) { create(:call_application, call: call, category: Category.painting) }
-    let!(:new_media_entry) { create(:call_application, call: call, category: Category.new_media) }
-    let!(:drawing_entry) { create(:call_application, call: call, category: Category.drawing) }
+    let!(:painting_entry) { create(:entry, call: call, category: Category.painting) }
+    let!(:new_media_entry) { create(:entry, call: call, category: Category.new_media) }
+    let!(:drawing_entry) { create(:entry, call: call, category: Category.drawing) }
 
     it 'searches on category_ids' do
       expect(searcher.records.pluck(:id)).to include(painting_entry.id)
@@ -53,9 +53,9 @@ RSpec.describe EntrySearcher, type: :service do
       [ Entry.status_ids['fresh'],
         Entry.status_ids['accepted'] ]
     end
-    let!(:fresh) { create(:call_application, call: call, status_id: 'fresh') }
-    let!(:accepted) { create(:call_application, call: call, status_id: 'accepted') }
-    let!(:rejected) { create(:call_application, call: call, status_id: 'rejected') }
+    let!(:fresh) { create(:entry, call: call, status_id: 'fresh') }
+    let!(:accepted) { create(:entry, call: call, status_id: 'accepted') }
+    let!(:rejected) { create(:entry, call: call, status_id: 'rejected') }
 
     it 'searches on status_ids' do
       expect(searcher.records.pluck(:id)).to include(fresh.id)
@@ -68,8 +68,8 @@ RSpec.describe EntrySearcher, type: :service do
     let(:creation_statuses) do
       [ Entry.creation_statuses['submitted'] ]
     end
-    let!(:submitted) { create(:call_application, call: call, creation_status: 'submitted') }
-    let!(:started) { create(:call_application, call: call) }
+    let!(:submitted) { create(:entry, call: call, creation_status: 'submitted') }
+    let!(:started) { create(:entry, call: call) }
 
     it 'searches on status_ids' do
       expect(searcher.records.pluck(:id)).to include(submitted.id)

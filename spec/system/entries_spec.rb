@@ -7,21 +7,21 @@ RSpec.describe 'Entries', type: :system do
   describe 'creating ' do
     context 'not logged in' do
       it 'creates a new call application and user' do
-        visit new_call_application_path(call_id: call.id)
-        fill_in 'call_application_user_attributes_first_name', with: 'John'
-        fill_in 'call_application_user_attributes_last_name', with: 'Doe'
-        fill_in 'call_application_user_attributes_email', with: 'john@doe.com'
-        fill_in 'call_application_artist_website', with: 'https://website.com'
-        fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
-        page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
+        visit new_entry_path(call_id: call.id)
+        fill_in 'entry_user_attributes_first_name', with: 'John'
+        fill_in 'entry_user_attributes_last_name', with: 'Doe'
+        fill_in 'entry_user_attributes_email', with: 'john@doe.com'
+        fill_in 'entry_artist_website', with: 'https://website.com'
+        fill_in 'entry_artist_instagram_url', with: 'https://instagram.com'
+        page.execute_script("document.getElementById('entry_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = Entry.last
-        expect(call_application.user.first_name).to eq('John')
-        expect(call_application.user.last_name).to eq('Doe')
-        expect(call_application.user.email).to eq('john@doe.com')
-        expect(call_application.artist_website).to eq('https://website.com')
-        expect(call_application.artist_instagram_url).to eq('https://instagram.com')
-        expect(call_application.artist_statement).to eq('statement')
+        entry = Entry.last
+        expect(entry.user.first_name).to eq('John')
+        expect(entry.user.last_name).to eq('Doe')
+        expect(entry.user.email).to eq('john@doe.com')
+        expect(entry.artist_website).to eq('https://website.com')
+        expect(entry.artist_instagram_url).to eq('https://instagram.com')
+        expect(entry.artist_statement).to eq('statement')
 
         sleep 0.5
         new_user = User.find_by(email: "john@doe.com")
@@ -30,40 +30,40 @@ RSpec.describe 'Entries', type: :system do
       end
     end
     context 'logged in' do
-      it 'creates a new call_application for the user' do
+      it 'creates a new entry for the user' do
         login_as(user, scope: :user)
-        visit new_call_application_path(call_id: call.id)
-        fill_in 'call_application_artist_website', with: 'https://website.com'
-        fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
-        page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
+        visit new_entry_path(call_id: call.id)
+        fill_in 'entry_artist_website', with: 'https://website.com'
+        fill_in 'entry_artist_instagram_url', with: 'https://instagram.com'
+        page.execute_script("document.getElementById('entry_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = Entry.last
-        expect(call_application.category).to be_nil
-        expect(call_application.artist_website).to eq('https://website.com')
-        expect(call_application.artist_instagram_url).to eq('https://instagram.com')
-        expect(call_application.artist_statement).to eq('statement')
+        entry = Entry.last
+        expect(entry.category).to be_nil
+        expect(entry.artist_website).to eq('https://website.com')
+        expect(entry.artist_instagram_url).to eq('https://instagram.com')
+        expect(entry.artist_statement).to eq('statement')
       end
       it 'creates with a category' do
         login_as(user, scope: :user)
         call.categories << Category.painting
-        visit new_call_application_path(call_id: call.id)
-        fill_in 'call_application_artist_website', with: 'https://website.com'
-        fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
-        select 'Painting', from: 'call_application_category_id'
-        page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
+        visit new_entry_path(call_id: call.id)
+        fill_in 'entry_artist_website', with: 'https://website.com'
+        fill_in 'entry_artist_instagram_url', with: 'https://instagram.com'
+        select 'Painting', from: 'entry_category_id'
+        page.execute_script("document.getElementById('entry_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = Entry.last
-        expect(call_application.category).to eq(Category.painting)
-        expect(call_application.artist_website).to eq('https://website.com')
-        expect(call_application.artist_instagram_url).to eq('https://instagram.com')
-        expect(call_application.artist_statement).to eq('statement')
+        entry = Entry.last
+        expect(entry.category).to eq(Category.painting)
+        expect(entry.artist_website).to eq('https://website.com')
+        expect(entry.artist_instagram_url).to eq('https://instagram.com')
+        expect(entry.artist_statement).to eq('statement')
       end
     end
   end
 
   describe 'index' do
-    let!(:call_application) { create(:call_application, user: user) }
-    let!(:other_call_application) { create(:call_application) }
+    let!(:entry) { create(:entry, user: user) }
+    let!(:other_entry) { create(:entry) }
 
     before do
       login_as(user, scope: :user)
@@ -71,8 +71,8 @@ RSpec.describe 'Entries', type: :system do
     end
 
     it 'displays the users entries' do
-      expect(page).to have_content(call_application.call.name)
-      expect(page).not_to have_content(other_call_application.call.name)
+      expect(page).to have_content(entry.call.name)
+      expect(page).not_to have_content(other_entry.call.name)
     end
   end
 

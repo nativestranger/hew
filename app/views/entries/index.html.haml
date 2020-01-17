@@ -8,13 +8,13 @@
         .list-group.mt-4
           - if @entries.none?
             .list-group-item.list-group-item-action.border-left-0.border-right-0
-              %p.text-muted.text-center Darn, no applications here.
+              %p.text-muted.text-center Darn, no entries here.
 
           - else
-            - @entries.each do |call_application|
+            - @entries.each do |entry|
               .list-group-item.list-group-item-action.border-left-0.border-right-0
                 %h5.text-center
 
-                %h3 #{call_application.call.name}
-                %p= "#{I18n.l(call_application.call.start_at, format: :long)} - #{I18n.l(call_application.call.end_at, format: :long)}"
-                %p.text-muted= call_application.call.overview
+                %h3 #{entry.call.name}
+                %p= "#{I18n.l(entry.call.start_at, format: :long)} - #{I18n.l(entry.call.end_at, format: :long)}"
+                %p.text-muted= entry.call.overview

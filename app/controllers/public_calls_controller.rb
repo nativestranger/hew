@@ -7,7 +7,7 @@ class PublicCallsController < ApplicationController
       @call.increment!(:view_count)
       redirect_to @call.external_url
     else
-      @call_application = @call.application_for(current_user)
+      @entry = @call.application_for(current_user)
     end
   end
 

@@ -62,10 +62,10 @@ class EntryDashboard < Administrate::BaseDashboard
     supplemental_material_url
   ].freeze
 
-  # Overwrite this method to customize how call applications are displayed
+  # Overwrite this method to customize how call entries are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(call_application)
-  #   "Entry ##{call_application.id}"
+  # def display_resource(entry)
+  #   "Entry ##{entry.id}"
   # end
 end

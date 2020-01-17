@@ -52,7 +52,7 @@ class Entry < ApplicationRecord
     rejected: 2
   }
 
-  scope :pending, -> { where(status_id: %i[fresh]).joins(:call).merge(Call.accepting_applications) }
+  scope :pending, -> { where(status_id: %i[fresh]).joins(:call).merge(Call.accepting_entries) }
 
   scope :past, -> {
     rejected.joins(:call).
@@ -70,7 +70,7 @@ class Entry < ApplicationRecord
   # TODO: require no artist_statement or minimal info?
   validates :artist_statement, presence: true
 
-  validates :category_id, presence: true, if: proc { |call_application| call_application&.call&.categories.exists? }
+  validates :category_id, presence: true, if: proc { |entry| entry&.call&.categories.exists? }
 
   # TODO: change to if 'past x status?'
   validate :has_valid_pieces, if: :creation_status_review?

@@ -24,15 +24,15 @@
 
 class Piece < ApplicationRecord
   belongs_to :user
-  belongs_to :call_application, optional: true
+  belongs_to :entry, optional: true
 
   has_many :piece_images, -> { order('position ASC') }, dependent: :destroy
   accepts_nested_attributes_for :piece_images, allow_destroy: true
 
-  validates :title, presence: true, unless: :call_application_id
+  validates :title, presence: true, unless: :entry_id
 
   scope :with_images, -> { joins(:piece_images).includes(:piece_images) }
-  scope :for_profile, -> { where(call_application_id: nil) }
+  scope :for_profile, -> { where(entry_id: nil) }
 
   attr_accessor :image_ids_in_position_order
 end
