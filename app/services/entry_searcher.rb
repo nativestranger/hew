@@ -8,27 +8,27 @@ class EntrySearcher < ActiveModel::Serializer
     @category_ids = params[:category_ids]
     @status_ids = params[:status_ids]
 
-    @call_applications = Entry.all.distinct
+    @entries = Entry.all.distinct
   end
 
   def records
     if @call_id
-      @call_applications = @call_applications.where(call_id: @call_id)
+      @entries = @entries.where(call_id: @call_id)
     end
 
     if @category_ids&.any?
-      @call_applications = @call_applications.where(category_id: @category_ids)
+      @entries = @entries.where(category_id: @category_ids)
     end
 
     if @status_ids&.any?
-      @call_applications = @call_applications.where(status_id: @status_ids)
+      @entries = @entries.where(status_id: @status_ids)
     end
 
     if @creation_statuses&.any?
-      @call_applications = @call_applications.where(creation_status: @creation_statuses)
+      @entries = @entries.where(creation_status: @creation_statuses)
     end
 
-    @call_applications.order(order_option)
+    @entries.order(order_option)
   end
 
   private
@@ -36,11 +36,11 @@ class EntrySearcher < ActiveModel::Serializer
   def order_option
     case @order_option && @order_option[:name]
     when 'Newest'
-      'call_applications.created_at DESC'
+      'entries.created_at DESC'
     when 'Updated'
-      'call_applications.updated_at DESC'
+      'entries.updated_at DESC'
     else
-      'call_applications.id DESC'
+      'entries.id DESC'
     end
   end
 end

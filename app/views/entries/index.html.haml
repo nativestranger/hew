@@ -6,12 +6,12 @@
 
       .col-md-9
         .list-group.mt-4
-          - if @call_applications.none?
+          - if @entries.none?
             .list-group-item.list-group-item-action.border-left-0.border-right-0
               %p.text-muted.text-center Darn, no applications here.
 
           - else
-            - @call_applications.each do |call_application|
+            - @entries.each do |call_application|
               .list-group-item.list-group-item-action.border-left-0.border-right-0
                 %h5.text-center
 

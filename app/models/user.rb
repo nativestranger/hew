@@ -54,7 +54,7 @@ class User < ApplicationRecord
   has_many :pieces, dependent: :destroy
   has_many :venues, dependent: :destroy
   has_many :calls, dependent: :destroy
-  has_many :call_applications, dependent: :destroy
+  has_many :entries, dependent: :destroy
 
   has_many :chat_users
   has_many :chats, through: :chat_users
@@ -113,7 +113,7 @@ class User < ApplicationRecord
   end
 
   def confirmation_required?
-    if created_at > 7.days.ago && call_applications.exists?
+    if created_at > 7.days.ago && entries.exists?
       false # allow new users created with applications to be unconfirmed
     else
       true

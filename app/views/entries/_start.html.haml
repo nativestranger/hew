@@ -2,7 +2,7 @@
 - # persised records always submit to @next_step and creation_status is updated after other params udpate if it's a forward progression
 
 .form-inputs
-  - url = @call_application.persisted? ? wizard_path(@next_step, call_application_id: @call_application.id) : "/call_applications?call_id=#{@call_application.call_id}"
+  - url = @call_application.persisted? ? wizard_path(@next_step, call_application_id: @call_application.id) : "/entries?call_id=#{@call_application.call_id}"
 
   = simple_form_for @call_application, url: url do |f|
     = f.error_notification

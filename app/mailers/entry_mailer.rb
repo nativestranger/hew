@@ -3,7 +3,7 @@ class EntryMailer < ApplicationMailer # :nodoc:
     mail(
       to:      call_application.call.user.email,
       subject: "You have a new artist submission from #{call_application.user.full_name}",
-      body:    call_applications_url(call_application.call).to_s
+      body:    entries_url(call_application.call).to_s
     )
   end
 

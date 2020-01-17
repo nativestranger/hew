@@ -10,7 +10,7 @@ class EntriesController < ApplicationController
 
   def index
     # TODO: sorting
-    @call_applications = current_user.call_applications
+    @entries = current_user.entries
   end
 
   def new

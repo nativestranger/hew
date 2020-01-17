@@ -109,7 +109,7 @@ export default class EditEntryPieces extends React.Component {
     let makeRequest = function() {
       return axios({
         method: 'patch',
-        url: `/call_applications/${thisComponent.props.next_step}?call_application_id=${thisComponent.props.entry.id}`,
+        url: `/entries/${thisComponent.props.next_step}?call_application_id=${thisComponent.props.entry.id}`,
         data: {
           call_application: { creation_status: thisComponent.props.next_step }
         },

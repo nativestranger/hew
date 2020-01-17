@@ -13,7 +13,7 @@ class UserDashboard < Administrate::BaseDashboard
     pieces:                 Field::HasMany,
     venues:                 Field::HasMany,
     calls:                  Field::HasMany,
-    call_applications:      Field::HasMany,
+    entries:                Field::HasMany,
     chat_users:             Field::HasMany,
     chats:                  Field::HasMany,
     id:                     Field::Number,
@@ -55,7 +55,7 @@ class UserDashboard < Administrate::BaseDashboard
   COLLECTION_ATTRIBUTES = %i[
     email
     calls
-    call_applications
+    entries
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -68,7 +68,7 @@ class UserDashboard < Administrate::BaseDashboard
     is_artist
     is_curator
     calls
-    call_applications
+    entries
     artist_website
     instagram_url
     is_admin

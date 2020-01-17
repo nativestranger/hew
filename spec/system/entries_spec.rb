@@ -67,10 +67,10 @@ RSpec.describe 'Entries', type: :system do
 
     before do
       login_as(user, scope: :user)
-      visit call_applications_path
+      visit entries_path
     end
 
-    it 'displays the users call_applications' do
+    it 'displays the users entries' do
       expect(page).to have_content(call_application.call.name)
       expect(page).not_to have_content(other_call_application.call.name)
     end
