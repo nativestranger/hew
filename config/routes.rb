@@ -39,11 +39,10 @@ Rails.application.routes.draw do
   match 'calls/:id/applications', via: :get, to: 'calls#applications', as: :call_applications
   match 'calls/:id/details', via: :get, to: 'public_calls#details', as: :public_call_details
 
-  resources :call_applications, only: %i[new create update show]
+  resources :call_applications, only: %i[new create update show index]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
   get 'messages', to: 'pages#messages', as: :messages
-  get 'dashboard', to: 'pages#dashboard', as: :dashboard
 
   get 'settings/profile', to: 'settings#profile'
   patch 'settings/profile', to: 'settings#update_profile', as: :update_profile_settings

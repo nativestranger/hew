@@ -8,6 +8,11 @@ class CallApplicationsController < ApplicationController
 
   steps :start, :add_pieces, :review, :submitted
 
+  def index
+    # TODO: sorting
+    @call_applications = current_user.call_applications
+  end
+
   def new
     @call_application = CallApplication.new(
       call:                 @call,
