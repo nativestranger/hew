@@ -21,7 +21,7 @@
                 -# Users
 
           - if policy(@call).view_entries?
-            = link_to call_applications_path(@call), class: 'btn btn-sm btn-white border px-3' do
+            = link_to call_entries_path(@call), class: 'btn btn-sm btn-white border px-3' do
               %span
                 %i.fa.fa-envelope
                 -# Entries

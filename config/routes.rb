@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     resources :call_users, only: %i[create update index]
   end
 
-  match 'calls/:id/applications', via: :get, to: 'calls#applications', as: :call_applications
+  match 'calls/:id/entries', via: :get, to: 'calls#entries', as: :call_entries
   match 'calls/:id/details', via: :get, to: 'public_calls#details', as: :public_call_details
 
   resources :call_applications, only: %i[new create update show index]
