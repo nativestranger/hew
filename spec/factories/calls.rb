@@ -2,28 +2,28 @@
 #
 # Table name: calls
 #
-#  id                      :bigint           not null, primary key
-#  application_deadline    :datetime         not null
-#  application_details     :text             default(""), not null
-#  call_applications_count :bigint           default(0), not null
-#  eligibility             :integer          default("unspecified"), not null
-#  end_at                  :date
-#  entry_fee               :integer
-#  external                :boolean          default(FALSE), not null
-#  external_url            :string           default(""), not null
-#  full_description        :text             default(""), not null
-#  is_approved             :boolean          default(FALSE), not null
-#  is_public               :boolean          default(FALSE), not null
-#  name                    :string           default(""), not null
-#  overview                :string           default(""), not null
-#  spider                  :integer          default("none"), not null
-#  start_at                :date
-#  view_count              :integer          default(0), not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  call_type_id            :integer          not null
-#  user_id                 :bigint           not null
-#  venue_id                :bigint
+#  id                   :bigint           not null, primary key
+#  application_deadline :datetime         not null
+#  application_details  :text             default(""), not null
+#  eligibility          :integer          default("unspecified"), not null
+#  end_at               :date
+#  entries_count        :bigint           default(0), not null
+#  entry_fee            :integer
+#  external             :boolean          default(FALSE), not null
+#  external_url         :string           default(""), not null
+#  full_description     :text             default(""), not null
+#  is_approved          :boolean          default(FALSE), not null
+#  is_public            :boolean          default(FALSE), not null
+#  name                 :string           default(""), not null
+#  overview             :string           default(""), not null
+#  spider               :integer          default("none"), not null
+#  start_at             :date
+#  view_count           :integer          default(0), not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
+#  user_id              :bigint           not null
+#  venue_id             :bigint
 #
 # Indexes
 #
