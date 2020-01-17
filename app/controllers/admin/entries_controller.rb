@@ -1,18 +1,18 @@
 module Admin
-  class CallApplicationsController < Admin::ApplicationController
+  class EntriesController < Admin::ApplicationController
     # To customize the behavior of this controller,
     # you can overwrite any of the RESTful actions. For example:
     #
     # def index
     #   super
-    #   @resources = CallApplication.
+    #   @resources = Entry.
     #     page(params[:page]).
     #     per(10)
     # end
 
     # Define a custom finder by overriding the `find_resource` method:
     # def find_resource(param)
-    #   CallApplication.find_by!(slug: param)
+    #   Entry.find_by!(slug: param)
     # end
 
     # See https://administrate-prototype.herokuapp.com/customizing_controller_actions

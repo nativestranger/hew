@@ -16,7 +16,7 @@ RSpec.describe CallSearcher, type: :service do
   let(:order_option) { nil }
 
   let!(:call) { create(:call) }
-  let!(:public_call) { create(:call, :accepting_applications, is_public: true, is_approved: true) }
+  let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
 
   context 'without a user' do
     let(:user) { nil }

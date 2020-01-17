@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: call_applications
+# Table name: entries
 #
 #  id                        :bigint           not null, primary key
 #  artist_instagram_url      :string           default(""), not null
@@ -18,10 +18,10 @@
 #
 # Indexes
 #
-#  index_call_applications_on_call_id              (call_id)
-#  index_call_applications_on_call_id_and_user_id  (call_id,user_id) UNIQUE
-#  index_call_applications_on_category_id          (category_id)
-#  index_call_applications_on_user_id              (user_id)
+#  index_entries_on_call_id              (call_id)
+#  index_entries_on_call_id_and_user_id  (call_id,user_id) UNIQUE
+#  index_entries_on_category_id          (category_id)
+#  index_entries_on_user_id              (user_id)
 #
 # Foreign Keys
 #
@@ -32,6 +32,6 @@
 
 require 'rails_helper'
 
-RSpec.describe CallApplication, type: :model do
+RSpec.describe Entry, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
 end

@@ -2,16 +2,16 @@
 - # persised records always submit to @next_step and creation_status is updated after other params udpate if it's a forward progression
 
 .form-inputs
-  - url = @call_application.persisted? ? wizard_path(@next_step, call_application_id: @call_application.id) : "/call_applications?call_id=#{@call_application.call_id}"
+  - url = @entry.persisted? ? wizard_path(@next_step, entry_id: @entry.id) : "/entries?call_id=#{@entry.call_id}"
 
-  = simple_form_for @call_application, url: url do |f|
+  = simple_form_for @entry, url: url do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .d-none= f.input :call_id, input_html: { class: 'form-control' }, label: false
 
-    - def @call_application.call_application_id; id; end
-    .d-none= f.input :call_application_id, input_html: { class: 'form-control' }, label: false
+    - def @entry.entry_id; id; end
+    .d-none= f.input :entry_id, input_html: { class: 'form-control' }, label: false
 
     - if current_user.nil?
       = f.simple_fields_for :user do |user|
@@ -37,15 +37,15 @@
           .row
             .col-12
               - categories = @call.categories.to_a
-              - categories << @call_application.category if @call_application.category
-              = f.input :category_id, collection: categories.uniq, include_blank: @call_application.new_record?
+              - categories << @entry.category if @entry.category
+              = f.input :category_id, collection: categories.uniq, include_blank: @entry.new_record?
 
       .col-md-6
         .form-group
-          %label{ for: 'call_application_artist_statement' } Artist Statement
+          %label{ for: 'entry_artist_statement' } Artist Statement
           .trix-md= f.input :artist_statement, input_html: { class: 'form-control' }, label: false, as: :trix_editor
-          - if @call_application.errors[:artist_statement].any?
-            - @call_application.errors[:artist_statement].each do |error_msg|
+          - if @entry.errors[:artist_statement].any?
+            - @entry.errors[:artist_statement].each do |error_msg|
               .text-danger= error_msg
 
     .row

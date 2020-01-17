@@ -2,28 +2,28 @@
 #
 # Table name: calls
 #
-#  id                      :bigint           not null, primary key
-#  application_deadline    :datetime         not null
-#  application_details     :text             default(""), not null
-#  call_applications_count :bigint           default(0), not null
-#  eligibility             :integer          default("unspecified"), not null
-#  end_at                  :date
-#  entry_fee               :integer
-#  external                :boolean          default(FALSE), not null
-#  external_url            :string           default(""), not null
-#  full_description        :text             default(""), not null
-#  is_approved             :boolean          default(FALSE), not null
-#  is_public               :boolean          default(FALSE), not null
-#  name                    :string           default(""), not null
-#  overview                :string           default(""), not null
-#  spider                  :integer          default("none"), not null
-#  start_at                :date
-#  view_count              :integer          default(0), not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  call_type_id            :integer          not null
-#  user_id                 :bigint           not null
-#  venue_id                :bigint
+#  id                   :bigint           not null, primary key
+#  application_deadline :datetime         not null
+#  application_details  :text             default(""), not null
+#  eligibility          :integer          default("unspecified"), not null
+#  end_at               :date
+#  entries_count        :bigint           default(0), not null
+#  entry_fee            :integer
+#  external             :boolean          default(FALSE), not null
+#  external_url         :string           default(""), not null
+#  full_description     :text             default(""), not null
+#  is_approved          :boolean          default(FALSE), not null
+#  is_public            :boolean          default(FALSE), not null
+#  name                 :string           default(""), not null
+#  overview             :string           default(""), not null
+#  spider               :integer          default("none"), not null
+#  start_at             :date
+#  view_count           :integer          default(0), not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  call_type_id         :integer          not null
+#  user_id              :bigint           not null
+#  venue_id             :bigint
 #
 # Indexes
 #
@@ -76,7 +76,7 @@ class Call < ApplicationRecord
 
   before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
 
-  has_many :applications, class_name: 'CallApplication', dependent: :destroy
+  has_many :entries, class_name: 'Entry', dependent: :destroy
 
   enum call_type_id: { exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
@@ -85,7 +85,7 @@ class Call < ApplicationRecord
   scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
   scope :internal, -> { where(external: false) }
 
-  scope :accepting_applications, lambda {
+  scope :accepting_entries, lambda {
     where('application_deadline >= ?', Time.current)
   }
 
@@ -99,7 +99,7 @@ class Call < ApplicationRecord
       .where('application_deadline <= ?', Time.current)
   }
 
-  scope :active, -> { accepting_applications.or(current).or(upcoming) }
+  scope :active, -> { accepting_entries.or(current).or(upcoming) }
 
   scope :past, -> { where('end_at <= ?', Time.current).or(where(end_at: nil).merge(past_deadline)) }
 
@@ -110,7 +110,7 @@ class Call < ApplicationRecord
   def application_for(user)
     return false unless user
 
-    applications.find_by(user: user)
+    entries.find_by(user: user)
   end
 
   def internal?

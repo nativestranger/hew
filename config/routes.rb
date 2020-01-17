@@ -6,7 +6,7 @@ Rails.application.routes.draw do
       get :impersonate, on: :member
     end
     resources :calls
-    resources :call_applications
+    resources :entries
     root to: "users#index"
     get 'blazer', to: 'application#blazer'
   end
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   match 'calls/:id/entries', via: :get, to: 'calls#entries', as: :call_entries
   match 'calls/:id/details', via: :get, to: 'public_calls#details', as: :public_call_details
 
-  resources :call_applications, only: %i[new create update show index]
+  resources :entries, only: %i[new create update show index]
   get '/application_submitted', to: 'pages#application_submitted', as: :application_submitted
 
   get 'messages', to: 'pages#messages', as: :messages
