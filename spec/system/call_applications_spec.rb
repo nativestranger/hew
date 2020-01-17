@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'CallApplications', type: :system do
+RSpec.describe 'Entries', type: :system do
   let(:user) { FactoryBot.create(:user) }
   let(:call) { FactoryBot.create(:call, user: user) }
 
@@ -15,7 +15,7 @@ RSpec.describe 'CallApplications', type: :system do
         fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = CallApplication.last
+        call_application = Entry.last
         expect(call_application.user.first_name).to eq('John')
         expect(call_application.user.last_name).to eq('Doe')
         expect(call_application.user.email).to eq('john@doe.com')
@@ -37,7 +37,7 @@ RSpec.describe 'CallApplications', type: :system do
         fill_in 'call_application_artist_instagram_url', with: 'https://instagram.com'
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = CallApplication.last
+        call_application = Entry.last
         expect(call_application.category).to be_nil
         expect(call_application.artist_website).to eq('https://website.com')
         expect(call_application.artist_instagram_url).to eq('https://instagram.com')
@@ -52,7 +52,7 @@ RSpec.describe 'CallApplications', type: :system do
         select 'Painting', from: 'call_application_category_id'
         page.execute_script("document.getElementById('call_application_artist_statement').value = 'statement'")
         click_button 'Continue'
-        call_application = CallApplication.last
+        call_application = Entry.last
         expect(call_application.category).to eq(Category.painting)
         expect(call_application.artist_website).to eq('https://website.com')
         expect(call_application.artist_instagram_url).to eq('https://instagram.com')

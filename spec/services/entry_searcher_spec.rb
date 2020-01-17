@@ -50,8 +50,8 @@ RSpec.describe EntrySearcher, type: :service do
 
   context 'with status_ids' do
     let(:status_ids) do
-      [ CallApplication.status_ids['fresh'],
-        CallApplication.status_ids['accepted'] ]
+      [ Entry.status_ids['fresh'],
+        Entry.status_ids['accepted'] ]
     end
     let!(:fresh) { create(:call_application, call: call, status_id: 'fresh') }
     let!(:accepted) { create(:call_application, call: call, status_id: 'accepted') }
@@ -66,7 +66,7 @@ RSpec.describe EntrySearcher, type: :service do
 
   context 'with creation_statuses' do
     let(:creation_statuses) do
-      [ CallApplication.creation_statuses['submitted'] ]
+      [ Entry.creation_statuses['submitted'] ]
     end
     let!(:submitted) { create(:call_application, call: call, creation_status: 'submitted') }
     let!(:started) { create(:call_application, call: call) }

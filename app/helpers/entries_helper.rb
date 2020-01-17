@@ -1,4 +1,4 @@
-module CallApplicationsHelper
+module EntriesHelper
   def call_application_progress_bar
     content_tag(:section, class: "content") do
       content_tag(:div, class: "navigator") do

@@ -8,7 +8,7 @@ class EntrySearcher < ActiveModel::Serializer
     @category_ids = params[:category_ids]
     @status_ids = params[:status_ids]
 
-    @call_applications = CallApplication.all.distinct
+    @call_applications = Entry.all.distinct
   end
 
   def records

@@ -39,7 +39,7 @@ FactoryBot.define do
     sequence(:artist_instagram_url) { |n| "https://www.instagram.com/#{n}" }
     sequence(:photos_url) { |n| "https://www.photos_url.com/#{n}" }
     sequence(:supplemental_material_url) { |n| "https://www.supplemental_material_url.com/#{n}" }
-    status_id { CallApplication.status_ids.values.sample }
+    status_id { Entry.status_ids.values.sample }
     creation_status { 'start' }
     category_id { call.categories.sample if call.categories.any? }
 

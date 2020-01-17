@@ -1,4 +1,4 @@
-class CallApplicationsController < ApplicationController
+class EntriesController < ApplicationController
   before_action :set_call, only: %i[new create]
   before_action :ensure_new_application!, only: %i[new create]
   before_action :set_call_application, only: %i[show update]
