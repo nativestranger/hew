@@ -38,7 +38,7 @@ RSpec.describe 'Calls', type: :system do
     fill_in 'call_name', with: 'Call name'
     fill_in 'call_overview', with: 'Call overview'
 
-    find('.application_deadline').click
+    find('.call_application_deadline').click
     find('.react-datepicker__navigation--next').click
     all(".react-datepicker__day").find { |day| day.text == "3" }.click
     all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
@@ -52,7 +52,7 @@ RSpec.describe 'Calls', type: :system do
     all(".react-datepicker__day").find { |day| day.text == "5" }.click
 
     page.execute_script("document.getElementById('call_full_description').value = 'desc'")
-    page.execute_script("document.getElementById('entry_details').value = 'app details'")
+    page.execute_script("document.getElementById('call_application_details').value = 'app details'")
   end
 
   def fill_in_venue_details
