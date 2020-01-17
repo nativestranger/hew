@@ -7,12 +7,6 @@ class PagesController < ApplicationController
     @app_layout_container_class_additions = 'p-0'
   end
 
-  def dashboard
-    if params[:as_artist]
-      @call_applications = current_user.call_applications.send(helpers.artist_dashboard_call_applications_scope)
-    end
-  end
-
   def messages
     @chats = current_user.chats.includes(:chat_users).order(updated_at: :desc)
   end
