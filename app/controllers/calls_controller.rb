@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[applications show edit update]
+  before_action :set_call, only: %i[entries show edit update]
 
   def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
@@ -45,10 +45,9 @@ class CallsController < ApplicationController
 
   def index
     # TODO: render homepage search for unauthenticated?
-    redirect_to dashboard_path
   end
 
-  def applications
+  def entries
     authorize @call, :view_entries?
 
     @disable_turbolinks = true
@@ -78,7 +77,7 @@ class CallsController < ApplicationController
       creation_statuses: creation_statuses,
     )
 
-    @applications = @entry_searcher.records
+    @entries = @entry_searcher.records
   end
 
   private

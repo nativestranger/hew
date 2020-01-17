@@ -5,7 +5,7 @@
     .row
       .col-md-4
         .form-inputs
-          = simple_form_for :entry_searcher, url: call_applications_path(@call), method: "GET", html: {} do |f|
+          = simple_form_for :entry_searcher, url: call_entries_path(@call), method: "GET", html: {} do |f|
 
             -# TODO: show # of not submitted?
             .row.no-gutters
@@ -26,18 +26,18 @@
                   = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-2 rounded-0"
       .col-md-8
         .div
-          - if @applications.none?
+          - if @entries.none?
             %p.text-muted No entries found.
           - else
             %p.text-muted
-              #{@applications.count}
+              #{@entries.count}
               of
               #{ @call.applications.creation_status_submitted.count }
               submitted entries displayed
               -# TODO: paginate - distinguish total count vs filter
 
           .list-group
-            - @applications.each do |call_application|
+            - @entries.each do |call_application|
               -# TODO: link to entry here
               .list-group-item.list-group-item-action.border-left-0.border-right-0.border-top-0.call-application-line-item.px-0.mb-4
                 .row.no-gutters

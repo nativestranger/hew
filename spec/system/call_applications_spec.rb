@@ -61,4 +61,19 @@ RSpec.describe 'CallApplications', type: :system do
     end
   end
 
+  describe 'index' do
+    let!(:call_application) { create(:call_application, user: user) }
+    let!(:other_call_application) { create(:call_application) }
+
+    before do
+      login_as(user, scope: :user)
+      visit call_applications_path
+    end
+
+    it 'displays the users call_applications' do
+      expect(page).to have_content(call_application.call.name)
+      expect(page).not_to have_content(other_call_application.call.name)
+    end
+  end
+
 end
