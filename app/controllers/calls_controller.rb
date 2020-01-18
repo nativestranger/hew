@@ -94,7 +94,7 @@ class CallsController < ApplicationController
       :call_type_id,
       :description,
       :application_details,
-      :application_deadline,
+      :entry_deadline,
       category_ids: [],
       venue_attributes: [
         :id,

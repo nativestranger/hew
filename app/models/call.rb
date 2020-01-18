@@ -63,13 +63,13 @@ class Call < ApplicationRecord
   validates :overview, presence: true # TODO: get rid of overview and rename to description to description
   validates :call_type_id, presence: true
   validates :description, presence: true, unless: :external
-  validates :application_deadline, presence: true
+  validates :entry_deadline, presence: true
   validates :application_details, presence: true, unless: :external
   validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
   validates :entry_fee, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
   validate :end_at_is_after_start_at
-  validate :application_deadline_is_before_start_at
+  validate :entry_deadline_is_before_start_at
   validate :owned_by_admin, if: :external
   validate :future_dates, on: :create
 
@@ -81,11 +81,11 @@ class Call < ApplicationRecord
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
   enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
-  scope :past_deadline, -> { where('application_deadline < ?', Time.current) }
+  scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
   scope :internal, -> { where(external: false) }
 
   scope :accepting_entries, lambda {
-    where('application_deadline >= ?', Time.current)
+    where('entry_deadline >= ?', Time.current)
   }
 
   scope :current, lambda {
@@ -95,7 +95,7 @@ class Call < ApplicationRecord
 
   scope :upcoming, lambda {
     where('start_at >= ?', Time.current)
-      .where('application_deadline <= ?', Time.current)
+      .where('entry_deadline <= ?', Time.current)
   }
 
   scope :active, -> { accepting_entries.or(current).or(upcoming) }
@@ -119,8 +119,8 @@ class Call < ApplicationRecord
   private
 
   def future_dates
-    if application_deadline && application_deadline < Time.current
-      errors.add(:application_deadline, "can't be in the past")
+    if entry_deadline && entry_deadline < Time.current
+      errors.add(:entry_deadline, "can't be in the past")
     end
   end
 
@@ -142,8 +142,8 @@ class Call < ApplicationRecord
     errors.add(:base, 'The end date must be after the start date')
   end
 
-  def application_deadline_is_before_start_at
-    return unless application_deadline && start_at && application_deadline > start_at
+  def entry_deadline_is_before_start_at
+    return unless entry_deadline && start_at && entry_deadline > start_at
 
     errors.add(:base, 'The application deadline must be before the start date')
   end

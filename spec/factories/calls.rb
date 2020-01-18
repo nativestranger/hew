@@ -47,7 +47,7 @@ FactoryBot.define do
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
     description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
-    application_deadline { (1..9).to_a.sample.days.from_now }
+    entry_deadline { (1..9).to_a.sample.days.from_now }
     application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
 
     after(:create) do |call|
@@ -59,26 +59,26 @@ FactoryBot.define do
     end
 
     trait :current do
-      application_deadline { rand(2..4).days.ago }
-      start_at { (application_deadline + 1.day).to_date }
+      entry_deadline { rand(2..4).days.ago }
+      start_at { (entry_deadline + 1.day).to_date }
       end_at { Date.current + rand(2..4).days }
     end
 
     trait :old do
-      application_deadline { 15.days.ago }
+      entry_deadline { 15.days.ago }
       start_at { rand(7..14).days.ago.to_date }
       end_at { start_at + rand(1..4).days }
     end
 
     trait :upcoming do
-      application_deadline { rand(1..4).days.ago }
+      entry_deadline { rand(1..4).days.ago }
       start_at { Date.current + rand(1..2).days }
       end_at { start_at + rand(1.7).days }
     end
 
     trait :accepting_entries do
-      application_deadline { Time.current + rand(1..2).days }
-      start_at { (application_deadline + rand(1..2).days).to_date }
+      entry_deadline { Time.current + rand(1..2).days }
+      start_at { (entry_deadline + rand(1..2).days).to_date }
       end_at { start_at + rand(3..4).days }
     end
   end

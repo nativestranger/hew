@@ -57,7 +57,7 @@ class CallSerializer < ActiveModel::Serializer
   end
 
   def time_until_deadline_in_words
-    distance_of_time_in_words(Time.current, object.application_deadline)
+    distance_of_time_in_words(Time.current, object.entry_deadline)
   end
 
   def entry_counts
