@@ -64,7 +64,7 @@ class Call < ApplicationRecord
   validates :call_type_id, presence: true
   validates :description, presence: true, unless: :external
   validates :entry_deadline, presence: true
-  validates :application_details, presence: true, unless: :external
+  validates :entry_details, presence: true, unless: :external
   validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
   validates :entry_fee, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 

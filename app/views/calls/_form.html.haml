@@ -67,10 +67,10 @@
         .form-group
           -# %label{ for: 'entry_details' }
           %sm.text-muted What should Artists include when applying?
-          - if f.object.errors[:application_details].any?
-            - f.object.errors[:application_details].each do |err|
+          - if f.object.errors[:entry_details].any?
+            - f.object.errors[:entry_details].each do |err|
               %p.mt-0.text-danger= err
-          .mt-2= f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+          .mt-2= f.input :entry_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     .row
       .col-md-4

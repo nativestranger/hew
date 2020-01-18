@@ -48,7 +48,7 @@ FactoryBot.define do
     call_type_id { [1,2,3].sample }
     description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
     entry_deadline { (1..9).to_a.sample.days.from_now }
-    application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
+    entry_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
 
     after(:create) do |call|
       create :call_user, call: call, user: call.user, role: 'owner'

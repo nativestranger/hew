@@ -93,7 +93,7 @@ class CallsController < ApplicationController
       :external_url,
       :call_type_id,
       :description,
-      :application_details,
+      :entry_details,
       :entry_deadline,
       category_ids: [],
       venue_attributes: [

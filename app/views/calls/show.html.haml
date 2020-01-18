@@ -45,11 +45,11 @@
               %h6 Description
               %p= @call.description.html_safe
 
-          - if @call.description.present? || @call.application_details.present?
+          - if @call.description.present? || @call.entry_details.present?
             .col-md-6
-              - if @call.application_details.present?
+              - if @call.entry_details.present?
                 %h6 Application Details
-                %p= @call.application_details.html_safe
+                %p= @call.entry_details.html_safe
 
               - if @call.categories.any?
                 %h6 Categories

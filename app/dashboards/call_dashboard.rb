@@ -18,7 +18,7 @@ class CallDashboard < Administrate::BaseDashboard
     overview:             Field::String,
     description:          Field::Text,
     entry_deadline:       Field::DateTime,
-    application_details:  Field::Text,
+    entry_details:        Field::Text,
     created_at:           Field::DateTime,
     updated_at:           Field::DateTime,
     is_public:            Field::Boolean,
@@ -49,7 +49,7 @@ class CallDashboard < Administrate::BaseDashboard
     :overview,
     :description,
     :entry_deadline,
-    :application_details,
+    :entry_details,
     :is_public,
     :is_approved,
     :created_at,
@@ -70,7 +70,7 @@ class CallDashboard < Administrate::BaseDashboard
     :overview,
     :description,
     :entry_deadline,
-    :application_details,
+    :entry_details,
     :is_public,
     :is_approved
   ].freeze
