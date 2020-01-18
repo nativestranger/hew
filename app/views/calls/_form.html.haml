@@ -40,7 +40,7 @@
     .row.internal-calls-only
       .col-md-12
         .form-group
-          %label{ for: 'call_description' } Full Description
+          %label{ for: 'call_description' } Description
           -# TODO: partial for this
           - if f.object.errors[:description].any?
             - f.object.errors[:description].each do |err|
