@@ -38,9 +38,6 @@
             - if @call.external?
               %h6 External URL
               %p= link_to @call.external_url, @call.external_url
-            - if @call.overview.present?
-              %h6 Overview
-              %p= @call.overview
             - if @call.description.present?
               %h6 Description
               %p= @call.description.html_safe

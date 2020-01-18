@@ -36,7 +36,6 @@ RSpec.describe 'Calls', type: :system do
 
   def fill_in_call_details
     fill_in 'call_name', with: 'Call name'
-    fill_in 'call_overview', with: 'Call overview'
 
     find('.call_entry_deadline').click
     find('.react-datepicker__navigation--next').click

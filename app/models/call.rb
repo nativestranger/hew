@@ -60,7 +60,6 @@ class Call < ApplicationRecord
   validates :start_at, presence: true, unless: START_END_EXCEPTION
   validates :end_at, presence: true, unless: START_END_EXCEPTION
 
-  validates :overview, presence: true # TODO: get rid of overview and rename to description to description
   validates :call_type_id, presence: true
   validates :description, presence: true, unless: :external
   validates :entry_deadline, presence: true

@@ -48,7 +48,7 @@ class ArtDeadlineSpider < Kimurai::Base
       start_at: nil,
       end_at: nil,
       entry_deadline: entry_deadline,
-      overview: possible_overview || "View details to find out more...",
+      description: possible_description || "View details to find out more...",
       eligibility: 'unspecified',
       entry_fee: entry_fee_in_cents,
       skip_start_and_end: true,
@@ -64,7 +64,7 @@ class ArtDeadlineSpider < Kimurai::Base
     false
   end
 
-  def possible_overview
+  def possible_description
     ps = browser.all(:xpath, "//div[@class='section_content']//p").first&.text&.split(' – ')
     ps && ps[1].strip
   end

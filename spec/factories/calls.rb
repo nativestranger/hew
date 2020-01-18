@@ -43,7 +43,6 @@ FactoryBot.define do
     venue { create(:venue) }
     start_at { (10..90).to_a.sample.days.from_now.to_date }
     end_at { start_at + rand(8..10).days }
-    overview { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
     description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }

@@ -87,7 +87,6 @@ class CallsController < ApplicationController
       :name,
       :start_at,
       :end_at,
-      :overview,
       :is_public,
       :external,
       :external_url,

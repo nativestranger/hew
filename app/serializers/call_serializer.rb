@@ -42,9 +42,9 @@ class CallSerializer < ActiveModel::Serializer
   attributes :id,
              :path,
              :name,
-             :overview,
              :call_type,
              :call_users,
+             :description,
              :entry_counts,
              :time_until_deadline_in_words
 

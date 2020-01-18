@@ -81,7 +81,7 @@ class ArtworkArchiveSpider < Kimurai::Base
       start_at: Date.strptime(event_dates.first, "%B %d, %Y"),
       end_at: Date.strptime(event_dates.last, "%B %d, %Y"),
       entry_deadline: entry_deadline,
-      overview: possible_overview&.text || "View details to find out more...",
+      description: possible_description&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
       is_public: true,
@@ -102,7 +102,7 @@ class ArtworkArchiveSpider < Kimurai::Base
       match(/^(?:International|National|Regional|State|Local|Unspecified)/)&.to_s&.downcase
   end
 
-  def possible_overview
+  def possible_description
     call_hero_container.all(:xpath, "//div[@class='row']")[2]
   end
 
