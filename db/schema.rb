@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_17_024950) do
+ActiveRecord::Schema.define(version: 2020_01_18_204552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -183,10 +183,9 @@ ActiveRecord::Schema.define(version: 2020_01_17_024950) do
     t.bigint "venue_id"
     t.date "start_at"
     t.date "end_at"
-    t.string "overview", default: "", null: false
-    t.text "full_description", default: "", null: false
-    t.datetime "application_deadline", null: false
-    t.text "application_details", default: "", null: false
+    t.text "description", default: "", null: false
+    t.datetime "entry_deadline", null: false
+    t.text "entry_details", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_public", default: false, null: false

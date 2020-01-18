@@ -2,28 +2,27 @@
 #
 # Table name: calls
 #
-#  id                   :bigint           not null, primary key
-#  application_deadline :datetime         not null
-#  application_details  :text             default(""), not null
-#  eligibility          :integer          default("unspecified"), not null
-#  end_at               :date
-#  entries_count        :bigint           default(0), not null
-#  entry_fee            :integer
-#  external             :boolean          default(FALSE), not null
-#  external_url         :string           default(""), not null
-#  full_description     :text             default(""), not null
-#  is_approved          :boolean          default(FALSE), not null
-#  is_public            :boolean          default(FALSE), not null
-#  name                 :string           default(""), not null
-#  overview             :string           default(""), not null
-#  spider               :integer          default("none"), not null
-#  start_at             :date
-#  view_count           :integer          default(0), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  call_type_id         :integer          not null
-#  user_id              :bigint           not null
-#  venue_id             :bigint
+#  id             :bigint           not null, primary key
+#  description    :text             default(""), not null
+#  eligibility    :integer          default("unspecified"), not null
+#  end_at         :date
+#  entries_count  :bigint           default(0), not null
+#  entry_deadline :datetime         not null
+#  entry_details  :text             default(""), not null
+#  entry_fee      :integer
+#  external       :boolean          default(FALSE), not null
+#  external_url   :string           default(""), not null
+#  is_approved    :boolean          default(FALSE), not null
+#  is_public      :boolean          default(FALSE), not null
+#  name           :string           default(""), not null
+#  spider         :integer          default("none"), not null
+#  start_at       :date
+#  view_count     :integer          default(0), not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  call_type_id   :integer          not null
+#  user_id        :bigint           not null
+#  venue_id       :bigint
 #
 # Indexes
 #
@@ -44,12 +43,11 @@ FactoryBot.define do
     venue { create(:venue) }
     start_at { (10..90).to_a.sample.days.from_now.to_date }
     end_at { start_at + rand(8..10).days }
-    overview { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
-    full_description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
-    application_deadline { (1..9).to_a.sample.days.from_now }
-    application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
+    description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
+    entry_deadline { (1..9).to_a.sample.days.from_now }
+    entry_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
 
     after(:create) do |call|
       create :call_user, call: call, user: call.user, role: 'owner'
@@ -60,26 +58,26 @@ FactoryBot.define do
     end
 
     trait :current do
-      application_deadline { rand(2..4).days.ago }
-      start_at { (application_deadline + 1.day).to_date }
+      entry_deadline { rand(2..4).days.ago }
+      start_at { (entry_deadline + 1.day).to_date }
       end_at { Date.current + rand(2..4).days }
     end
 
     trait :old do
-      application_deadline { 15.days.ago }
+      entry_deadline { 15.days.ago }
       start_at { rand(7..14).days.ago.to_date }
       end_at { start_at + rand(1..4).days }
     end
 
     trait :upcoming do
-      application_deadline { rand(1..4).days.ago }
+      entry_deadline { rand(1..4).days.ago }
       start_at { Date.current + rand(1..2).days }
       end_at { start_at + rand(1.7).days }
     end
 
     trait :accepting_entries do
-      application_deadline { Time.current + rand(1..2).days }
-      start_at { (application_deadline + rand(1..2).days).to_date }
+      entry_deadline { Time.current + rand(1..2).days }
+      start_at { (entry_deadline + rand(1..2).days).to_date }
       end_at { start_at + rand(3..4).days }
     end
   end

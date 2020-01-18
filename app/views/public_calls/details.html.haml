@@ -14,11 +14,8 @@
             %h5 Event Dates
             %p= "#{@call.start_at.strftime("%B %d, %Y")} - #{@call.end_at.strftime("%B %d, %Y")}"
 
-            %h5 Overview
-            %p.text-muted= @call.overview
-
             %h5 Description
-            %p= @call.full_description.html_safe
+            %p= @call.description.html_safe
 
       .col-md-4
         .card.fun-card
@@ -27,10 +24,10 @@
             %hr
 
             %h6 Deadline
-            %p= @call.application_deadline.strftime("%d %B %Y")
+            %p= @call.entry_deadline.strftime("%d %B %Y")
 
             %h6 Details to Include
-            %p= @call.application_details.html_safe
+            %p= @call.entry_details.html_safe
 
             %hr
             .text-center

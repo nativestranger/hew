@@ -127,7 +127,7 @@ export default class HomepageCallSearch extends React.Component {
                             </div>
                         </div>
                         <div className="card-body my-1 p-0">
-                          <p className="mb-0 text-truncate text-muted">{call.overview}</p>
+                          <p className="mb-0 text-truncate text-muted">{call.description}</p>
                         </div>
                         <div className="card-footer bg-white border-0 p-0 text-muted">
                             <div className="row">
