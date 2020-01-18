@@ -26,9 +26,9 @@ module CallsHelper
 
   def call_order_options
     [
-      { name: 'Deadline (soonest)', selected: true },
-      { name: 'Deadline (furthest)' },
-      { name: 'Newest' },
+      { name: 'Deadline (soonest)', col: :entry_deadline, dir: :asc, selected: true },
+      { name: 'Deadline (furthest)', col: :entry_deadline, dir: :desc },
+      { name: 'Newest', col: :created_at, dir: :desc },
     ]
   end
 

@@ -43,9 +43,20 @@ FactoryBot::SyntaxRunner.class_eval do
   include ActionDispatch::TestProcess
 end
 
+module ViewHelpers
+  class HelpersHolder
+    include Rails.application.helpers
+  end
+
+  def helpers
+    @helpers ||= HelpersHolder.new
+  end
+end
+
 RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include FactoryBot::Syntax::Methods
+  config.include ViewHelpers
 
   config.before(:each, type: :system) do
     include CapybaraSelect2::Helpers
