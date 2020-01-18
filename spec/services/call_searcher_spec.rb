@@ -78,7 +78,7 @@ RSpec.describe CallSearcher, type: :service do
 
       let!(:soon_call) { create(:call, user: user, entry_deadline: 1.day.from_now) }
       let!(:far_call) { create(:call, user: user, entry_deadline: 1.week.from_now) }
-      let!(:farther_call) { create(:call, user: user, entry_deadline: 1.month.from_now) }
+      let!(:farther_call) { create(:call, user: user, entry_deadline: 1.month.from_now, start_at: 2.months.from_now.to_date) }
 
       it 'sorts as expected' do
         expect(searcher.records.map(&:id)).to eq(
@@ -104,7 +104,7 @@ RSpec.describe CallSearcher, type: :service do
 
       let!(:new_call) { create(:call, user: user, created_at: Time.current) }
       let!(:old_call) { create(:call, user: user, created_at: 1.week.ago) }
-      let!(:farther_call) { create(:call, user: user, entry_deadline: 1.month.from_now, start_at: 2.months.from_now.to_date) }
+      let!(:oldest_call) { create(:call, user: user, created_at: 1.month.ago) }
 
       it 'sorts as expected' do
         expect(searcher.records.map(&:id)).to eq(
