@@ -1,7 +1,8 @@
 .row
   .col-lg-10.mx-auto
     %h3
-      = link_to "#{@call.name} Entries", @call
+      = link_to "#{@call.name}", @call
+      Entries
     .row
       .col-md-4
         .form-inputs
@@ -45,7 +46,8 @@
                     .d-inline-block.mr-1
                       = image_tag(entry.user.avatar_url, class: 'img-fluid rounded-circle avatar')
                     %h5.d-inline-block.mb-0.align-middle
-                      = link_to entry.user.full_name, artist_profile_path(user_id: entry.user.id)
+                      = link_to entry.user.full_name,
+                                call_entry_path(call_entry_searcher_wrapped.merge(id: @call.id, entry_id: entry.id))
 
                     - #TODO: track this
                     -# %small.text-muted= time_ago_in_words(entry.submitted_at)
@@ -55,4 +57,4 @@
                     - if entry.category
                       %span.badge.badge-success #{entry.category}
 
-                    = link_to 'Artist Website', entry.artist_website, target: :_blank if entry.artist_website.present?
+                    -# = link_to 'Artist Website', entry.artist_website, target: :_blank if entry.artist_website.present?

@@ -51,4 +51,19 @@ module CallsHelper
       page: (params[:page]&.to_i || 1)
     }
   end
+
+  def call_entry_searcher_params
+    return {} unless params[:entry_searcher]
+
+    params.require(:entry_searcher).permit(
+      category_ids: [],
+      status_ids: []
+    )
+  end
+
+  def call_entry_searcher_wrapped
+    return {} unless params[:entry_searcher]
+
+    { entry_searcher: call_entry_searcher_params.to_h.symbolize_keys }
+  end
 end

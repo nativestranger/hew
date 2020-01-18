@@ -1,0 +1,15 @@
+.row
+  .col-lg-10.mx-auto
+    %h3
+      = link_to "Back to #{@call.name} Entries",
+                call_entries_path(call_entry_searcher_wrapped.merge(id: @call))
+
+    %h4 #{ @entry.user.full_name }
+
+    - if @entry.artist_statement.present?
+      .artist-statement
+        %blockquote.blockquote
+          %p.mb-0 #{ @entry.artist_statement }
+          %footer.blockquote-footer
+            #{ @entry.user.full_name }
+            %cite{:title => "Source Title"} Source Title
