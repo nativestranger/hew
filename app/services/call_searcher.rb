@@ -1,9 +1,10 @@
-class CallSearcher < ActiveModel::Serializer
+class CallSearcher < BaseSearch
   def initialize(params)
     @call_name = params[:call_name]
     @user = params[:user]
     @call_type_ids = params[:call_type_ids]
-    @order_option = params[:order_option]
+    @order_option = params[:sort]
+    super(params)
 
     @calls = Call.all.distinct
   end
@@ -25,7 +26,19 @@ class CallSearcher < ActiveModel::Serializer
       @calls = @calls.where("name ILIKE :name", name: "%#{@call_name}%")
     end
 
-    @calls.order(order_option)
+    # @calls.order(order_option)
+    sort_query(@calls)
+  end
+
+  def sort_columns
+    columns = [
+      { label: 'Deadline (soonest)' , column: 'calls.entry_deadline', direction: 'asc' },
+      { label: 'Deadline (furthest)', column: 'calls.entry_deadline', direction: 'desc' },
+      { label: 'Newest', column: 'calls.created_at', direction: 'desc', default: true },
+      { label: 'Updated', column: 'calls.updated_at', direction: 'desc' }
+    ]
+
+    columns
   end
 
   private

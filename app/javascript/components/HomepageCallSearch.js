@@ -65,7 +65,7 @@ export default class HomepageCallSearch extends React.Component {
 
     $.get("/v1/public/calls.json",
            { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-             order_option: this.selectedOrderOption(),
+             sort: this.selectedOrderOption(),
              page: currentPage,
              authenticity_token: App.getMetaContent("csrf-token") })
         .done(function(data) {

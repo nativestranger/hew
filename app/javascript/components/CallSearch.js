@@ -66,7 +66,7 @@ export default class CallSearch extends React.Component {
 
     var thisComponent = this;
 
-    $.get("/v1/calls", { name: searchValInput, order_option: this.selectedOrderOption() })
+    $.get("/v1/calls", { name: searchValInput, sort: this.selectedOrderOption() })
       .done(function(response) {
         thisComponent.setState({ calls: response.calls,
                                  searchVal: searchValInput,
