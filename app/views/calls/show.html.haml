@@ -41,11 +41,11 @@
             - if @call.overview.present?
               %h6 Overview
               %p= @call.overview
-            - if @call.full_description.present?
+            - if @call.description.present?
               %h6 Description
-              %p= @call.full_description.html_safe
+              %p= @call.description.html_safe
 
-          - if @call.full_description.present? || @call.application_details.present?
+          - if @call.description.present? || @call.application_details.present?
             .col-md-6
               - if @call.application_details.present?
                 %h6 Application Details

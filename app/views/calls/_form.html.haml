@@ -40,12 +40,12 @@
     .row.internal-calls-only
       .col-md-12
         .form-group
-          %label{ for: 'call_full_description' } Full Description
+          %label{ for: 'call_description' } Full Description
           -# TODO: partial for this
-          - if f.object.errors[:full_description].any?
-            - f.object.errors[:full_description].each do |err|
+          - if f.object.errors[:description].any?
+            - f.object.errors[:description].each do |err|
               %p.mt-0.text-danger= err
-          = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+          = f.input :description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     %hr
 

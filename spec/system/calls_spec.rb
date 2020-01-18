@@ -51,7 +51,7 @@ RSpec.describe 'Calls', type: :system do
     find('.react-datepicker__navigation--next').click
     all(".react-datepicker__day").find { |day| day.text == "5" }.click
 
-    page.execute_script("document.getElementById('call_full_description').value = 'desc'")
+    page.execute_script("document.getElementById('call_description').value = 'desc'")
     page.execute_script("document.getElementById('call_application_details').value = 'app details'")
   end
 

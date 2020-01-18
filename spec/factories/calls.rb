@@ -2,28 +2,27 @@
 #
 # Table name: calls
 #
-#  id                   :bigint           not null, primary key
-#  application_deadline :datetime         not null
-#  application_details  :text             default(""), not null
-#  eligibility          :integer          default("unspecified"), not null
-#  end_at               :date
-#  entries_count        :bigint           default(0), not null
-#  entry_fee            :integer
-#  external             :boolean          default(FALSE), not null
-#  external_url         :string           default(""), not null
-#  full_description     :text             default(""), not null
-#  is_approved          :boolean          default(FALSE), not null
-#  is_public            :boolean          default(FALSE), not null
-#  name                 :string           default(""), not null
-#  overview             :string           default(""), not null
-#  spider               :integer          default("none"), not null
-#  start_at             :date
-#  view_count           :integer          default(0), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  call_type_id         :integer          not null
-#  user_id              :bigint           not null
-#  venue_id             :bigint
+#  id             :bigint           not null, primary key
+#  description    :text             default(""), not null
+#  eligibility    :integer          default("unspecified"), not null
+#  end_at         :date
+#  entries_count  :bigint           default(0), not null
+#  entry_deadline :datetime         not null
+#  entry_details  :text             default(""), not null
+#  entry_fee      :integer
+#  external       :boolean          default(FALSE), not null
+#  external_url   :string           default(""), not null
+#  is_approved    :boolean          default(FALSE), not null
+#  is_public      :boolean          default(FALSE), not null
+#  name           :string           default(""), not null
+#  spider         :integer          default("none"), not null
+#  start_at       :date
+#  view_count     :integer          default(0), not null
+#  created_at     :datetime         not null
+#  updated_at     :datetime         not null
+#  call_type_id   :integer          not null
+#  user_id        :bigint           not null
+#  venue_id       :bigint
 #
 # Indexes
 #
@@ -47,7 +46,7 @@ FactoryBot.define do
     overview { Faker::Lorem.paragraphs(rand(1..3)).join(' ') }
     external_url { external ? "https://#{ SecureRandom.uuid[0..5] }.com" : '' }
     call_type_id { [1,2,3].sample }
-    full_description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
+    description { Faker::Lorem.paragraphs(rand(4..8)).join(' ') }
     application_deadline { (1..9).to_a.sample.days.from_now }
     application_details { Faker::Lorem.paragraphs(rand(2..8)).join(' ') }
 
