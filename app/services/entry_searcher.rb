@@ -1,4 +1,4 @@
-class EntrySearcher < ActiveModel::Serializer
+class EntrySearcher
   attr_accessor :category_ids, :status_ids
 
   def initialize(params)

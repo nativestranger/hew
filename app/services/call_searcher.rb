@@ -1,4 +1,4 @@
-class CallSearcher < ActiveModel::Serializer
+class CallSearcher
   def initialize(params)
     @call_name = params[:call_name]
     @user = params[:user]
