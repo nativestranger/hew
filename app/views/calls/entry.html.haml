@@ -1,0 +1,40 @@
+.row
+  .col-lg-10.mx-auto
+    %h3.mb-4
+      = link_to "Back to #{@call.name} Entries",
+                call_entries_path(call_entry_searcher_wrapped.merge(id: @call))
+
+    .row.entry-line-item
+      .col-8.artist-details
+        .d-inline-block.mr-1
+          = image_tag(@entry.user.avatar_url, class: 'img-fluid rounded-circle avatar')
+        %h4.d-inline-block.pt-1 #{ @entry.user.full_name }
+
+        -# %h6
+        -#   Status:
+        -#   %strong{ class: status_color_class(@entry.status_id) } #{@entry.status_id.capitalize}
+
+      - if policy(@call).update_entry_status?
+        .col-4
+          .btns.pull-right.d-flex.justify-content-end
+            .d-inline-block.pr-1
+              = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+                .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'accepted'
+                = f.submit "Accept", class: "btn btn-sm btn-success"
+            .d-inline-block
+              = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+                .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'rejected'
+                = f.submit "Reject", class: "btn btn-sm btn-danger"
+
+    .row
+      .col-12
+        - if @entry.artist_statement.present?
+          -# %h6.mt-4 Artist Statement
+          .artist-statement
+            %blockquote.blockquote
+              %p.mb-0 "#{ @entry.artist_statement }"
+              %footer.blockquote-footer.mt-2
+                #{ @entry.user.full_name }
+                -# %cite #{@entry.user.full_name}
+
+        -# TODO: show pieces

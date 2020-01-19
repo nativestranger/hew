@@ -25,4 +25,11 @@ class CallPolicy
   def view_entries?
     show? # TODO conditionally show to jury based on status?
   end
+
+  def update_entry_status?
+    call.call_users.where(
+      user_id: user.id,
+      role: %w[owner admin director]
+    ).exists?
+  end
 end

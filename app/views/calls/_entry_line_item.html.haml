@@ -1,0 +1,18 @@
+%a.list-group-item.list-group-item-action.entry-line-item.mb-4{ href: call_entry_path(call_entry_searcher_wrapped.merge(id: @call.id, entry_id: entry.id)) }
+  .row.no-gutters
+    .col-auto.mr-auto.artist-details
+      .d-inline-block.mr-1
+        = image_tag(entry.user.avatar_url, class: 'img-fluid rounded-circle avatar')
+      %h5.d-inline-block.align-middle
+        = entry.user.full_name
+
+      - if entry.category
+        %span.badge.badge-success #{entry.category}
+
+      - #TODO: track this
+      -# %small.text-muted= time_ago_in_words(entry.submitted_at)
+      %p.mt-4.text-muted= truncate(entry.artist_statement, length: 60)
+
+      %strong{ class: status_color_class(entry.status_id) } #{entry.status_id.capitalize}
+
+      -# = link_to 'Artist Website', entry.artist_website, target: :_blank if entry.artist_website.present?

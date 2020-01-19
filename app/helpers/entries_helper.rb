@@ -37,4 +37,15 @@ module EntriesHelper
   def entry_search_category_options
     @search_categories.map { |k| [k.name, k.id] }
   end
+
+  def status_color_class(status_id)
+    case status_id
+    when 'fresh'
+      'text-primary'
+    when 'accepted'
+      'text-success'
+    when 'rejected'
+      'text-danger'
+    end
+  end
 end

@@ -53,7 +53,8 @@ class User < ApplicationRecord
 
   has_many :pieces, dependent: :destroy
   has_many :venues, dependent: :destroy
-  has_many :calls, dependent: :destroy
+  has_many :calls, dependent: :destroy # TODO: remove calls.user_id and require owner record
+  has_many :call_users, dependent: :destroy
   has_many :entries, dependent: :destroy
 
   has_many :chat_users

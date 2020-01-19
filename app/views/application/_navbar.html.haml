@@ -12,7 +12,7 @@
         - if current_user.is_artist?
           %li.nav-item
             = link_to 'My Portfolio', artist_profile_path(current_user), class: "nav-link text-dark"
-        - if current_user.calls.exists? # TODO: for entries
+        - if current_user.call_users.exists?
           %li.nav-item
             = link_to 'My Calls', calls_path, class: "nav-link text-dark"
         %li.nav-item
