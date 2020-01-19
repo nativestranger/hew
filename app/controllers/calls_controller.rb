@@ -50,9 +50,6 @@ class CallsController < ApplicationController
   def entries
     authorize @call, :view_entries?
 
-    # TODO: new how to authorize for use cases? # apply_scope?
-    raise 'unauthorized' unless @entry.creation_status_submitted?
-
     @disable_turbolinks = true
 
     @call_user = @call.call_users.find_by!(user: current_user)
@@ -71,6 +68,7 @@ class CallsController < ApplicationController
     # TODO: filter from entry_searcher category_ids from @search_categories
     # similar for status_ids - set up whitelist per role
 
+
     creation_statuses = ['submitted']
 
     @entry_searcher = EntrySearcher.new(
@@ -85,6 +83,10 @@ class CallsController < ApplicationController
 
   def entry
     authorize @call, :view_entries?
+    @entry = @call.entries.find(params[:entry_id])
+
+    # TODO: new how to authorize for use cases? # apply_scope?
+    raise 'unauthorized' unless @entry.creation_status_submitted?
 
     @entry = @call.entries.find(params[:entry_id])
   end
