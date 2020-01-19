@@ -90,7 +90,7 @@ class CallsController < ApplicationController
   end
 
   def update_entry
-    authorize @call, :view_entries?
+    authorize @call, :update_entry_status?
     @entry = @call.entries.find(params[:entry_id])
 
     # TODO: new how to authorize for use cases? # apply_scope?

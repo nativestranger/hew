@@ -14,16 +14,17 @@
         -#   Status:
         -#   %strong{ class: status_color_class(@entry.status_id) } #{@entry.status_id.capitalize}
 
-      .col-4
-        .btns.pull-right.d-flex.justify-content-end
-          .d-inline-block.pr-1
-            = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
-              .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'accepted'
-              = f.submit "Accept", class: "btn btn-sm btn-success"
-          .d-inline-block
-            = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
-              .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'rejected'
-              = f.submit "Reject", class: "btn btn-sm btn-danger"
+      - if policy(@call).update_entry_status?
+        .col-4
+          .btns.pull-right.d-flex.justify-content-end
+            .d-inline-block.pr-1
+              = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+                .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'accepted'
+                = f.submit "Accept", class: "btn btn-sm btn-success"
+            .d-inline-block
+              = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+                .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'rejected'
+                = f.submit "Reject", class: "btn btn-sm btn-danger"
 
     .row
       .col-12
