@@ -40,7 +40,7 @@ class EntrySearcher
     when 'Updated'
       'entries.updated_at DESC'
     else
-      'entries.id DESC'
+      'entries.updated_at DESC'
     end
   end
 end

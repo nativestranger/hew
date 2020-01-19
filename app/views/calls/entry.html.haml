@@ -16,10 +16,14 @@
 
       .col-4
         .btns.pull-right.d-flex.justify-content-end
-          .d-inline-block.pr-1= button_to 'Accept', '#', class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
-          .d-inline-block= button_to 'Reject', '#', class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
-
-    %hr
+          .d-inline-block.pr-1
+            = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+              .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'accepted'
+              = f.submit "Accept", class: "btn btn-sm btn-success"
+          .d-inline-block
+            = simple_form_for @entry, url: call_entry_path(id: @call, entry_id: @entry.id), method: "PATCH", html: {} do |f|
+              .d-none= f.input :status_id, collection: options_for_enum(Entry, :status_id), selected: 'rejected'
+              = f.submit "Reject", class: "btn btn-sm btn-danger"
 
     .row
       .col-12

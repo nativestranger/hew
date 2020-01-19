@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[entries entry show edit update]
+  before_action :set_call, only: %i[entries entry update_entry show edit update]
 
   def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
@@ -87,8 +87,23 @@ class CallsController < ApplicationController
 
     # TODO: new how to authorize for use cases? # apply_scope?
     raise 'unauthorized' unless @entry.creation_status_submitted?
+  end
 
+  def update_entry
+    authorize @call, :view_entries?
     @entry = @call.entries.find(params[:entry_id])
+
+    # TODO: new how to authorize for use cases? # apply_scope?
+    raise 'unauthorized' unless @entry.creation_status_submitted?
+
+    entry_params = params.require(:entry).permit(:status_id)
+
+    if @entry.update(entry_params)
+      redirect_to call_entries_path(@call)
+    else
+      # TODO: error msg
+      redirect_to call_entry_path(id: @call.id, entry_id: @entry.id), danger: 'oops'
+    end
   end
 
   private
