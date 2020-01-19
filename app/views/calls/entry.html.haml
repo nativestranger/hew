@@ -4,12 +4,24 @@
       = link_to "Back to #{@call.name} Entries",
                 call_entries_path(call_entry_searcher_wrapped.merge(id: @call))
 
-    %h4 #{ @entry.user.full_name }
+    %hr
+    .row
+      .col-8
+        %h4 #{ @entry.user.full_name }
 
-    - if @entry.artist_statement.present?
-      .artist-statement
-        %blockquote.blockquote
-          %p.mb-0 #{ @entry.artist_statement }
-          %footer.blockquote-footer
-            #{ @entry.user.full_name }
-            %cite{:title => "Source Title"} Source Title
+      .col-4
+        .btns.pull-right.d-flex.justify-content-end
+          .d-inline-block.pr-1= button_to 'Accept', '#', class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
+          .d-inline-block= button_to 'Reject', '#', class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
+
+      .col-12
+        - if @entry.artist_statement.present?
+          -# %h6.mt-4 Artist Statement
+          .artist-statement
+            %blockquote.blockquote
+              %p.mb-0 "#{ @entry.artist_statement }"
+              %footer.blockquote-footer.mt-2
+                #{ @entry.user.full_name }
+                -# %cite #{@entry.user.full_name}
+
+        -# TODO: show pieces
