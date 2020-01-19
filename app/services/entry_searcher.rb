@@ -8,7 +8,7 @@ class EntrySearcher
     @category_ids = params[:category_ids]
     @status_ids = params[:status_ids]
 
-    @entries = Entry.all.distinct
+    @entries = Entry.all
   end
 
   def records
