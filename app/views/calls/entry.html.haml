@@ -1,19 +1,27 @@
 .row
   .col-lg-10.mx-auto
-    %h3
+    %h3.mb-4
       = link_to "Back to #{@call.name} Entries",
                 call_entries_path(call_entry_searcher_wrapped.merge(id: @call))
 
-    %hr
-    .row
-      .col-8
-        %h4 #{ @entry.user.full_name }
+    .row.entry-line-item
+      .col-8.artist-details
+        .d-inline-block.mr-1
+          = image_tag(@entry.user.avatar_url, class: 'img-fluid rounded-circle avatar')
+        %h4.d-inline-block.pt-1 #{ @entry.user.full_name }
+
+        -# %h6
+        -#   Status:
+        -#   %strong{ class: status_color_class(@entry.status_id) } #{@entry.status_id.capitalize}
 
       .col-4
         .btns.pull-right.d-flex.justify-content-end
           .d-inline-block.pr-1= button_to 'Accept', '#', class: 'btn btn-sm btn-success', method: :patch#, disabled: curator_application_status_scope == :accepted
           .d-inline-block= button_to 'Reject', '#', class: 'btn btn-sm btn-danger', method: :patch#, disabled: curator_application_status_scope == :rejected
 
+    %hr
+
+    .row
       .col-12
         - if @entry.artist_statement.present?
           -# %h6.mt-4 Artist Statement
