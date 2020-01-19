@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[entries show edit update]
+  before_action :set_call, only: %i[entries entry update_entry show edit update]
 
   def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
@@ -68,6 +68,7 @@ class CallsController < ApplicationController
     # TODO: filter from entry_searcher category_ids from @search_categories
     # similar for status_ids - set up whitelist per role
 
+
     creation_statuses = ['submitted']
 
     @entry_searcher = EntrySearcher.new(
@@ -80,6 +81,31 @@ class CallsController < ApplicationController
     @entries = @entry_searcher.records
   end
 
+  def entry
+    authorize @call, :view_entries?
+    @entry = @call.entries.find(params[:entry_id])
+
+    # TODO: new how to authorize for use cases? # apply_scope?
+    raise 'unauthorized' unless @entry.creation_status_submitted?
+  end
+
+  def update_entry
+    authorize @call, :update_entry_status?
+    @entry = @call.entries.find(params[:entry_id])
+
+    # TODO: new how to authorize for use cases? # apply_scope?
+    raise 'unauthorized' unless @entry.creation_status_submitted?
+
+    entry_params = params.require(:entry).permit(:status_id)
+
+    if @entry.update(entry_params)
+      redirect_to call_entries_path(@call)
+    else
+      # TODO: error msg
+      redirect_to call_entry_path(id: @call.id, entry_id: @entry.id), danger: 'oops'
+    end
+  end
+
   private
 
   def permitted_params
@@ -87,14 +113,13 @@ class CallsController < ApplicationController
       :name,
       :start_at,
       :end_at,
-      :overview,
       :is_public,
       :external,
       :external_url,
       :call_type_id,
-      :full_description,
-      :application_details,
-      :application_deadline,
+      :description,
+      :entry_details,
+      :entry_deadline,
       category_ids: [],
       venue_attributes: [
         :id,

@@ -14,11 +14,8 @@
             %h5 Event Dates
             %p= "#{@call.start_at.strftime("%B %d, %Y")} - #{@call.end_at.strftime("%B %d, %Y")}"
 
-            %h5 Overview
-            %p.text-muted= @call.overview
-
             %h5 Description
-            %p= @call.full_description.html_safe
+            %p= @call.description.html_safe
 
       .col-md-4
         .card.fun-card
@@ -27,13 +24,13 @@
             %hr
 
             %h6 Deadline
-            %p= @call.application_deadline.strftime("%d %B %Y")
+            %p= @call.entry_deadline.strftime("%d %B %Y")
 
             %h6 Details to Include
-            %p= @call.application_details.html_safe
+            %p= @call.entry_details.html_safe
 
             %hr
             .text-center
-              - apply_path = @call_application ? "/call_applications/#{@call_application.creation_status}?call_application_id=#{@call_application.id}" : new_call_application_path(call_id: @call.id)
+              - apply_path = @entry ? "/entries/#{@entry.creation_status}?entry_id=#{@entry.id}" : new_entry_path(call_id: @call.id)
 
               = link_to 'Apply', apply_path, class: 'btn btn-success'

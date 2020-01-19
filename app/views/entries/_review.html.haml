@@ -1,13 +1,13 @@
 %p TODO: content for review
 
 .form-inputs
-  = simple_form_for @call_application, url: wizard_path(@next_step, call_application_id: @call_application.id) do |f|
+  = simple_form_for @entry, url: wizard_path(@next_step, entry_id: @entry.id) do |f|
     = f.error_notification
     = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
     .d-none= f.input :creation_status, input_html: { value: @next_step, type: 'string' }
-    - def @call_application.call_application_id; id; end
-    .d-none= f.input :call_application_id, input_html: { class: 'form-control' }, label: false
+    - def @entry.entry_id; id; end
+    .d-none= f.input :entry_id, input_html: { class: 'form-control' }, label: false
 
     .row
       .col-12

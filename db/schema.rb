@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_035318) do
+ActiveRecord::Schema.define(version: 2020_01_18_204552) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -147,25 +147,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
     t.index ["creator_id"], name: "index_blazer_queries_on_creator_id"
   end
 
-  create_table "call_applications", force: :cascade do |t|
-    t.bigint "call_id", null: false
-    t.bigint "user_id", null: false
-    t.text "artist_statement", default: "", null: false
-    t.string "artist_website", default: "", null: false
-    t.string "artist_instagram_url", default: "", null: false
-    t.string "photos_url", default: "", null: false
-    t.string "supplemental_material_url", default: "", null: false
-    t.integer "status_id", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "creation_status", default: 0, null: false
-    t.bigint "category_id"
-    t.index ["call_id", "user_id"], name: "index_call_applications_on_call_id_and_user_id", unique: true
-    t.index ["call_id"], name: "index_call_applications_on_call_id"
-    t.index ["category_id"], name: "index_call_applications_on_category_id"
-    t.index ["user_id"], name: "index_call_applications_on_user_id"
-  end
-
   create_table "call_categories", force: :cascade do |t|
     t.bigint "call_id", null: false
     t.bigint "category_id", null: false
@@ -202,10 +183,9 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
     t.bigint "venue_id"
     t.date "start_at"
     t.date "end_at"
-    t.string "overview", default: "", null: false
-    t.text "full_description", default: "", null: false
-    t.datetime "application_deadline", null: false
-    t.text "application_details", default: "", null: false
+    t.text "description", default: "", null: false
+    t.datetime "entry_deadline", null: false
+    t.text "entry_details", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_public", default: false, null: false
@@ -218,7 +198,7 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
     t.integer "eligibility", default: 1, null: false
     t.integer "entry_fee"
     t.integer "spider", default: 0, null: false
-    t.bigint "call_applications_count", default: 0, null: false
+    t.bigint "entries_count", default: 0, null: false
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
@@ -258,6 +238,25 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
     t.index ["user2_id"], name: "index_connections_on_user2_id"
   end
 
+  create_table "entries", force: :cascade do |t|
+    t.bigint "call_id", null: false
+    t.bigint "user_id", null: false
+    t.text "artist_statement", default: "", null: false
+    t.string "artist_website", default: "", null: false
+    t.string "artist_instagram_url", default: "", null: false
+    t.string "photos_url", default: "", null: false
+    t.string "supplemental_material_url", default: "", null: false
+    t.integer "status_id", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "creation_status", default: 0, null: false
+    t.bigint "category_id"
+    t.index ["call_id", "user_id"], name: "index_entries_on_call_id_and_user_id", unique: true
+    t.index ["call_id"], name: "index_entries_on_call_id"
+    t.index ["category_id"], name: "index_entries_on_category_id"
+    t.index ["user_id"], name: "index_entries_on_user_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "chat_user_id", null: false
     t.text "body", default: "", null: false
@@ -285,8 +284,8 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "medium", default: "", null: false
-    t.bigint "call_application_id"
-    t.index ["call_application_id"], name: "index_pieces_on_call_application_id"
+    t.bigint "entry_id"
+    t.index ["entry_id"], name: "index_pieces_on_entry_id"
     t.index ["user_id"], name: "index_pieces_on_user_id"
   end
 
@@ -339,9 +338,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "call_applications", "calls"
-  add_foreign_key "call_applications", "categories"
-  add_foreign_key "call_applications", "users"
   add_foreign_key "call_categories", "calls"
   add_foreign_key "call_categories", "categories"
   add_foreign_key "call_category_users", "call_categories"
@@ -352,8 +348,11 @@ ActiveRecord::Schema.define(version: 2020_01_14_035318) do
   add_foreign_key "calls", "venues"
   add_foreign_key "connections", "users", column: "user1_id"
   add_foreign_key "connections", "users", column: "user2_id"
+  add_foreign_key "entries", "calls"
+  add_foreign_key "entries", "categories"
+  add_foreign_key "entries", "users"
   add_foreign_key "piece_images", "pieces"
-  add_foreign_key "pieces", "call_applications"
+  add_foreign_key "pieces", "entries"
   add_foreign_key "pieces", "users"
   add_foreign_key "venues", "addresses"
   add_foreign_key "venues", "users"

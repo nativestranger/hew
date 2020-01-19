@@ -1,7 +1,7 @@
-class CallApplicationsController < ApplicationController
+class EntriesController < ApplicationController
   before_action :set_call, only: %i[new create]
   before_action :ensure_new_application!, only: %i[new create]
-  before_action :set_call_application, only: %i[show update]
+  before_action :set_entry, only: %i[show update]
   before_action :authorize_user!, only: %i[show update]
 
   include Wicked::Wizard
@@ -10,22 +10,22 @@ class CallApplicationsController < ApplicationController
 
   def index
     # TODO: sorting
-    @call_applications = current_user.call_applications
+    @entries = current_user.entries
   end
 
   def new
-    @call_application = CallApplication.new(
+    @entry = Entry.new(
       call:                 @call,
       artist_website:       current_user&.artist_website,
       artist_statement:     current_user&.artist_statement,
       artist_instagram_url: current_user&.instagram_url
     )
 
-    @call_application.user = User.new unless current_user
+    @entry.user = User.new unless current_user
   end
 
   def show
-    @call = @call_application.call
+    @call = @entry.call
 
     case step
     when :start
@@ -37,20 +37,20 @@ class CallApplicationsController < ApplicationController
   end
 
   def create
-    create_call_application!
+    create_entry!
 
-    if @call_application.persisted?
-      CallApplicationMailer.new_application(@call_application).deliver_later # if notify?
+    if @entry.persisted?
+      EntryMailer.new_application(@entry).deliver_later # if notify?
 
       if current_user.nil?
-        CallApplicationMailer.new_artist(@call_application).deliver_later
-        bypass_sign_in(@call_application.user)
+        EntryMailer.new_artist(@entry).deliver_later
+        bypass_sign_in(@entry.user)
         flash.notice = "Success! We sent you an email with a link to confirm your address. In the meantime, complete the steps below to finish your entry."
       end
 
-      redirect_to wizard_path(@call_application.creation_status, call_application_id: @call_application.id)
+      redirect_to wizard_path(@entry.creation_status, entry_id: @entry.id)
     else
-      if current_user.nil? && User.find_by(email: @call_application.user.email)
+      if current_user.nil? && User.find_by(email: @entry.user.email)
         flash.now[:error] = "You already have an account with us. You need to sign in before applying."
       end
       render :new
@@ -58,9 +58,9 @@ class CallApplicationsController < ApplicationController
   end
 
   def update
-    @call = @call_application.call
+    @call = @entry.call
 
-    if update_call_application!
+    if update_entry!
       respond_to do |format|
         format.json do
           render json: {
@@ -68,14 +68,14 @@ class CallApplicationsController < ApplicationController
           }
         end
         format.html do
-          redirect_to wizard_path(@step, call_application_id: @call_application.id)
+          redirect_to wizard_path(@step, entry_id: @entry.id)
         end
       end
     else
       respond_to do |format|
         format.json do
           render json: {
-            errors: @call_application.errors
+            errors: @entry.errors
           }
         end
         format.html do
@@ -88,7 +88,7 @@ class CallApplicationsController < ApplicationController
   private
 
   def permitted_params
-    params.require(:call_application).permit(
+    params.require(:entry).permit(
       :call_id,
       :category_id,
       :artist_statement,
@@ -102,16 +102,16 @@ class CallApplicationsController < ApplicationController
     @call = Call.find(params[:call_id])
   end
 
-  def set_call_application
-    @call_application = CallApplication.find(params[:call_application_id])
+  def set_entry
+    @entry = Entry.find(params[:entry_id])
   end
 
-  def create_call_application!
-    CallApplication.transaction do
-      build_call_application
-      @call_application.save!
-      @call_application.update!(
-        creation_status: @call_application.next_creation_status
+  def create_entry!
+    Entry.transaction do
+      build_entry
+      @entry.save!
+      @entry.update!(
+        creation_status: @entry.next_creation_status
       )
       # setup_connection!
     rescue ActiveRecord::RecordInvalid
@@ -119,12 +119,12 @@ class CallApplicationsController < ApplicationController
     end
   end
 
-  def update_call_application!
-    CallApplication.transaction do
-      @call_application.update!(permitted_params) if permitted_params.present?
+  def update_entry!
+    Entry.transaction do
+      @entry.update!(permitted_params) if permitted_params.present?
 
-      if @call_application.future_creation_status?(@step)
-        @call_application.update!(creation_status: @step)
+      if @entry.future_creation_status?(@step)
+        @entry.update!(creation_status: @step)
       end
 
       true
@@ -133,27 +133,27 @@ class CallApplicationsController < ApplicationController
     end
   end
 
-  def build_call_application
-    @call_application = CallApplication.new(permitted_params)
+  def build_entry
+    @entry = Entry.new(permitted_params)
 
     if current_user
-      @call_application.user = current_user
+      @entry.user = current_user
     else
-      @call_application.user.assign_attributes(
+      @entry.user.assign_attributes(
         is_artist:      true,
-        artist_website: @call_application.artist_website,
-        instagram_url:  @call_application.artist_instagram_url
+        artist_website: @entry.artist_website,
+        instagram_url:  @entry.artist_instagram_url
       )
 
-      @call_application.user.skip_confirmation_notification!
+      @entry.user.skip_confirmation_notification!
     end
   end
 
   def setup_connection!
-    return if @call.user_id == @call_application.user_id
+    return if @call.user_id == @entry.user_id
 
     @connection = Connection.find_or_create_between!(
-      @call.user_id, @call_application.user_id
+      @call.user_id, @entry.user_id
     )
   end
 
@@ -167,6 +167,6 @@ class CallApplicationsController < ApplicationController
   end
 
   def authorize_user!
-    redirect_to root_path unless @call_application.user_id == current_user&.id
+    redirect_to root_path unless @entry.user_id == current_user&.id
   end
 end

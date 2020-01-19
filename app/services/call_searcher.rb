@@ -1,4 +1,4 @@
-class CallSearcher < ActiveModel::Serializer
+class CallSearcher
   def initialize(params)
     @call_name = params[:call_name]
     @user = params[:user]
@@ -18,7 +18,7 @@ class CallSearcher < ActiveModel::Serializer
         call_users: { user: @user }
       )
     else
-      @calls = @calls.accepting_applications.approved.published
+      @calls = @calls.accepting_entries.approved.published
     end
 
     if @call_name
@@ -33,9 +33,9 @@ class CallSearcher < ActiveModel::Serializer
   def order_option
     case @order_option && @order_option[:name]
     when 'Deadline (soonest)'
-      'calls.application_deadline ASC'
+      'calls.entry_deadline ASC'
     when 'Deadline (furthest)'
-      'calls.application_deadline DESC'
+      'calls.entry_deadline DESC'
     when 'Newest'
       'calls.created_at DESC'
     when 'Updated'

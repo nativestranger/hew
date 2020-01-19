@@ -1,6 +1,6 @@
 require "administrate/base_dashboard"
 
-class CallApplicationDashboard < Administrate::BaseDashboard
+class EntryDashboard < Administrate::BaseDashboard
   # ATTRIBUTE_TYPES
   # a hash that describes the type of each of the model's fields.
   #
@@ -62,10 +62,10 @@ class CallApplicationDashboard < Administrate::BaseDashboard
     supplemental_material_url
   ].freeze
 
-  # Overwrite this method to customize how call applications are displayed
+  # Overwrite this method to customize how call entries are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(call_application)
-  #   "CallApplication ##{call_application.id}"
+  # def display_resource(entry)
+  #   "Entry ##{entry.id}"
   # end
 end

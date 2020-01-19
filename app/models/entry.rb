@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: call_applications
+# Table name: entries
 #
 #  id                        :bigint           not null, primary key
 #  artist_instagram_url      :string           default(""), not null
@@ -18,10 +18,10 @@
 #
 # Indexes
 #
-#  index_call_applications_on_call_id              (call_id)
-#  index_call_applications_on_call_id_and_user_id  (call_id,user_id) UNIQUE
-#  index_call_applications_on_category_id          (category_id)
-#  index_call_applications_on_user_id              (user_id)
+#  index_entries_on_call_id              (call_id)
+#  index_entries_on_call_id_and_user_id  (call_id,user_id) UNIQUE
+#  index_entries_on_category_id          (category_id)
+#  index_entries_on_user_id              (user_id)
 #
 # Foreign Keys
 #
@@ -30,8 +30,7 @@
 #  fk_rails_...  (user_id => users.id)
 #
 
-# TODO: rename to CallEntry
-class CallApplication < ApplicationRecord
+class Entry < ApplicationRecord
   belongs_to :call, counter_cache: true
   belongs_to :user
   belongs_to :category, optional: true
@@ -53,7 +52,7 @@ class CallApplication < ApplicationRecord
     rejected: 2
   }
 
-  scope :pending, -> { where(status_id: %i[fresh]).joins(:call).merge(Call.accepting_applications) }
+  scope :pending, -> { where(status_id: %i[fresh]).joins(:call).merge(Call.accepting_entries) }
 
   scope :past, -> {
     rejected.joins(:call).
@@ -71,22 +70,22 @@ class CallApplication < ApplicationRecord
   # TODO: require no artist_statement or minimal info?
   validates :artist_statement, presence: true
 
-  validates :category_id, presence: true, if: proc { |call_application| call_application&.call&.categories.exists? }
+  validates :category_id, presence: true, if: proc { |entry| entry&.call&.categories.exists? }
 
   # TODO: change to if 'past x status?'
   validate :has_valid_pieces, if: :creation_status_review?
 
   def future_creation_status?(some_status)
-    CallApplication.creation_statuses[some_status] > CallApplication.creation_statuses[creation_status]
+    Entry.creation_statuses[some_status] > Entry.creation_statuses[creation_status]
   end
 
   # TODO: based on call config whenif dynamic steps
   def next_creation_status(some_status = nil)
     some_status = creation_status if some_status.nil?
 
-    next_value = CallApplication.creation_statuses[some_status] + 1
+    next_value = Entry.creation_statuses[some_status] + 1
 
-    CallApplication.creation_statuses.each_pair do |key, value|
+    Entry.creation_statuses.each_pair do |key, value|
       return key if value == next_value
     end
 

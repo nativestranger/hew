@@ -32,20 +32,15 @@
           = f.label 'Categories'
           #select2_call_category_ids= f.select :category_ids, category_options, { include_blank: true }, { multiple: true, class: 'form-control' }
 
-    .row
-      .col-md-12
-        .form-group
-          = f.input :overview, input_html: { class: 'form-control' }, as: :text
-
     .row.internal-calls-only
       .col-md-12
         .form-group
-          %label{ for: 'call_full_description' } Full Description
+          %label{ for: 'call_description' } Description
           -# TODO: partial for this
-          - if f.object.errors[:full_description].any?
-            - f.object.errors[:full_description].each do |err|
+          - if f.object.errors[:description].any?
+            - f.object.errors[:description].each do |err|
               %p.mt-0.text-danger= err
-          = f.input :full_description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+          = f.input :description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     %hr
 
@@ -65,19 +60,19 @@
     .row.internal-calls-only
       .col-md-12
         .form-group
-          -# %label{ for: 'call_application_details' }
+          -# %label{ for: 'entry_details' }
           %sm.text-muted What should Artists include when applying?
-          - if f.object.errors[:application_details].any?
-            - f.object.errors[:application_details].each do |err|
+          - if f.object.errors[:entry_details].any?
+            - f.object.errors[:entry_details].each do |err|
               %p.mt-0.text-danger= err
-          .mt-2= f.input :application_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+          .mt-2= f.input :entry_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     .row
       .col-md-4
         .form-group
           %label Application Deadline
-          = f.text_field(:application_deadline, hidden: true, html: { id: 'application_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @call.application_deadline, formFieldId: 'call_application_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:application_deadline].present? }
+          = f.text_field(:entry_deadline, hidden: true, html: { id: 'entry_deadline' })
+          = react_component 'ReactDatePicker', { startDate: @call.entry_deadline, formFieldId: 'call_entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:entry_deadline].present? }
 
       .col-md-2
         .form-group

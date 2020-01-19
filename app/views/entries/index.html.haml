@@ -1,0 +1,20 @@
+.row
+  .col-lg-10.mx-auto
+    .row
+      .col-md-3
+        %h3 My Entries
+
+      .col-md-9
+        .list-group.mt-4
+          - if @entries.none?
+            .list-group-item.list-group-item-action.border-left-0.border-right-0
+              %p.text-muted.text-center Darn, no entries here.
+
+          - else
+            - @entries.each do |entry|
+              .list-group-item.list-group-item-action.border-left-0.border-right-0
+                %h5.text-center
+
+                %h3 #{entry.call.name}
+                %p= "#{I18n.l(entry.call.start_at, format: :long)} - #{I18n.l(entry.call.end_at, format: :long)}"
+                %p.text-muted= entry.call.description

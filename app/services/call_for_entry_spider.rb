@@ -70,8 +70,8 @@ class CallForEntrySpider < Kimurai::Base
       name: browser.find(:xpath, "//*[@class='fairname']").text,
       start_at: start_at,
       end_at: end_at,
-      application_deadline: application_deadline,
-      overview: possible_overview&.text || "View details to find out more...",
+      entry_deadline: entry_deadline,
+      description: possible_description&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
       skip_start_and_end: no_dates,
@@ -88,7 +88,7 @@ class CallForEntrySpider < Kimurai::Base
   end
 
   # TODO: clean this up... or set a default?
-  def possible_overview
+  def possible_description
     browser.all(:xpath, "//p").find do |paragraph|
       paragraph.text.include?('eligible') ||
         paragraph.text.include?('open to') ||
@@ -155,7 +155,7 @@ class CallForEntrySpider < Kimurai::Base
     nil
   end
 
-  def application_deadline
+  def entry_deadline
     deadline_str = browser.text.split('Entry Deadline:').last.strip.split('D').first
     Date.strptime(deadline_str, "%m/%d/%y")
   end

@@ -16,7 +16,7 @@ RSpec.describe CallSearcher, type: :service do
   let(:order_option) { nil }
 
   let!(:call) { create(:call) }
-  let!(:public_call) { create(:call, :accepting_applications, is_public: true, is_approved: true) }
+  let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
 
   context 'without a user' do
     let(:user) { nil }
@@ -66,6 +66,51 @@ RSpec.describe CallSearcher, type: :service do
       expect(searcher.records.pluck(:id)).to include(exhibition.id)
       expect(searcher.records.pluck(:id)).to include(publication.id)
       expect(searcher.records.pluck(:id)).not_to include(residency.id)
+    end
+  end
+
+  context 'with order options' do
+    def order_option_for(name)
+      helpers.call_order_options.find {|oo| oo[:name] == name }
+    end
+    context 'Soonest deadline' do
+      let(:order_option) { order_option_for('Deadline (soonest)') }
+
+      let!(:soon_call) { create(:call, user: user, entry_deadline: 1.day.from_now) }
+      let!(:far_call) { create(:call, user: user, entry_deadline: 1.week.from_now) }
+      let!(:farther_call) { create(:call, user: user, entry_deadline: 1.month.from_now, start_at: 2.months.from_now.to_date) }
+
+      it 'sorts as expected' do
+        expect(searcher.records.map(&:id)).to eq(
+          [ soon_call, far_call, farther_call ].map(&:id)
+        )
+      end
+    end
+    context 'Deadline (furthest)' do
+      let(:order_option) { order_option_for('Deadline (furthest)') }
+
+      let!(:soon_call) { create(:call, user: user, entry_deadline: 1.day.from_now) }
+      let!(:far_call) { create(:call, user: user, entry_deadline: 1.week.from_now) }
+      let!(:farther_call) { create(:call, user: user, entry_deadline: 1.month.from_now, start_at: 2.months.from_now.to_date) }
+
+      it 'sorts as expected' do
+        expect(searcher.records.map(&:id)).to eq(
+          [ farther_call, far_call, soon_call ].map(&:id)
+        )
+      end
+    end
+    context 'Newest' do
+      let(:order_option) { order_option_for('Newest') }
+
+      let!(:new_call) { create(:call, user: user, created_at: Time.current) }
+      let!(:old_call) { create(:call, user: user, created_at: 1.week.ago) }
+      let!(:oldest_call) { create(:call, user: user, created_at: 1.month.ago) }
+
+      it 'sorts as expected' do
+        expect(searcher.records.map(&:id)).to eq(
+          [ new_call, old_call, oldest_call ].map(&:id)
+        )
+      end
     end
   end
 end

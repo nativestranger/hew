@@ -10,15 +10,14 @@ class CallDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     user:                 Field::BelongsTo,
     # venue: Field::BelongsTo,
-    applications:         Field::HasMany.with_options(class_name: "CallApplication"),
+    entries:              Field::HasMany.with_options(class_name: "Entry"),
     id:                   Field::Number,
     name:                 Field::String,
     start_at:             Field::DateTime,
     end_at:               Field::DateTime,
-    overview:             Field::String,
-    full_description:     Field::Text,
-    application_deadline: Field::DateTime,
-    application_details:  Field::Text,
+    description:          Field::Text,
+    entry_deadline:       Field::DateTime,
+    entry_details:        Field::Text,
     created_at:           Field::DateTime,
     updated_at:           Field::DateTime,
     is_public:            Field::Boolean,
@@ -34,7 +33,7 @@ class CallDashboard < Administrate::BaseDashboard
     id
     name
     user
-    applications
+    entries
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -46,15 +45,14 @@ class CallDashboard < Administrate::BaseDashboard
     # :venue,
     :start_at,
     :end_at,
-    :overview,
-    :full_description,
-    :application_deadline,
-    :application_details,
+    :description,
+    :entry_deadline,
+    :entry_details,
     :is_public,
     :is_approved,
     :created_at,
     :updated_at,
-    :applications
+    :entries
   ].freeze
 
   # FORM_ATTRIBUTES
@@ -63,14 +61,13 @@ class CallDashboard < Administrate::BaseDashboard
   FORM_ATTRIBUTES = [
     # :user,
     # :venue,
-    # :applications,
+    # :entries,
     :name,
     :start_at,
     :end_at,
-    :overview,
-    :full_description,
-    :application_deadline,
-    :application_details,
+    :description,
+    :entry_deadline,
+    :entry_details,
     :is_public,
     :is_approved
   ].freeze

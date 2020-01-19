@@ -1,9 +1,10 @@
 .row
   .col-lg-10.mx-auto
-    %h3
-      = link_to "#{@call.name} Entries", @call
+    %h3.mb-4
+      = link_to "#{@call.name}", @call
+      Entries
     .row
-      .col-md-4
+      .col
         .form-inputs
           = simple_form_for :entry_searcher, url: call_entries_path(@call), method: "GET", html: {} do |f|
 
@@ -15,44 +16,31 @@
                     .col-xl
                       .form-group
                         %label Categories
-                        = f.select :category_ids, entry_search_category_options, { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
+                        = f.select :category_ids, entry_search_category_options, { include_blank: false }, { multiple: true, 'data-live-search': false, class: 'form-control selectpicker rounded-0' }
 
                   .col-xl
                     .form-group
                       %label Statuses
-                      = f.select :status_ids, options_for_enum(CallApplication, :status_id), { include_blank: true }, { multiple: true, class: 'form-control selectpicker rounded-0' }
-              .col-12
+                      = f.select :status_ids, options_for_enum(Entry, :status_id), { include_blank: false }, { multiple: true, 'data-live-search': false, class: 'form-control selectpicker rounded-0' }
+
+
+            .row
+              .col-md-6
+                %p.text-muted
+                  #{@entries.count}
+                  of
+                  #{ @call.entries.creation_status_submitted.count }
+                  submitted entries displayed
+
+              .col-md-6.d-flex.justify-content-end
                 .form-group
                   = f.submit "Apply Filters", class: "btn btn-primary btn-sm p-2 rounded-0"
-      .col-md-8
+    .row
+      .col
         .div
           - if @entries.none?
             %p.text-muted No entries found.
-          - else
-            %p.text-muted
-              #{@entries.count}
-              of
-              #{ @call.applications.creation_status_submitted.count }
-              submitted entries displayed
-              -# TODO: paginate - distinguish total count vs filter
 
           .list-group
-            - @entries.each do |call_application|
-              -# TODO: link to entry here
-              .list-group-item.list-group-item-action.border-left-0.border-right-0.border-top-0.call-application-line-item.px-0.mb-4
-                .row.no-gutters
-                  .col-auto.mr-auto.artist-details
-                    .d-inline-block.mr-1
-                      = image_tag(call_application.user.avatar_url, class: 'img-fluid rounded-circle avatar')
-                    %h5.d-inline-block.mb-0.align-middle
-                      = link_to call_application.user.full_name, artist_profile_path(user_id: call_application.user.id)
-
-                    - #TODO: track this
-                    -# %small.text-muted= time_ago_in_words(call_application.submitted_at)
-                    -# = truncate(call_application.artist_statement)
-
-                  .col-auto
-                    - if call_application.category
-                      %span.badge.badge-success #{call_application.category}
-
-                    = link_to 'Artist Website', call_application.artist_website, target: :_blank if call_application.artist_website.present?
+            - @entries.each do |entry|
+              = render 'entry_line_item', entry: entry

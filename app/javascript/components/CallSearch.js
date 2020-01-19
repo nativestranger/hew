@@ -162,7 +162,7 @@ export default class CallSearch extends React.Component {
           </p>
 
           <div className='text-primary'>
-            { call.call_application_counts.submitted } { pluralize('entry', call.call_application_counts.submitted) } submitted
+            { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
           </div>
           <div className='clearfix mb-2' />
         </div>
