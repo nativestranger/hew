@@ -21,6 +21,7 @@ module CallsHelper
       "residency" => "🏠",
       "publication" => "📰",
       "competition" => "🏆",
+      "public_art" => "🏛️",
       "default"   => "🌎",
     }
   end
