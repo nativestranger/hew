@@ -1,4 +1,4 @@
-class CallForEntrySpider < Kimurai::Base
+class CallForEntrySpider < Spider
   URL = "https://artist.callforentry.org/festivals.php?reset=1&apply=yes".freeze
 
   @name = "call_for_entry_spider"
@@ -6,10 +6,9 @@ class CallForEntrySpider < Kimurai::Base
   @start_urls = [URL]
 
   def parse(response, url:, data: {})
-    apply_filters
-
-    call_count = 0
-    attempt_count = 0
+    # apply_filters
+    # call_count = 0
+    # attempt_count = 0
 
     until call_count == max_call_count || attempt_count == max_attempt_count
       return if browser.all(:xpath, "//*[text() = 'MORE INFO']")[attempt_count].nil?
@@ -62,25 +61,22 @@ class CallForEntrySpider < Kimurai::Base
   def create_maybe
     return if User.system.calls.where(external_url: browser.current_url).exists?
 
-    persisted = User.system.calls.create(
+    @call = User.system.calls.build(
       user: User.system,
       external: true,
       external_url: browser.current_url,
       call_type_id: call_type_id,
-      name: browser.find(:xpath, "//*[@class='fairname']").text,
+      name: name,
       start_at: start_at,
       end_at: end_at,
       entry_deadline: entry_deadline,
       description: possible_description&.text || "View details to find out more...",
       eligibility: eligibility,
       entry_fee: entry_fee_in_cents,
-      skip_start_and_end: no_dates,
-      is_public: true,
       spider: :call_for_entry,
     ).persisted?
 
-    Rails.logger.info("CREATED CALL #{browser.current_url}")
-    persisted
+    save_call
   rescue => e
     Rails.logger.debug e.message
     puts e.message
@@ -125,6 +121,13 @@ class CallForEntrySpider < Kimurai::Base
     nil
   end
 
+  def name
+    browser.find(:xpath, "//*[@class='fairname']").text
+  rescue => e
+    Rails.logger.debug("EVENT name ERROR: #{browser.current_url}")
+    nil
+  end
+
   # TODO: https://artist.callforentry.org/festivals_unique_info.php?ID=7224
   # Exhibition Dates: Friday, February 14 – Saturday, March 7, 2020
 
@@ -158,6 +161,9 @@ class CallForEntrySpider < Kimurai::Base
   def entry_deadline
     deadline_str = browser.text.split('Entry Deadline:').last.strip.split('D').first
     Date.strptime(deadline_str, "%m/%d/%y")
+  rescue => e
+    Rails.logger.debug("entry_deadline ERROR: #{browser.current_url}")
+    nil
   end
 
   def eligibility

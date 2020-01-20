@@ -7,7 +7,7 @@
 #  eligibility    :integer          default("unspecified"), not null
 #  end_at         :date
 #  entries_count  :bigint           default(0), not null
-#  entry_deadline :datetime         not null
+#  entry_deadline :datetime
 #  entry_details  :text             default(""), not null
 #  entry_fee      :integer
 #  external       :boolean          default(FALSE), not null
@@ -49,20 +49,17 @@ class Call < ApplicationRecord
   has_many :categories, through: :call_categories
   has_many :call_category_users, through: :call_categories
 
-  attr_accessor :skip_start_and_end
-
   accepts_nested_attributes_for :venue
 
   validates :venue, presence: true, if: :require_venue?
-  validates :name, presence: true
+  validates :name, presence: true, unless: :scraper_exception?
 
-  START_END_EXCEPTION = proc { |c| (c.skip_start_and_end || c.user_id == User.system.id) && c.external? }
-  validates :start_at, presence: true, unless: START_END_EXCEPTION
-  validates :end_at, presence: true, unless: START_END_EXCEPTION
+  validates :start_at, presence: true, unless: :start_end_optional?
+  validates :end_at, presence: true, unless: :start_end_optional?
 
   validates :call_type_id, presence: true
   validates :description, presence: true, unless: :external
-  validates :entry_deadline, presence: true
+  validates :entry_deadline, presence: true, unless: :scraper_exception?
   validates :entry_details, presence: true, unless: :external
   validates :external_url, url: { allow_blank: false, public_suffix: true }, if: :external
   validates :entry_fee, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
@@ -76,7 +73,7 @@ class Call < ApplicationRecord
 
   has_many :entries, class_name: 'Entry', dependent: :destroy
 
-  enum call_type_id: { exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
+  enum call_type_id: { tbd: 0, exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
   enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
@@ -112,10 +109,27 @@ class Call < ApplicationRecord
   end
 
   def internal?
-    !external?
+    internal
+  end
+
+  def internal
+    !external
   end
 
   private
+
+  def start_end_optional?
+    system_user? && external? # TODO: certain types?
+  end
+
+  def scraper_exception?
+    !is_public? && system_user? && external?
+  end
+
+  def system_user?
+    call_users.find_by(role: 'owner')&.user_id == User.system.id ||
+      User.system.id == user_id # TODO: eliminate need
+  end
 
   def future_dates
     if entry_deadline && entry_deadline < Time.current

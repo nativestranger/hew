@@ -1,4 +1,4 @@
-class ArtDeadlineSpider < Kimurai::Base
+class ArtDeadlineSpider < Spider
   URL = "https://artdeadline.com/".freeze
 
   @name = "art_deadline_spider"
@@ -51,7 +51,6 @@ class ArtDeadlineSpider < Kimurai::Base
       description: possible_description || "View details to find out more...",
       eligibility: 'unspecified',
       entry_fee: entry_fee_in_cents,
-      skip_start_and_end: true,
       is_public: true,
       spider: :art_deadline,
     ).persisted?

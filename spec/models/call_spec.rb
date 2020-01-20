@@ -7,7 +7,7 @@
 #  eligibility    :integer          default("unspecified"), not null
 #  end_at         :date
 #  entries_count  :bigint           default(0), not null
-#  entry_deadline :datetime         not null
+#  entry_deadline :datetime
 #  entry_details  :text             default(""), not null
 #  entry_fee      :integer
 #  external       :boolean          default(FALSE), not null

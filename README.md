@@ -1,1 +1,2 @@
-iterating on an app for artists&curators/venues to connect
+## CallBulkSpider
+HEADLESS=false be rake scrapers:cafe
