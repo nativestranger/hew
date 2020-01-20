@@ -86,6 +86,11 @@
             %label{ for: 'call_external' }
               External
               = f.input :external, label: false
+        .col-md-2
+          .form-group
+            %label{ for: 'call_is_approved' }
+              Approved
+              = f.input :is_approved, label: false
 
     #venue_fields
       %hr

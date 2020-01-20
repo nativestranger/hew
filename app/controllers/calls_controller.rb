@@ -115,6 +115,7 @@ class CallsController < ApplicationController
       :end_at,
       :is_public,
       :external,
+      :is_approved,
       :external_url,
       :call_type_id,
       :description,
@@ -136,6 +137,8 @@ class CallsController < ApplicationController
         Category.find_or_create_by!(name: category_id).id # TODO: lock or retry on race
       end
     end
+
+    result.delete(:is_approved) unless current_user.is_admin?
 
     result
   end

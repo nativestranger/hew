@@ -69,11 +69,19 @@ class Call < ApplicationRecord
   validate :owned_by_admin, if: :external
   validate :future_dates, on: :create
 
-  before_validation :remove_venue, unless: :venue_supported? # TODO better form/venue edit
+  before_validation :remove_venue_maybe # TODO better form/venue edit
 
   has_many :entries, class_name: 'Entry', dependent: :destroy
 
-  enum call_type_id: { unspecified: 0, exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
+  enum call_type_id: {
+    unspecified: 0,
+    exhibition: 1,
+    residency: 2,
+    publication: 3,
+    competition: 4,
+    public_art: 5
+    }, _prefix: true
+
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
   enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
@@ -137,8 +145,10 @@ class Call < ApplicationRecord
     end
   end
 
-  def remove_venue
-    self.venue = nil
+  def remove_venue_maybe
+    if !venue_supported? || system_user? && venue&.invalid?
+      self.venue = nil
+    end
   end
 
   def require_venue?

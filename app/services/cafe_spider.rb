@@ -8,18 +8,19 @@ class CafeSpider < Spider
   def parse(response, url:, data: {})
     @call = ::Call.find(ENV['call_id'])
     browser.visit @call.external_url
+
     update_maybe
   end
 
   private
 
   def update_maybe
-    # call.call_type_id ||= call_type_id
+    @call.call_type_id = call_type_id if @call.call_type_id_unspecified? && call_type_id
     @call.name = name if @call.name.blank?
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description = possible_description&.text if @call.description.blank?
+    @call.description = possible_description&.text || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
 
@@ -132,13 +133,22 @@ class CafeSpider < Spider
     ENV['call_type'] || "Exhibitions"
   end
 
-  # TODO: fix this
+  CALL_TYPE_REGEX = /\A(Public Art|Exhibitions|Residencies)/
+
   def call_type_id
-    case call_type
+    type_start = browser.text.split('Call Type:')[1]
+
+    return unless type_start.strip.match(CALL_TYPE_REGEX)
+
+    case type_start.strip.match(CALL_TYPE_REGEX)[0]
+    when "Public Art"
+      'public_art'
     when "Exhibitions"
       'exhibition'
     when "Residencies"
       'residency'
     end
+  rescue => e
+    nil
   end
 end

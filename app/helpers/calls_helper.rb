@@ -11,6 +11,7 @@ module CallsHelper
       { id: call_type_ids['residency'], name: 'Residency', enum_name: 'residency', selected: true },
       { id: call_type_ids['publication'], name: 'Publication', enum_name: 'publication', selected: true },
       { id: call_type_ids['competition'], name: 'Competition', enum_name: 'competition', selected: true },
+      { id: call_type_ids['public_art'], name: 'Public Art', enum_name: 'public_art', selected: true },
     ]
   end
 
