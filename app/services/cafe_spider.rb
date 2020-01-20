@@ -19,7 +19,7 @@ class CafeSpider < Spider
     @call.name = name if @call.name.blank?
     @call.start_at ||= start_at
     @call.end_at ||= end_at
-    @call.entry_deadline ||= entry_deadline
+    @call.entry_deadline ||= entry_deadline # TODO: make end of day in estimated timezone
     @call.description = possible_description&.text || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
