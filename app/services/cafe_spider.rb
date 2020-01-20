@@ -1,4 +1,4 @@
-class CallForEntrySpider < Spider
+class CafeSpider < Spider
   URL = "https://artist.callforentry.org/festivals.php?reset=1&apply=yes".freeze
 
   @name = "call_for_entry_spider"
@@ -6,77 +6,24 @@ class CallForEntrySpider < Spider
   @start_urls = [URL]
 
   def parse(response, url:, data: {})
-    # apply_filters
-    # call_count = 0
-    # attempt_count = 0
-
-    until call_count == max_call_count || attempt_count == max_attempt_count
-      return if browser.all(:xpath, "//*[text() = 'MORE INFO']")[attempt_count].nil?
-
-      browser.all(:xpath, "//*[text() = 'MORE INFO']")[attempt_count].click
-
-      if create_maybe
-        call_count += 1
-      end
-
-      attempt_count += 1 # change?
-      browser.go_back
-    end
+    @call = ::Call.find(ENV['call_id'])
+    browser.visit @call.external_url
+    update_maybe
   end
 
   private
 
-  def apply_filters
-    choose_call_type
-    choose_eligibility if eligibility_filter
-    choose_sort_option if sort_option
-  end
+  def update_maybe
+    # call.call_type_id ||= call_type_id
+    @call.name = name if @call.name.blank?
+    @call.start_at ||= start_at
+    @call.end_at ||= end_at
+    @call.entry_deadline ||= entry_deadline
+    @call.description = possible_description&.text if @call.description.blank?
+    @call.eligibility ||= eligibility
+    @call.entry_fee ||= entry_fee_in_cents
 
-  def choose_call_type
-    browser.find(:xpath, "//*[@id='call-icon']").click
-    filter_checkbox(call_type).click
-    browser.find(:xpath, "//*[@id='call-icon']").click
-  end
-
-  def choose_eligibility
-    browser.find(:xpath, "//*[@id='elig-icon']").click
-    filter_checkbox(eligibility_filter).click
-    browser.find(:xpath, "//*[@id='elig-icon']").click
-  end
-
-  def choose_sort_option
-    browser.select sort_option, from: 'sort'
-    # TODO support state sort...
-    if sort_option == 'DEADLINE'
-      deadline_sort_labels.find { |element| element.text == deadline_sort_by }.click
-    end
-  end
-
-  def filter_checkbox(checkbox_name)
-    browser.all(:xpath, "//label[@class='ck-contain']").find do |ck_contain|
-      ck_contain.text == checkbox_name
-    end
-  end
-
-  def create_maybe
-    return if User.system.calls.where(external_url: browser.current_url).exists?
-
-    @call = User.system.calls.build(
-      user: User.system,
-      external: true,
-      external_url: browser.current_url,
-      call_type_id: call_type_id,
-      name: name,
-      start_at: start_at,
-      end_at: end_at,
-      entry_deadline: entry_deadline,
-      description: possible_description&.text || "View details to find out more...",
-      eligibility: eligibility,
-      entry_fee: entry_fee_in_cents,
-      spider: :call_for_entry,
-    ).persisted?
-
-    save_call
+    @call.save!
   rescue => e
     Rails.logger.debug e.message
     puts e.message
@@ -185,6 +132,7 @@ class CallForEntrySpider < Spider
     ENV['call_type'] || "Exhibitions"
   end
 
+  # TODO: fix this
   def call_type_id
     case call_type
     when "Exhibitions"
@@ -192,37 +140,5 @@ class CallForEntrySpider < Spider
     when "Residencies"
       'residency'
     end
-  end
-
-  def eligibility_filter
-    return if ENV['ignore_eligibility'].present?
-
-    ENV['eligibility'] || "International"
-  end
-
-  def max_call_count
-    ENV['max_call_count']&.to_i || 40
-  end
-
-  def max_attempt_count
-    ENV['max_attempt_count']&.to_i || 80
-  end
-
-  def sort_option
-    return if ENV['ignore_sort_option'].present?
-
-    ENV['sort_option'] || 'DEADLINE'
-  end
-
-  def deadline_sort_labels
-    browser.all(:xpath, "//div[@id='deadline-types']//label[@class='r-contain']")
-  end
-
-  def deadline_sort_by
-    ENV['deadline_sort_by'] || "Latest Deadline"
-  end
-
-  def no_dates
-    !browser.text.downcase.include?('dates')
   end
 end

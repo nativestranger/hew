@@ -32,6 +32,9 @@
           .col-md-6.mb-4
             %h6 Deadline
             %p= I18n.l(@call.entry_deadline, format: :long) if @call.entry_deadline
+            - if @call.entry_fee
+              %h6 Entry Fee
+              %p= number_to_currency(@call.entry_fee / 100)
             - if @call.start_at && @call.end_at
               %h6 Event Dates
               %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"

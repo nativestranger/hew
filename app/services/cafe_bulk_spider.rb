@@ -10,10 +10,11 @@ class CafeBulkSpider < Spider
       @call = ::Call.find_or_initialize_by(
         user: User.system,
         external_url: entry_link[:href],
-        external: true
+        external: true,
+        spider: :call_for_entry
       )
 
-      @call.call_type_id = :tbd if @call.new_record?
+      @call.call_type_id = :unspecified if @call.new_record?
       save_with_admins
     end
   end

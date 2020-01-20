@@ -73,7 +73,7 @@ class Call < ApplicationRecord
 
   has_many :entries, class_name: 'Entry', dependent: :destroy
 
-  enum call_type_id: { tbd: 0, exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
+  enum call_type_id: { unspecified: 0, exhibition: 1, residency: 2, publication: 3, competition: 4 }, _prefix: true
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
   enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
 
