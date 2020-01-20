@@ -6,13 +6,17 @@
       %h5.d-inline-block.align-middle
         = entry.user.full_name
 
+    .col-auto
       - if entry.category
         %span.badge.badge-success #{entry.category}
-
+  .row
+    .col-auto.mr-auto
       - #TODO: track this
       -# %small.text-muted= time_ago_in_words(entry.submitted_at)
-      %p.mt-4.text-muted= truncate(entry.artist_statement, length: 60)
+      .artist-statement
+        .trix-content.mt-4.text-muted= entry.artist_statement.html_safe
 
-      %strong{ class: status_color_class(entry.status_id) } #{entry.status_id.capitalize}
+    .col-auto.d-flex.align-items-end.flex-column
+      %strong.mt-auto{ class: status_color_class(entry.status_id) } #{entry.status_id.capitalize}
 
       -# = link_to 'Artist Website', entry.artist_website, target: :_blank if entry.artist_website.present?

@@ -49,6 +49,12 @@ trix-toolbar .trix-button-group--history-tools {
 
 // misc
 
+.fade-text {
+  -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  // overflow-y: scroll;
+}
+
 .c-pointer {
   cursor: pointer;
 }

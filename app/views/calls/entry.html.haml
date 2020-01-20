@@ -4,7 +4,7 @@
       = link_to "Back to #{@call.name} Entries",
                 call_entries_path(call_entry_searcher_wrapped.merge(id: @call))
 
-    .row.entry-line-item
+    .row.entry-line-item.mb-4
       .col-8.artist-details
         .d-inline-block.mr-1
           = image_tag(@entry.user.avatar_url, class: 'img-fluid rounded-circle avatar')
@@ -27,14 +27,14 @@
                 = f.submit "Reject", class: "btn btn-sm btn-danger"
 
     .row
-      .col-12
+      .col-6
+        .card.fun-card
+          .card-header Work
+          .card-body
+            -# TODO: show pieces
+      .col-6
         - if @entry.artist_statement.present?
-          -# %h6.mt-4 Artist Statement
-          .artist-statement
-            %blockquote.blockquote
-              %p.mb-0 "#{ @entry.artist_statement }"
-              %footer.blockquote-footer.mt-2
-                #{ @entry.user.full_name }
-                -# %cite #{@entry.user.full_name}
-
-        -# TODO: show pieces
+          .card.fun-card
+            .card-header Artist Statement
+            .card-body.blockquote
+              .trix-content.mb-0 #{ @entry.artist_statement.html_safe }

@@ -126,8 +126,8 @@ export default class HomepageCallSearch extends React.Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="card-body my-1 p-0">
-                          <p className="mb-0 text-truncate text-muted">{call.description}</p>
+                        <div className="card-body call-description my-1 p-0">
+                          <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
                         </div>
                         <div className="card-footer bg-white border-0 p-0 text-muted">
                             <div className="row">
