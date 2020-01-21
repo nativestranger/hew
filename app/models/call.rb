@@ -109,6 +109,7 @@ class Call < ApplicationRecord
   scope :published, -> { where(is_public: true) }
 
   scope :approved, -> { where(is_approved: true) }
+  scope :not_approved, -> { where(is_approved: false) }
 
   def application_for(user)
     return false unless user

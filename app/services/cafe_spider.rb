@@ -133,7 +133,7 @@ class CafeSpider < Spider
     ENV['call_type'] || "Exhibitions"
   end
 
-  CALL_TYPE_REGEX = /\A(Public Art|Exhibitions|Residencies)/
+  CALL_TYPE_REGEX = /\A(Public Art|Exhibitions|Residencies|Competitions)/
 
   def call_type_id
     type_start = browser.text.split('Call Type:')[1]
@@ -147,6 +147,8 @@ class CafeSpider < Spider
       'exhibition'
     when "Residencies"
       'residency'
+    when "Competitions"
+      'competition'
     end
   rescue => e
     nil
