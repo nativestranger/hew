@@ -6,7 +6,7 @@ namespace :scrapers do
   end
 
   task :artwork_archive do
-    ArtworkArchiveSpider.crawl!
+    ArtworkArchiveBulkSpider.crawl!
   end
 
   task :art_deadline do
