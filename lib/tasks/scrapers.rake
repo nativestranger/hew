@@ -10,6 +10,6 @@ namespace :scrapers do
   end
 
   task :art_deadline do
-    ArtDeadlineSpider.crawl!
+    ArtDeadlineBulkSpider.crawl!
   end
 end
