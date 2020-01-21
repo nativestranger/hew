@@ -16,7 +16,7 @@ class ArtworkArchiveSpider < Kimurai::Base
 
   def update_maybe
     @call.call_type_id ||= call_type_id
-    @call.name ||= name
+    @call.name = name if name && @call.name.blank?
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
