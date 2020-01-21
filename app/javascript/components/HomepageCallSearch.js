@@ -111,7 +111,7 @@ export default class HomepageCallSearch extends React.Component {
 
         <div className="calls">
           { this.state.calls && this.state.calls.map(call => (
-            <div className="row mb-4 mt-2" key={call.id}>
+            <a href={`/calls/${call.id}/details`} target="_blank" className="row mb-4" key={call.id}>
                 <div className="col-12 mx-auto">
                     <div className="card border-0">
                         <div className="card-header bg-white border-0 p-0">
@@ -119,9 +119,9 @@ export default class HomepageCallSearch extends React.Component {
                                 <div className="col-12">
                                     <h5 className="mb-0">
                                       <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
-                                      <a href={`/calls/${call.id}/details`}>{call.name}
+                                      <p className='d-inline-block'>{call.name}
                                         { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
-                                      </a>
+                                      </p>
                                     </h5>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@ export default class HomepageCallSearch extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
           )) }
         </div>
 
@@ -222,6 +222,11 @@ export default class HomepageCallSearch extends React.Component {
               Publications
               { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
               { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
+            </li>
+            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Public Art') } }>
+              Publications
+              { isSelected('Public Art') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+              { !isSelected('Public Art') && <span className="fa fa-times fa-sm p-2"></span> }
             </li>
           </ul>
       </div>

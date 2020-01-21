@@ -154,16 +154,41 @@ export default class CallSearch extends React.Component {
 
     return (
       <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
-        <h4 className='card-title mb-0'>{ call.name }</h4>
+        <h4 className='card-title mb-0'>
+          { call.name || 'Unknown Name' }
+
+          { call.scraped && (
+            <small className='pull-right'>
+              <span className="d-inline badge badge-light border mr-1 p-1" >
+                {call.spider}
+              </span>
+            </small>
+          ) }
+        </h4>
 
         <div className="card-body p-0">
-          <p className='text-muted'>
-            { call.time_until_deadline_in_words } left for entries
-          </p>
+          { call.time_until_deadline_in_words && (
+            <p className='text-muted'>
+              { call.time_until_deadline_in_words } left for entries
+            </p>
+          ) }
 
-          <div className='text-primary'>
-            { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
-          </div>
+          { call.internal && (
+            <div className='text-primary'>
+              { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
+            </div>
+          ) }
+
+          { call.external && (
+            <div className='mt-4'>
+              <a href={call.external_url}>
+                External URL
+              </a>
+              <div>
+                { call.view_count } { pluralize('view', call.view_count) }
+              </div>
+            </div>
+          ) }
           <div className='clearfix mb-2' />
         </div>
       </a>

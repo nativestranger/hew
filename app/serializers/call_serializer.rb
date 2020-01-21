@@ -7,7 +7,7 @@
 #  eligibility    :integer          default("unspecified"), not null
 #  end_at         :date
 #  entries_count  :bigint           default(0), not null
-#  entry_deadline :datetime         not null
+#  entry_deadline :datetime
 #  entry_details  :text             default(""), not null
 #  entry_fee      :integer
 #  external       :boolean          default(FALSE), not null
@@ -42,9 +42,15 @@ class CallSerializer < ActiveModel::Serializer
   attributes :id,
              :path,
              :name,
+             :scraped,
+             :spider,
+             :internal,
+             :external,
              :call_type,
              :call_users,
+             :view_count,
              :description,
+             :external_url,
              :entry_counts,
              :time_until_deadline_in_words
 
@@ -57,6 +63,8 @@ class CallSerializer < ActiveModel::Serializer
   end
 
   def time_until_deadline_in_words
+    return unless object.entry_deadline
+
     distance_of_time_in_words(Time.current, object.entry_deadline)
   end
 
