@@ -5,16 +5,18 @@
   #navbarSupportedContent.collapse.navbar-collapse
     %ul.navbar-nav.ml-auto
       - if current_user
-        %li.nav-item
-          = link_to "Admin", admin_root_path, class: "nav-link text-dark" if current_user.is_admin?
-        %li.nav-item
-          = link_to '+ New Call', new_call_path, class: 'nav-link text-dark'
-        - if current_user.is_artist?
+        - if current_user.is_admin?
           %li.nav-item
-            = link_to 'My Portfolio', artist_profile_path(current_user), class: "nav-link text-dark"
+            = link_to "Admin", admin_root_path, class: "nav-link text-dark"
         - if current_user.call_users.exists?
           %li.nav-item
             = link_to 'My Calls', calls_path, class: "nav-link text-dark"
+        - else
+          %li.nav-item
+            = link_to '+ New Call', new_call_path, class: 'nav-link text-dark'
+        - if current_user.is_artist?
+          %li.nav-item
+            = link_to 'My Portfolio', artist_profile_path(current_user), class: "nav-link text-dark"
         %li.nav-item
           = link_to 'Profile', settings_profile_path, class: "nav-link text-dark"
         -# %li.nav-item
