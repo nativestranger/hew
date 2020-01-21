@@ -4,6 +4,8 @@ class CallSearcher
     @user = params[:user]
     @call_type_ids = params[:call_type_ids]
     @order_option = params[:order_option]
+    @approved = params[:approved]
+    @published = params[:published]
 
     @calls = Call.all.distinct
   end
@@ -17,8 +19,16 @@ class CallSearcher
       @calls = @calls.joins(:call_users).where(
         call_users: { user: @user }
       )
+
+      if [true, false].include?(@approved)
+        @calls = @calls.where(is_approved: @approved)
+      end
+
+      if [true, false].include?(@published)
+        @calls = @calls.where(is_public: @published)
+      end
     else
-      @calls = @calls.accepting_entries.approved.published
+      @calls = @calls.homepage
     end
 
     if @call_name

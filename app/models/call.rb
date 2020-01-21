@@ -80,10 +80,16 @@ class Call < ApplicationRecord
     publication: 3,
     competition: 4,
     public_art: 5
-    }, _prefix: true
+  }, _prefix: true
 
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
-  enum spider: { none: 0, call_for_entry: 1, artwork_archive: 2, art_deadline: 3 }, _prefix: true
+
+  enum spider: {
+    none: 0,
+    call_for_entry: 1,
+    artwork_archive: 2,
+    art_deadline: 3
+  }, _prefix: true
 
   scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
   scope :internal, -> { where(external: false) }
@@ -111,6 +117,8 @@ class Call < ApplicationRecord
   scope :approved, -> { where(is_approved: true) }
   scope :not_approved, -> { where(is_approved: false) }
 
+  scope :homepage, -> { accepting_entries.approved.published }
+
   def application_for(user)
     return false unless user
 
@@ -123,6 +131,21 @@ class Call < ApplicationRecord
 
   def internal
     !external
+  end
+
+  def homepage?
+    Call.where(id: self.id).homepage.exists?
+  end
+
+  def perform_scrape
+    return if spider_none?
+
+    case spider
+    when 'call_for_entry'
+      CallForEntryJob.perform_later(id)
+    when 'artwork_archive'
+    when 'art_deadline'
+    end
   end
 
   private

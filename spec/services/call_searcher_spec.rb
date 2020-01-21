@@ -5,6 +5,8 @@ RSpec.describe CallSearcher, type: :service do
     CallSearcher.new(
        call_name: call_name,
        user: user,
+       approved: approved,
+       published: published,
        call_type_ids: call_type_ids,
        order_option: order_option
     )
@@ -12,8 +14,10 @@ RSpec.describe CallSearcher, type: :service do
 
   let(:call_name) { nil }
   let(:user) { create(:user) }
-  let(:call_type_ids) { nil }
+  let(:approved) { nil }
+  let(:published) { nil }
   let(:order_option) { nil }
+  let(:call_type_ids) { nil }
 
   let!(:call) { create(:call) }
   let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
@@ -50,6 +54,48 @@ RSpec.describe CallSearcher, type: :service do
       expect(searcher.records.pluck(:id)).to include(named_call.id)
       named_call.update!(name: 'other')
       expect(searcher.records.pluck(:id)).not_to include(named_call.id)
+    end
+  end
+
+  context 'with approved' do
+    let!(:approved_call) { create(:call, user: user, is_approved: true) }
+    let!(:not_approved_call) { create(:call, user: user, is_approved: false) }
+
+    context 'approved' do
+      let(:approved) { true }
+      it 'shows approved' do
+        expect(searcher.records.pluck(:id)).to include(approved_call.id)
+        expect(searcher.records.pluck(:id)).not_to include(not_approved_call.id)
+      end
+    end
+
+    context 'not approved' do
+      let(:approved) { false }
+      it 'shows not approved' do
+        expect(searcher.records.pluck(:id)).not_to include(approved_call.id)
+        expect(searcher.records.pluck(:id)).to include(not_approved_call.id)
+      end
+    end
+  end
+
+  context 'with published' do
+    let!(:published_call) { create(:call, user: user, is_public: true) }
+    let!(:not_published_call) { create(:call, user: user, is_public: false) }
+
+    context 'published' do
+      let(:published) { true }
+      it 'shows published' do
+        expect(searcher.records.pluck(:id)).to include(published_call.id)
+        expect(searcher.records.pluck(:id)).not_to include(not_published_call.id)
+      end
+    end
+
+    context 'not published' do
+      let(:published) { false }
+      it 'shows not published' do
+        expect(searcher.records.pluck(:id)).not_to include(published_call.id)
+        expect(searcher.records.pluck(:id)).to include(not_published_call.id)
+      end
     end
   end
 
