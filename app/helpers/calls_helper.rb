@@ -1,4 +1,8 @@
 module CallsHelper
+  def titleize_snakecase(str)
+    str.gsub('_', ' ').titleize
+  end
+
   def fa_class_for_call(call)
     call_type_icons[call.call_type_id] || "fa-globe"
   end
