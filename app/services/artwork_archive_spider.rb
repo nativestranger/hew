@@ -6,90 +6,56 @@ class ArtworkArchiveSpider < Kimurai::Base
   @start_urls = [URL]
 
   def parse(response, url:, data: {})
-    apply_filters
+    @call = ::Call.find(ENV['call_id'])
+    browser.visit @call.external_url
 
-    call_count = 0
-    attempt_count = 0
-
-    until call_count == max_call_count || attempt_count == max_attempt_count
-      browser.visit(URL)
-      apply_filters
-
-      sleep 1
-
-      if call_list[attempt_count].nil?
-        Rails.logger.debug "ENDED AT #{attempt_count} ATTEMPTS"
-        return
-      end
-
-      call_list[attempt_count].click
-      sleep 0.5
-
-      if create_maybe
-        call_count += 1
-      end
-
-      attempt_count += 1
-    end
+    update_maybe
   end
 
   private
 
-  def apply_filters
-    choose_call_type if call_type_filter
-    # choose_eligibility if eligibility_filter
+  def update_maybe
+    @call.call_type_id ||= call_type_id
+    @call.name ||= name
+    @call.start_at ||= start_at
+    @call.end_at ||= end_at
+    @call.entry_deadline ||= entry_deadline
+    @call.description ||= possible_description&.text || ''
+    @call.eligibility ||= eligibility
+    @call.entry_fee ||= entry_fee_in_cents
+
+    @call.save!
+  rescue => e
+    Rails.logger.debug e.message
+    false
   end
 
-  def call_list
-    result = browser.all("//div[@class='call-container call-container-featured']").to_a
-    result += browser.all("//div[@class='call-container call-container-basic']").to_a
-    result
+  def name
+    call_hero_container.find(:xpath, "//h2").text.strip
+  rescue => e
+    nil
   end
 
-  def filter_labels
-    browser.all(:xpath, "//div[@class='calls-filter js-filters-submit']//label")
-  end
-
-  def choose_call_type
-    filter_labels.find do |label|
-      label.text == call_type_filter
-    end.click
-  end
-
-  def choose_eligibility
-    filter_labels.find do |label|
-      label.text == eligibility_filter
-    end.click
+  def event_dates
+    browser.text.split('Event Dates:').last.strip.split(/(?:Entry|Type\:)/).first.strip.split(' - ')
+  rescue => e
+    nil
   end
 
   def call_hero_container
     browser.find(:xpath, "//div[@class='call-hero-container']")
   end
 
-  def create_maybe
-    return if User.system.calls.where(external_url: browser.current_url).exists?
-
-    event_dates = browser.text.split('Event Dates:').last.strip.split(/(?:Entry|Type\:)/).first.strip.split(' - ')
-    # TODO: rescue but log when this fails. some won't have dates...
-
-    User.system.calls.create(
-      user: User.system,
-      external: true,
-      external_url: browser.current_url,
-      call_type_id: call_type_id,
-      name: call_hero_container.find(:xpath, "//h2").text.strip,
-      start_at: Date.strptime(event_dates.first, "%B %d, %Y"),
-      end_at: Date.strptime(event_dates.last, "%B %d, %Y"),
-      entry_deadline: entry_deadline,
-      description: possible_description&.text || "View details to find out more...",
-      eligibility: eligibility,
-      entry_fee: entry_fee_in_cents,
-      is_public: true,
-      spider: :artwork_archive,
-    ).persisted?
+  def start_at
+    Date.strptime(event_dates.first, "%B %d, %Y")
   rescue => e
-    Rails.logger.debug e.message
-    false
+    nil
+  end
+
+  def end_at
+    Date.strptime(event_dates.last, "%B %d, %Y")
+  rescue => e
+    nil
   end
 
   def entry_deadline # TODO: handle ongoing
@@ -100,10 +66,14 @@ class ArtworkArchiveSpider < Kimurai::Base
   def eligibility
     browser.text.split('Eligibility:').last.strip.
       match(/^(?:International|National|Regional|State|Local|Unspecified)/)&.to_s&.downcase
+    rescue => e
+      nil
   end
 
   def possible_description
     call_hero_container.all(:xpath, "//div[@class='row']")[2]
+  rescue => e
+    nil
   end
 
   def entry_fee_in_cents
@@ -117,40 +87,7 @@ class ArtworkArchiveSpider < Kimurai::Base
     nil
   end
 
-  def call_type_filter
-    ENV['call_type'] || "Exhibition"
-  end
-
   def call_type_id
-    case call_type_filter
-    when "Exhibition"
-      'exhibition'
-    when "Residency"
-      'residency'
-    when "Competition"
-      'competition'
-    end
-  end
-
-  def eligibility_filter
-    return if ENV['ignore_eligibility'].present?
-
-    ENV['eligibility'] || "International"
-  end
-
-  def max_call_count
-    ENV['max_call_count']&.to_i || 20
-  end
-
-  def max_attempt_count
-    ENV['max_attempt_count']&.to_i || 40
-  end
-
-  def deadline_sort_labels
-    browser.all(:xpath, "//div[@id='deadline-types']//label[@class='r-contain']")
-  end
-
-  def deadline_sort_by
-    ENV['deadline_sort_by'] || "Latest Deadline"
+    'unspecified' # TODO: resolve this
   end
 end
