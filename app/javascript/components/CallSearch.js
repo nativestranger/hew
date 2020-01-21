@@ -97,6 +97,16 @@ export default class CallSearch extends React.Component {
     var thisComponent = this;
     return (
       <div>
+        <div className='row mb-3'>
+          <div className='col-auto mr-auto'>
+          </div>
+          <div className='col-auto'>
+            <a className='btn btn-sm btn-primary' href='/calls/new'>
+              + New Call
+            </a>
+          </div>
+        </div>
+
         <form onSubmit={ this.getCalls }>
           <div className='form-group'>
             <input id="search_bar"
@@ -109,9 +119,9 @@ export default class CallSearch extends React.Component {
             </input>
             <div className='row'>
               <div className='col-auto mr-auto'>
-                <a className='btn btn-sm btn-primary' href='/calls/new'>
-                  New Call
-                </a>
+                <div>
+                  <p className='text-muted'>{ thisComponent.state.calls.length + pluralize(' call', thisComponent.state.calls.length) }</p>
+                </div>
               </div>
               <div className='col-auto'>
                 { this.renderSortByDropdown() }
@@ -122,19 +132,6 @@ export default class CallSearch extends React.Component {
 
         <div className='gray'>
           { this.state.errorMessage }
-        </div>
-
-        <div className='clearfix'>
-          { (function() {
-            if (thisComponent.state.searchVal) {
-              let callCount = thisComponent.state.calls.length;
-              return (
-                <div>
-                  <p className='float-left gray'>{ callCount + pluralize(' call', callCount) }</p>
-                  <div className='clear'></div>
-                </div>);
-            }
-          })() }
         </div>
 
         <div className='mt-2'>
