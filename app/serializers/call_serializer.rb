@@ -42,6 +42,8 @@ class CallSerializer < ActiveModel::Serializer
   attributes :id,
              :path,
              :name,
+             :scraped,
+             :spider,
              :internal,
              :external,
              :call_type,

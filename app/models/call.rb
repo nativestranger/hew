@@ -125,17 +125,21 @@ class Call < ApplicationRecord
     entries.find_by(user: user)
   end
 
-  def internal?
-    internal
-  end
-
   def internal
     !external
   end
 
+  alias_method :internal?, :internal
+
   def homepage?
     Call.where(id: self.id).homepage.exists?
   end
+
+  def scraped
+    !spider_none?
+  end
+
+  alias_method :scraped?, :scraped
 
   def perform_scrape
     return if spider_none?

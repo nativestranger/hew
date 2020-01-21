@@ -26,6 +26,12 @@
                 %i.fa.fa-envelope
                 -# Entries
 
+          - if current_user.is_admin? && @call.scraped?
+            = link_to scrape_call_path(@call), class: 'btn btn-sm btn-white border px-3' do
+              %span
+                %i.fa.fa-rocket
+                -# Scrape
+
     .row
       .col.mx-auto
         .row

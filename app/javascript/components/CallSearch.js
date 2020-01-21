@@ -154,7 +154,17 @@ export default class CallSearch extends React.Component {
 
     return (
       <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
-        <h4 className='card-title mb-0'>{ call.name || 'Unknown Name' }</h4>
+        <h4 className='card-title mb-0'>
+          { call.name || 'Unknown Name' }
+
+          { call.scraped && (
+            <small className='pull-right'>
+              <span className="d-inline badge badge-light border mr-1 p-1" >
+                {call.spider}
+              </span>
+            </small>
+          ) }
+        </h4>
 
         <div className="card-body p-0">
           { call.time_until_deadline_in_words && (
@@ -170,15 +180,14 @@ export default class CallSearch extends React.Component {
           ) }
 
           { call.external && (
-            <div className='text-primary'>
-              { call.view_count } { pluralize('view', call.view_count) }
+            <div className='mt-4'>
+              <a href={call.external_url}>
+                External URL
+              </a>
+              <div>
+                { call.view_count } { pluralize('view', call.view_count) }
+              </div>
             </div>
-          ) }
-
-          { call.external && (
-            <a className='btn btn-info' href={call.external_url}>
-              External URL
-            </a>
           ) }
           <div className='clearfix mb-2' />
         </div>

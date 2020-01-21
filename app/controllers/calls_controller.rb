@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[entries entry update_entry show edit update]
+  before_action :set_call, only: %i[entries entry update_entry show edit update scrape]
 
   def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
@@ -104,6 +104,13 @@ class CallsController < ApplicationController
       # TODO: error msg
       redirect_to call_entry_path(id: @call.id, entry_id: @entry.id), danger: 'oops'
     end
+  end
+
+  def scrape
+    raise 'auth' unless current_user.is_admin?
+
+    @call.perform_scrape
+    redirect_to @call, notice: 'Scraping'
   end
 
   private
