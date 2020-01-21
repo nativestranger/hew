@@ -141,7 +141,7 @@ class Call < ApplicationRecord
 
   alias_method :scraped?, :scraped
 
-  def perform_scrape
+  def scrape
     return if spider_none?
 
     case spider

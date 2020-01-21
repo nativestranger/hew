@@ -109,7 +109,7 @@ class CallsController < ApplicationController
   def scrape
     raise 'auth' unless current_user.is_admin?
 
-    @call.perform_scrape
+    @call.scrape
     redirect_to @call, notice: 'Scraping'
   end
 
