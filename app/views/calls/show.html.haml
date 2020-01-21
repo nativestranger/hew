@@ -36,6 +36,9 @@
       .col.mx-auto
         .row
           .col-md-6.mb-4
+            %h6 Type
+            %p Exhibition #{call_type_emojis[@call.call_type_id]} 
+
             %h6 Deadline
             %p= I18n.l(@call.entry_deadline, format: :long) if @call.entry_deadline
             - if @call.entry_fee

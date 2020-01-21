@@ -15,7 +15,7 @@ class ArtworkArchiveSpider < Kimurai::Base
   private
 
   def update_maybe
-    @call.call_type_id ||= call_type_id
+    @call.call_type_id = call_type_id if call_type_id && @call.call_type_id_unspecified?
     @call.name = name if name && @call.name.blank?
     @call.start_at ||= start_at
     @call.end_at ||= end_at
@@ -88,6 +88,14 @@ class ArtworkArchiveSpider < Kimurai::Base
   end
 
   def call_type_id
-    'unspecified' # TODO: resolve this
+    type_text = browser.text.split('Type:').last.strip
+
+    if type_text.match(/^(?:Exhibition|Competition|Residency)/)
+      type_text.match(/^(?:Exhibition|Competition|Residency)/).to_s.downcase
+    elsif type_text.starts_with?("Public Art & Proposals")
+      'public_art'
+    end
+    rescue => e
+      nil
   end
 end
