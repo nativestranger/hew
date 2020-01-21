@@ -150,6 +150,7 @@ class Call < ApplicationRecord
     when 'artwork_archive'
       ArtworkArchiveJob.perform_later(id)
     when 'art_deadline'
+      ArtDeadlineJob.perform_later(id)
     end
   end
 

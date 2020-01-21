@@ -9,97 +9,78 @@ class ArtDeadlineSpider < Spider
   # On Display: December 12, 2019-January 4, 2020
 
   def parse(response, url:, data: {})
-    apply_filters
+    @call = ::Call.find(ENV['call_id'])
+    browser.visit @call.external_url
 
-    call_count = 0
-    attempt_count = 0
-
-    until call_count == 5 || attempt_count > 20
-      call_links[attempt_count].click
-
-      if create_maybe
-        call_count += 1
-      end
-
-      attempt_count += 1
-      browser.go_back
-    end
+    update_maybe
   end
 
   private
 
-  def call_links
-    browser.all(:xpath, "//ol[@class='jobs']//li[@class='job']//dl//dd[@class='title']//strong//a")
-  end
 
-  def create_maybe
-    return if User.system.calls.where(external_url: browser.current_url).exists?
+  def update_maybe
+    @call.call_type_id = call_type_id if call_type_id && @call.call_type_id_unspecified?
+    @call.name = name if name && @call.name.blank?
+    @call.start_at ||= start_at
+    @call.end_at ||= end_at
+    @call.entry_deadline ||= entry_deadline
+    @call.description ||= possible_description&.text || ''
+    @call.eligibility ||= eligibility
+    @call.entry_fee ||= entry_fee_in_cents
 
-    # TODO: handle ongoing. add a start_at && end_at presence exception
-
-    # TODO: service to create calls with users- admins should own external calls with system user
-
-    persisted = User.system.calls.create(
-      user: User.system,
-      external: true,
-      external_url: browser.current_url,
-      call_type_id: call_type_id,
-      name: call_name,
-      start_at: nil,
-      end_at: nil,
-      entry_deadline: entry_deadline,
-      description: possible_description || "View details to find out more...",
-      eligibility: 'unspecified',
-      entry_fee: entry_fee_in_cents,
-      is_public: true,
-      spider: :art_deadline,
-    ).persisted?
-
-    puts "CREATED CALL #{browser.current_url}"
-    persisted
+    @call.save!
   rescue => e
     Rails.logger.debug e.message
-    puts e.message
     false
   end
 
   def possible_description
     ps = browser.all(:xpath, "//div[@class='section_content']//p").first&.text&.split(' – ')
     ps && ps[1].strip
+  rescue => e
+    nil
   end
 
   def entry_deadline
     deadline_str = browser.text.split("Deadline:").last.split('–').first.strip
     Date.strptime(deadline_str, "%B %d, %y")
-  end
-
-  def apply_filters
-    browser.all(:xpath, "//*[@class='filter']//input[@type='checkbox']").each(&:click) # remove all
-    select_call_type
-    browser.find(:xpath, "//*[@class='filter']//input[@type='submit']").click
-  end
-
-  def select_call_type
-    case call_type_id
-    when 'competition'
-      browser.find(:xpath, "//*[@id='type-competitions']").click
-    when 'residency'
-      browser.find(:xpath, "//*[@id='type-residencies']").click
-    else
-      browser.find(:xpath, "//*[@id='type-call']").click
-    end
+  rescue => e
+    nil
   end
 
   def call_type_id
-    ENV['call_type'] || 'competition'
+    result = browser.all(:xpath, "//span[@class='type']").first.text
+
+    case result
+    when 'Competitions'
+      'competition'
+    when 'Public Art RFP'
+      'public_art'
+    when 'Residencies'
+      'residency'
+    end
+  rescue => e
+    nil
   end
 
-  def call_name
+  def name
     # TODO: this is gross.. don't do this?
     browser.find(:xpath, "//h1[@class='title']").native.text.split("\n")[1]
+  rescue => e
+    nil
   end
 
   def entry_fee_in_cents
     nil
+  end
+
+  def eligibility
+    # TODO
+  end
+
+  def start_at
+  end
+
+  def end_at
   end
 end

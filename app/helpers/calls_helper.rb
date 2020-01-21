@@ -35,6 +35,7 @@ module CallsHelper
       { name: 'Deadline (soonest)', selected: true },
       { name: 'Deadline (furthest)' },
       { name: 'Newest' },
+      { name: 'Updated' },
     ]
   end
 
