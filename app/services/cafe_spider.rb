@@ -1,16 +1,6 @@
 class CafeSpider < Spider
-  URL = "https://artist.callforentry.org/festivals.php?reset=1&apply=yes".freeze
-
   @name = "call_for_entry_spider"
   @engine = :selenium_chrome
-  @start_urls = [URL]
-
-  def parse(response, url:, data: {})
-    @call = ::Call.find(ENV['call_id'])
-    browser.visit @call.external_url
-
-    update_maybe
-  end
 
   private
 

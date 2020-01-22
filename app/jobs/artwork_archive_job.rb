@@ -2,8 +2,9 @@
 
 class ArtworkArchiveJob < ActiveJob::Base
   def perform(call_id)
-    ENV['call_id'] = call_id.to_s # TODO: not this
-
-    ArtworkArchiveSpider.crawl!
+    call = Call.find(call_id)
+    klass = Class.new(ArtworkArchiveSpider)
+    klass.setup_call(call)
+    klass.crawl!
   end
 end

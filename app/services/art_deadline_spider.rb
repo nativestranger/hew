@@ -1,19 +1,6 @@
 class ArtDeadlineSpider < Spider
-  URL = "https://artdeadline.com/".freeze
-
   @name = "art_deadline_spider"
   @engine = :selenium_chrome
-  @start_urls = [URL]
-
-  # Show Dates: December 12, 2019-January 4, 2020
-  # On Display: December 12, 2019-January 4, 2020
-
-  def parse(response, url:, data: {})
-    @call = ::Call.find(ENV['call_id'])
-    browser.visit @call.external_url
-
-    update_maybe
-  end
 
   private
 

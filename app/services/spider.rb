@@ -1,4 +1,17 @@
 class Spider < Kimurai::Base
+  def self.setup_call(call)
+    self.const_set(:URL, call.external_url)
+    @start_urls = [call.external_url]
+    @call_id = call.id
+  end
+
+  def parse(response, url:, data: {})
+    @call = Call.find(
+      self.class.instance_variable_get('@call_id')
+    )
+    update_maybe
+  end
+
   def save_with_admins
     @call.transaction do
       if @call.new_record?

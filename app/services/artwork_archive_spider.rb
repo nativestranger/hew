@@ -1,16 +1,6 @@
-class ArtworkArchiveSpider < Kimurai::Base
-  URL = "https://www.artworkarchive.com/call-for-entry".freeze
-
+class ArtworkArchiveSpider < Spider
   @name = "artwork_archive_spider"
   @engine = :selenium_chrome
-  @start_urls = [URL]
-
-  def parse(response, url:, data: {})
-    @call = ::Call.find(ENV['call_id'])
-    browser.visit @call.external_url
-
-    update_maybe
-  end
 
   private
 

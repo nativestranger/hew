@@ -2,8 +2,9 @@
 
 class CallForEntryJob < ActiveJob::Base
   def perform(call_id)
-    ENV['call_id'] = call_id.to_s # TODO: not this
-
-    CafeSpider.crawl!
+    call = Call.find(call_id)
+    klass = Class.new(CafeSpider)
+    klass.setup_call(call)
+    klass.crawl!
   end
 end
