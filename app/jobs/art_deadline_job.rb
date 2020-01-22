@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ArtDeadlineJob < ActiveJob::Base
+  queue_as :default
+
   def perform(call_id)
     call = Call.find(call_id)
     klass = Class.new(ArtDeadlineSpider)

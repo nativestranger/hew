@@ -1068,6 +1068,8 @@ GEM
     rack-canonical-host (0.2.3)
       addressable (> 0, < 3)
       rack (>= 1.0.0, < 3)
+    rack-protection (2.0.7)
+      rack
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -1111,6 +1113,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redis (4.1.2)
     regexp_parser (1.6.0)
     responders (3.0.0)
       actionpack (>= 5.0)
@@ -1176,6 +1179,11 @@ GEM
     sentry-raven (2.11.1)
       faraday (>= 0.7.6, < 1.0)
     sexp_processor (4.12.0)
+    sidekiq (5.2.7)
+      connection_pool (~> 2.2, >= 2.2.2)
+      rack (>= 1.5.0)
+      rack-protection (>= 1.5.0)
+      redis (>= 3.3.5, < 5)
     simple_form (4.1.0)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -1194,8 +1202,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sucker_punch (2.1.1)
-      concurrent-ruby (~> 1.0)
     temple (0.8.1)
     thor (0.20.3)
     thread_safe (0.3.6)
@@ -1293,10 +1299,10 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   select2-rails
   sentry-raven
+  sidekiq
   simple_form
   spring
   spring-watcher-listen (~> 2.0.0)
-  sucker_punch
   trix-rails
   turbolinks (~> 5)
   tzinfo-data
