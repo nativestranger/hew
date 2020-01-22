@@ -36,7 +36,7 @@ Rails.application.configure do
     config.active_storage.service = :local
   end
 
-  config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = ENV['SIDEKIQ'] ? :sidekiq : :inline
 
   config.action_mailer.raise_delivery_errors = true
 

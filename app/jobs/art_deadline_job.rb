@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ArtDeadlineJob < ActiveJob::Base
+class ArtDeadlineJob < ApplicationJob
   def perform(call_id)
     call = Call.find(call_id)
     klass = Class.new(ArtDeadlineSpider)
