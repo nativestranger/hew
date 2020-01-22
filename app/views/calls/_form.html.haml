@@ -32,7 +32,7 @@
           = f.label 'Categories'
           #select2_call_category_ids= f.select :category_ids, category_options, { include_blank: true }, { multiple: true, class: 'form-control' }
 
-    .row.internal-calls-only
+    .row
       .col-md-12
         .form-group
           %label{ for: 'call_description' } Description
@@ -86,6 +86,11 @@
             %label{ for: 'call_external' }
               External
               = f.input :external, label: false
+        .col-md-2
+          .form-group
+            %label{ for: 'call_is_approved' }
+              Approved
+              = f.input :is_approved, label: false
 
     #venue_fields
       %hr

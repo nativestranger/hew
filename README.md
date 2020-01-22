@@ -1,1 +1,5 @@
-iterating on an app for artists&curators/venues to connect
+## Bulk spiders
+
+HEADLESS=false be rake scrapers:cafe
+HEADLESS=false be rake scrapers:art_deadline
+HEADLESS=false be rake scrapers:artwork_archive

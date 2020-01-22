@@ -1,6 +1,6 @@
 class CallsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_call, only: %i[entries entry update_entry show edit update]
+  before_action :set_call, only: %i[entries entry update_entry show edit update scrape]
 
   def new # TODO: unauthenticated user can create call
     @call = Call.new(is_public: true)
@@ -106,6 +106,13 @@ class CallsController < ApplicationController
     end
   end
 
+  def scrape
+    raise 'auth' unless current_user.is_admin?
+
+    @call.scrape
+    redirect_to @call, notice: 'Scraping'
+  end
+
   private
 
   def permitted_params
@@ -115,6 +122,7 @@ class CallsController < ApplicationController
       :end_at,
       :is_public,
       :external,
+      :is_approved,
       :external_url,
       :call_type_id,
       :description,
@@ -136,6 +144,8 @@ class CallsController < ApplicationController
         Category.find_or_create_by!(name: category_id).id # TODO: lock or retry on race
       end
     end
+
+    result.delete(:is_approved) unless current_user.is_admin?
 
     result
   end

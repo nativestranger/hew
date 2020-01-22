@@ -1,4 +1,8 @@
 module CallsHelper
+  def titleize_snakecase(str)
+    str.gsub('_', ' ').titleize
+  end
+
   def fa_class_for_call(call)
     call_type_icons[call.call_type_id] || "fa-globe"
   end
@@ -11,6 +15,7 @@ module CallsHelper
       { id: call_type_ids['residency'], name: 'Residency', enum_name: 'residency', selected: true },
       { id: call_type_ids['publication'], name: 'Publication', enum_name: 'publication', selected: true },
       { id: call_type_ids['competition'], name: 'Competition', enum_name: 'competition', selected: true },
+      { id: call_type_ids['public_art'], name: 'Public Art', enum_name: 'public_art', selected: true },
     ]
   end
 
@@ -20,6 +25,7 @@ module CallsHelper
       "residency" => "🏠",
       "publication" => "📰",
       "competition" => "🏆",
+      "public_art" => "🏛️",
       "default"   => "🌎",
     }
   end
@@ -29,6 +35,7 @@ module CallsHelper
       { name: 'Deadline (soonest)', selected: true },
       { name: 'Deadline (furthest)' },
       { name: 'Newest' },
+      { name: 'Updated' },
     ]
   end
 

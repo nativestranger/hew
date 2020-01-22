@@ -36,7 +36,7 @@ Rails.application.configure do
     config.active_storage.service = :local
   end
 
-  config.active_job.queue_adapter = :sucker_punch
+  config.active_job.queue_adapter = :inline
 
   config.action_mailer.raise_delivery_errors = true
 

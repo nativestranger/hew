@@ -26,12 +26,24 @@
                 %i.fa.fa-envelope
                 -# Entries
 
+          - if current_user.is_admin? && @call.scraped?
+            = link_to scrape_call_path(@call), class: 'btn btn-sm btn-white border px-3' do
+              %span
+                %i.fa.fa-rocket
+                -# Scrape
+
     .row
       .col.mx-auto
         .row
           .col-md-6.mb-4
+            %h6 Type
+            %p #{titleize_snakecase(@call.call_type_id)} #{call_type_emojis[@call.call_type_id]} 
+
             %h6 Deadline
-            %p= I18n.l(@call.entry_deadline, format: :long)
+            %p= I18n.l(@call.entry_deadline, format: :long) if @call.entry_deadline
+            - if @call.entry_fee
+              %h6 Entry Fee
+              %p= number_to_currency(@call.entry_fee / 100)
             - if @call.start_at && @call.end_at
               %h6 Event Dates
               %p= "#{I18n.l(@call.start_at, format: :long)} - #{I18n.l(@call.end_at, format: :long)}"

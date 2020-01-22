@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   resources :venues, except: :destroy
 
   resources :calls, except: :destroy do
+    get :scrape, on: :member
     resources :call_users, only: %i[create update index]
   end
 

@@ -1,15 +1,15 @@
 require './config/environment.rb'
 
 namespace :scrapers do
-  task :call_for_entry do
-    CallForEntrySpider.crawl!
+  task :cafe do
+    CafeBulkSpider.crawl!
   end
 
   task :artwork_archive do
-    ArtworkArchiveSpider.crawl!
+    ArtworkArchiveBulkSpider.crawl!
   end
 
   task :art_deadline do
-    ArtDeadlineSpider.crawl!
+    ArtDeadlineBulkSpider.crawl!
   end
 end
