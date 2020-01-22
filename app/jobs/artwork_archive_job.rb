@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class ArtworkArchiveJob < ActiveJob::Base
-  queue_as :default
-
+class ArtworkArchiveJob < ApplicationJob
   def perform(call_id)
     call = Call.find(call_id)
     klass = Class.new(ArtworkArchiveSpider)
