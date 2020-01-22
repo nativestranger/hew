@@ -17,6 +17,7 @@ class Spider < Kimurai::Base
       @call.update!(
         user: User.system,
         external: true,
+        is_public: true,
         spider: spider_name,
         call_type_id: :unspecified
       )
