@@ -54,8 +54,8 @@ class Call < ApplicationRecord
   validates :venue, presence: true, if: :require_venue?
   validates :name, presence: true, unless: :scraper_exception?
 
-  validates :start_at, presence: true, unless: :start_end_optional?
-  validates :end_at, presence: true, unless: :start_end_optional?
+  validates :start_at, presence: true, unless: :scraper_exception?
+  validates :end_at, presence: true, unless: :scraper_exception?
 
   validates :call_type_id, presence: true
   validates :description, presence: true, unless: :external
@@ -156,12 +156,8 @@ class Call < ApplicationRecord
 
   private
 
-  def start_end_optional?
-    system_user? && external? # TODO: certain types?
-  end
-
   def scraper_exception?
-    !is_public? && system_user? && external?
+    system_user? && external?
   end
 
   def system_user?
