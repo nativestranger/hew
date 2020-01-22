@@ -32,18 +32,18 @@ class ArtDeadlineBulkSpider < Spider
   def add_all_calls
     call_links.each do |call_link|
       @call = ::Call.find_or_initialize_by(
-        user: User.system,
-        external_url: call_link[:href], # finding child div for now
-        external: true,
-        spider: :art_deadline
+        external_url: call_link[:href]
       )
 
-      @call.call_type_id = :unspecified if @call.new_record?
       save_with_admins
     end
   end
 
   def next_page_link
     browser.all(:xpath, "//a[@class='next page-numbers']").first
+  end
+
+  def spider_name
+    :art_deadline
   end
 end

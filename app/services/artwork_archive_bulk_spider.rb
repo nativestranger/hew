@@ -18,13 +18,9 @@ class ArtworkArchiveBulkSpider < Spider
   def add_all_calls
     call_list.each do |call_container|
       @call = ::Call.find_or_initialize_by(
-        user: User.system,
-        external_url: call_container.find(:xpath, '..')[:href], # finding child div for now
-        external: true,
-        spider: :artwork_archive
+        external_url: call_container.find(:xpath, '..')[:href] # finding child div for now
       )
 
-      @call.call_type_id = :unspecified if @call.new_record?
       save_with_admins
     end
   end
@@ -37,5 +33,9 @@ class ArtworkArchiveBulkSpider < Spider
 
   def next_page_link
     browser.all("//li[@class='waves-effect']//a//i[@class='fa fa-angle-right']")&.first
+  end
+
+  def spider_name
+    :artwork_archive
   end
 end
