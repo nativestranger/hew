@@ -11,7 +11,7 @@ class CafeBulkSpider < Spider
         external_url: entry_link[:href]
       )
 
-      save_with_admins
+      create_call
     end
   end
 

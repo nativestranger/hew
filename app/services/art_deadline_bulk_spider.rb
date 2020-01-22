@@ -35,7 +35,7 @@ class ArtDeadlineBulkSpider < Spider
         external_url: call_link[:href]
       )
 
-      save_with_admins
+      create_call
     end
   end
 

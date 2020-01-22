@@ -12,19 +12,16 @@ class Spider < Kimurai::Base
     update_maybe
   end
 
-  def save_with_admins
+  def create_call
     @call.transaction do
-      if @call.new_record?
-        @call.assign_attributes(
-          user: User.system,
-          external: true,
-          spider: spider_name,
-          call_type_id: :unspecified
-        )
-      end
-
-      @call.save!
+      @call.update!(
+        user: User.system,
+        external: true,
+        spider: spider_name,
+        call_type_id: :unspecified
+      )
       ensure_admins!
+      @call.scrape
     rescue => e
       nil
     end
