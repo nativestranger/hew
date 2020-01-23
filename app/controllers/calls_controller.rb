@@ -10,7 +10,7 @@ class CallsController < ApplicationController
   def create
     @call = Call.new(permitted_params.merge(user: current_user))
 
-    if create_call
+    if Time.use_zone(params[:call][:time_zone]) { create_call }
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
     else
@@ -34,7 +34,7 @@ class CallsController < ApplicationController
 
     private_before_update = !@call.is_public
 
-    if update_call
+    if Time.use_zone(params[:call][:time_zone]) { update_call }
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
       redirect_to @call, notice: t('success')
     else
@@ -122,6 +122,7 @@ class CallsController < ApplicationController
       :end_at,
       :is_public,
       :external,
+      :time_zone,
       :is_approved,
       :external_url,
       :call_type_id,

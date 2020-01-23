@@ -12,19 +12,23 @@
         .form-group
           = f.input :call_type_id, collection: options_for_enum(Call, :call_type_id)
     .row
-      .col-6
+      .col-3
         .form-group
           %label Start Date
           = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
           - # TODO: fix date picker issue
           - start_at = @call.start_at.present? ? @call.start_at + 1.day : nil
           = react_component 'ReactDatePicker', { startDate: start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
-      .col-6
+      .col-3
         .form-group
           %label End Date
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
           - end_at = @call.end_at.present? ? @call.end_at + 1.day : nil
           = react_component 'ReactDatePicker', { startDate: end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
+      .col-6
+        .form-group
+          %label Time Zone
+          = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
 
     .row
       .col-md-12
