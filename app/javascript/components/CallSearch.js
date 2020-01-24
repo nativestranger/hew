@@ -146,11 +146,11 @@ export default class CallSearch extends React.Component {
 
   renderCall(call) {
     const capitalize = (s) => {
-      if (typeof s !== 'string') return ''
-        return s.charAt(0).toUpperCase() + s.slice(1)
-      }
+    if (typeof s !== 'string') return ''
+      return s.charAt(0).toUpperCase() + s.slice(1)
+    }
 
-      let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
+    let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
       return (
         <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
