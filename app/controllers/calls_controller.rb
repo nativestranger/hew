@@ -3,7 +3,7 @@ class CallsController < ApplicationController
   before_action :set_call, only: %i[entries entry update_entry show edit update scrape]
 
   def new # TODO: unauthenticated user can create call
-    @call = Call.new(is_public: true)
+    @call = Call.new(is_public: true, time_zone: current_user.time_zone)
     ensure_venue
   end
 
@@ -164,7 +164,9 @@ class CallsController < ApplicationController
   def create_call
     Call.transaction do
       @call = Call.new(
-        permitted_params.merge(user: current_user)
+        permitted_params.merge(
+          user: current_user
+        )
       )
       @call&.venue&.user ||= current_user
       @call.save!

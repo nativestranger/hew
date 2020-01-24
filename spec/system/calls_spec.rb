@@ -37,23 +37,23 @@ RSpec.describe 'Calls', type: :system do
   def fill_in_call_details
     fill_in 'call_name', with: 'Call name'
 
-    all(:css, '#call_entry_deadline').first.click
+    find('.call_entry_deadline').click
     within(:css, 'div.datepicker-days') do
       all('td', text: '3').last.click
     end
 
-    all(:css, '#call_start_at').first.click
+    find('.call_start_at').click
     within(:css, 'div.datepicker-days') do
       all('td', text: '4').last.click
     end
 
-    all(:css, '#call_end_at').first.click
+    find('.call_end_at').click
     within(:css, 'div.datepicker-days') do
       all('td', text: '5').last.click
     end
 
     page.execute_script("document.getElementById('call_description').value = 'desc'")
-    page.execute_script("document.getElementById('call_entry_details').value = 'app details'")
+    page.execute_script("document.getElementById('call_entry_details').value = 'entry details'")
   end
 
   def fill_in_venue_details
