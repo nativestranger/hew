@@ -170,8 +170,6 @@ class CallsController < ApplicationController
       )
       @call&.venue&.user ||= current_user
       @call.save!
-      # TODO: define #entry_deadline= and test that
-      @call.set_entry_deadline_in_zone!(permitted_params[:entry_deadline])
       @call.call_users.create!(user: current_user, role: 'owner')
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
@@ -184,10 +182,9 @@ class CallsController < ApplicationController
         call_categories: { category_id: permitted_params[:category_ids]  }
       ).each(&:destroy!)
 
-      @call.assign_attributes(permitted_params.except(:entry_deadline))
+      @call.assign_attributes(permitted_params)
       @call&.venue&.user ||= current_user
-      @call.save!(permitted_params)
-      @call.set_entry_deadline_in_zone!(permitted_params[:entry_deadline])
+      @call.save!
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
     end
