@@ -8,8 +8,6 @@ class CallsController < ApplicationController
   end
 
   def create
-    @call = Call.new(permitted_params.merge(user: current_user))
-
     if create_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
@@ -36,7 +34,7 @@ class CallsController < ApplicationController
 
     if update_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
-      redirect_to @call, notice: t('success')
+      redirect_to @call
     else
       ensure_venue
       render :edit
@@ -165,8 +163,13 @@ class CallsController < ApplicationController
 
   def create_call
     Call.transaction do
+      @call = Call.new(
+        permitted_params.merge(user: current_user)
+      )
       @call&.venue&.user ||= current_user
       @call.save!
+      # TODO: define #entry_deadline= and test that
+      @call.set_entry_deadline_in_zone!(permitted_params[:entry_deadline])
       @call.call_users.create!(user: current_user, role: 'owner')
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
@@ -179,9 +182,10 @@ class CallsController < ApplicationController
         call_categories: { category_id: permitted_params[:category_ids]  }
       ).each(&:destroy!)
 
-      @call.assign_attributes(permitted_params)
+      @call.assign_attributes(permitted_params.except(:entry_deadline))
       @call&.venue&.user ||= current_user
       @call.save!(permitted_params)
+      @call.set_entry_deadline_in_zone!(permitted_params[:entry_deadline])
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
     end

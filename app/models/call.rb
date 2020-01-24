@@ -155,6 +155,16 @@ class Call < ApplicationRecord
     end
   end
 
+  def set_entry_deadline_in_zone!(datetime)
+    Time.use_zone(time_zone) do
+      update!(entry_deadline: datetime)
+    end
+  end
+
+  def get_entry_deadline_in_zone
+    Time.use_zone(time_zone) { entry_deadline }
+  end
+
   private
 
   def scraper_exception?

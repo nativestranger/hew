@@ -20,6 +20,15 @@
         .form-group
           %label End Date
           = f.input :end_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
+      .col-3
+        .form-group
+          %label Entry Deadline
+          - @call.entry_deadline = @call.get_entry_deadline_in_zone
+          = f.input :entry_deadline, as: :tempus_dominus, input_html: { class: 'datetime_local' }, label: false
+      .col-3
+        .form-group
+          %label Time Zone
+          = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
 
     .row
       .col-md-12
@@ -63,11 +72,6 @@
           .mt-2= f.input :entry_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
     .row
-      .col-md-4
-        .form-group
-          %label Entry Deadline
-          = f.input :entry_deadline, as: :tempus_dominus, input_html: { class: 'datetime_local' }, label: false
-
       .col-md-2
         .form-group
           %label{ for: 'call_is_public' }
