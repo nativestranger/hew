@@ -152,10 +152,10 @@ export default class CallSearch extends React.Component {
 
     let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
-      return (
-        <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
-          <h4 className='card-title mb-0'>
-            <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
+    return (
+      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
+        <h4 className='card-title mb-0'>
+          <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
           { call.name || 'Unknown Name' }
 
           { call.scraped && (
