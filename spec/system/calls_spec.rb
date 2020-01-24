@@ -37,18 +37,20 @@ RSpec.describe 'Calls', type: :system do
   def fill_in_call_details
     fill_in 'call_name', with: 'Call name'
 
-    find('.call_entry_deadline').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "3" }.click
-    all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
+    all(:css, '#call_entry_deadline').first.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '3').last.click
+    end
 
-    find('.call_start_at').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "4" }.click
+    all(:css, '#call_start_at').first.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '4').last.click
+    end
 
-    find('.call_end_at').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "5" }.click
+    all(:css, '#call_end_at').first.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '5').last.click
+    end
 
     page.execute_script("document.getElementById('call_description').value = 'desc'")
     page.execute_script("document.getElementById('call_entry_details').value = 'app details'")
@@ -126,18 +128,24 @@ RSpec.describe 'Calls', type: :system do
   describe 'edit' do
     it 'renders the edit template' do
       visit edit_call_path(call)
+      old_start_at, old_end_at = call.start_at, call.end_at
+      new_start_at, new_end_at = old_start_at + 1.day, old_end_at + 1.day
       find('.call_start_at').click
-      all(".react-datepicker__day").find { |day| day.text =="8" }.click
+      within(:css, 'div.datepicker-days') do
+        all('td', text: new_start_at.day.to_s).last.click
+      end
       click_button 'Save'
-      expect(call.reload.start_at.day).to eq(8)
-      expect(call.reload.end_at.day).not_to eq(9) # need to fix datepicker issue & remove/change
+      expect(call.reload.start_at.day).to eq(new_start_at.day)
+      expect(call.reload.end_at.day).to eq(old_end_at.day) # not needed now?
 
       visit edit_call_path(call)
       find('.call_end_at').click
-      all(".react-datepicker__day").find { |day| day.text =="9" }.click
+      within(:css, 'div.datepicker-days') do
+        all('td', text: new_end_at.day.to_s).last.click
+      end
       click_button 'Save'
-      expect(call.reload.start_at.day).to eq(8)
-      expect(call.reload.end_at.day).to eq(9)
+      expect(call.reload.start_at.day).to eq(new_start_at.day)
+      expect(call.reload.end_at.day).to eq(new_end_at.day)
     end
 
     it 'deletes call_category_users when categories are removed' do
