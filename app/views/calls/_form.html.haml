@@ -15,16 +15,11 @@
       .col-3
         .form-group
           %label Start Date
-          = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
-          - # TODO: fix date picker issue
-          - start_at = @call.start_at.present? ? @call.start_at + 1.day : nil
-          = react_component 'ReactDatePicker', { startDate: start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
+          = f.input :start_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
       .col-3
         .form-group
           %label End Date
-          = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
-          - end_at = @call.end_at.present? ? @call.end_at + 1.day : nil
-          = react_component 'ReactDatePicker', { startDate: end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
+          = f.input :end_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
 
     .row
       .col-md-12
@@ -71,9 +66,7 @@
       .col-md-4
         .form-group
           %label Entry Deadline
-          -# = f.text_field(:entry_deadline, hidden: true, html: { id: 'entry_deadline' })
-          -# = react_component 'ReactDatePicker', { startDate: @call.entry_deadline, formFieldId: 'call_entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:entry_deadline].present? }
-          = f.input :entry_deadline, as: :tempus_dominus, label: false
+          = f.input :entry_deadline, as: :tempus_dominus, input_html: { class: 'datetime_local' }, label: false
 
       .col-md-2
         .form-group

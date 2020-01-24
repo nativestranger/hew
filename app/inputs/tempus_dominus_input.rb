@@ -7,7 +7,9 @@ class TempusDominusInput < SimpleForm::Inputs::Base
   end
 
   def input_html_options
-    super.merge({class: 'form-control terminus-dominus datetimepicker-input '})
+    super.merge({
+      class: "#{ super[:class].map(&:to_s).join(' ') } form-control datetimepicker-input "}
+    )
   end
 
   def div_button
@@ -23,7 +25,7 @@ class TempusDominusInput < SimpleForm::Inputs::Base
   end
 
   def calendar_button
-    template.button_tag(class: 'btn btn-primary', :type => 'button') do
+    template.button_tag(class: 'btn btn-primary blr-0', :type => 'button') do
       template.concat icon_table
     end
   end
