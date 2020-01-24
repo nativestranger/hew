@@ -6,12 +6,15 @@ export default class CallSearch extends React.Component {
 
   static propTypes = {
     orderOptions: PropTypes.array.isRequired,
+    call_types: PropTypes.array.isRequired,
+    call_type_emojis: PropTypes.object.isRequired,
     calls: PropTypes.array.isRequired,
-    searchVal: PropTypes.string
+    searchVal: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
+    this.renderCall = this.renderCall.bind(this);
     this.state = Object.assign({}, props);
   }
 
@@ -83,6 +86,10 @@ export default class CallSearch extends React.Component {
     return this.state.orderOptions.find(option => option.selected);
   }
 
+  callTypeEmojis() {
+    return this.state.call_type_emojis;
+  }
+
   render() {
     if (this.state.loading) {
       return (
@@ -150,8 +157,9 @@ export default class CallSearch extends React.Component {
     let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
     return (
-      <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
+      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
         <h4 className='card-title mb-0'>
+          <span className="p-1">{this.callTypeEmojis()[call.call_type.name] || this.callTypeEmojis()['default']}</span>
           { call.name || 'Unknown Name' }
 
           { call.scraped && (
@@ -188,7 +196,7 @@ export default class CallSearch extends React.Component {
           ) }
           <div className='clearfix mb-2' />
         </div>
-      </a>
+      </div>
     );
   }
 
