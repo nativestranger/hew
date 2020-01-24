@@ -29,6 +29,7 @@ module Mox
 
     config.eager_load_paths += %W[
       #{config.root}/services
+      #{config.root}/inputs
     ]
 
     # Settings in config/environments/* take precedence over those specified here.

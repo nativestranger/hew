@@ -25,10 +25,6 @@
           = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
           - end_at = @call.end_at.present? ? @call.end_at + 1.day : nil
           = react_component 'ReactDatePicker', { startDate: end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
-      .col-6
-        .form-group
-          %label Time Zone
-          = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
 
     .row
       .col-md-12
@@ -74,9 +70,10 @@
     .row
       .col-md-4
         .form-group
-          %label Application Deadline
-          = f.text_field(:entry_deadline, hidden: true, html: { id: 'entry_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @call.entry_deadline, formFieldId: 'call_entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:entry_deadline].present? }
+          %label Entry Deadline
+          -# = f.text_field(:entry_deadline, hidden: true, html: { id: 'entry_deadline' })
+          -# = react_component 'ReactDatePicker', { startDate: @call.entry_deadline, formFieldId: 'call_entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:entry_deadline].present? }
+          = f.input :entry_deadline, as: :tempus_dominus, label: false
 
       .col-md-2
         .form-group
