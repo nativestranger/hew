@@ -46,6 +46,19 @@
               %p.mt-0.text-danger= err
           = f.input :description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
 
+      .row
+        .col-md-4
+          .form-check.pl-0
+            = f.input :is_public, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "Public", "data-off" => "Private", "data-size" => "sm", "data-onstyle" => "light" }
+
+        - if current_user.is_admin?
+          .col-md-4
+            .form-check.pl-0
+              = f.input :external, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "External", "data-off" => "Internal", "data-size" => "sm", "data-onstyle" => "light" }
+          .col-md-4
+            .form-check.pl-0
+              = f.input :is_approved, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "Approved", "data-off" => "Pending", "data-size" => "sm", "data-onstyle" => "light" }
+
     %hr
 
     .row.external-calls-only
@@ -70,25 +83,6 @@
             - f.object.errors[:entry_details].each do |err|
               %p.mt-0.text-danger= err
           .mt-2= f.input :entry_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
-
-    .row
-      .col-md-2
-        .form-group
-          %label{ for: 'call_is_public' }
-            Publish
-            = f.input :is_public, label: false
-
-      - if current_user.is_admin?
-        .col-md-2
-          .form-group
-            %label{ for: 'call_external' }
-              External
-              = f.input :external, label: false
-        .col-md-2
-          .form-group
-            %label{ for: 'call_is_approved' }
-              Approved
-              = f.input :is_approved, label: false
 
     #venue_fields
       %hr

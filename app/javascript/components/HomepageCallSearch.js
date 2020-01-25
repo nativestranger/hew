@@ -199,36 +199,35 @@ export default class HomepageCallSearch extends React.Component {
     }
 
     return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">Call Types
-          <span className="caret"></span></button>
-          <ul className="dropdown-menu text-center">
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Competition') } }>
-              Competitions
-              { isSelected('Competition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Competition') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
-              Exhibitions
-              { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Residency') } }>
-              Residencies
-              { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Publication') } }>
-              Publications
-              { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-            <li className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Public Art') } }>
-              Publications
-              { isSelected('Public Art') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-              { !isSelected('Public Art') && <span className="fa fa-times fa-sm p-2"></span> }
-            </li>
-          </ul>
+      <div className="hover-dropdown">
+        <button className="hover-dropbtn btn btn-light">Call Types</button>
+        <div className="hover-dropdown-content">
+          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Competition') } }>
+            Competitions
+            { isSelected('Competition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+            { !isSelected('Competition') && <span className="fa fa-times fa-sm p-2"></span> }
+          </div>
+          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
+            Exhibitions
+            { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+            { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
+          </div>
+          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Residency') } }>
+            Residencies
+            { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+            { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
+          </div>
+          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Publication') } }>
+            Publications
+            { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+            { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
+          </div>
+          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Public Art') } }>
+            Publications
+            { isSelected('Public Art') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
+            { !isSelected('Public Art') && <span className="fa fa-times fa-sm p-2"></span> }
+          </div>
+        </div>
       </div>
     );
   }
