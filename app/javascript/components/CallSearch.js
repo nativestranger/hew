@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Pagination from "./Pagination";
+import BaseCallSearch from "./BaseCallSearch";
 import pluralize from "pluralize";
 
-export default class CallSearch extends React.Component {
+export default class CallSearch extends BaseCallSearch {
 
   static propTypes = {
     orderOptions: PropTypes.array.isRequired,
@@ -24,43 +26,6 @@ export default class CallSearch extends React.Component {
 
   selectedOrderOption() {
     return this.state.orderOptions.find(option => option.selected);
-  }
-
-  renderSortByDropdown() {
-    let thisComponent = this;
-
-    let isSelected = function(orderOptionName) {
-      return thisComponent.selectedOrderOption().name == orderOptionName;
-    }
-    let selectOrderOption = function(orderOptionName) {
-      let orderOptions = [...thisComponent.state.orderOptions];
-      orderOptions.forEach(option => {
-        if (option.name === orderOptionName) {
-          option.selected = true;
-        } else {
-          option.selected = false;
-        }
-      });
-      thisComponent.setState({ orderOptions: orderOptions });
-      thisComponent.getCalls();
-    }
-
-    return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
-          <span className="caret"></span></button>
-          <ul className="dropdown-menu dropdown-menu-right text-center">
-            { thisComponent.state.orderOptions.map(orderOption => {
-              return (
-                <li key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
-                  { isSelected(orderOption.name) && <strong>{orderOption.name}</strong> }
-                  { !isSelected(orderOption.name) && <span>{orderOption.name}</span> }
-                </li>
-              )
-            }) }
-          </ul>
-      </div>
-    );
   }
 
   getCalls = () => {
