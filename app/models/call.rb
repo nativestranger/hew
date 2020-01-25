@@ -81,7 +81,8 @@ class Call < ApplicationRecord
     residency: 2,
     publication: 3,
     competition: 4,
-    public_art: 5
+    public_art: 5,
+    fair_or_festival: 6
   }, _prefix: true
 
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
@@ -90,7 +91,8 @@ class Call < ApplicationRecord
     none: 0,
     call_for_entry: 1,
     artwork_archive: 2,
-    art_deadline: 3
+    art_deadline: 3,
+    zapplication: 4
   }, _prefix: true
 
   scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
@@ -153,6 +155,8 @@ class Call < ApplicationRecord
       ArtworkArchiveJob.perform_later(id)
     when 'art_deadline'
       ArtDeadlineJob.perform_later(id)
+    when 'zapplication'
+      ZappJob.perform_later(id)
     end
   end
 

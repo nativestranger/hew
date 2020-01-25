@@ -34,6 +34,7 @@ export default class CallSearch extends BaseCallSearch {
     $.get("/v1/calls", {
        name: searchValInput,
        page: this.currentPage(),
+       call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
        order_option: this.selectedOrderOption()
      }).done(function(response) {
         thisComponent.setState({
@@ -53,13 +54,7 @@ export default class CallSearch extends BaseCallSearch {
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <div className='loader'></div>
-      );
-    } else {
-      return this.renderContent();
-    }
+    return this.renderContent();
   }
 
   renderContent() {
@@ -104,6 +99,7 @@ export default class CallSearch extends BaseCallSearch {
               ) }
             </div>
             <div className='col-auto'>
+              { this.renderCallTypeDropdown() }
               { this.renderSortByDropdown() }
             </div>
           </div>
@@ -113,13 +109,20 @@ export default class CallSearch extends BaseCallSearch {
           { this.state.errorMessage }
         </div>
 
-        <div className='mt-2'>
-         { this.state.calls.map(this.renderCall) }
-        </div>
+        { this.state.loading && (
+          <div className='loader'></div>
+        )}
+        { !this.state.loading && (
+          <div>
+            <div className='mt-2'>
+             { this.state.calls.map(this.renderCall) }
+            </div>
 
-        <div className='mt-4'>
-          { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
-        </div>
+            <div className='mt-4'>
+              { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
+            </div>
+          </div>
+        )}
       </div>
     );
   }
