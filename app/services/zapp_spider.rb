@@ -5,7 +5,6 @@ class ZappSpider < Spider
   private
 
   def update_maybe
-    # binding.pry
     @call.call_type_id = call_type_id if call_type_id && @call.call_type_id_unspecified?
     @call.name = name if name && @call.name.blank?
     @call.start_at ||= start_at
@@ -57,7 +56,13 @@ class ZappSpider < Spider
     nil
   end
 
-  def entry_fee_in_cents
+  def entry_fee_in_cents # TODO: dont go to newline after 'Fee:' make shared method?
+    # TODO: handle exceptions in euros or other... €, CAD
+
+    browser.text.split('Fee:').last.strip.
+      match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
+  rescue => e
+    Rails.logger.debug "ENTRY FEE ERROR #{e.message}"
     nil
   end
 
