@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_20_032806) do
+ActiveRecord::Schema.define(version: 2020_01_23_032521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
@@ -199,6 +199,7 @@ ActiveRecord::Schema.define(version: 2020_01_20_032806) do
     t.integer "entry_fee"
     t.integer "spider", default: 0, null: false
     t.bigint "entries_count", default: 0, null: false
+    t.string "time_zone", default: "UTC", null: false
     t.index ["call_type_id"], name: "index_calls_on_call_type_id"
     t.index ["user_id"], name: "index_calls_on_user_id"
     t.index ["venue_id"], name: "index_calls_on_venue_id"
@@ -320,6 +321,7 @@ ActiveRecord::Schema.define(version: 2020_01_20_032806) do
     t.boolean "is_admin", default: false, null: false
     t.text "artist_statement", default: "", null: false
     t.text "bio", default: "", null: false
+    t.string "time_zone", default: "UTC", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

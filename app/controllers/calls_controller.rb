@@ -3,13 +3,11 @@ class CallsController < ApplicationController
   before_action :set_call, only: %i[entries entry update_entry show edit update scrape]
 
   def new # TODO: unauthenticated user can create call
-    @call = Call.new(is_public: true)
+    @call = Call.new(is_public: true, time_zone: current_user.time_zone)
     ensure_venue
   end
 
   def create
-    @call = Call.new(permitted_params.merge(user: current_user))
-
     if create_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public
       redirect_to @call, notice: t('success')
@@ -27,6 +25,7 @@ class CallsController < ApplicationController
   def edit
     authorize @call
     ensure_venue
+    @disable_turbolinks = true # for select2. consider disabling turbolink on all back/forward?
   end
 
   def update
@@ -36,7 +35,7 @@ class CallsController < ApplicationController
 
     if update_call
       AdminMailer.new_call(@call).deliver_later if @call.is_public && private_before_update
-      redirect_to @call, notice: t('success')
+      redirect_to @call
     else
       ensure_venue
       render :edit
@@ -122,6 +121,7 @@ class CallsController < ApplicationController
       :end_at,
       :is_public,
       :external,
+      :time_zone,
       :is_approved,
       :external_url,
       :call_type_id,
@@ -164,6 +164,11 @@ class CallsController < ApplicationController
 
   def create_call
     Call.transaction do
+      @call = Call.new(
+        permitted_params.merge(
+          user: current_user
+        )
+      )
       @call&.venue&.user ||= current_user
       @call.save!
       @call.call_users.create!(user: current_user, role: 'owner')
@@ -180,7 +185,7 @@ class CallsController < ApplicationController
 
       @call.assign_attributes(permitted_params)
       @call&.venue&.user ||= current_user
-      @call.save!(permitted_params)
+      @call.save!
     rescue ActiveRecord::RecordInvalid => e
       raise ActiveRecord::Rollback
     end

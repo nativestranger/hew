@@ -17,6 +17,7 @@
 #  name           :string           default(""), not null
 #  spider         :integer          default("none"), not null
 #  start_at       :date
+#  time_zone      :string           default("UTC"), not null
 #  view_count     :integer          default(0), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -69,6 +70,7 @@ class Call < ApplicationRecord
   validate :owned_by_admin, if: :external
   validate :future_dates, on: :create
 
+  before_validation :set_entry_deadline_in_zone
   before_validation :remove_venue_maybe # TODO better form/venue edit
 
   has_many :entries, class_name: 'Entry', dependent: :destroy
@@ -152,6 +154,16 @@ class Call < ApplicationRecord
     when 'art_deadline'
       ArtDeadlineJob.perform_later(id)
     end
+  end
+
+  def set_entry_deadline_in_zone
+    Time.use_zone(time_zone) do
+      instance_variable_set('@entry_deadline', entry_deadline)
+    end
+  end
+
+  def get_entry_deadline_in_zone
+    Time.use_zone(time_zone) { entry_deadline }
   end
 
   private

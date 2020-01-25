@@ -44,6 +44,7 @@ class UserDashboard < Administrate::BaseDashboard
     artist_website:         Field::String,
     instagram_url:          Field::String,
     gravatar_url:           Field::String,
+    time_zone:              Field::String,
     is_admin:               Field::Boolean
   }.freeze
 
@@ -72,6 +73,7 @@ class UserDashboard < Administrate::BaseDashboard
     artist_website
     instagram_url
     is_admin
+    time_zone
   ].freeze
 
   # FORM_ATTRIBUTES
