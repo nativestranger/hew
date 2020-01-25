@@ -25,6 +25,7 @@ class CallsController < ApplicationController
   def edit
     authorize @call
     ensure_venue
+    @disable_turbolinks = true # for select2. consider disabling turbolink on all back/forward?
   end
 
   def update
