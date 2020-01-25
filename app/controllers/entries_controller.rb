@@ -94,7 +94,7 @@ class EntriesController < ApplicationController
       :artist_statement,
       :artist_website,
       :artist_instagram_url,
-      user_attributes: %i[email first_name last_name]
+      user_attributes: %i[email first_name last_name time_zone]
     )
   end
 
