@@ -69,6 +69,8 @@ class User < ApplicationRecord
   validates :artist_website, url: { allow_blank: true, public_suffix: true }
   validates :instagram_url, url: { allow_blank: true, public_suffix: true }
 
+  before_validation :cleanse_time_zone, if: :new_record?
+
   scope :admins, -> { where(is_admin: true) }
 
   def self.system
@@ -104,6 +106,21 @@ class User < ApplicationRecord
   end
 
   private
+
+  def cleanse_time_zone
+    if self.time_zone == "America/Indianapolis" # not in mapping :x
+      self.time_zone = "America/New_York"
+    end
+
+    active_support_time_zone = \
+      ActiveSupport::TimeZone::MAPPING.key(self.time_zone)
+
+    if active_support_time_zone
+      self.time_zone = active_support_time_zone
+    else
+      self.time_zone = 'UTC'
+    end
+  end
 
   def set_gravatar_url
     gravatar_id = Digest::MD5.hexdigest(email.downcase)

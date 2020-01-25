@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name time_zone])
   end
 
   def validate_attachment_type(file, valid_types)
