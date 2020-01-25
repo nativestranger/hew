@@ -135,6 +135,7 @@ RSpec.describe 'Calls', type: :system do
         all('td', text: new_start_at.day.to_s).last.click
       end
       click_button 'Save'
+      sleep 0.5
       expect(call.reload.start_at.day).to eq(new_start_at.day)
       expect(call.reload.end_at.day).to eq(old_end_at.day) # not needed now?
 
@@ -144,6 +145,7 @@ RSpec.describe 'Calls', type: :system do
         all('td', text: new_end_at.day.to_s).last.click
       end
       click_button 'Save'
+      sleep 0.5
       expect(call.reload.start_at.day).to eq(new_start_at.day)
       expect(call.reload.end_at.day).to eq(new_end_at.day)
     end
