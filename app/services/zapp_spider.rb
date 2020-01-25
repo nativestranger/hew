@@ -56,10 +56,10 @@ class ZappSpider < Spider
     nil
   end
 
-  def entry_fee_in_cents # TODO: dont go to newline after 'Fee:' make shared method?
+  def entry_fee_in_cents # need shared?
     # TODO: handle exceptions in euros or other... €, CAD
 
-    browser.text.split('Fee:').last.strip.
+    browser.text.split('Fee:')[1].
       match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
   rescue => e
     Rails.logger.debug "ENTRY FEE ERROR #{e.message}"
