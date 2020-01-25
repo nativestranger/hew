@@ -46,6 +46,7 @@ gem 'administrate'
 gem 'blazer'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'bootstrap', '~> 4.3.1'
+gem 'bootstrap4-datetime-picker-rails'
 gem 'bootstrap-select-rails'
 gem 'carmen'
 gem 'country_select', '~> 4.0'

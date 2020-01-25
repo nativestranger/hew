@@ -1,4 +1,6 @@
 .nested-fields
+  = f.hidden_field(:time_zone, value: '')
+  = react_component 'TimeZoneSetter', { elementId: 'entry_user_attributes_time_zone' }
   .row
     .col-md-6
       .form-group

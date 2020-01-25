@@ -29,6 +29,7 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  sign_in_count          :integer          default(0), not null
+#  time_zone              :string           default("UTC"), not null
 #  unconfirmed_email      :string
 #  unlock_token           :string
 #  created_at             :datetime         not null
@@ -68,6 +69,8 @@ class User < ApplicationRecord
   validates :artist_website, url: { allow_blank: true, public_suffix: true }
   validates :instagram_url, url: { allow_blank: true, public_suffix: true }
 
+  before_validation :cleanse_time_zone, if: :new_record?
+
   scope :admins, -> { where(is_admin: true) }
 
   def self.system
@@ -103,6 +106,21 @@ class User < ApplicationRecord
   end
 
   private
+
+  def cleanse_time_zone
+    if self.time_zone == "America/Indianapolis" # not in mapping :x
+      self.time_zone = "America/New_York"
+    end
+
+    active_support_time_zone = \
+      ActiveSupport::TimeZone::MAPPING.key(self.time_zone)
+
+    if active_support_time_zone
+      self.time_zone = active_support_time_zone
+    else
+      self.time_zone = 'UTC'
+    end
+  end
 
   def set_gravatar_url
     gravatar_id = Digest::MD5.hexdigest(email.downcase)
