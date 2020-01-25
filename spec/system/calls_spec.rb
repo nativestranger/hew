@@ -38,20 +38,22 @@ RSpec.describe 'Calls', type: :system do
     fill_in 'call_name', with: 'Call name'
 
     find('.call_entry_deadline').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "3" }.click
-    all(".react-datepicker__time-list-item").find { |day| day.text == "12:00 AM" }.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '3').last.click
+    end
 
     find('.call_start_at').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "4" }.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '4').last.click
+    end
 
     find('.call_end_at').click
-    find('.react-datepicker__navigation--next').click
-    all(".react-datepicker__day").find { |day| day.text == "5" }.click
+    within(:css, 'div.datepicker-days') do
+      all('td', text: '5').last.click
+    end
 
     page.execute_script("document.getElementById('call_description').value = 'desc'")
-    page.execute_script("document.getElementById('call_entry_details').value = 'app details'")
+    page.execute_script("document.getElementById('call_entry_details').value = 'entry details'")
   end
 
   def fill_in_venue_details
@@ -124,22 +126,6 @@ RSpec.describe 'Calls', type: :system do
   end
 
   describe 'edit' do
-    it 'renders the edit template' do
-      visit edit_call_path(call)
-      find('.call_start_at').click
-      all(".react-datepicker__day").find { |day| day.text =="8" }.click
-      click_button 'Save'
-      expect(call.reload.start_at.day).to eq(8)
-      expect(call.reload.end_at.day).not_to eq(9) # need to fix datepicker issue & remove/change
-
-      visit edit_call_path(call)
-      find('.call_end_at').click
-      all(".react-datepicker__day").find { |day| day.text =="9" }.click
-      click_button 'Save'
-      expect(call.reload.start_at.day).to eq(8)
-      expect(call.reload.end_at.day).to eq(9)
-    end
-
     it 'deletes call_category_users when categories are removed' do
       call.categories << Category.new_media
 

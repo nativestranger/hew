@@ -17,6 +17,7 @@
 #  name           :string           default(""), not null
 #  spider         :integer          default("none"), not null
 #  start_at       :date
+#  time_zone      :string           default("UTC"), not null
 #  view_count     :integer          default(0), not null
 #  created_at     :datetime         not null
 #  updated_at     :datetime         not null
@@ -69,6 +70,7 @@ class Call < ApplicationRecord
   validate :owned_by_admin, if: :external
   validate :future_dates, on: :create
 
+  before_validation :set_entry_deadline_in_zone
   before_validation :remove_venue_maybe # TODO better form/venue edit
 
   has_many :entries, class_name: 'Entry', dependent: :destroy
@@ -79,7 +81,8 @@ class Call < ApplicationRecord
     residency: 2,
     publication: 3,
     competition: 4,
-    public_art: 5
+    public_art: 5,
+    fair_or_festival: 6
   }, _prefix: true
 
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
@@ -88,7 +91,8 @@ class Call < ApplicationRecord
     none: 0,
     call_for_entry: 1,
     artwork_archive: 2,
-    art_deadline: 3
+    art_deadline: 3,
+    zapplication: 4
   }, _prefix: true
 
   scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
@@ -151,7 +155,19 @@ class Call < ApplicationRecord
       ArtworkArchiveJob.perform_later(id)
     when 'art_deadline'
       ArtDeadlineJob.perform_later(id)
+    when 'zapplication'
+      ZappJob.perform_later(id)
     end
+  end
+
+  def set_entry_deadline_in_zone
+    Time.use_zone(time_zone) do
+      instance_variable_set('@entry_deadline', entry_deadline)
+    end
+  end
+
+  def get_entry_deadline_in_zone
+    Time.use_zone(time_zone) { entry_deadline }
   end
 
   private

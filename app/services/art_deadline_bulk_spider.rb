@@ -35,7 +35,7 @@ class ArtDeadlineBulkSpider < Spider
         external_url: call_link[:href]
       )
 
-      create_call
+      find_or_create_call
     end
   end
 

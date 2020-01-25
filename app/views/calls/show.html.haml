@@ -37,7 +37,7 @@
         .row
           .col-md-6.mb-4
             %h6 Type
-            %p #{titleize_snakecase(@call.call_type_id)} #{call_type_emojis[@call.call_type_id]} 
+            %p #{titleize_snakecase(@call.call_type_id)} #{call_type_emojis[@call.call_type_id]}
 
             %h6 Deadline
             %p= I18n.l(@call.entry_deadline, format: :long) if @call.entry_deadline
@@ -54,7 +54,7 @@
               %h6 Description
               %p= @call.description.html_safe
 
-          - if @call.description.present? || @call.entry_details.present?
+          - if @call.description.present? || @call.entry_details.present? || @call.categories.any?
             .col-md-6
               - if @call.entry_details.present?
                 %h6 Application Details

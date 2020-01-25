@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
   before_action :set_locale
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  around_action :set_time_zone, if: :current_user
+
   private
 
   def set_locale
@@ -40,7 +42,7 @@ class ApplicationController < ActionController::Base
   end
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name])
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[first_name last_name time_zone])
   end
 
   def validate_attachment_type(file, valid_types)
@@ -60,5 +62,9 @@ class ApplicationController < ActionController::Base
     referer_params = Rack::Utils.parse_nested_query(referer_uri.query).except(param_name)
     referer_uri.query = referer_params.to_query
     referer_uri.to_s
+  end
+
+  def set_time_zone(&block)
+    Time.use_zone(current_user.time_zone, &block)
   end
 end

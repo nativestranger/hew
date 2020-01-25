@@ -12,19 +12,23 @@
         .form-group
           = f.input :call_type_id, collection: options_for_enum(Call, :call_type_id)
     .row
-      .col-6
+      .col-lg-3
         .form-group
           %label Start Date
-          = f.text_field(:start_at, hidden: true, html: { id: 'start_at' })
-          - # TODO: fix date picker issue
-          - start_at = @call.start_at.present? ? @call.start_at + 1.day : nil
-          = react_component 'ReactDatePicker', { startDate: start_at, formFieldId: 'call_start_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:start_at].present? }
-      .col-6
+          = f.input :start_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
+      .col-lg-3
         .form-group
           %label End Date
-          = f.text_field(:end_at, hidden: true, html: { id: 'end_at' })
-          - end_at = @call.end_at.present? ? @call.end_at + 1.day : nil
-          = react_component 'ReactDatePicker', { startDate: end_at, formFieldId: 'call_end_at', showTimeSelect: false, isClearable: false, invalidInput: @call.errors[:end_at].present? }
+          = f.input :end_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
+      .col-lg-3
+        .form-group
+          %label Entry Deadline
+          - @call.entry_deadline = @call.get_entry_deadline_in_zone
+          = f.input :entry_deadline, as: :tempus_dominus, input_html: { class: 'datetime_local' }, label: false
+      .col-lg-3
+        .form-group
+          %label Time Zone
+          = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
 
     .row
       .col-md-12
@@ -41,6 +45,19 @@
             - f.object.errors[:description].each do |err|
               %p.mt-0.text-danger= err
           = f.input :description, input_html: { class: 'form-control' }, label: false, as: :trix_editor
+
+      .row.no-gutters
+        .col-md-4.col-4.p-0
+          .form-check.pl-0
+            = f.input :is_public, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "Public", "data-off" => "Private", "data-size" => "sm", "data-onstyle" => "light" }
+
+        - if current_user.is_admin?
+          .col-md-4.col-4.p-0
+            .form-check.pl-0
+              = f.input :external, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "External", "data-off" => "Internal", "data-size" => "sm", "data-onstyle" => "light" }
+          .col-md-4.col-4.p-0
+            .form-check.pl-0
+              = f.input :is_approved, label: false, input_html: { "data-toggle" => "toggle", "data-on" => "Approved", "data-off" => "Pending", "data-size" => "sm", "data-onstyle" => "light" }
 
     %hr
 
@@ -66,31 +83,6 @@
             - f.object.errors[:entry_details].each do |err|
               %p.mt-0.text-danger= err
           .mt-2= f.input :entry_details, input_html: { class: 'form-control' }, label: false, as: :trix_editor
-
-    .row
-      .col-md-4
-        .form-group
-          %label Application Deadline
-          = f.text_field(:entry_deadline, hidden: true, html: { id: 'entry_deadline' })
-          = react_component 'ReactDatePicker', { startDate: @call.entry_deadline, formFieldId: 'call_entry_deadline', showTimeSelect: true, isClearable: false, invalidInput: @call.errors[:entry_deadline].present? }
-
-      .col-md-2
-        .form-group
-          %label{ for: 'call_is_public' }
-            Publish
-            = f.input :is_public, label: false
-
-      - if current_user.is_admin?
-        .col-md-2
-          .form-group
-            %label{ for: 'call_external' }
-              External
-              = f.input :external, label: false
-        .col-md-2
-          .form-group
-            %label{ for: 'call_is_approved' }
-              Approved
-              = f.input :is_approved, label: false
 
     #venue_fields
       %hr

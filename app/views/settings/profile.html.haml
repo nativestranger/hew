@@ -22,14 +22,18 @@
             = f.input :email, input_html: { class: 'form-control' }, label: false
 
       .row
-        .col-md-6
+        .col-md-3
           .form-group
             %label{ for: 'user_first_name' }= t('first_name')
             = f.input :first_name, input_html: { class: 'form-control' }, label: false
-        .col-md-6
+        .col-md-3
           .form-group
             %label{ for: 'user_last_name' }= t('last_name')
             = f.input :last_name, input_html: { class: 'form-control' }, label: false
+        .col-md-6
+          .form-group
+            %label Time Zone
+            = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
 
         -# .col-md-6
         -#   .form-group

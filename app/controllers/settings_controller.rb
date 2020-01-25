@@ -35,6 +35,7 @@ class SettingsController < ApplicationController
       :instagram_url,
       :first_name,
       :last_name,
+      :time_zone,
       :is_curator,
       :is_artist,
       :locale,

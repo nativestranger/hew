@@ -22,4 +22,7 @@
 //= require jquery.ui.widget
 //= require z.jquery.fileupload
 //= require bootstrap-select
+//= require moment
+//= require moment-timezone-with-data
+//= require tempusdominus-bootstrap-4
 //= require_tree .

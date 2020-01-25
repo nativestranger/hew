@@ -1,17 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Pagination from "./Pagination";
+import BaseCallSearch from "./BaseCallSearch";
 import pluralize from "pluralize";
 
-export default class CallSearch extends React.Component {
-
+export default class CallSearch extends BaseCallSearch {
   static propTypes = {
+    page: PropTypes.number.isRequired,
     orderOptions: PropTypes.array.isRequired,
+    call_types: PropTypes.array.isRequired,
+    call_type_emojis: PropTypes.object.isRequired,
     calls: PropTypes.array.isRequired,
-    searchVal: PropTypes.string
+    searchVal: PropTypes.string,
   };
 
   constructor(props) {
     super(props);
+    this.getCalls = this.getCalls.bind(this);
+    this.renderCall = this.renderCall.bind(this);
     this.state = Object.assign({}, props);
   }
 
@@ -19,82 +25,40 @@ export default class CallSearch extends React.Component {
     this.getCalls()
   }
 
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
-  }
-
-  renderSortByDropdown() {
-    let thisComponent = this;
-
-    let isSelected = function(orderOptionName) {
-      return thisComponent.selectedOrderOption().name == orderOptionName;
-    }
-    let selectOrderOption = function(orderOptionName) {
-      let orderOptions = [...thisComponent.state.orderOptions];
-      orderOptions.forEach(option => {
-        if (option.name === orderOptionName) {
-          option.selected = true;
-        } else {
-          option.selected = false;
-        }
-      });
-      thisComponent.setState({ orderOptions: orderOptions });
-      thisComponent.getCalls();
-    }
-
-    return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
-          <span className="caret"></span></button>
-          <ul className="dropdown-menu dropdown-menu-right text-center">
-            { thisComponent.state.orderOptions.map(orderOption => {
-              return (
-                <li key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
-                  { isSelected(orderOption.name) && <strong>{orderOption.name}</strong> }
-                  { !isSelected(orderOption.name) && <span>{orderOption.name}</span> }
-                </li>
-              )
-            }) }
-          </ul>
-      </div>
-    );
-  }
-
-  getCalls = () => {
+  getCalls() {
     var searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
     var thisComponent = this;
 
-    $.get("/v1/calls", { name: searchValInput, order_option: this.selectedOrderOption() })
-      .done(function(response) {
-        thisComponent.setState({ calls: response.calls,
-                                 searchVal: searchValInput,
-                                 errorMessage: '',
-                                 loading: false });
+    $.get("/v1/calls", {
+       name: searchValInput,
+       page: this.currentPage(),
+       call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
+       order_option: this.selectedOrderOption()
+     }).done(function(response) {
+        thisComponent.setState({
+          calls: response.records,
+          pagination: response.pagination,
+          searchVal: searchValInput,
+          errorMessage: '',
+          loading: false
+        });
       }).fail(function(data) {
-        thisComponent.setState({ errorMessage: 'Something went wrong...',
-                                 searchVal: searchValInput,
-                                 loading: false });
+        thisComponent.setState({
+          errorMessage: 'Something went wrong...',
+          searchVal: searchValInput,
+          loading: false
+        });
       });
-    }
-
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
   }
 
   render() {
-    if (this.state.loading) {
-      return (
-        <div className='loader'></div>
-      );
-    } else {
-      return this.renderContent();
-    }
+    return this.renderContent();
   }
 
   renderContent() {
-    var thisComponent = this;
+    let thisComponent = this;
     return (
       <div>
         <div className='row mb-3'>
@@ -108,24 +72,35 @@ export default class CallSearch extends React.Component {
         </div>
 
         <form onSubmit={ this.getCalls }>
-          <div className='form-group'>
-            <input id="search_bar"
-                   className="form-control mb-2"
-                   autoFocus={ true }
-                   type='search'
-                   ref='searchValInput'
-                   defaultValue={ this.state.searchVal }
-                   placeholder='Search Your Calls'>
-            </input>
-            <div className='row'>
-              <div className='col-auto mr-auto'>
+          <div className='form-group mb-0'>
+            <div className='input-group'>
+              <input id="search_bar"
+                     className="form-control mb-2"
+                     type='string'
+                     ref='searchValInput'
+                     defaultValue={ this.state.searchVal }
+                     placeholder='Search Your Calls'>
+              </input>
+              <div className="input-group-append" onClick={this.getCalls}>
+                <span className="input-group-btn">
+                  <button name="button" type="button" className="btn btn-primary blr-0">
+                    <i className="fa fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-auto mr-auto'>
+              { this.state.pagination && (
                 <div>
-                  <p className='text-muted'>{ thisComponent.state.calls.length + pluralize(' call', thisComponent.state.calls.length) }</p>
+                  <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
                 </div>
-              </div>
-              <div className='col-auto'>
-                { this.renderSortByDropdown() }
-              </div>
+              ) }
+            </div>
+            <div className='col-auto'>
+              { this.renderCallTypeDropdown() }
+              { this.renderSortByDropdown() }
             </div>
           </div>
         </form>
@@ -134,9 +109,20 @@ export default class CallSearch extends React.Component {
           { this.state.errorMessage }
         </div>
 
-        <div className='mt-2'>
-         { this.state.calls.map(this.renderCall) }
-        </div>
+        { this.state.loading && (
+          <div className='loader'></div>
+        )}
+        { !this.state.loading && (
+          <div>
+            <div className='mt-2'>
+             { this.state.calls.map(this.renderCall) }
+            </div>
+
+            <div className='mt-4'>
+              { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -150,8 +136,9 @@ export default class CallSearch extends React.Component {
     let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
     return (
-      <a className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light" href={ call.path } key={ call.id }>
+      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
         <h4 className='card-title mb-0'>
+          <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
           { call.name || 'Unknown Name' }
 
           { call.scraped && (
@@ -188,7 +175,7 @@ export default class CallSearch extends React.Component {
           ) }
           <div className='clearfix mb-2' />
         </div>
-      </a>
+      </div>
     );
   }
 
