@@ -12,4 +12,12 @@ namespace :scrapers do
   task :art_deadline do
     ArtDeadlineBulkSpider.crawl!
   end
+
+  task :art_deadline do
+    ArtDeadlineBulkSpider.crawl!
+  end
+
+  task :zapp do
+    ZappBulkSpider.crawl!
+  end
 end

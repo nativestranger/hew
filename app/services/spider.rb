@@ -12,17 +12,24 @@ class Spider < Kimurai::Base
     update_maybe
   end
 
-  def create_call
+  def create_call # bulk spiders only
+    if @call.new_record?
+      @call.assign_attributes(
+        external: true,
+        is_public: true,
+        call_type_id: :unspecified
+      )
+    end
+
     @call.transaction do
       @call.update!(
         user: User.system,
-        external: true,
-        is_public: true,
-        spider: spider_name,
-        call_type_id: :unspecified
+        spider: spider_name
       )
       ensure_admins!
       @call.scrape
+
+      true
     rescue => e
       nil
     end
