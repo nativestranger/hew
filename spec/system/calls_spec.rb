@@ -126,30 +126,6 @@ RSpec.describe 'Calls', type: :system do
   end
 
   describe 'edit' do
-    it 'renders the edit template' do
-      visit edit_call_path(call)
-      old_start_at, old_end_at = call.start_at, call.end_at
-      new_start_at, new_end_at = old_start_at + 1.day, old_end_at + 1.day
-      find('.call_start_at').click
-      within(:css, 'div.datepicker-days') do
-        all('td', text: new_start_at.day.to_s).last.click
-      end
-      click_button 'Save'
-      sleep 0.5
-      expect(call.reload.start_at.day).to eq(new_start_at.day)
-      expect(call.reload.end_at.day).to eq(old_end_at.day) # not needed now?
-
-      visit edit_call_path(call)
-      find('.call_end_at').click
-      within(:css, 'div.datepicker-days') do
-        all('td', text: new_end_at.day.to_s).last.click
-      end
-      click_button 'Save'
-      sleep 0.5
-      expect(call.reload.start_at.day).to eq(new_start_at.day)
-      expect(call.reload.end_at.day).to eq(new_end_at.day)
-    end
-
     it 'deletes call_category_users when categories are removed' do
       call.categories << Category.new_media
 
