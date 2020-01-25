@@ -12,20 +12,20 @@
         .form-group
           = f.input :call_type_id, collection: options_for_enum(Call, :call_type_id)
     .row
-      .col-3
+      .col-lg-3
         .form-group
           %label Start Date
           = f.input :start_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
-      .col-3
+      .col-lg-3
         .form-group
           %label End Date
           = f.input :end_at, as: :tempus_dominus, input_html: { class: 'date' }, label: false
-      .col-3
+      .col-lg-3
         .form-group
           %label Entry Deadline
           - @call.entry_deadline = @call.get_entry_deadline_in_zone
           = f.input :entry_deadline, as: :tempus_dominus, input_html: { class: 'datetime_local' }, label: false
-      .col-3
+      .col-lg-3
         .form-group
           %label Time Zone
           = f.select :time_zone, time_zone_options_for_select(selected: f.object.time_zone), { include_blank: false }, { class: 'form-control' }
