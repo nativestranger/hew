@@ -4,7 +4,6 @@ class ZappSpider < Spider
 
   private
 
-
   def update_maybe
     # binding.pry
     @call.call_type_id = call_type_id if call_type_id && @call.call_type_id_unspecified?
@@ -12,9 +11,10 @@ class ZappSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description ||= possible_description&.text || ''
+    @call.description = possible_description if possible_description && @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
+    # @call.time_zone = time_zone if time_zone && @call.time_zone == 'UTC'
 
     @call.save!
   rescue => e
@@ -23,8 +23,10 @@ class ZappSpider < Spider
   end
 
   def possible_description
-    ps = browser.all(:xpath, "//div[@class='section_content']//p").first&.text&.split(' – ')
-    ps && ps[1].strip
+    browser.all(
+      :xpath,
+      "//*[text() = 'EVENT INFORMATION']/following-sibling::div"
+    )[0].text
   rescue => e
     nil
   end
