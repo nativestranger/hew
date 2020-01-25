@@ -13,7 +13,7 @@ class ZappBulkSpider < Spider
         external_url: href
       )
 
-      create_call
+      find_or_create_call
     end
   end
 

@@ -21,7 +21,7 @@ class ArtworkArchiveBulkSpider < Spider
         external_url: call_container.find(:xpath, '..')[:href] # finding child div for now
       )
 
-      create_call
+      find_or_create_call
     end
   end
 
