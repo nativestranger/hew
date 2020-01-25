@@ -20,6 +20,7 @@ class CallDashboard < Administrate::BaseDashboard
     entry_details:        Field::Text,
     created_at:           Field::DateTime,
     updated_at:           Field::DateTime,
+    external:             Field::Boolean,
     is_public:            Field::Boolean,
     is_approved:          Field::Boolean
   }.freeze
@@ -48,6 +49,7 @@ class CallDashboard < Administrate::BaseDashboard
     :description,
     :entry_deadline,
     :entry_details,
+    :external,
     :is_public,
     :is_approved,
     :created_at,
