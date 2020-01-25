@@ -111,24 +111,32 @@ export default class CallSearch extends React.Component {
         </div>
 
         <form onSubmit={ this.getCalls }>
-          <div className='form-group'>
-            <input id="search_bar"
-                   className="form-control mb-2"
-                   autoFocus={ true }
-                   type='search'
-                   ref='searchValInput'
-                   defaultValue={ this.state.searchVal }
-                   placeholder='Search Your Calls'>
-            </input>
-            <div className='row'>
-              <div className='col-auto mr-auto'>
-                <div>
-                  <p className='text-muted'>{ thisComponent.state.calls.length + pluralize(' call', thisComponent.state.calls.length) }</p>
-                </div>
+          <div className='form-group mb-0'>
+            <div className='input-group'>
+              <input id="search_bar"
+                     className="form-control mb-2"
+                     type='string'
+                     ref='searchValInput'
+                     defaultValue={ this.state.searchVal }
+                     placeholder='Search Your Calls'>
+              </input>
+              <div className="input-group-append" onClick={this.getCalls}>
+                <span className="input-group-btn">
+                  <button name="button" type="button" className="btn btn-primary blr-0">
+                    <i className="fa fa-search"></i>
+                  </button>
+                </span>
               </div>
-              <div className='col-auto'>
-                { this.renderSortByDropdown() }
+            </div>
+          </div>
+          <div className='row'>
+            <div className='col-auto mr-auto'>
+              <div>
+                <p className='text-muted'>{ thisComponent.state.calls.length + pluralize(' call', thisComponent.state.calls.length) }</p>
               </div>
+            </div>
+            <div className='col-auto'>
+              { this.renderSortByDropdown() }
             </div>
           </div>
         </form>
