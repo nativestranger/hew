@@ -16,6 +16,10 @@ export default class Pagination extends React.Component {
       ...Array(this.props.pagination.pages).keys()
     ].map(n => n+1);
 
+    let lastPageNumber = pageNumbers[pageNumbers.length - 1];
+    let maxPageNumber = Math.min(lastPageNumber, 6);
+    pageNumbers = pageNumbers.slice(0, maxPageNumber);
+
     let renderPageNumberLink = function(n) {
       let pageItemClass = "page-item";
 
