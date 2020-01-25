@@ -66,7 +66,7 @@ class CallSerializer < ActiveModel::Serializer
   def time_until_deadline_in_words
     return unless object.entry_deadline
 
-    distance_of_time_in_words(Time.current.utc, object.entry_deadline.in_time_zone(object.time_zone).utc)
+    distance_of_time_in_words(Time.current, object.entry_deadline)
   end
 
   def entry_counts
