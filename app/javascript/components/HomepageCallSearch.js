@@ -200,33 +200,18 @@ export default class HomepageCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown">
-        <button className="hover-dropbtn btn btn-light">Call Types</button>
+        <button className="hover-dropbtn btn btn-sm btn-light">Call Types</button>
+
         <div className="hover-dropdown-content">
-          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Competition') } }>
-            Competitions
-            { isSelected('Competition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-            { !isSelected('Competition') && <span className="fa fa-times fa-sm p-2"></span> }
-          </div>
-          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Exhibition') } }>
-            Exhibitions
-            { isSelected('Exhibition') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-            { !isSelected('Exhibition') && <span className="fa fa-times fa-sm p-2"></span> }
-          </div>
-          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Residency') } }>
-            Residencies
-            { isSelected('Residency') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-            { !isSelected('Residency') && <span className="fa fa-times fa-sm p-2"></span> }
-          </div>
-          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Publication') } }>
-            Publications
-            { isSelected('Publication') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-            { !isSelected('Publication') && <span className="fa fa-times fa-sm p-2"></span> }
-          </div>
-          <div className="dropdown-item c-pointer" onClick={ function(e) { e.preventDefault(); thisComponent.toggleCallType('Public Art') } }>
-            Publications
-            { isSelected('Public Art') && <span className="fa fa-check fa-sm p-2 text-success"></span> }
-            { !isSelected('Public Art') && <span className="fa fa-times fa-sm p-2"></span> }
-          </div>
+          { this.props.call_types.map(function(callType) {
+            return (
+              <div key={callType.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleCallType(callType.name) } }>
+                <span>{callType.name}</span>
+                { isSelected(callType.name) && <span className="fa fa-check fa-sm p-2 text-success mb-1"></span> }
+                { !isSelected(callType.name) && <span className="fa fa-times fa-sm p-2 text-danger mb-1"></span> }
+              </div>
+            );
+          }) }
         </div>
       </div>
     );
@@ -256,19 +241,19 @@ export default class HomepageCallSearch extends React.Component {
     }
 
     return (
-      <div className="dropdown d-inline">
-          <button className="btn btn-sm btn-muted dropdown-toggle" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
+      <div className="hover-dropdown d-inline">
+          <button className="hover-dropbtn btn btn-sm btn-light" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
           <span className="caret"></span></button>
-          <ul className="dropdown-menu dropdown-menu-right text-center">
+          <div className="hover-dropdown-content dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
               return (
-                <li key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
+                <div key={orderOption.name} className="dropdown-item c-pointer d-flex justify-content-start" onClick={ function(e) { e.preventDefault(); selectOrderOption(orderOption.name) } }>
                   { isSelected(orderOption.name) && <strong>{orderOption.name}</strong> }
                   { !isSelected(orderOption.name) && <span>{orderOption.name}</span> }
-                </li>
+                </div>
               )
             }) }
-          </ul>
+          </div>
       </div>
     );
   }
