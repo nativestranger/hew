@@ -8,12 +8,7 @@ class V1::CallsController < V1Controller
       user: current_user
     ).records
 
-    render json: {
-      calls: ActiveModel::Serializer::CollectionSerializer.new(
-          @calls,
-          each_serializer: CallSerializer
-      )
-    }
+    render json: paginate(@calls, serializer: CallSerializer)
   end
 
   private

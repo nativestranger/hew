@@ -53,25 +53,20 @@ export default class HomepageCallSearch extends BaseCallSearch {
   getCalls() {
     let thisComponent = this;
 
-    // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
-    let currentPage = (
-      (this.state.pagination && this.state.pagination.current) || thisComponent.props.page
-    );
-
     $.get("/v1/public/calls.json",
            { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
              order_option: this.selectedOrderOption(),
-             page: currentPage,
+             page: this.currentPage(),
              authenticity_token: App.getMetaContent("csrf-token") })
-        .done(function(data) {
+        .done(function(response) {
                   thisComponent.setState({
                     getError: false,
-                    calls: data.records,
-                    pagination: data.pagination,
+                    calls: response.records,
+                    pagination: response.pagination,
                   });
                   // thisComponent.refs.submit.blur();
                 })
-        .fail(function(data) {
+        .fail(function(response) {
                 thisComponent.setState({ getError: 'Oops, something went wrong.'});
               })
         .always(function() { $(thisComponent.refs.submit).prop('disabled', false); });

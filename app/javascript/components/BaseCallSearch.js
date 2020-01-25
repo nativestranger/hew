@@ -6,12 +6,18 @@ export default class BaseCallSearch extends React.Component {
 
   constructor(props) {
     super(props);
+    this.currentPage = this.currentPage.bind(this);
     this.toggleCallType = this.toggleCallType.bind(this);
     this.selectedCallTypes = this.selectedCallTypes.bind(this);
     this.selectedOrderOption = this.selectedOrderOption.bind(this);
     this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
     this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+  }
+
+  // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
+  currentPage() {
+    return (this.state.pagination && this.state.pagination.current) || this.props.page;
   }
 
   setLocalStorageFilters(property, value) {

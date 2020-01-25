@@ -6,6 +6,7 @@ import pluralize from "pluralize";
 
 export default class CallSearch extends BaseCallSearch {
   static propTypes = {
+    page: PropTypes.number.isRequired,
     orderOptions: PropTypes.array.isRequired,
     call_types: PropTypes.array.isRequired,
     call_type_emojis: PropTypes.object.isRequired,
@@ -30,16 +31,24 @@ export default class CallSearch extends BaseCallSearch {
 
     var thisComponent = this;
 
-    $.get("/v1/calls", { name: searchValInput, order_option: this.selectedOrderOption() })
-      .done(function(response) {
-        thisComponent.setState({ calls: response.calls,
-                                 searchVal: searchValInput,
-                                 errorMessage: '',
-                                 loading: false });
+    $.get("/v1/calls", {
+       name: searchValInput,
+       page: this.currentPage(),
+       order_option: this.selectedOrderOption()
+     }).done(function(response) {
+        thisComponent.setState({
+          calls: response.records,
+          pagination: response.pagination,
+          searchVal: searchValInput,
+          errorMessage: '',
+          loading: false
+        });
       }).fail(function(data) {
-        thisComponent.setState({ errorMessage: 'Something went wrong...',
-                                 searchVal: searchValInput,
-                                 loading: false });
+        thisComponent.setState({
+          errorMessage: 'Something went wrong...',
+          searchVal: searchValInput,
+          loading: false
+        });
       });
   }
 
@@ -54,7 +63,7 @@ export default class CallSearch extends BaseCallSearch {
   }
 
   renderContent() {
-    var thisComponent = this;
+    let thisComponent = this;
     return (
       <div>
         <div className='row mb-3'>
@@ -88,9 +97,11 @@ export default class CallSearch extends BaseCallSearch {
           </div>
           <div className='row'>
             <div className='col-auto mr-auto'>
-              <div>
-                <p className='text-muted'>{ thisComponent.state.calls.length + pluralize(' call', thisComponent.state.calls.length) }</p>
-              </div>
+              { this.state.pagination && (
+                <div>
+                  <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
+                </div>
+              ) }
             </div>
             <div className='col-auto'>
               { this.renderSortByDropdown() }
@@ -104,6 +115,10 @@ export default class CallSearch extends BaseCallSearch {
 
         <div className='mt-2'>
          { this.state.calls.map(this.renderCall) }
+        </div>
+
+        <div className='mt-4'>
+          { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
         </div>
       </div>
     );
