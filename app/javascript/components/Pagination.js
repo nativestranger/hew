@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+// TODO: allow callback function instead of href (to preserve filters/order)
+
 export default class Pagination extends React.Component {
   static propTypes = {
     pagination: PropTypes.object.isRequired
