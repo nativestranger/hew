@@ -155,7 +155,7 @@ class Call < ApplicationRecord
     when 'art_deadline'
       ArtDeadlineJob.perform_later(id)
     when 'zapplication'
-      # ZappJob.perform_later(id)
+      ZappJob.perform_later(id)
     end
   end
 
