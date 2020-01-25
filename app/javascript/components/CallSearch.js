@@ -5,7 +5,6 @@ import BaseCallSearch from "./BaseCallSearch";
 import pluralize from "pluralize";
 
 export default class CallSearch extends BaseCallSearch {
-
   static propTypes = {
     orderOptions: PropTypes.array.isRequired,
     call_types: PropTypes.array.isRequired,
@@ -16,6 +15,7 @@ export default class CallSearch extends BaseCallSearch {
 
   constructor(props) {
     super(props);
+    this.getCalls = this.getCalls.bind(this);
     this.renderCall = this.renderCall.bind(this);
     this.state = Object.assign({}, props);
   }
@@ -24,11 +24,7 @@ export default class CallSearch extends BaseCallSearch {
     this.getCalls()
   }
 
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
-  }
-
-  getCalls = () => {
+  getCalls() {
     var searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
@@ -45,10 +41,6 @@ export default class CallSearch extends BaseCallSearch {
                                  searchVal: searchValInput,
                                  loading: false });
       });
-    }
-
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
   }
 
   render() {

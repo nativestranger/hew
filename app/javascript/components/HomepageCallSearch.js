@@ -15,14 +15,9 @@ export default class HomepageCallSearch extends BaseCallSearch {
     super(props);
     this.getCalls = this.getCalls.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.toggleCallType = this.toggleCallType.bind(this);
-    this.selectedCallTypes = this.selectedCallTypes.bind(this);
-    this.selectedOrderOption = this.selectedOrderOption.bind(this);
-    this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
-    this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
-    this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
+  // not used for now
   setLocalStorageFilters(property, value) {
     let filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
     filters[property] = value;
@@ -31,7 +26,6 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
   componentWillMount() {
     let filters;
-
 
     // TODO: clear on deploy && renable localStorage
     if (false && localStorage.getItem('mox_call_search_filters')) {
@@ -87,14 +81,6 @@ export default class HomepageCallSearch extends BaseCallSearch {
     e.preventDefault();
     $(this.refs.submit).prop('disabled', true);
     this.getCalls();
-  }
-
-  selectedCallTypes() {
-    return this.state.call_types.filter(type => type.selected);
-  }
-
-  selectedOrderOption() {
-    return this.state.orderOptions.find(option => option.selected);
   }
 
   render() {
@@ -178,43 +164,5 @@ export default class HomepageCallSearch extends BaseCallSearch {
         </div>
       </div>
     )
-  }
-
-  toggleCallType(callType) {
-    let thisComponent = this;
-
-    let call_types = [...this.state.call_types];
-    callType = call_types.find(type => type.name === callType);
-    callType.selected = !callType.selected;
-    this.setState({ call_types: call_types }, function() {
-      thisComponent.setLocalStorageFilters('call_types', call_types);
-    });
-    this.getCalls();
-  }
-
-  renderCallTypeDropdown() {
-    let thisComponent = this;
-
-    let isSelected = function(callTypeName) {
-      return thisComponent.selectedCallTypes().find(type => type.name === callTypeName);
-    }
-
-    return (
-      <div className="hover-dropdown">
-        <button className="hover-dropbtn btn btn-sm btn-light">Call Types</button>
-
-        <div className="hover-dropdown-content">
-          { this.props.call_types.map(function(callType) {
-            return (
-              <div key={callType.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleCallType(callType.name) } }>
-                <span>{callType.name}</span>
-                { isSelected(callType.name) && <span className="fa fa-check fa-sm p-2 text-success mb-1"></span> }
-                { !isSelected(callType.name) && <span className="fa fa-times fa-sm p-2 text-danger mb-1"></span> }
-              </div>
-            );
-          }) }
-        </div>
-      </div>
-    );
   }
 }
