@@ -11,7 +11,7 @@ class ZappSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description = possible_description if possible_description && @call.description.blank?
+    @call.description = description if description && @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
     # @call.time_zone = time_zone if time_zone && @call.time_zone == 'UTC'
@@ -22,7 +22,7 @@ class ZappSpider < Spider
     false
   end
 
-  def possible_description
+  def description
     browser.all(
       :xpath,
       "//*[text() = 'EVENT INFORMATION']/following-sibling::div"
@@ -39,15 +39,10 @@ class ZappSpider < Spider
   end
 
   def call_type_id
-    result = browser.all(:xpath, "//span[@class='type']").first.text
+    text = [name&.downcase, description&.downcase].join(' ')
 
-    case result
-    when 'Competitions'
-      'competition'
-    when 'Public Art RFP'
-      'public_art'
-    when 'Residencies'
-      'residency'
+    if text.include?('fair') || text.include?('festival')
+      'fair_or_festival'
     end
   rescue => e
     nil

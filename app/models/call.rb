@@ -81,7 +81,8 @@ class Call < ApplicationRecord
     residency: 2,
     publication: 3,
     competition: 4,
-    public_art: 5
+    public_art: 5,
+    fair_or_festival: 6
   }, _prefix: true
 
   enum eligibility: { unspecified: 1, international: 2, national: 3, regional: 4, state: 5, local: 6 }, _prefix: true
