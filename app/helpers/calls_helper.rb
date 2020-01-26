@@ -10,7 +10,7 @@ module CallsHelper
   def call_search_call_types
     call_type_ids = Call.call_type_ids
 
-    [
+    result = [
       { id: call_type_ids['exhibition'], name: 'Exhibitions', enum_name: 'exhibition', selected: true },
       { id: call_type_ids['residency'], name: 'Residencies', enum_name: 'residency', selected: true },
       { id: call_type_ids['publication'], name: 'Publications', enum_name: 'publication', selected: true },
@@ -18,6 +18,12 @@ module CallsHelper
       { id: call_type_ids['public_art'], name: 'Public Art', enum_name: 'public_art', selected: true },
       { id: call_type_ids['fair_or_festival'], name: 'Fairs & Festivals', enum_name: 'fair_or_festival', selected: true },
     ]
+
+    if current_user&.is_admin?
+      result << { id: call_type_ids['unspecified'], name: 'Unspecified', enum_name: 'unspecified', selected: true }
+    end
+
+    result
   end
 
   def call_type_emojis
