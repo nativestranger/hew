@@ -10,11 +10,18 @@ as defined by the routes in the `admin/` namespace
 <nav class="navigation" role="navigation">
   <% Administrate::Namespace.new(namespace).resources.each do |resource| %>
     <% if resource.resource == 'application' %>
-      <%= link_to(
-        'Blazer',
-        admin_blazer_path,
-        class: "navigation__link navigation__link--#{nav_link_state(resource)}"
-      ) %>
+       <div style="margin-top: 10px;">
+         <%= link_to(
+           'Blazer',
+           admin_blazer_path,
+           class: "navigation__link navigation__link--#{nav_link_state(resource)}"
+         ) %>
+         <%= link_to(
+           'Sidekiq',
+           '/sidekiq',
+           class: "navigation__link navigation__link--#{nav_link_state(resource)}"
+         ) %>
+       </div>
     <% else %>
       <%= link_to(
         display_resource_name(resource),
