@@ -19,6 +19,8 @@ export default class BaseCallSearch extends React.Component {
     this.dateTimePickerValue = this.dateTimePickerValue.bind(this);
     this.toggleFilterButton = this.toggleFilterButton.bind(this);
     this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
+    this.renderCallTypeFilterMaybe = this.renderCallTypeFilterMaybe.bind(this);
+    this.renderSpiderFilterMaybe = this.renderSpiderFilterMaybe.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
@@ -93,7 +95,7 @@ export default class BaseCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown d-inline">
-          <button className="hover-dropbtn btn btn-sm btn-light border" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
+          <button className="hover-dropbtn btn btn-sm btn-light border" type="button">{this.selectedOrderOption().name}
           <span className="caret"></span></button>
           <div className="hover-dropdown-content dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
@@ -195,7 +197,8 @@ export default class BaseCallSearch extends React.Component {
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
       order_option: this.selectedOrderOption(),
-      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' })
+      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }),
+      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' })
      }
 
     return options;
@@ -226,38 +229,19 @@ export default class BaseCallSearch extends React.Component {
     let renderDateFilters = function() {
       let className;
       if (thisComponent.state.activeFilterSection == 'dates') {
-        className = ''
+        className = 'row'
       } else {
         className = 'd-none' // jquery stored value
       }
 
       return (
         <div className={className}>
-          { thisComponent.renderDateTimePicker('entry_deadline_start', 'Due After') }
-        </div>
-      )
-    }
-
-    let renderCallTypeFilterMaybe = function() {
-      if (thisComponent.state.activeFilterSection != 'call_types') {
-        return;
-      }
-
-      return (
-        <div>
-          { thisComponent.renderCallTypeDropdown() }
-        </div>
-      )
-    }
-
-    let renderSpiderFilterMaybe = function() {
-      if (thisComponent.state.activeFilterSection != 'spiders') {
-        return;
-      }
-
-      return (
-        <div>
-          { thisComponent.renderSpiderDropdown() }
+          <div className='col-md-3'>
+            { thisComponent.renderDateTimePicker('entry_deadline_start', 'Due After') }
+          </div>
+          <div className='col-md-3'>
+            { thisComponent.renderDateTimePicker('start_at_start', 'Event After') }
+          </div>
         </div>
       )
     }
@@ -284,15 +268,67 @@ export default class BaseCallSearch extends React.Component {
           </div>
         </div>
         <div className='row'>
-          <div className='col-12 mb-4'>
+          <div className='col mb-4'>
             { renderDateFilters() }
-            { renderCallTypeFilterMaybe() }
-            { renderSpiderFilterMaybe() }
+            { this.renderCallTypeFilterMaybe() }
+            { this.renderSpiderFilterMaybe() }
           </div>
         </div>
         <hr/>
       </div>
     );
+  }
+
+  renderCallTypeFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'call_types') {
+      return;
+    }
+
+    let renderCallType = function(callType) {
+      return (
+        <div key={callType.name} className="m-4 c-pointer" onClick={function() {thisComponent.toggleCallType(callType.name)}}>
+          <input className="form-check-input boolean optional c-pointer"
+                 checked={callType.selected}
+                 onChange={function() {}}
+                 type="checkbox" />
+          <span>{callType.name}</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className='d-md-flex'>
+        { this.state.call_types.map(renderCallType) }
+      </div>
+    )
+  }
+
+  renderSpiderFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'spiders') {
+      return;
+    }
+
+    let renderSpider = function(spider) {
+      return (
+        <div key={spider.name} className="m-4 c-pointer" onClick={function() {thisComponent.toggleSpider(spider.name)}}>
+          <input className="form-check-input boolean optional c-pointer"
+                 checked={spider.selected}
+                 onChange={function() {}}
+                 type="checkbox" />
+          <span>{spider.name}</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className='d-md-flex'>
+        { this.state.spiders.map(renderSpider) }
+      </div>
+    )
   }
 
   renderFilterSection() {
@@ -303,7 +339,7 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  renderDateTimePicker(attribute_name) {
+  renderDateTimePicker(attribute_name, label) {
     let thisComponent = this;
 
     let date = this.dateTimePickerValue({ id: attribute_name });
@@ -330,6 +366,9 @@ export default class BaseCallSearch extends React.Component {
                     next: 'fa fa-arrow-right',
                     today: 'fa fa-calendar-o',
                     clear: 'fa fa-times-circle'
+                },
+                buttons: {
+                  // showClear: true
                 }
             });
 
@@ -340,6 +379,8 @@ export default class BaseCallSearch extends React.Component {
           $(`#${ inputID }`).blur(function() {
             $(`#${ inputID }`).datetimepicker('hide');
           });
+
+          $(`#${ inputID }`).datetimepicker('toggle');
         }, 20);
       }
 
@@ -373,7 +414,7 @@ export default class BaseCallSearch extends React.Component {
     return (
       <div>
         <div className="form-group datetime_local optional">
-          <label className="col-form-label datetime_local optional">Deadline Cutoff</label>
+          <label className="col-form-label datetime_local optional">{label}</label>
 
           { renderControlledInputMaybe() }
           { renderjQueryInput() }

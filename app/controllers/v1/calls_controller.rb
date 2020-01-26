@@ -7,6 +7,7 @@ class V1::CallsController < V1Controller
       spiders: params[:spiders],
       call_type_ids: params[:call_type_ids],
       order_option: params[:order_option],
+      start_at_start: params[:start_at_start],
       entry_deadline_start: params[:entry_deadline_start],
       user: current_user
     ).records

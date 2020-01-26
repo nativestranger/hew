@@ -7,6 +7,7 @@ class CallSearcher
     @order_option = params[:order_option]
     @approved = params[:approved]
     @published = params[:published]
+    @start_at_start = params[:start_at_start]
     @entry_deadline_start = params[:entry_deadline_start]
     @entry_deadline_end = params[:entry_deadline_end]
 
@@ -42,12 +43,16 @@ class CallSearcher
       @calls = @calls.where("name ILIKE :name", name: "%#{@call_name}%")
     end
 
+    if @start_at_start
+      @calls = @calls.where("start_at >= ?", @start_at_start)
+    end
+
     if @entry_deadline_start
-      @calls = @calls.where("entry_deadline > ?", @entry_deadline_start)
+      @calls = @calls.where("entry_deadline >= ?", @entry_deadline_start)
     end
 
     if @entry_deadline_end
-      @calls = @calls.where("entry_deadline < ?", @entry_deadline_end)
+      @calls = @calls.where("entry_deadline <= ?", @entry_deadline_end)
     end
 
     @calls.order(order_option)
