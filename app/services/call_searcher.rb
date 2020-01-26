@@ -3,6 +3,7 @@ class CallSearcher
     @call_name = params[:call_name]
     @user = params[:user]
     @call_type_ids = params[:call_type_ids]
+    @spiders = params[:spiders]
     @order_option = params[:order_option]
     @approved = params[:approved]
     @published = params[:published]
@@ -13,6 +14,10 @@ class CallSearcher
   def records
     if @call_type_ids&.any?
       @calls = @calls.where(call_type_id: @call_type_ids)
+    end
+
+    if @spiders&.any?
+      @calls = @calls.where(spider: @spiders)
     end
 
     if @user
