@@ -32,7 +32,7 @@ class ResartisSpider < Spider
 
   def entry_deadline
     deadline_str = browser.text.downcase.split("application deadline")[1].split(/[a-z]/i).first.strip
-    Date.strptime(deadline_str, "%Y-%m-%d")
+    try_date_parse(deadline_str)
   rescue => e
     nil
   end
@@ -68,8 +68,8 @@ class ResartisSpider < Spider
   end
 
   def start_at
-    deadline_str = browser.text.downcase.split("residency starts")[1].split(/[a-z]/i).first.strip
-    Date.strptime(deadline_str, "%Y-%m-%d")
+    start_str = browser.text.downcase.split("residency starts")[1].split(/[a-z]/i).first.strip
+    try_date_parse(start_str)
   rescue => e
     Rails.logger.debug("DATES start_at ERROR: #{browser.current_url}")
     # binding.pry if !no_dates
@@ -77,11 +77,21 @@ class ResartisSpider < Spider
   end
 
   def end_at
-    deadline_str = browser.text.downcase.split("residency ends")[1].split(/[a-z]/i).first.strip
-    Date.strptime(deadline_str, "%Y-%m-%d")
+    end_str = browser.text.downcase.split("residency ends")[1].split(/[a-z]/i).first.strip
+    try_date_parse(end_str)
   rescue => e
     Rails.logger.debug("DATES end_at ERROR: #{browser.current_url}")
     # binding.pry if !no_dates
     nil
+  end
+
+  def try_date_parse(date_str)
+    Date.strptime(date_str, "%Y-%m-%d")
+  rescue ArgumentError => e
+    if e.message == 'invalid date'
+      Date.strptime(date_str, "%Y/%m/%d")
+    else
+      nil
+    end
   end
 end
