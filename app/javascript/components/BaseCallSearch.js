@@ -9,6 +9,8 @@ export default class BaseCallSearch extends React.Component {
     this.currentPage = this.currentPage.bind(this);
     this.toggleCallType = this.toggleCallType.bind(this);
     this.selectedCallTypes = this.selectedCallTypes.bind(this);
+    this.toggleSpider = this.toggleSpider.bind(this);
+    this.selectedSpiders = this.selectedSpiders.bind(this);
     this.selectedOrderOption = this.selectedOrderOption.bind(this);
     this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
     this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
@@ -22,6 +24,10 @@ export default class BaseCallSearch extends React.Component {
 
   setLocalStorageFilters(property, value) {
     // TODO: determine when/if
+  }
+
+  selectedSpiders() {
+    return this.state.spiders.filter(spider => spider.selected);
   }
 
   selectedCallTypes() {
@@ -72,11 +78,11 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  toggleCallType(callType) {
+  toggleCallType(name) {
     let thisComponent = this;
 
     let call_types = [...this.state.call_types];
-    callType = call_types.find(type => type.name === callType);
+    let callType = call_types.find(type => type.name === name);
     callType.selected = !callType.selected;
     this.setState({ call_types: call_types }, function() {
       thisComponent.setLocalStorageFilters('call_types', call_types);
@@ -102,6 +108,44 @@ export default class BaseCallSearch extends React.Component {
                 <span>{callType.name}</span>
                 { isSelected(callType.name) && <span className="fa fa-check fa-sm p-2 text-success mb-1"></span> }
                 { !isSelected(callType.name) && <span className="fa fa-times fa-sm p-2 text-danger mb-1"></span> }
+              </div>
+            );
+          }) }
+        </div>
+      </div>
+    );
+  }
+
+  toggleSpider(name) {
+    let thisComponent = this;
+
+    let spiders = [...this.state.spiders];
+    let spider = spiders.find(spider => spider.name === name);
+    spider.selected = !spider.selected;
+    this.setState({ spiders: spiders }, function() {
+      thisComponent.setLocalStorageFilters('spiders', spiders);
+    });
+    this.getCalls();
+  }
+
+  renderSpiderDropdown() {
+    let thisComponent = this;
+
+    let isSelected = function(spiderName) {
+      return thisComponent.selectedSpiders().find(spider => spider.name === spiderName);
+    }
+
+    return (
+      <div className="hover-dropdown">
+        <button className="hover-dropbtn btn btn-sm btn-light">Spiders</button>
+
+        <div className="hover-dropdown-content">
+          { this.props.spiders.map(function(spider) {
+            return (
+              <div key={spider.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleSpider(spider.name) } }>
+                <span>{spider.name}</span>
+                { isSelected(spider.name) && <span className="fa fa-check fa-sm p-2 text-success mb-1"></span> }
+                { !isSelected(spider.name) && <span className="fa fa-times fa-sm p-2 text-danger mb-1"></span> }
               </div>
             );
           }) }

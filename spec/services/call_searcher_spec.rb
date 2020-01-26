@@ -7,6 +7,7 @@ RSpec.describe CallSearcher, type: :service do
        user: user,
        approved: approved,
        published: published,
+       spiders: spiders,
        call_type_ids: call_type_ids,
        order_option: order_option
     )
@@ -16,6 +17,7 @@ RSpec.describe CallSearcher, type: :service do
   let(:user) { create(:user) }
   let(:approved) { nil }
   let(:published) { nil }
+  let(:spiders) { nil }
   let(:order_option) { nil }
   let(:call_type_ids) { nil }
 
@@ -112,6 +114,22 @@ RSpec.describe CallSearcher, type: :service do
       expect(searcher.records.pluck(:id)).to include(exhibition.id)
       expect(searcher.records.pluck(:id)).to include(publication.id)
       expect(searcher.records.pluck(:id)).not_to include(residency.id)
+    end
+  end
+
+  context 'with spiders' do
+    let(:spiders) do
+      [ Call.spiders['call_for_entry'],
+        Call.spiders['art_deadline'] ]
+    end
+    let!(:call_for_entry) { create(:call, user: user, spider: 'call_for_entry') }
+    let!(:art_deadline) { create(:call, user: user, spider: 'art_deadline') }
+    let!(:zapplication) { create(:call, user: user, spider: 'zapplication') }
+
+    it 'searches on spiders' do
+      expect(searcher.records.pluck(:id)).to include(call_for_entry.id)
+      expect(searcher.records.pluck(:id)).to include(art_deadline.id)
+      expect(searcher.records.pluck(:id)).not_to include(zapplication.id)
     end
   end
 

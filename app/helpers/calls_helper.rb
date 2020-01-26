@@ -26,6 +26,17 @@ module CallsHelper
     result
   end
 
+  def call_search_spiders
+    spiders = Call.spiders
+
+    [
+      { id: spiders['call_for_entry'], name: 'Cafe', enum_name: 'call_for_entry', selected: true },
+      { id: spiders['artwork_archive'], name: 'ArtworkArchive', enum_name: 'artwork_archive', selected: true },
+      { id: spiders['art_deadline'], name: 'ArtDeadline', enum_name: 'art_deadline', selected: true },
+      { id: spiders['zapplication'], name: 'Zapplication', enum_name: 'zapplication', selected: true },
+    ]
+  end
+
   def call_type_emojis
     {
       "exhibition" => "👀",
@@ -80,5 +91,12 @@ module CallsHelper
     return {} unless params[:entry_searcher]
 
     { entry_searcher: call_entry_searcher_params.to_h.symbolize_keys }
+  end
+
+  def calls_search_defaults
+    homepage_search_defaults.merge(
+      calls: [],
+      spiders: call_search_spiders
+    )
   end
 end

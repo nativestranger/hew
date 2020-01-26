@@ -35,6 +35,7 @@ export default class CallSearch extends BaseCallSearch {
        name: searchValInput,
        page: this.currentPage(),
        call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
+       spiders: this.selectedSpiders().map(spider => spider.id),
        order_option: this.selectedOrderOption()
      }).done(function(response) {
         thisComponent.setState({
@@ -99,6 +100,7 @@ export default class CallSearch extends BaseCallSearch {
               ) }
             </div>
             <div className='col-auto'>
+              { this.renderSpiderDropdown() }
               { this.renderCallTypeDropdown() }
               { this.renderSortByDropdown() }
             </div>
