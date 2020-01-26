@@ -192,7 +192,7 @@ export default class BaseCallSearch extends React.Component {
 
     let options = {
       authenticity_token: App.getMetaContent("csrf-token"),
-      name: searchValInput,
+      call_name: searchValInput,
       page: this.currentPage(),
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
@@ -237,10 +237,10 @@ export default class BaseCallSearch extends React.Component {
       return (
         <div className={className}>
           <div className='col-md-3'>
-            { thisComponent.renderDateTimePicker('entry_deadline_start', 'Due After') }
+            { thisComponent.renderDateTimePicker('entry_deadline_start', 'Deadline After') }
           </div>
           <div className='col-md-3'>
-            { thisComponent.renderDateTimePicker('start_at_start', 'Event After') }
+            { thisComponent.renderDateTimePicker('start_at_start', 'Event Starts After') }
           </div>
         </div>
       )
@@ -255,7 +255,7 @@ export default class BaseCallSearch extends React.Component {
                 <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` }>
                   <span className='c-pointer' onClick={function(){ selectFilterSection('call_types') }}>Call Types</span>
                 </div>
-                { 'admin' && (
+                { this.state.spiders && (
                   <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` }>
                     <span className='c-pointer' onClick={function(){ selectFilterSection('spiders') }}>Spiders</span>
                   </div>

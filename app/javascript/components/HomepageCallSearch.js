@@ -14,6 +14,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
   constructor(props) {
     super(props);
     this.getCalls = this.getCalls.bind(this);
+    this.renderFiltersBottom = this.renderFiltersBottom.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,6 +26,10 @@ export default class HomepageCallSearch extends BaseCallSearch {
   }
 
   componentWillMount() {
+    this.setState({
+      activeFilterSection: 'call_types'
+    }); // TODO: /// share w/ live search...
+
     let filters;
 
     // TODO: clear on deploy && renable localStorage
@@ -50,7 +55,8 @@ export default class HomepageCallSearch extends BaseCallSearch {
     this.getCalls();
   }
 
-  getCalls() {
+  getCalls(e) {
+    e && e.preventDefault();
     let thisComponent = this;
 
     $.get("/v1/public/calls.json", this.callSearchOptions())
@@ -79,11 +85,35 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
     return (
       <div className="call-searcher">
-        { this.renderFilterSection() }
+        <div className="filters">
+          <form onSubmit={ this.getCalls }>
+            <div className='form-group mb-0'>
+              <div className='input-group'>
+                <input id="search_bar"
+                       className="form-control mb-2"
+                       type='string'
+                       ref='searchValInput'
+                       defaultValue={ this.state.searchVal }
+                       placeholder='Search Calls'>
+                </input>
+                <div className="input-group-append" onClick={this.getCalls}>
+                  <span className="input-group-btn">
+                    <button name="button" type="button" className="btn btn-primary blr-0">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          { this.renderFilterSection() }
+          { this.renderFiltersBottom() }
+        </div>
 
         { this.state.pagination && (
           <div>
-            <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} calls</p>
+            <p className="m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} calls</p>
           </div>
         ) }
 
@@ -104,9 +134,11 @@ export default class HomepageCallSearch extends BaseCallSearch {
                                 </div>
                             </div>
                         </div>
-                        <div className="card-body call-description my-1 p-0">
-                          <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
-                        </div>
+                        { call.description && (
+                          <div className="card-body call-description my-1 p-0">
+                            <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
+                          </div>
+                        ) }
                         <div className="card-footer bg-white border-0 p-0 text-muted">
                             <div className="row">
                                 <div className="col-12">
@@ -127,7 +159,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
     );
   }
 
-  renderFilterSection() {
+  renderFiltersBottom() {
     let thisComponent = this;
 
     let renderCallType = function(callType) {
@@ -141,17 +173,10 @@ export default class HomepageCallSearch extends BaseCallSearch {
     }
 
     return (
-      <div className="filters card">
-        <div className="search-container p-1">
-          <span className="fa fa-search fa-sm p-2"></span>
-          { this.selectedCallTypes().map(renderCallType) }
-        </div>
-
-        <div className="card-footer bg-white p-0">
-          <div className="dropdowns d-flex justify-content-between">
-            { thisComponent.renderCallTypeDropdown() }
-            { thisComponent.renderSortByDropdown() }
-          </div>
+      <div className="bg-white p-0 mb-2">
+        <div className="dropdowns d-flex justify-content-between">
+          { this.toggleFilterButton() }
+          { thisComponent.renderSortByDropdown() }
         </div>
       </div>
     )

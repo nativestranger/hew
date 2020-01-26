@@ -3,13 +3,7 @@ class V1::CallsController < V1Controller
 
   def index
     @calls = CallSearcher.new(
-      call_name: params[:name],
-      spiders: params[:spiders],
-      call_type_ids: params[:call_type_ids],
-      order_option: params[:order_option],
-      start_at_start: params[:start_at_start],
-      entry_deadline_start: params[:entry_deadline_start],
-      user: current_user
+      params.merge(user: current_user)
     ).records
 
     render json: paginate(@calls, serializer: CallSerializer)
