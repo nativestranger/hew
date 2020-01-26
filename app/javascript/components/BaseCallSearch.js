@@ -6,6 +6,9 @@ export default class BaseCallSearch extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      activeFilterSection: 'call_types'
+    }
     this.currentPage = this.currentPage.bind(this);
     this.toggleCallType = this.toggleCallType.bind(this);
     this.selectedCallTypes = this.selectedCallTypes.bind(this);
@@ -17,12 +20,26 @@ export default class BaseCallSearch extends React.Component {
     this.callSearchOptions = this.callSearchOptions.bind(this);
     this.renderDateTimePicker = this.renderDateTimePicker.bind(this);
     this.dateTimePickerValue = this.dateTimePickerValue.bind(this);
+    this.toggleFilterButton = this.toggleFilterButton.bind(this);
+    this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
   // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
   currentPage() {
     return (this.state.pagination && this.state.pagination.current) || this.props.page;
+  }
+
+  toggleFilterExpansion() {
+    this.setState({ filterExpanded: !this.state.filterExpanded });
+  }
+
+  toggleFilterButton() {
+    return (
+      <div className='btn btn-sm btn-light border c-pointer' onClick={ this.toggleFilterExpansion }>
+        { `${ this.state.filterExpanded ? 'Hide' : 'Show' }` } Filters
+      </div>
+    );
   }
 
   setLocalStorageFilters(property, value) {
@@ -73,7 +90,7 @@ export default class BaseCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown d-inline">
-          <button className="hover-dropbtn btn btn-sm btn-light" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
+          <button className="hover-dropbtn btn btn-sm btn-light border" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
           <span className="caret"></span></button>
           <div className="hover-dropdown-content dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
@@ -196,36 +213,89 @@ export default class BaseCallSearch extends React.Component {
     if (opts.hidden) {
       className = 'd-none'
     } else {
-      className = 'row'
+      className = ''
+    }
+
+    let selectFilterSection = function(name) {
+      thisComponent.setState({ activeFilterSection: name });
+    }
+
+    let renderDateFilters = function() {
+      let className;
+      if (thisComponent.state.activeFilterSection == 'dates') {
+        className = ''
+      } else {
+        className = 'd-none' // jquery stored value
+      }
+
+      return (
+        <div className={className}>
+          { thisComponent.renderDateTimePicker('entry_deadline_start', 'Due After') }
+        </div>
+      )
+    }
+
+    let renderCallTypeFilterMaybe = function() {
+      if (thisComponent.state.activeFilterSection != 'call_types') {
+        return;
+      }
+
+      return (
+        <div>
+          { thisComponent.renderCallTypeDropdown() }
+        </div>
+      )
+    }
+
+    let renderSpiderFilterMaybe = function() {
+      if (thisComponent.state.activeFilterSection != 'spiders') {
+        return;
+      }
+
+      return (
+        <div>
+          { thisComponent.renderSpiderDropdown() }
+        </div>
+      )
     }
 
     return (
       <div className={className}>
-        <div className='col-3'>
-          { this.renderDateTimePicker('entry_deadline_start', 'Due After') }
+        <div className='row'>
+          <div className='col-12'>
+            <div className='mt-2'>
+              <nav className="nav nav-tabs">
+                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` }>
+                  <span className='c-pointer' onClick={function(){ selectFilterSection('call_types') }}>Call Types</span>
+                </div>
+                { 'admin' && (
+                  <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` }>
+                    <span className='c-pointer' onClick={function(){ selectFilterSection('spiders') }}>Spiders</span>
+                  </div>
+                ) }
+                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` }>
+                  <span className='c-pointer' onClick={function(){ selectFilterSection('dates') }}>Dates</span>
+                </div>
+              </nav>
+            </div>
+          </div>
         </div>
-        <div className='col-3'>
-          <p className='text-muted'
-             onClick={ function() {  thisComponent.setState({ filterExpanded: false }) } }>
-            hide filter options
-          </p>
+        <div className='row'>
+          <div className='col-12 mb-4'>
+            { renderDateFilters() }
+            { renderCallTypeFilterMaybe() }
+            { renderSpiderFilterMaybe() }
+          </div>
         </div>
+        <hr/>
       </div>
     );
   }
 
   renderFilterSection() {
-    let thisComponent = this;
     return (
       <div>
         { this.renderFilters({ hidden: !this.state.filterExpanded }) }
-
-        { !this.state.filterExpanded && (
-          <p className='text-muted'
-             onClick={ function() { thisComponent.setState({ filterExpanded: true }) } }>
-            show filter options
-          </p>
-        ) }
       </div>
     );
   }
@@ -296,10 +366,11 @@ export default class BaseCallSearch extends React.Component {
       )
     }
 
+    // TODO: generalize
     return (
       <div>
         <div className="form-group datetime_local optional">
-          <label className="col-form-label datetime_local optional">Date Filter</label>
+          <label className="col-form-label datetime_local optional">Deadline Cutoff</label>
 
           { renderControlledInputMaybe() }
           { renderjQueryInput() }

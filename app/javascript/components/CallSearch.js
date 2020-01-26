@@ -56,11 +56,11 @@ export default class CallSearch extends BaseCallSearch {
       <div>
         <div className='row mb-3'>
           <div className='col-auto mr-auto'>
-          </div>
-          <div className='col-auto'>
-            <a className='btn btn-sm btn-primary' href='/calls/new'>
+            <a className='btn btn-sm btn-light border' href='/calls/new'>
               + New Call
             </a>
+          </div>
+          <div className='col-auto'>
           </div>
         </div>
 
@@ -84,22 +84,24 @@ export default class CallSearch extends BaseCallSearch {
             </div>
           </div>
           <div className='row'>
-            <div className='col-auto mr-auto'>
+            <div className='col-auto mr-auto d-flex d-justify-content-between'>
+              { this.toggleFilterButton() }
               { this.state.pagination && (
-                <div>
-                  <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
-                </div>
+                <span>
+                  <strong className="m-1">{this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</strong>
+                </span>
               ) }
             </div>
+
             <div className='col-auto'>
-              { this.renderSpiderDropdown() }
-              { this.renderCallTypeDropdown() }
               { this.renderSortByDropdown() }
             </div>
           </div>
         </form>
 
-        { this.renderFilterSection() }
+        <div className='mt-4'>
+          { this.renderFilterSection() }
+        </div>
 
         <div className='gray'>
           { this.state.errorMessage }
@@ -110,7 +112,7 @@ export default class CallSearch extends BaseCallSearch {
         )}
         { !this.state.loading && (
           <div>
-            <div className='mt-2'>
+            <div className='mt-4'>
              { this.state.calls.map(this.renderCall) }
             </div>
 
@@ -146,30 +148,32 @@ export default class CallSearch extends BaseCallSearch {
           ) }
         </h4>
 
-        <div className="card-body p-0">
-          { call.time_until_deadline_in_words && (
-            <p className='text-muted'>
-              { call.time_until_deadline_in_words } left for entries
-            </p>
-          ) }
-
-          { call.internal && (
-            <div className='text-primary'>
-              { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
+        <div className="card-body p-0 mb-1">
+          <div className='row mt-4 mb-1'>
+            <div className='col-auto mr-auto'>
+              { call.entry_deadline && (
+                <div className='text-muted'>
+                  { call.entry_deadline }
+                </div>
+              ) }
             </div>
-          ) }
+            <div className='col-auto'>
+              { call.external && (
+                <div className='text-right'>
+                  <div>
+                    { call.view_count } { pluralize('view', call.view_count) }
+                  </div>
+                </div>
+              ) }
 
-          { call.external && (
-            <div className='mt-4'>
-              <a href={call.external_url}>
-                External URL
-              </a>
-              <div>
-                { call.view_count } { pluralize('view', call.view_count) }
-              </div>
+              { call.internal && (
+                <div className='text-primary'>
+                  { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
+                </div>
+              ) }
             </div>
-          ) }
-          <div className='clearfix mb-2' />
+          </div>
+
         </div>
       </div>
     );
