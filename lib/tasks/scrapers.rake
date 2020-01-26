@@ -20,4 +20,8 @@ namespace :scrapers do
   task :zapp do
     ZappBulkSpider.crawl!
   end
+
+  task :resartis do
+    ResartisBulkSpider.crawl!
+  end
 end
