@@ -6,9 +6,6 @@ export default class BaseCallSearch extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      activeFilterSection: 'call_types'
-    }
     this.currentPage = this.currentPage.bind(this);
     this.toggleCallType = this.toggleCallType.bind(this);
     this.selectedCallTypes = this.selectedCallTypes.bind(this);
@@ -23,6 +20,12 @@ export default class BaseCallSearch extends React.Component {
     this.toggleFilterButton = this.toggleFilterButton.bind(this);
     this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({
+      activeFilterSection: 'call_types'
+    });
   }
 
   // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
