@@ -173,6 +173,10 @@ class Call < ApplicationRecord
     Time.use_zone(time_zone) { entry_deadline }
   end
 
+  def past_deadline?
+    entry_deadline && entry_deadline < Time.current
+  end
+
   private
 
   def scraper_exception?
