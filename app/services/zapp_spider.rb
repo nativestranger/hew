@@ -38,11 +38,7 @@ class ZappSpider < Spider
   end
 
   def call_type_id
-    text = [name&.downcase, description&.downcase].join(' ')
-
-    if text.include?('fair') || text.include?('festival')
-      'fair_or_festival'
-    end
+    'fair_or_festival' # all on zapplication
   rescue => e
     nil
   end
