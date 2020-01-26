@@ -25,7 +25,7 @@ class Spider < Kimurai::Base
       end
 
       ensure_admins!
-      @call.scrape
+      @call.scrape unless @call.past_deadline?
 
       true
     rescue => e
