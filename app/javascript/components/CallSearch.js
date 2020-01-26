@@ -87,9 +87,7 @@ export default class CallSearch extends BaseCallSearch {
             <div className='col-auto mr-auto d-flex d-justify-content-between'>
               { this.toggleFilterButton() }
               { this.state.pagination && (
-                <span>
-                  <strong className="m-1">{this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</strong>
-                </span>
+                  <p className="m-1">{this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
               ) }
             </div>
 
