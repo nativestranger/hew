@@ -38,7 +38,7 @@ class ResartisSpider < Spider
   end
 
   def call_type_id
-    'residency' # all on zapplication
+    'residency' # all on resartis
   rescue => e
     nil
   end
@@ -52,11 +52,11 @@ class ResartisSpider < Spider
     nil
   end
 
-  def entry_fee_in_cents # need shared?
-    # TODO: handle exceptions in euros or other... €, CAD
+  def entry_fee_in_cents
+    return
+    # TODO: add this?
 
-    # TODO not need?
-    browser.text.downase.split('fee')[1].
+    browser.text.downcase.split('fee')[1].
       match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
   rescue => e
     Rails.logger.debug "ENTRY FEE ERROR #{e.message}"

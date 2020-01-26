@@ -23,6 +23,6 @@ class ResartisBulkSpider < Spider
     browser.all(
       :xpath,
       "//*[@class='grid__item  postcard']//article//div//h2//a"
-    )
+    ).select { |cl| cl[:href].include?('resartis.org/open-call/') }
   end
 end
