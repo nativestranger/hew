@@ -27,18 +27,11 @@ export default class CallSearch extends BaseCallSearch {
 
   getCalls(e) {
     e && e.preventDefault();
-    let searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
     var thisComponent = this;
 
-    $.get("/v1/calls", {
-       name: searchValInput,
-       page: this.currentPage(),
-       call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-       spiders: this.selectedSpiders().map(spider => spider.id),
-       order_option: this.selectedOrderOption()
-     }).done(function(response) {
+    $.get("/v1/calls", this.callSearchOptions()).done(function(response) {
         thisComponent.setState({
           calls: response.records,
           pagination: response.pagination,
@@ -105,6 +98,8 @@ export default class CallSearch extends BaseCallSearch {
             </div>
           </div>
         </form>
+
+        { this.renderFilterSection() }
 
         <div className='gray'>
           { this.state.errorMessage }

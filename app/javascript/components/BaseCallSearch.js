@@ -14,6 +14,9 @@ export default class BaseCallSearch extends React.Component {
     this.selectedOrderOption = this.selectedOrderOption.bind(this);
     this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
     this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
+    this.callSearchOptions = this.callSearchOptions.bind(this);
+    this.renderDateTimePicker = this.renderDateTimePicker.bind(this);
+    this.dateTimePickerValue = this.dateTimePickerValue.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
@@ -27,11 +30,19 @@ export default class BaseCallSearch extends React.Component {
   }
 
   selectedSpiders() {
-    return this.state.spiders.filter(spider => spider.selected);
+    if (this.state.spiders) {
+      return this.state.spiders.filter(spider => spider.selected);
+    } else {
+      return [];
+    }
   }
 
   selectedCallTypes() {
-    return this.state.call_types.filter(type => type.selected);
+    if (this.state.call_types) {
+      return this.state.call_types.filter(type => type.selected);
+    } else {
+      return [];
+    }
   }
 
   selectedOrderOption() {
@@ -154,4 +165,146 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
+  callSearchOptions() {
+    let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
+
+    let options = {
+      authenticity_token: App.getMetaContent("csrf-token"),
+      name: searchValInput,
+      page: this.currentPage(),
+      call_type_ids: this.selectedCallTypes().map(type => type.id),
+      spiders: this.selectedSpiders().map(spider => spider.id),
+      order_option: this.selectedOrderOption(),
+      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' })
+     }
+
+    return options;
+  }
+
+  // need alt formats
+  dateTimePickerValue(opts) {
+    if ($(`#${opts['id']}`)[0] && $(`#${opts['id']}`).data('datetimepicker')) {
+      let datetimepicker = $(`#${opts['id']}`).data('datetimepicker')
+      return datetimepicker.date() && datetimepicker.date().format('YYYY-MM-DDTHH:mm')
+    }
+  }
+
+  renderFilters(opts) {
+    let thisComponent = this;
+
+    let className;
+    if (opts.hidden) {
+      className = 'd-none'
+    } else {
+      className = 'row'
+    }
+
+    return (
+      <div className={className}>
+        <div className='col-3'>
+          { this.renderDateTimePicker('entry_deadline_start', 'Due After') }
+        </div>
+        <div className='col-3'>
+          <p className='text-muted'
+             onClick={ function() {  thisComponent.setState({ filterExpanded: false }) } }>
+            hide filter options
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  renderFilterSection() {
+    let thisComponent = this;
+    return (
+      <div>
+        { this.renderFilters({ hidden: !this.state.filterExpanded }) }
+
+        { !this.state.filterExpanded && (
+          <p className='text-muted'
+             onClick={ function() { thisComponent.setState({ filterExpanded: true }) } }>
+            show filter options
+          </p>
+        ) }
+      </div>
+    );
+  }
+
+  renderDateTimePicker(attribute_name) {
+    let thisComponent = this;
+
+    let date = this.dateTimePickerValue({ id: attribute_name });
+    let visibility_toggle_name = `show_filter__${attribute_name}`;
+    let inputID = `${ attribute_name }`;
+
+    let renderControlledInputMaybe = function() {
+      if (thisComponent.state[visibility_toggle_name]) {
+        return;
+      }
+
+      let showjQuerySelector = function() {
+        let stateChanges = {};
+        stateChanges[visibility_toggle_name] = true;
+        thisComponent.setState(stateChanges);
+        setTimeout(function() {
+          $(`#${ inputID }`).datetimepicker({
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: 'fa fa-arrow-left',
+                    next: 'fa fa-arrow-right',
+                    today: 'fa fa-calendar-o',
+                    clear: 'fa fa-times-circle'
+                }
+            });
+
+          $(`#${ inputID }`).click(function() {
+            $(`#${ inputID }`).datetimepicker('show');
+          });
+
+          $(`#${ inputID }`).blur(function() {
+            $(`#${ inputID }`).datetimepicker('hide');
+          });
+        }, 20);
+      }
+
+      return (
+        <input className="form-control optional"
+               id={ `call_search_${ attribute_name }_initial` }
+               defaultValue={ date && moment(date).format('MM/DD/YYYY h:mm A') }
+               onMouseEnter={ showjQuerySelector } />
+      );
+    }
+
+    let renderjQueryInput = function() {
+      let style;
+      if (!thisComponent.state[visibility_toggle_name]) {
+        style = { display: 'none' };
+      } else {
+        style = {  };
+      }
+
+      return (
+        <input className="form-control datetime_local optional"
+               style={ style }
+               type="text" html5="false"
+               id={ inputID }
+               defaultValue={ moment(date).format('MM/DD/YYYY h:mm A') }
+               autoComplete="off" />
+      )
+    }
+
+    return (
+      <div>
+        <div className="form-group datetime_local optional">
+          <label className="col-form-label datetime_local optional">Date Filter</label>
+
+          { renderControlledInputMaybe() }
+          { renderjQueryInput() }
+        </div>
+      </div>
+    );
+  }
 }

@@ -53,11 +53,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
   getCalls() {
     let thisComponent = this;
 
-    $.get("/v1/public/calls.json",
-           { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-             order_option: this.selectedOrderOption(),
-             page: this.currentPage(),
-             authenticity_token: App.getMetaContent("csrf-token") })
+    $.get("/v1/public/calls.json", this.callSearchOptions())
         .done(function(response) {
                   thisComponent.setState({
                     getError: false,
