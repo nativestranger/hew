@@ -65,6 +65,9 @@ FactoryBot.define do
     end
 
     trait :old do
+      after(:build) do |call|
+        def call.future_dates; end # stub validation
+      end
       entry_deadline { 15.days.ago }
       start_at { rand(7..14).days.ago.to_date }
       end_at { start_at + rand(1..4).days }
@@ -78,6 +81,12 @@ FactoryBot.define do
 
     trait :accepting_entries do
       entry_deadline { Time.current + rand(1..2).days }
+      start_at { (entry_deadline + rand(1..2).days).to_date }
+      end_at { start_at + rand(3..4).days }
+    end
+
+    trait :future do
+      entry_deadline { Time.current + rand(6..13).months }
       start_at { (entry_deadline + rand(1..2).days).to_date }
       end_at { start_at + rand(3..4).days }
     end

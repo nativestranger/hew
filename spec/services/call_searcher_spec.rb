@@ -9,7 +9,9 @@ RSpec.describe CallSearcher, type: :service do
        published: published,
        spiders: spiders,
        call_type_ids: call_type_ids,
-       order_option: order_option
+       order_option: order_option,
+       entry_deadline_start: entry_deadline_start,
+       entry_deadline_end: entry_deadline_end
     )
   end
 
@@ -20,6 +22,8 @@ RSpec.describe CallSearcher, type: :service do
   let(:spiders) { nil }
   let(:order_option) { nil }
   let(:call_type_ids) { nil }
+  let(:entry_deadline_start) { nil }
+  let(:entry_deadline_end) { nil }
 
   let!(:call) { create(:call) }
   let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
@@ -174,6 +178,40 @@ RSpec.describe CallSearcher, type: :service do
         expect(searcher.records.map(&:id)).to eq(
           [ new_call, old_call, oldest_call ].map(&:id)
         )
+      end
+    end
+  end
+
+  context 'with entry_deadline options' do
+    let!(:late) { create(:call, :old, user: user) }
+    let!(:soon) { create(:call, :accepting_entries, user: user) }
+    let!(:future) { create(:call, :future, user: user) }
+
+    context 'with start' do
+      let(:entry_deadline_start) { late.entry_deadline + 1.day }
+      it 'returns calls with entry_deadline after entry_deadline_start' do
+        expect(searcher.records.pluck(:id)).not_to include(late.id)
+        expect(searcher.records.pluck(:id)).to include(soon.id)
+        expect(searcher.records.pluck(:id)).to include(future.id)
+      end
+    end
+
+    context 'with end' do
+      let(:entry_deadline_end) { future.entry_deadline - 1.day }
+      it 'returns calls with entry_deadline before entry_deadline_end' do
+        expect(searcher.records.pluck(:id)).to include(late.id)
+        expect(searcher.records.pluck(:id)).to include(soon.id)
+        expect(searcher.records.pluck(:id)).not_to include(future.id)
+      end
+    end
+
+    context 'with both' do
+      let(:entry_deadline_start) { late.entry_deadline + 1.day }
+      let(:entry_deadline_end) { future.entry_deadline - 1.day }
+      it 'returns calls with entry_deadline between start and end' do
+        expect(searcher.records.pluck(:id)).not_to include(late.id)
+        expect(searcher.records.pluck(:id)).to include(soon.id)
+        expect(searcher.records.pluck(:id)).not_to include(future.id)
       end
     end
   end
