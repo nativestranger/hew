@@ -25,8 +25,9 @@ export default class CallSearch extends BaseCallSearch {
     this.getCalls()
   }
 
-  getCalls() {
-    var searchValInput = this.refs.searchValInput.value;
+  getCalls(e) {
+    e && e.preventDefault();
+    let searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
     var thisComponent = this;
@@ -41,14 +42,12 @@ export default class CallSearch extends BaseCallSearch {
         thisComponent.setState({
           calls: response.records,
           pagination: response.pagination,
-          searchVal: searchValInput,
           errorMessage: '',
           loading: false
         });
       }).fail(function(data) {
         thisComponent.setState({
           errorMessage: 'Something went wrong...',
-          searchVal: searchValInput,
           loading: false
         });
       });
