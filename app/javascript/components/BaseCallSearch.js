@@ -95,8 +95,8 @@ export default class BaseCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown d-inline">
-          <button className="hover-dropbtn btn btn-sm btn-light border" type="button">{this.selectedOrderOption().name}
-          <span className="caret"></span></button>
+          <span className="hover-dropbtn c-pointer">Sort by {this.selectedOrderOption().name}
+          </span>
           <div className="hover-dropdown-content dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
               return (
@@ -250,18 +250,18 @@ export default class BaseCallSearch extends React.Component {
       <div className={className}>
         <div className='row'>
           <div className='col-12'>
-            <div className='mt-2'>
+            <div className=''>
               <nav className="nav nav-tabs">
-                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` }>
-                  <span className='c-pointer' onClick={function(){ selectFilterSection('call_types') }}>Call Types</span>
+                <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` } onClick={function(){ selectFilterSection('call_types') }}>
+                  Call Types
                 </div>
                 { this.state.spiders && (
-                  <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` }>
-                    <span className='c-pointer' onClick={function(){ selectFilterSection('spiders') }}>Spiders</span>
+                  <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` } onClick={function(){ selectFilterSection('spiders') }}>
+                    Spiders
                   </div>
                 ) }
-                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` }>
-                  <span className='c-pointer' onClick={function(){ selectFilterSection('dates') }}>Dates</span>
+                <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` } onClick={function(){ selectFilterSection('dates') }}>
+                  Dates
                 </div>
               </nav>
             </div>

@@ -52,6 +52,12 @@ export default class CallSearch extends BaseCallSearch {
 
   renderContent() {
     let thisComponent = this;
+
+    let placeholder = "Search your calls";
+    if (this.state.pagination) {
+      placeholder = `${this.state.pagination.count} ${pluralize('call', this.state.pagination.count)} match`;
+    }
+
     return (
       <div>
         <div className='row mb-3'>
@@ -72,7 +78,7 @@ export default class CallSearch extends BaseCallSearch {
                      type='string'
                      ref='searchValInput'
                      defaultValue={ this.state.searchVal }
-                     placeholder='Search Your Calls'>
+                     placeholder={placeholder}>
               </input>
               <div className="input-group-append" onClick={this.getCalls}>
                 <span className="input-group-btn">
@@ -85,19 +91,17 @@ export default class CallSearch extends BaseCallSearch {
           </div>
           <div className='row'>
             <div className='col-auto mr-auto d-flex d-justify-content-between'>
-              { this.toggleFilterButton() }
-              { this.state.pagination && (
-                  <p className="m-1">{this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
-              ) }
+              { this.renderSortByDropdown() }
             </div>
 
             <div className='col-auto'>
-              { this.renderSortByDropdown() }
+              { this.toggleFilterButton() }
+
             </div>
           </div>
         </form>
 
-        <div className='mt-4'>
+        <div className='mt-2'>
           { this.renderFilterSection() }
         </div>
 

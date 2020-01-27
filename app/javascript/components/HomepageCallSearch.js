@@ -122,9 +122,9 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
         <div className="calls">
           { this.state.calls && this.state.calls.map(call => (
-            <div onClick={function(){ window.location.pathname = `/calls/${call.id}/details`; }} target="_blank" className="row c-pointer mb-4 border-right border-bottom border-top py-2 text-dark" key={call.id}>
+            <div onClick={function(){ window.location.pathname = `/calls/${call.id}/details`; }} target="_blank" className="row c-pointer mb-4 text-dark" key={call.id}>
               <div className="col-12 mx-auto mt-2">
-                <div className="card border-0">
+                <div className="card border-left-0 py-3 px-2">
                   <div className="card-header bg-white border-0 p-0">
                       <div className="row">
                           <div className="col-11">
@@ -139,19 +139,19 @@ export default class HomepageCallSearch extends BaseCallSearch {
                           </div>
                       </div>
                   </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="text-dark small">
+                        <span>{call.time_until_deadline_in_words} left</span>
+                      </div>
+                    </div>
+                  </div>
                   { call.description && (
                     <div className="card-body call-description my-1 p-0">
                       <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
                     </div>
                   ) }
                   <div className="card-footer bg-white border-0 p-0 text-muted">
-                      <div className="row">
-                          <div className="col-12">
-                              <div className="text-muted small">
-                                  <span>{call.time_until_deadline_in_words} left</span>
-                              </div>
-                          </div>
-                      </div>
                   </div>
                 </div>
               </div>
@@ -179,7 +179,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
     return (
       <div className="bg-white p-0 mb-2 dropdowns d-flex justify-content-between">
-        { thisComponent.renderSortByDropdown() }
+        { this.renderSortByDropdown() }
         { this.toggleFilterButton() }
       </div>
     )
