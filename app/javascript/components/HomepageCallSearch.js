@@ -14,6 +14,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
   constructor(props) {
     super(props);
     this.getCalls = this.getCalls.bind(this);
+    this.renderFiltersTop = this.renderFiltersTop.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,6 +26,10 @@ export default class HomepageCallSearch extends BaseCallSearch {
   }
 
   componentWillMount() {
+    this.setState({
+      activeFilterSection: 'call_types'
+    }); // TODO: /// share w/ live search...
+
     let filters;
 
     // TODO: clear on deploy && renable localStorage
@@ -50,14 +55,11 @@ export default class HomepageCallSearch extends BaseCallSearch {
     this.getCalls();
   }
 
-  getCalls() {
+  getCalls(e) {
+    e && e.preventDefault();
     let thisComponent = this;
 
-    $.get("/v1/public/calls.json",
-           { call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-             order_option: this.selectedOrderOption(),
-             page: this.currentPage(),
-             authenticity_token: App.getMetaContent("csrf-token") })
+    $.get("/v1/public/calls.json", this.callSearchOptions())
         .done(function(response) {
                   thisComponent.setState({
                     getError: false,
@@ -80,49 +82,80 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
   render() {
     let thisComponent = this;
+    let placeholder;
+
+    if (this.state.pagination) {
+      placeholder = `${this.state.pagination.count} calls match`;
+    }
 
     return (
       <div className="call-searcher">
-        { this.renderFilterSection() }
+        <div className="filters">
+          <form onSubmit={ this.getCalls }>
+            <div className='form-group mb-0'>
+              <div className='input-group'>
+                <input id="search_bar"
+                       className="form-control mb-2"
+                       type='string'
+                       ref='searchValInput'
+                       defaultValue={ this.state.searchVal }
+                       placeholder={placeholder}>
+                </input>
+                <div className="input-group-append" onClick={this.getCalls}>
+                  <span className="input-group-btn">
+                    <button name="button" type="button" className="btn btn-primary blr-0">
+                      <i className="fa fa-search"></i>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
 
-        { this.state.pagination && (
-          <div>
-            <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} calls</p>
+        <div className="row mb-4">
+          <div className="col-12">
+            { this.renderFiltersTop() }
+            { this.renderFilterSection() }
           </div>
-        ) }
+        </div>
 
         <div className="calls">
           { this.state.calls && this.state.calls.map(call => (
-            <a href={`/calls/${call.id}/details`} target="_blank" className="row mb-4" key={call.id}>
-                <div className="col-12 mx-auto">
-                    <div className="card border-0">
-                        <div className="card-header bg-white border-0 p-0">
-                            <div className="row">
-                                <div className="col-12">
-                                    <h5 className="mb-0">
-                                      <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
-                                      <p className='d-inline-block'>{call.name}
-                                        { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
-                                      </p>
-                                    </h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="card-body call-description my-1 p-0">
-                          <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
-                        </div>
-                        <div className="card-footer bg-white border-0 p-0 text-muted">
-                            <div className="row">
-                                <div className="col-12">
-                                    <div className="text-muted small">
-                                        <span>{call.time_until_deadline_in_words} left</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div onClick={function(){ window.location.pathname = `/calls/${call.id}/details`; }} target="_blank" className="row c-pointer mb-4 text-dark" key={call.id}>
+              <div className="col-12 mx-auto mt-2">
+                <div className="card border-left-0 py-3 px-2">
+                  <div className="card-header bg-white border-0 p-0">
+                      <div className="row">
+                          <div className="col-11">
+                            <h5 className="mb-0">
+                              <a href={`/calls/${call.id}/details`} className='d-inline-block text-dark'>{call.name}
+                                { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
+                              </a>
+                            </h5>
+                          </div>
+                          <div className="col-1 d-flex justify-content-end">
+                            <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
+                          </div>
+                      </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="text-dark small">
+                        <span>{call.time_until_deadline_in_words} left</span>
+                      </div>
                     </div>
+                  </div>
+                  { call.description && (
+                    <div className="card-body call-description my-1 p-0">
+                      <div className="mb-0 text-truncate text-muted trix-content" dangerouslySetInnerHTML={{ __html: call.description }} />
+                    </div>
+                  ) }
+                  <div className="card-footer bg-white border-0 p-0 text-muted">
+                  </div>
                 </div>
-            </a>
+              </div>
+            </div>
           )) }
         </div>
 
@@ -131,7 +164,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
     );
   }
 
-  renderFilterSection() {
+  renderFiltersTop() {
     let thisComponent = this;
 
     let renderCallType = function(callType) {
@@ -145,18 +178,9 @@ export default class HomepageCallSearch extends BaseCallSearch {
     }
 
     return (
-      <div className="filters card">
-        <div className="search-container p-1">
-          <span className="fa fa-search fa-sm p-2"></span>
-          { this.selectedCallTypes().map(renderCallType) }
-        </div>
-
-        <div className="card-footer bg-white p-0">
-          <div className="dropdowns d-flex justify-content-between">
-            { thisComponent.renderCallTypeDropdown() }
-            { thisComponent.renderSortByDropdown() }
-          </div>
-        </div>
+      <div className="bg-white p-0 mb-2 dropdowns d-flex justify-content-between">
+        { this.renderSortByDropdown() }
+        { this.toggleFilterButton() }
       </div>
     )
   }

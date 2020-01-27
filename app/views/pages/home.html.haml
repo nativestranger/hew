@@ -32,10 +32,7 @@
   -#               We keep your email private and you can unsubscribe any time.
   -#       / End mc_embed_signup
 
-%div.mt-3
-
 .container
   .row.mb-1
-    .col-md-10.mx-auto
-      %p.mb-0.text-muted.text-center We scour the web for opportunities in art so you don't have to.
-      .mt-4= react_component "HomepageCallSearch", homepage_search_defaults
+    .col-md-10.mx-auto.mt-4
+      = react_component "HomepageCallSearch", homepage_search_defaults

@@ -53,6 +53,7 @@ class CallSerializer < ActiveModel::Serializer
              :description,
              :external_url,
              :entry_counts,
+             :entry_deadline,
              :time_until_deadline_in_words
 
   def path
@@ -74,5 +75,9 @@ class CallSerializer < ActiveModel::Serializer
       started: object.entries.count,
       submitted: object.entries.creation_status_submitted.count,
     }
+  end
+
+  def entry_deadline
+    object.entry_deadline&.strftime("%m/%d/%Y")
   end
 end

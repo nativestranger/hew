@@ -27,18 +27,11 @@ export default class CallSearch extends BaseCallSearch {
 
   getCalls(e) {
     e && e.preventDefault();
-    let searchValInput = this.refs.searchValInput.value;
     this.setState({ loading: true });
 
     var thisComponent = this;
 
-    $.get("/v1/calls", {
-       name: searchValInput,
-       page: this.currentPage(),
-       call_type_ids: this.selectedCallTypes().map(call_type => call_type.id),
-       spiders: this.selectedSpiders().map(spider => spider.id),
-       order_option: this.selectedOrderOption()
-     }).done(function(response) {
+    $.get("/v1/calls", this.callSearchOptions()).done(function(response) {
         thisComponent.setState({
           calls: response.records,
           pagination: response.pagination,
@@ -59,15 +52,21 @@ export default class CallSearch extends BaseCallSearch {
 
   renderContent() {
     let thisComponent = this;
+
+    let placeholder = "Search your calls";
+    if (this.state.pagination) {
+      placeholder = `${this.state.pagination.count} ${pluralize('call', this.state.pagination.count)} match`;
+    }
+
     return (
       <div>
         <div className='row mb-3'>
           <div className='col-auto mr-auto'>
-          </div>
-          <div className='col-auto'>
-            <a className='btn btn-sm btn-primary' href='/calls/new'>
+            <a className='btn btn-sm btn-light border' href='/calls/new'>
               + New Call
             </a>
+          </div>
+          <div className='col-auto'>
           </div>
         </div>
 
@@ -79,7 +78,7 @@ export default class CallSearch extends BaseCallSearch {
                      type='string'
                      ref='searchValInput'
                      defaultValue={ this.state.searchVal }
-                     placeholder='Search Your Calls'>
+                     placeholder={placeholder}>
               </input>
               <div className="input-group-append" onClick={this.getCalls}>
                 <span className="input-group-btn">
@@ -91,20 +90,20 @@ export default class CallSearch extends BaseCallSearch {
             </div>
           </div>
           <div className='row'>
-            <div className='col-auto mr-auto'>
-              { this.state.pagination && (
-                <div>
-                  <p className="text-muted m-1 text-right">{this.state.calls.length} of {this.state.pagination.count} {pluralize(' call', this.state.pagination.count) }</p>
-                </div>
-              ) }
-            </div>
-            <div className='col-auto'>
-              { this.renderSpiderDropdown() }
-              { this.renderCallTypeDropdown() }
+            <div className='col-auto mr-auto d-flex d-justify-content-between'>
               { this.renderSortByDropdown() }
+            </div>
+
+            <div className='col-auto'>
+              { this.toggleFilterButton() }
+
             </div>
           </div>
         </form>
+
+        <div className='mt-2'>
+          { this.renderFilterSection() }
+        </div>
 
         <div className='gray'>
           { this.state.errorMessage }
@@ -115,7 +114,7 @@ export default class CallSearch extends BaseCallSearch {
         )}
         { !this.state.loading && (
           <div>
-            <div className='mt-2'>
+            <div className='mt-4'>
              { this.state.calls.map(this.renderCall) }
             </div>
 
@@ -138,7 +137,7 @@ export default class CallSearch extends BaseCallSearch {
 
     return (
       <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
-        <h4 className='card-title mb-0'>
+        <h5 className='card-title mb-0'>
           <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
           { call.name || 'Unknown Name' }
 
@@ -149,32 +148,34 @@ export default class CallSearch extends BaseCallSearch {
               </span>
             </small>
           ) }
-        </h4>
+        </h5>
 
-        <div className="card-body p-0">
-          { call.time_until_deadline_in_words && (
-            <p className='text-muted'>
-              { call.time_until_deadline_in_words } left for entries
-            </p>
-          ) }
-
-          { call.internal && (
-            <div className='text-primary'>
-              { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
+        <div className="card-body p-0 mb-1">
+          <div className='row mt-4 mb-1'>
+            <div className='col-auto mr-auto'>
+              { call.entry_deadline && (
+                <div className='text-muted'>
+                  { call.entry_deadline }
+                </div>
+              ) }
             </div>
-          ) }
+            <div className='col-auto'>
+              { call.external && (
+                <div className='text-right'>
+                  <div>
+                    { call.view_count } { pluralize('view', call.view_count) }
+                  </div>
+                </div>
+              ) }
 
-          { call.external && (
-            <div className='mt-4'>
-              <a href={call.external_url}>
-                External URL
-              </a>
-              <div>
-                { call.view_count } { pluralize('view', call.view_count) }
-              </div>
+              { call.internal && (
+                <div className='text-primary'>
+                  { call.entry_counts.submitted } { pluralize('entry', call.entry_counts.submitted) } submitted
+                </div>
+              ) }
             </div>
-          ) }
-          <div className='clearfix mb-2' />
+          </div>
+
         </div>
       </div>
     );

@@ -11,5 +11,5 @@
 //# sourceMappingURL=bootstrap4-toggle.min.js.map
 
 $(document).on('ready turbolinks:load', function() {
-  $('[data-toggle="toggle"]').bootstrapToggle()
+  $('[data-toggle="toggle"]').bootstrapToggle();
 });
