@@ -24,4 +24,8 @@ namespace :scrapers do
   task :resartis do
     ResartisBulkSpider.crawl!
   end
+
+  task :art_guide do
+    ArtGuideBulkSpider.crawl!
+  end
 end
