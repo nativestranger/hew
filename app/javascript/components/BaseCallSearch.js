@@ -274,7 +274,6 @@ export default class BaseCallSearch extends React.Component {
             { this.renderSpiderFilterMaybe() }
           </div>
         </div>
-        <hr/>
       </div>
     );
   }
