@@ -14,7 +14,20 @@ export default class BaseCallSearch extends React.Component {
     this.selectedOrderOption = this.selectedOrderOption.bind(this);
     this.renderSortByDropdown = this.renderSortByDropdown.bind(this);
     this.renderCallTypeDropdown = this.renderCallTypeDropdown.bind(this);
+    this.callSearchOptions = this.callSearchOptions.bind(this);
+    this.renderDateTimePicker = this.renderDateTimePicker.bind(this);
+    this.dateTimePickerValue = this.dateTimePickerValue.bind(this);
+    this.toggleFilterButton = this.toggleFilterButton.bind(this);
+    this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
+    this.renderCallTypeFilterMaybe = this.renderCallTypeFilterMaybe.bind(this);
+    this.renderSpiderFilterMaybe = this.renderSpiderFilterMaybe.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({
+      activeFilterSection: 'call_types'
+    });
   }
 
   // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
@@ -22,16 +35,36 @@ export default class BaseCallSearch extends React.Component {
     return (this.state.pagination && this.state.pagination.current) || this.props.page;
   }
 
+  toggleFilterExpansion() {
+    this.setState({ filterExpanded: !this.state.filterExpanded });
+  }
+
+  toggleFilterButton() {
+    return (
+      <div className='btn btn-sm btn-light border c-pointer' onClick={ this.toggleFilterExpansion }>
+        { `${ this.state.filterExpanded ? 'Hide' : 'Show' }` } Filters
+      </div>
+    );
+  }
+
   setLocalStorageFilters(property, value) {
     // TODO: determine when/if
   }
 
   selectedSpiders() {
-    return this.state.spiders.filter(spider => spider.selected);
+    if (this.state.spiders) {
+      return this.state.spiders.filter(spider => spider.selected);
+    } else {
+      return [];
+    }
   }
 
   selectedCallTypes() {
-    return this.state.call_types.filter(type => type.selected);
+    if (this.state.call_types) {
+      return this.state.call_types.filter(type => type.selected);
+    } else {
+      return [];
+    }
   }
 
   selectedOrderOption() {
@@ -62,7 +95,7 @@ export default class BaseCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown d-inline">
-          <button className="hover-dropbtn btn btn-sm btn-light" type="button" data-toggle="dropdown">{this.selectedOrderOption().name}
+          <button className="hover-dropbtn btn btn-sm btn-light border" type="button">{this.selectedOrderOption().name}
           <span className="caret"></span></button>
           <div className="hover-dropdown-content dropdown-menu-right text-center">
             { thisComponent.state.orderOptions.map(orderOption => {
@@ -154,4 +187,238 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
+  callSearchOptions() {
+    let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
+
+    let options = {
+      authenticity_token: App.getMetaContent("csrf-token"),
+      call_name: searchValInput,
+      page: this.currentPage(),
+      call_type_ids: this.selectedCallTypes().map(type => type.id),
+      spiders: this.selectedSpiders().map(spider => spider.id),
+      order_option: this.selectedOrderOption(),
+      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }),
+      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' })
+     }
+
+    return options;
+  }
+
+  // need alt formats
+  dateTimePickerValue(opts) {
+    if ($(`#${opts['id']}`)[0] && $(`#${opts['id']}`).data('datetimepicker')) {
+      let datetimepicker = $(`#${opts['id']}`).data('datetimepicker')
+      return datetimepicker.date() && datetimepicker.date().format('YYYY-MM-DDTHH:mm')
+    }
+  }
+
+  renderFilters(opts) {
+    let thisComponent = this;
+
+    let className;
+    if (opts.hidden) {
+      className = 'd-none'
+    } else {
+      className = ''
+    }
+
+    let selectFilterSection = function(name) {
+      thisComponent.setState({ activeFilterSection: name });
+    }
+
+    let renderDateFilters = function() {
+      let className;
+      if (thisComponent.state.activeFilterSection == 'dates') {
+        className = 'row'
+      } else {
+        className = 'd-none' // jquery stored value
+      }
+
+      return (
+        <div className={className}>
+          <div className='col-md-3'>
+            { thisComponent.renderDateTimePicker('entry_deadline_start', 'Deadline After') }
+          </div>
+          <div className='col-md-3'>
+            { thisComponent.renderDateTimePicker('start_at_start', 'Event Starts After') }
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className={className}>
+        <div className='row'>
+          <div className='col-12'>
+            <div className='mt-2'>
+              <nav className="nav nav-tabs">
+                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` }>
+                  <span className='c-pointer' onClick={function(){ selectFilterSection('call_types') }}>Call Types</span>
+                </div>
+                { this.state.spiders && (
+                  <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` }>
+                    <span className='c-pointer' onClick={function(){ selectFilterSection('spiders') }}>Spiders</span>
+                  </div>
+                ) }
+                <div className={ `nav-item nav-link ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` }>
+                  <span className='c-pointer' onClick={function(){ selectFilterSection('dates') }}>Dates</span>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <div className='row'>
+          <div className='col mb-4'>
+            { renderDateFilters() }
+            { this.renderCallTypeFilterMaybe() }
+            { this.renderSpiderFilterMaybe() }
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderCallTypeFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'call_types') {
+      return;
+    }
+
+    let renderCallType = function(callType) {
+      return (
+        <div key={callType.name} className="m-4 c-pointer" onClick={function() {thisComponent.toggleCallType(callType.name)}}>
+          <input className="form-check-input boolean optional c-pointer"
+                 checked={callType.selected}
+                 onChange={function() {}}
+                 type="checkbox" />
+          <span>{callType.name}</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className='d-md-flex'>
+        { this.state.call_types.map(renderCallType) }
+      </div>
+    )
+  }
+
+  renderSpiderFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'spiders') {
+      return;
+    }
+
+    let renderSpider = function(spider) {
+      return (
+        <div key={spider.name} className="m-4 c-pointer" onClick={function() {thisComponent.toggleSpider(spider.name)}}>
+          <input className="form-check-input boolean optional c-pointer"
+                 checked={spider.selected}
+                 onChange={function() {}}
+                 type="checkbox" />
+          <span>{spider.name}</span>
+        </div>
+      )
+    }
+
+    return (
+      <div className='d-md-flex'>
+        { this.state.spiders.map(renderSpider) }
+      </div>
+    )
+  }
+
+  renderFilterSection() {
+    return (
+      <div>
+        { this.renderFilters({ hidden: !this.state.filterExpanded }) }
+      </div>
+    );
+  }
+
+  renderDateTimePicker(attribute_name, label) {
+    let thisComponent = this;
+
+    let date = this.dateTimePickerValue({ id: attribute_name });
+    let visibility_toggle_name = `show_filter__${attribute_name}`;
+    let inputID = `${ attribute_name }`;
+
+    let renderControlledInputMaybe = function() {
+      if (thisComponent.state[visibility_toggle_name]) {
+        return;
+      }
+
+      let showjQuerySelector = function() {
+        let stateChanges = {};
+        stateChanges[visibility_toggle_name] = true;
+        thisComponent.setState(stateChanges);
+        setTimeout(function() {
+          $(`#${ inputID }`).datetimepicker({
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-arrow-up",
+                    down: "fa fa-arrow-down",
+                    previous: 'fa fa-arrow-left',
+                    next: 'fa fa-arrow-right',
+                    today: 'fa fa-calendar-o',
+                    clear: 'fa fa-times-circle'
+                },
+                buttons: {
+                  // showClear: true
+                }
+            });
+
+          $(`#${ inputID }`).click(function() {
+            $(`#${ inputID }`).datetimepicker('show');
+          });
+
+          $(`#${ inputID }`).blur(function() {
+            $(`#${ inputID }`).datetimepicker('hide');
+          });
+
+          $(`#${ inputID }`).datetimepicker('toggle');
+        }, 20);
+      }
+
+      return (
+        <input className="form-control optional"
+               id={ `call_search_${ attribute_name }_initial` }
+               defaultValue={ date && moment(date).format('MM/DD/YYYY h:mm A') }
+               onMouseEnter={ showjQuerySelector } />
+      );
+    }
+
+    let renderjQueryInput = function() {
+      let style;
+      if (!thisComponent.state[visibility_toggle_name]) {
+        style = { display: 'none' };
+      } else {
+        style = {  };
+      }
+
+      return (
+        <input className="form-control datetime_local optional"
+               style={ style }
+               type="text" html5="false"
+               id={ inputID }
+               defaultValue={ moment(date).format('MM/DD/YYYY h:mm A') }
+               autoComplete="off" />
+      )
+    }
+
+    // TODO: generalize
+    return (
+      <div>
+        <div className="form-group datetime_local optional">
+          <label className="col-form-label datetime_local optional">{label}</label>
+
+          { renderControlledInputMaybe() }
+          { renderjQueryInput() }
+        </div>
+      </div>
+    );
+  }
 }

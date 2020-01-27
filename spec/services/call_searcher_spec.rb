@@ -11,7 +11,8 @@ RSpec.describe CallSearcher, type: :service do
        call_type_ids: call_type_ids,
        order_option: order_option,
        entry_deadline_start: entry_deadline_start,
-       entry_deadline_end: entry_deadline_end
+       entry_deadline_end: entry_deadline_end,
+       start_at_start: start_at_start
     )
   end
 
@@ -24,6 +25,7 @@ RSpec.describe CallSearcher, type: :service do
   let(:call_type_ids) { nil }
   let(:entry_deadline_start) { nil }
   let(:entry_deadline_end) { nil }
+  let(:start_at_start) { nil }
 
   let!(:call) { create(:call) }
   let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
@@ -212,6 +214,21 @@ RSpec.describe CallSearcher, type: :service do
         expect(searcher.records.pluck(:id)).not_to include(late.id)
         expect(searcher.records.pluck(:id)).to include(soon.id)
         expect(searcher.records.pluck(:id)).not_to include(future.id)
+      end
+    end
+  end
+
+  context 'with start_at options' do
+    let!(:late) { create(:call, :old, user: user) }
+    let!(:soon) { create(:call, :accepting_entries, user: user) }
+    let!(:future) { create(:call, :future, user: user) }
+
+    context 'with start' do
+      let(:start_at_start) { late.start_at + 1.day }
+      it 'returns calls with start_at after start_at_start' do
+        expect(searcher.records.pluck(:id)).not_to include(late.id)
+        expect(searcher.records.pluck(:id)).to include(soon.id)
+        expect(searcher.records.pluck(:id)).to include(future.id)
       end
     end
   end
