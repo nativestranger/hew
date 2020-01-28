@@ -25,7 +25,7 @@ class Spider < Kimurai::Base
       end
 
       ensure_admins!
-      @call.scrape unless @call.past_deadline?
+      @call.scrape unless skip_scrape?
 
       true
     rescue => e
@@ -66,5 +66,10 @@ class Spider < Kimurai::Base
     else
       nil
     end
+  end
+
+  def skip_scrape?
+    @call.past_deadline? ||
+      @call.persisted? && @call.name.present? && @call.entry_deadline.present?
   end
 end
