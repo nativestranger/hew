@@ -11,7 +11,7 @@ class ArtGuideSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description ||= possible_description&.text || ''
+    @call.description = description || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
 
@@ -64,7 +64,7 @@ class ArtGuideSpider < Spider
       nil
   end
 
-  def possible_description
+  def description
     browser.all(:xpath, "//div[@class='blog-details']").first.text
   rescue => e
     nil
@@ -82,14 +82,6 @@ class ArtGuideSpider < Spider
   end
 
   def call_type_id
-    type_text = browser.text.split('Type:').last.strip
-
-    if type_text.match(/^(?:Exhibition|Competition|Residency)/)
-      type_text.match(/^(?:Exhibition|Competition|Residency)/).to_s.downcase
-    elsif type_text.starts_with?("Public Art & Proposals")
-      'public_art'
-    end
-    rescue => e
-      nil
+    call_type_id_fallback
   end
 end

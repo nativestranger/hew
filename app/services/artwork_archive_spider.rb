@@ -10,7 +10,7 @@ class ArtworkArchiveSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description ||= possible_description&.text || ''
+    @call.description = description || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
 
@@ -60,8 +60,8 @@ class ArtworkArchiveSpider < Spider
       nil
   end
 
-  def possible_description
-    call_hero_container.all(:xpath, "//div[@class='row']")[2]
+  def description
+    call_hero_container.all(:xpath, "//div[@class='row']")[2].text
   rescue => e
     nil
   end

@@ -42,4 +42,29 @@ class Spider < Kimurai::Base
   def spider_name
     raise "must implement in #{self.class.name}"
   end
+
+  def call_type_id_fallback
+    call_type_id_fallback_from(name) ||
+      call_type_id_fallback_from(description)
+  end
+
+  def call_type_id_fallback_from(string)
+    return unless string.present?
+
+    string = string.downcase
+
+    if string.include?('exhibit')
+      'exhibition'
+    elsif string.include?('fair') || string.include?('fest')
+      'fair_or_festival'
+    elsif string.include?('residenc')
+      'residency'
+    elsif string.include?('publication') || string.include?('magazine')
+      'publication'
+    elsif string.include?('competition') || string.include?('contest')
+      'competition'
+    else
+      nil
+    end
+  end
 end
