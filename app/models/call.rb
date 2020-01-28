@@ -93,7 +93,8 @@ class Call < ApplicationRecord
     artwork_archive: 2,
     art_deadline: 3,
     zapplication: 4,
-    resartis: 5
+    resartis: 5,
+    art_guide: 6
   }, _prefix: true
 
   scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
@@ -147,8 +148,6 @@ class Call < ApplicationRecord
   alias_method :scraped?, :scraped
 
   def scrape
-    return if spider_none?
-
     case spider
     when 'call_for_entry'
       CallForEntryJob.perform_later(id)
@@ -160,6 +159,8 @@ class Call < ApplicationRecord
       ZappJob.perform_later(id)
     when 'resartis'
       ResartisJob.perform_later(id)
+    when 'art_guide'
+      ArtGuideJob.perform_later(id)
     end
   end
 

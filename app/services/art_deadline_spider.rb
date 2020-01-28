@@ -11,7 +11,7 @@ class ArtDeadlineSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline
-    @call.description ||= possible_description&.text || ''
+    @call.description = description || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
 
@@ -21,7 +21,7 @@ class ArtDeadlineSpider < Spider
     false
   end
 
-  def possible_description
+  def description
     ps = browser.all(:xpath, "//div[@class='section_content']//p").first&.text&.split(' – ')
     ps && ps[1].strip
   rescue => e
