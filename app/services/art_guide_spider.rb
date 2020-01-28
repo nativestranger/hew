@@ -5,7 +5,6 @@ class ArtGuideSpider < Spider
   private
 
   def update_maybe
-    # binding.pry
     @call.call_type_id = call_type_id if call_type_id && @call.call_type_id_unspecified?
     @call.name = name if name && @call.name.blank?
     @call.start_at ||= start_at
