@@ -137,17 +137,19 @@ export default class CallSearch extends BaseCallSearch {
 
     return (
       <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
-        <h5 className='card-title mb-0'>
-          <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
-          { call.name || 'Unknown Name' }
+        <h5>
+          <a className='card-title mb-0 text-dark' href={call.path}>
+            <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
+            { call.name || 'Unknown Name' }
 
-          { call.scraped && (
-            <small className='pull-right'>
-              <span className="d-inline badge badge-light border mr-1 p-1" >
-                {call.spider}
-              </span>
-            </small>
-          ) }
+            { call.scraped && (
+              <small className='pull-right'>
+                <span className="d-inline badge badge-light border mr-1 p-1" >
+                  {call.spider}
+                </span>
+              </small>
+            ) }
+          </a>
         </h5>
 
         <div className="card-body p-0 mb-1">

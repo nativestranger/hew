@@ -10,7 +10,7 @@ class CafeSpider < Spider
     @call.start_at ||= start_at
     @call.end_at ||= end_at
     @call.entry_deadline ||= entry_deadline # TODO: make end of day in estimated timezone
-    @call.description = possible_description&.text || '' if @call.description.blank?
+    @call.description = description || '' if @call.description.blank?
     @call.eligibility ||= eligibility
     @call.entry_fee ||= entry_fee_in_cents
 
@@ -22,13 +22,17 @@ class CafeSpider < Spider
   end
 
   # TODO: clean this up... or set a default?
-  def possible_description
-    browser.all(:xpath, "//p").find do |paragraph|
+  def description
+    node = browser.all(:xpath, "//p").find do |paragraph|
       paragraph.text.include?('eligible') ||
         paragraph.text.include?('open to') ||
         paragraph.text.include?('invite') ||
         paragraph.text.include?('present')
     end
+
+    node&.text
+  rescue => e
+    nil
   end
 
   def month_names

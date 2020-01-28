@@ -1,5 +1,5 @@
-class ArtworkArchiveSpider < Spider
-  @name = "artwork_archive_spider"
+class ArtGuideSpider < Spider
+  @name = "art_guide_spider"
   @engine = :selenium_chrome
 
   private
@@ -21,7 +21,8 @@ class ArtworkArchiveSpider < Spider
   end
 
   def name
-    call_hero_container.find(:xpath, "//h2").text.strip
+    browser.
+      all(:xpath, "//*[@class='blogdt-heading']//h1")[0].text.strip
   rescue => e
     nil
   end
@@ -49,8 +50,10 @@ class ArtworkArchiveSpider < Spider
   end
 
   def entry_deadline # TODO: handle ongoing
-    deadline_str = browser.find(:xpath, "//p[@class='call-date']").text.split(' ').first(3).join(' ')
-    Date.strptime(deadline_str, "%B %d, %Y")
+    deadline_str = browser.find(
+      :xpath, "//p[@class='deadline']"
+    ).text.split("Entry Deadline:").reject(&:blank?)[0].strip
+    Date.strptime(deadline_str, "%b. %d") # Mar. 30
   end
 
   def eligibility
@@ -61,7 +64,7 @@ class ArtworkArchiveSpider < Spider
   end
 
   def description
-    call_hero_container.all(:xpath, "//div[@class='row']")[2].text
+    browser.all(:xpath, "//div[@class='blog-details']").first.text
   rescue => e
     nil
   end
@@ -69,7 +72,7 @@ class ArtworkArchiveSpider < Spider
   def entry_fee_in_cents
     # TODO: handle exceptions in euros or other... €, CAD
 
-    browser.text.split('Fee:').
+    browser.text.downcase.split('fee:').
       last.strip.split(' ').first.gsub('$', '').
         match(/\A[+-]?\d+(\.[\d]+)?\z/)&.to_s&.to_f * 100
   rescue => e
@@ -78,14 +81,6 @@ class ArtworkArchiveSpider < Spider
   end
 
   def call_type_id
-    type_text = browser.text.split('Type:').last.strip
-
-    if type_text.match(/^(?:Exhibition|Competition|Residency)/)
-      type_text.match(/^(?:Exhibition|Competition|Residency)/).to_s.downcase
-    elsif type_text.starts_with?("Public Art & Proposals")
-      'public_art'
-    end
-    rescue => e
-      nil
+    call_type_id_fallback
   end
 end
