@@ -10,14 +10,6 @@ class ArtShowBulkSpider < Spider
     browser.all(:xpath, "//*[@class='col-md-3 col-sm-4 listing col-centered']")
   end
 
-  def call_links
-    browser.all(:xpath, "//a[text() = 'More info']")
-  end
-
-  def names
-    browser.all(:xpath, "//*[@class='OppTitle']")
-  end
-
   def parse(response, url:, data: {})
     call_containers.each do |call_container|
       next unless external_url(call_container)
