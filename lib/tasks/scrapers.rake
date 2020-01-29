@@ -28,4 +28,8 @@ namespace :scrapers do
   task :art_guide do
     ArtGuideBulkSpider.crawl!
   end
+
+  task :art_show do
+    ArtShowBulkSpider.crawl!
+  end
 end

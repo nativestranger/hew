@@ -15,10 +15,11 @@ class Spider < Kimurai::Base
   def find_or_create_call # bulk spiders only # TODO: rename
     @call.transaction do
       if @call.new_record?
+        @call.call_type_id ||= :unspecified
+
         @call.update!(
           external: true,
           is_public: true,
-          call_type_id: :unspecified,
           user: User.system,
           spider: spider_name
         )

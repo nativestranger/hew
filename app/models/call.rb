@@ -94,7 +94,8 @@ class Call < ApplicationRecord
     art_deadline: 3,
     zapplication: 4,
     resartis: 5,
-    art_guide: 6
+    art_guide: 6,
+    art_show: 7
   }, _prefix: true
 
   scope :past_deadline, -> { where('entry_deadline < ?', Time.current) }
@@ -161,6 +162,8 @@ class Call < ApplicationRecord
       ResartisJob.perform_later(id)
     when 'art_guide'
       ArtGuideJob.perform_later(id)
+    when 'art_show'
+      # nop
     end
   end
 
