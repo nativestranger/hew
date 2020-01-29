@@ -122,14 +122,14 @@ export default class HomepageCallSearch extends BaseCallSearch {
 
         <div className="calls">
           { this.state.calls && this.state.calls.map(call => (
-            <div onClick={function(){ window.location.pathname = `/calls/${call.id}/details`; }} target="_blank" className="row c-pointer mb-4 text-dark" key={call.id}>
+            <div onClick={function(){ window.location.pathname = `/calls/${call.id}/details`; }} className="row c-pointer mb-4 text-dark" key={call.id}>
               <div className="col-12 mx-auto mt-2">
-                <div className="card border-left-0 py-3 px-2">
+                <div className="card border-right-0 border-top-0 border-bottom-0 py-3 px-2">
                   <div className="card-header bg-white border-0 p-0">
                       <div className="row">
                           <div className="col-11">
                             <h5 className="mb-0">
-                              <a href={`/calls/${call.id}/details`} className='d-inline-block text-dark'>{call.name}
+                              <a href={`/calls/${call.id}/details`} target="_blank" className='d-inline-block text-dark'>{call.name}
                                 { call.venue && (<h6 className="d-inline">@ {call.venue.id}</h6>) }
                               </a>
                             </h5>

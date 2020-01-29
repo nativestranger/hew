@@ -4,9 +4,11 @@ set -e
 
 [ -e latest.dump ] && rm latest.dump
 
-heroku pg:backups:capture --app "$1"
+# heroku pg:backups:capture --app "$1"
+heroku pg:backups:capture --app mox-production
 
-heroku pg:backups:download --app "$1"
+# heroku pg:backups:download --app "$1"
+heroku pg:backups:download --app mox-production
 
 bundle exec rake db:drop db:create
 

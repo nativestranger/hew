@@ -37,6 +37,7 @@ module CallsHelper
       { id: spiders['zapplication'], name: 'Zapplication', enum_name: 'zapplication', selected: true },
       { id: spiders['art_guide'], name: 'The Art Guide', enum_name: 'art_guide', selected: true },
       { id: spiders['resartis'], name: 'Resartis', enum_name: 'resartis', selected: true },
+      { id: spiders['art_show'], name: 'ArtShow', enum_name: 'art_show', selected: true },
     ]
   end
 

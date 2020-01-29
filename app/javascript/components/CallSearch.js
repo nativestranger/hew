@@ -136,7 +136,7 @@ export default class CallSearch extends BaseCallSearch {
     let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
     return (
-      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-left-0 border-right-0 text-decoration-none hover-bg-light c-pointer" key={ call.id }>
+      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-bottom-0 border-right-0 text-decoration-none hover-bg-light c-pointer py-3 px-2" key={ call.id }>
         <h5>
           <a className='card-title mb-0 text-dark' href={call.path}>
             <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
