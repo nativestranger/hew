@@ -1,6 +1,6 @@
 class ArtShowBulkSpider < Spider
   URL = "https://www.artshow.com/juriedshows/index.html".freeze
-  # TODO: see if 'featured opportuniries' page has all or not
+  # TODO: see if 'featured opportunities' page has all or not
 
   @name = "art_show_spider"
   @engine = :selenium_chrome
@@ -33,16 +33,16 @@ class ArtShowBulkSpider < Spider
   end
 
   def external_url(call_container)
-    call_container.
-      all(:xpath, "a[text() = 'More info']").
-      first[:href]
+    browser.find(
+      :xpath,
+      "#{call_container.path}//a[text() = 'More info']"
+    )[:href]
   rescue => e
   end
 
   def name(call_container)
-    call_container.
-      all(:xpath, "//*[@class='OppTitle']").
-      first.text
+    browser.find(:xpath, "#{call_container.path}//h4").text
+  rescue
   end
 
   def entry_deadline(call_container)

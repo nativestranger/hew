@@ -30,7 +30,7 @@ module CallsHelper
     spiders = Call.spiders
 
     [
-      { id: spiders['none'], name: 'Not Scraped', enum_name: 'none', selected: true },
+      { id: spiders['none'], name: 'Mox', enum_name: 'none', selected: true },
       { id: spiders['call_for_entry'], name: 'Cafe', enum_name: 'call_for_entry', selected: true },
       { id: spiders['artwork_archive'], name: 'ArtworkArchive', enum_name: 'artwork_archive', selected: true },
       { id: spiders['art_deadline'], name: 'ArtDeadline', enum_name: 'art_deadline', selected: true },
