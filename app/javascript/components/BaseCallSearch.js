@@ -170,7 +170,7 @@ export default class BaseCallSearch extends React.Component {
 
     return (
       <div className="hover-dropdown">
-        <button className="hover-dropbtn btn btn-sm btn-light">Spiders</button>
+        <button className="hover-dropbtn btn btn-sm btn-light">Site</button>
 
         <div className="hover-dropdown-content">
           { this.props.spiders.map(function(spider) {
@@ -257,7 +257,7 @@ export default class BaseCallSearch extends React.Component {
                 </div>
                 { this.state.spiders && (
                   <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'spiders' ? 'active' : '') }` } onClick={function(){ selectFilterSection('spiders') }}>
-                    Spiders
+                    Site
                   </div>
                 ) }
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` } onClick={function(){ selectFilterSection('dates') }}>
