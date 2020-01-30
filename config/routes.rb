@@ -63,7 +63,7 @@ Rails.application.routes.draw do
     resources :calls, only: :index
 
     namespace :public do
-      resources :calls, only: :index
+      resources :calls, only: %i[index update]
     end
   end
 
