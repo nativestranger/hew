@@ -136,24 +136,26 @@ export default class CallSearch extends BaseCallSearch {
     let callUser = call.call_users.find(cu => cu.user_id === App.currentUser().id);
 
     return (
-      <div onClick={ function() { window.location.pathname = call.path } } className="card mt-3 rounded-0 text-dark border-top-0 border-bottom-0 border-right-0 text-decoration-none hover-bg-light c-pointer py-3 px-2" key={ call.id }>
+      <div className="card mt-3 rounded-0 text-dark border-top-0 border-bottom-0 border-right-0 text-decoration-none hover-bg-light pt-3 px-2" key={ call.id }>
         <h5>
           <a className='card-title mb-0 text-dark' href={call.path}>
-            <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
             { call.name || 'Unknown Name' }
 
-            { call.scraped && (
-              <small className='pull-right'>
-                <span className="d-inline badge badge-light border mr-1 p-1" >
-                  {call.spider}
-                </span>
-              </small>
-            ) }
+            <div className='pull-right d-none d-md-block'>
+              <span className="p-1">{this.state.call_type_emojis[call.call_type.name] || this.state.call_type_emojis['default']}</span>
+            </div>
           </a>
         </h5>
+        { call.scraped && (
+          <small>
+            <span className="d-inline badge badge-light border mr-1 p-1" >
+              {call.spider}
+            </span>
+          </small>
+        ) }
 
-        <div className="card-body p-0 mb-1">
-          <div className='row mt-4 mb-1'>
+        <div className="card-body p-0">
+          <div className='row mt-4'>
             <div className='col-auto mr-auto'>
               { call.entry_deadline && (
                 <div className='text-muted'>
