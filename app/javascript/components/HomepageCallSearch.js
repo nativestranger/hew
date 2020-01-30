@@ -124,7 +124,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
           { this.state.calls && this.state.calls.map(call => (
             <div className="row mb-4 text-dark" key={call.id}>
               <div className="col-12 mx-auto mt-2">
-                <div className="card border-right-0 border-top-0 border-bottom-0 py-3 px-2">
+                <div className="card blr-0 border-right-0 border-top-0 border-bottom-0 py-3 px-2">
                   <div className="card-header bg-white border-0 p-0">
                       <div className="row">
                           <div className="col-11">
@@ -139,7 +139,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
                             </h5>
                           </div>
                           <div className="col-1 d-flex justify-content-end">
-                            <span className="p-1">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
+                            <span className="p-1 d-none d-md-block">{this.props.call_type_emojis[call.call_type.name] || this.props.call_type_emojis['default']}</span>
                           </div>
                       </div>
                   </div>
