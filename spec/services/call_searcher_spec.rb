@@ -12,7 +12,9 @@ RSpec.describe CallSearcher, type: :service do
        order_option: order_option,
        entry_deadline_start: entry_deadline_start,
        entry_deadline_end: entry_deadline_end,
-       start_at_start: start_at_start
+       start_at_start: start_at_start,
+       entry_fee_start: entry_fee_start,
+       entry_fee_end: entry_fee_end,
     )
   end
 
@@ -26,6 +28,8 @@ RSpec.describe CallSearcher, type: :service do
   let(:entry_deadline_start) { nil }
   let(:entry_deadline_end) { nil }
   let(:start_at_start) { nil }
+  let(:entry_fee_start) { nil }
+  let(:entry_fee_end) { nil }
 
   let!(:call) { create(:call) }
   let!(:public_call) { create(:call, :accepting_entries, is_public: true, is_approved: true) }
@@ -229,6 +233,50 @@ RSpec.describe CallSearcher, type: :service do
         expect(searcher.records.pluck(:id)).not_to include(late.id)
         expect(searcher.records.pluck(:id)).to include(soon.id)
         expect(searcher.records.pluck(:id)).to include(future.id)
+      end
+    end
+  end
+
+  context 'with entry fee options' do
+    let!(:free) { create(:call, user: user, entry_fee: nil) }
+    let!(:cheap) { create(:call, user: user, entry_fee: 1000) }
+    let!(:expensive) { create(:call, user: user, entry_fee: 50000) }
+
+    context 'with start' do
+      let(:entry_fee_start) { 1000 }
+      it 'returns calls with entry_fee >= entry_fee_start' do
+        expect(searcher.records.pluck(:id)).not_to include(free.id)
+        expect(searcher.records.pluck(:id)).to include(cheap.id)
+        expect(searcher.records.pluck(:id)).to include(expensive.id)
+      end
+    end
+
+    context 'with end' do
+      let(:entry_fee_end) { 2000 }
+      it 'returns calls with entry_fee <= entry_fee_end' do
+        expect(searcher.records.pluck(:id)).not_to include(free.id)
+        expect(searcher.records.pluck(:id)).to include(cheap.id)
+        expect(searcher.records.pluck(:id)).not_to include(expensive.id)
+      end
+    end
+
+    context 'with both' do
+      let(:entry_fee_start) { 2000 }
+      let(:entry_fee_end) { 50000 }
+      it 'returns calls with entry_fee in range' do
+        expect(searcher.records.pluck(:id)).not_to include(free.id)
+        expect(searcher.records.pluck(:id)).not_to include(cheap.id)
+        expect(searcher.records.pluck(:id)).to include(expensive.id)
+      end
+
+      context 'with fee range starting at 0' do
+        let(:entry_fee_start) { 0 }
+        let(:entry_fee_end) { 2000 }
+        it 'returns calls with entry_fee in range or nil' do
+          expect(searcher.records.pluck(:id)).to include(free.id)
+          expect(searcher.records.pluck(:id)).to include(cheap.id)
+          expect(searcher.records.pluck(:id)).not_to include(expensive.id)
+        end
       end
     end
   end

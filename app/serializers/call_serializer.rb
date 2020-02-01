@@ -47,6 +47,7 @@ class CallSerializer < ActiveModel::Serializer
              :spider,
              :internal,
              :external,
+             :entry_fee,
              :call_type,
              :call_users,
              :view_count,

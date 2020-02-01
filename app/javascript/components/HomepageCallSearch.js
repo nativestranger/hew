@@ -147,6 +147,9 @@ export default class HomepageCallSearch extends BaseCallSearch {
                     <div className="col-12">
                       <div className="text-dark small">
                         <span>{call.time_until_deadline_in_words} left</span>
+                        { call.entry_fee && (
+                           <span> - ${ Math.round(call.entry_fee / 100) } entry</span>
+                        ) }
                       </div>
                     </div>
                   </div>
