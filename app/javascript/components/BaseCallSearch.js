@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
 export default class BaseCallSearch extends React.Component {
 
@@ -21,6 +23,7 @@ export default class BaseCallSearch extends React.Component {
     this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
     this.renderCallTypeFilterMaybe = this.renderCallTypeFilterMaybe.bind(this);
     this.renderSpiderFilterMaybe = this.renderSpiderFilterMaybe.bind(this);
+    this.renderEntryFeeFilterMaybe = this.renderEntryFeeFilterMaybe.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
@@ -190,6 +193,7 @@ export default class BaseCallSearch extends React.Component {
   callSearchOptions() {
     let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
 
+    // pagination should set all of this to localStorage except token, page
     let options = {
       authenticity_token: App.getMetaContent("csrf-token"),
       call_name: searchValInput,
@@ -198,7 +202,9 @@ export default class BaseCallSearch extends React.Component {
       spiders: this.selectedSpiders().map(spider => spider.id),
       order_option: this.selectedOrderOption(),
       entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }),
-      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' })
+      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' }),
+      entry_fee_start: this.state.entry_fee_range && (this.state.entry_fee_range.min * 100),
+      entry_fee_end: this.state.entry_fee_range && (this.state.entry_fee_range.max * 100),
      }
 
     return options;
@@ -263,6 +269,9 @@ export default class BaseCallSearch extends React.Component {
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` } onClick={function(){ selectFilterSection('dates') }}>
                   Dates
                 </div>
+                <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'entry_fee' ? 'active' : '') }` } onClick={function(){ selectFilterSection('entry_fee') }}>
+                  Entry Fee
+                </div>
               </nav>
             </div>
           </div>
@@ -272,6 +281,7 @@ export default class BaseCallSearch extends React.Component {
             { renderDateFilters() }
             { this.renderCallTypeFilterMaybe() }
             { this.renderSpiderFilterMaybe() }
+            { this.renderEntryFeeFilterMaybe() }
           </div>
         </div>
       </div>
@@ -326,6 +336,31 @@ export default class BaseCallSearch extends React.Component {
     return (
       <div className='d-md-flex'>
         { this.state.spiders.map(renderSpider) }
+      </div>
+    )
+  }
+
+  renderEntryFeeFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'entry_fee') {
+      return;
+    }
+
+    // TODO: local storage write
+    let updateEntryRange = function(value) {
+      thisComponent.setState({ entry_fee_range: value });
+    }
+
+    return (
+      <div className='p-2 mt-4'>
+        <InputRange
+          formatLabel={value => `${value} $`}
+          maxValue={100}
+          minValue={0}
+          value={this.state.entry_fee_range || { min: 0, max: 100 }}
+          onChange={updateEntryRange}
+          onChangeComplete={function() { thisComponent.getCalls(); }} />
       </div>
     )
   }
