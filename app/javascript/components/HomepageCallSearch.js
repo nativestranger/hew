@@ -18,37 +18,8 @@ export default class HomepageCallSearch extends BaseCallSearch {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // not used for now
-  setLocalStorageFilters(property, value) {
-    let filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
-    filters[property] = value;
-    localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
-  }
-
-  componentWillMount() {
-    this.setState({
-      activeFilterSection: 'call_types'
-    }); // TODO: /// share w/ live search...
-
-    let filters;
-
-    // TODO: clear on deploy && renable localStorage
-    if (false && localStorage.getItem('mox_call_search_filters')) {
-      filters = JSON.parse(localStorage.getItem('mox_call_search_filters'));
-    } else {
-      filters = {
-        call_types: this.props.call_types,
-        orderOptions: this.props.orderOptions
-      }
-
-      localStorage.setItem('mox_call_search_filters', JSON.stringify(filters));
-    }
-
-    this.setState({
-      call_types: filters.call_types,
-      calls: [],
-      orderOptions: filters.orderOptions
-    });
+  localStoreKey() {
+    return 'moxHomepageCallSearch';
   }
 
   componentDidMount() {
@@ -166,7 +137,7 @@ export default class HomepageCallSearch extends BaseCallSearch {
           )) }
         </div>
 
-        { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
+        { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} onClick={function(e) { thisComponent.setLocalStorageFilters() }} /> }
 	    </div>
     );
   }

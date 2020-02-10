@@ -21,6 +21,10 @@ export default class CallSearch extends BaseCallSearch {
     this.state = Object.assign({}, props);
   }
 
+  localStoreKey() {
+    return 'moxCallSearch';
+  }
+
   componentDidMount() {
     this.getCalls()
   }

@@ -1,11 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// TODO: allow callback function instead of href (to preserve filters/order)
-
 export default class Pagination extends React.Component {
   static propTypes = {
-    pagination: PropTypes.object.isRequired
+    pagination: PropTypes.object.isRequired,
+    onClick: PropTypes.func,
   }
 
   render() {
@@ -34,7 +33,7 @@ export default class Pagination extends React.Component {
 
       return (
         <li key={n} className={pageItemClass}>
-          <a className="page-link" href={`?page=${n}`}>{n}</a>
+          <a className="page-link" href={`?page=${n}`} onClick={thisComponent.props.onClick}>{n}</a>
         </li>
       )
     }
@@ -44,13 +43,13 @@ export default class Pagination extends React.Component {
         <ul className="pagination">
           { thisComponent.props.pagination.previous && (
             <li className="page-item">
-              <a className="page-link" href="?page=1">« First</a>
+              <a className="page-link" href="?page=1" onClick={thisComponent.props.onClick}>« First</a>
             </li>
           ) }
 
           { thisComponent.props.pagination.previous && (
             <li className="page-item">
-              <a className="page-link" href={`?page=${this.props.pagination.previous}`}>‹ Prev</a>
+              <a className="page-link" href={`?page=${this.props.pagination.previous}`} onClick={thisComponent.props.onClick}>‹ Prev</a>
             </li>
           ) }
 
@@ -60,13 +59,13 @@ export default class Pagination extends React.Component {
 
           { thisComponent.props.pagination.next && (
             <li className="page-item">
-              <a className="page-link" href={`?page=${this.props.pagination.next}`}>Next ›</a>
+              <a className="page-link" href={`?page=${this.props.pagination.next}`} onClick={thisComponent.props.onClick}>Next ›</a>
             </li>
           ) }
 
           { thisComponent.props.pagination.next && (
             <li className="page-item">
-              <a className="page-link" href={`?page=${this.props.pagination.pages}`}>Last »</a>
+              <a className="page-link" href={`?page=${this.props.pagination.pages}`} onClick={thisComponent.props.onClick}>Last »</a>
             </li>
           ) }
         </ul>

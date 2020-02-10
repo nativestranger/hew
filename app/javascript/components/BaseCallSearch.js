@@ -24,13 +24,67 @@ export default class BaseCallSearch extends React.Component {
     this.renderCallTypeFilterMaybe = this.renderCallTypeFilterMaybe.bind(this);
     this.renderSpiderFilterMaybe = this.renderSpiderFilterMaybe.bind(this);
     this.renderEntryFeeFilterMaybe = this.renderEntryFeeFilterMaybe.bind(this);
+    this.localStoreKey = this.localStoreKey.bind(this);
+    this.setupFilters = this.setupFilters.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
-  componentWillMount() {
+  setupFilters() {
+    let filters = {};
+    let storedFilters = localStorage.getItem(this.localStoreKey());
+
+    if (storedFilters) {
+      filters = JSON.parse(storedFilters);
+    }
+
     this.setState({
       activeFilterSection: 'call_types'
     });
+
+    let call_types = Object.assign([], this.props.call_types);
+    let orderOptions = Object.assign([], this.props.orderOptions);
+
+    if (Object.getOwnPropertyNames(filters).length) {
+      if (filters.call_type_ids) {
+        call_types.map(function(type) {
+          if (filters.call_type_ids.indexOf(type.id) != -1) {
+            type.selected = true;
+          } else {
+            type.selected = false;
+          }
+        });
+      }
+
+      if (filters.order_option) {
+        orderOptions.map(function(option) {
+          if (filters.order_option.name == option.name) {
+            option.selected = true;
+          } else {
+            option.selected = false;
+          }
+        });
+      }
+    }
+
+    // TODO: set date & fee options
+
+    this.setState({
+      call_types: call_types,
+      orderOptions: orderOptions
+    });
+  }
+
+  componentWillMount() {
+    this.setupFilters()
+    this.setState({
+      calls: []
+    });
+  }
+
+  componentWillUnmount() {
+    if (!this.state.preserveLocalStorageFilters) {
+      localStorage.clear(); // clear unless pagination click
+    }
   }
 
   // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
@@ -50,8 +104,10 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  setLocalStorageFilters(property, value) {
-    // TODO: determine when/if
+  setLocalStorageFilters() {
+    this.setState({ preserveLocalStorageFilters: true });
+
+    localStorage.setItem(this.localStoreKey(), JSON.stringify(this.callSearchOptions()));
   }
 
   selectedSpiders() {
@@ -90,9 +146,7 @@ export default class BaseCallSearch extends React.Component {
           option.selected = false;
         }
       });
-      thisComponent.setState({ orderOptions: orderOptions }, function() {
-        thisComponent.setLocalStorageFilters('orderOptions', orderOptions);
-      });
+      thisComponent.setState({ orderOptions: orderOptions });
       thisComponent.getCalls();
     }
 
@@ -120,9 +174,7 @@ export default class BaseCallSearch extends React.Component {
     let call_types = [...this.state.call_types];
     let callType = call_types.find(type => type.name === name);
     callType.selected = !callType.selected;
-    this.setState({ call_types: call_types }, function() {
-      thisComponent.setLocalStorageFilters('call_types', call_types);
-    });
+    this.setState({ call_types: call_types });
     this.getCalls();
   }
 
@@ -158,9 +210,7 @@ export default class BaseCallSearch extends React.Component {
     let spiders = [...this.state.spiders];
     let spider = spiders.find(spider => spider.name === name);
     spider.selected = !spider.selected;
-    this.setState({ spiders: spiders }, function() {
-      thisComponent.setLocalStorageFilters('spiders', spiders);
-    });
+    this.setState({ spiders: spiders });
     this.getCalls();
   }
 
@@ -193,7 +243,6 @@ export default class BaseCallSearch extends React.Component {
   callSearchOptions() {
     let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
 
-    // pagination should set all of this to localStorage except token, page
     let options = {
       authenticity_token: App.getMetaContent("csrf-token"),
       call_name: searchValInput,
