@@ -64,13 +64,21 @@ export default class BaseCallSearch extends React.Component {
           }
         });
       }
-    }
 
-    // TODO: set date & fee options
+      if (filters.entry_fee_start) {
+        filters.entry_fee_range = {
+          min: filters.entry_fee_start / 100, // convert back to cents
+          max: filters.entry_fee_end / 100,
+        }
+      }
+    }
 
     this.setState({
       call_types: call_types,
-      orderOptions: orderOptions
+      orderOptions: orderOptions,
+      start_at_start: filters.start_at_start,
+      entry_deadline_start: filters.entry_deadline_start,
+      entry_fee_range: filters.entry_fee_range,
     });
   }
 
@@ -250,8 +258,8 @@ export default class BaseCallSearch extends React.Component {
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
       order_option: this.selectedOrderOption(),
-      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }),
-      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' }),
+      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }) || this.state.entry_deadline_start,
+      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' }) || this.state.start_at_start,
       entry_fee_start: this.state.entry_fee_range && (this.state.entry_fee_range.min * 100),
       entry_fee_end: this.state.entry_fee_range && (this.state.entry_fee_range.max * 100),
      }
@@ -396,7 +404,6 @@ export default class BaseCallSearch extends React.Component {
       return;
     }
 
-    // TODO: local storage write
     let updateEntryRange = function(value) {
       thisComponent.setState({ entry_fee_range: value });
     }
@@ -422,10 +429,12 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
+  // TODO: getCalls on change item
+  // TODO: add clear option & clear state on change item
   renderDateTimePicker(attribute_name, label) {
     let thisComponent = this;
 
-    let date = this.dateTimePickerValue({ id: attribute_name });
+    let date = this.state[attribute_name] || this.dateTimePickerValue({ id: attribute_name });
     let visibility_toggle_name = `show_filter__${attribute_name}`;
     let inputID = `${ attribute_name }`;
 
