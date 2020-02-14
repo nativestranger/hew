@@ -37,39 +37,33 @@ export default class BaseCallSearch extends React.Component {
       filters = JSON.parse(storedFilters);
     }
 
-    this.setState({
-      activeFilterSection: 'call_types'
-    });
-
     let call_types = Object.assign([], this.props.call_types);
     let orderOptions = Object.assign([], this.props.orderOptions);
 
-    if (Object.getOwnPropertyNames(filters).length) {
-      if (filters.call_type_ids) {
-        call_types.map(function(type) {
-          if (filters.call_type_ids.indexOf(type.id) != -1) {
-            type.selected = true;
-          } else {
-            type.selected = false;
-          }
-        });
-      }
-
-      if (filters.order_option) {
-        orderOptions.map(function(option) {
-          if (filters.order_option.name == option.name) {
-            option.selected = true;
-          } else {
-            option.selected = false;
-          }
-        });
-      }
-
-      if (filters.entry_fee_start) {
-        filters.entry_fee_range = {
-          min: filters.entry_fee_start / 100, // convert back to cents
-          max: filters.entry_fee_end / 100,
+    if (filters.call_type_ids) {
+      call_types.map(function(type) {
+        if (filters.call_type_ids.indexOf(type.id) != -1) {
+          type.selected = true;
+        } else {
+          type.selected = false;
         }
+      });
+    }
+
+    if (filters.order_option) {
+      orderOptions.map(function(option) {
+        if (filters.order_option.name == option.name) {
+          option.selected = true;
+        } else {
+          option.selected = false;
+        }
+      });
+    }
+
+    if (filters.entry_fee_start) {
+      filters.entry_fee_range = {
+        min: filters.entry_fee_start / 100, // convert back to cents
+        max: filters.entry_fee_end / 100,
       }
     }
 
@@ -79,6 +73,7 @@ export default class BaseCallSearch extends React.Component {
       start_at_start: filters.start_at_start,
       entry_deadline_start: filters.entry_deadline_start,
       entry_fee_range: filters.entry_fee_range,
+      activeFilterSection: 'call_types',
     });
   }
 

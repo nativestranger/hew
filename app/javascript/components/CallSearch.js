@@ -123,7 +123,7 @@ export default class CallSearch extends BaseCallSearch {
             </div>
 
             <div className='mt-4'>
-              { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} /> }
+              { this.state.pagination && this.state.pagination.pages > 1 && <Pagination pagination={this.state.pagination} onClick={function(e) { thisComponent.setLocalStorageFilters() }} /> }
             </div>
           </div>
         )}
