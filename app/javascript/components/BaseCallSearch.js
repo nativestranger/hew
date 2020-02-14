@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Pagination from "./Pagination";
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
 export default class BaseCallSearch extends React.Component {
 
@@ -21,13 +23,76 @@ export default class BaseCallSearch extends React.Component {
     this.toggleFilterExpansion = this.toggleFilterExpansion.bind(this);
     this.renderCallTypeFilterMaybe = this.renderCallTypeFilterMaybe.bind(this);
     this.renderSpiderFilterMaybe = this.renderSpiderFilterMaybe.bind(this);
+    this.renderEntryFeeFilterMaybe = this.renderEntryFeeFilterMaybe.bind(this);
+    this.localStoreKey = this.localStoreKey.bind(this);
+    this.setupFilters = this.setupFilters.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
   }
 
-  componentWillMount() {
+  setupFilters() {
+    let filters = {};
+    let storedFilters = localStorage.getItem(this.localStoreKey());
+
+    if (storedFilters) {
+      filters = JSON.parse(storedFilters);
+    }
+
     this.setState({
       activeFilterSection: 'call_types'
     });
+
+    let call_types = Object.assign([], this.props.call_types);
+    let orderOptions = Object.assign([], this.props.orderOptions);
+
+    if (Object.getOwnPropertyNames(filters).length) {
+      if (filters.call_type_ids) {
+        call_types.map(function(type) {
+          if (filters.call_type_ids.indexOf(type.id) != -1) {
+            type.selected = true;
+          } else {
+            type.selected = false;
+          }
+        });
+      }
+
+      if (filters.order_option) {
+        orderOptions.map(function(option) {
+          if (filters.order_option.name == option.name) {
+            option.selected = true;
+          } else {
+            option.selected = false;
+          }
+        });
+      }
+
+      if (filters.entry_fee_start) {
+        filters.entry_fee_range = {
+          min: filters.entry_fee_start / 100, // convert back to cents
+          max: filters.entry_fee_end / 100,
+        }
+      }
+    }
+
+    this.setState({
+      call_types: call_types,
+      orderOptions: orderOptions,
+      start_at_start: filters.start_at_start,
+      entry_deadline_start: filters.entry_deadline_start,
+      entry_fee_range: filters.entry_fee_range,
+    });
+  }
+
+  componentWillMount() {
+    this.setupFilters()
+    this.setState({
+      calls: []
+    });
+  }
+
+  componentWillUnmount() {
+    if (!this.state.preserveLocalStorageFilters) {
+      localStorage.clear(); // clear unless pagination click
+    }
   }
 
   // TODO: display pagination or reset page when results returned that make our current page # greater than pages returned
@@ -47,8 +112,10 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  setLocalStorageFilters(property, value) {
-    // TODO: determine when/if
+  setLocalStorageFilters() {
+    this.setState({ preserveLocalStorageFilters: true });
+
+    localStorage.setItem(this.localStoreKey(), JSON.stringify(this.callSearchOptions()));
   }
 
   selectedSpiders() {
@@ -87,9 +154,7 @@ export default class BaseCallSearch extends React.Component {
           option.selected = false;
         }
       });
-      thisComponent.setState({ orderOptions: orderOptions }, function() {
-        thisComponent.setLocalStorageFilters('orderOptions', orderOptions);
-      });
+      thisComponent.setState({ orderOptions: orderOptions });
       thisComponent.getCalls();
     }
 
@@ -117,9 +182,7 @@ export default class BaseCallSearch extends React.Component {
     let call_types = [...this.state.call_types];
     let callType = call_types.find(type => type.name === name);
     callType.selected = !callType.selected;
-    this.setState({ call_types: call_types }, function() {
-      thisComponent.setLocalStorageFilters('call_types', call_types);
-    });
+    this.setState({ call_types: call_types });
     this.getCalls();
   }
 
@@ -155,9 +218,7 @@ export default class BaseCallSearch extends React.Component {
     let spiders = [...this.state.spiders];
     let spider = spiders.find(spider => spider.name === name);
     spider.selected = !spider.selected;
-    this.setState({ spiders: spiders }, function() {
-      thisComponent.setLocalStorageFilters('spiders', spiders);
-    });
+    this.setState({ spiders: spiders });
     this.getCalls();
   }
 
@@ -197,8 +258,10 @@ export default class BaseCallSearch extends React.Component {
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
       order_option: this.selectedOrderOption(),
-      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }),
-      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' })
+      entry_deadline_start: this.dateTimePickerValue({ id: 'entry_deadline_start' }) || this.state.entry_deadline_start,
+      start_at_start: this.dateTimePickerValue({ id: 'start_at_start' }) || this.state.start_at_start,
+      entry_fee_start: this.state.entry_fee_range && (this.state.entry_fee_range.min * 100),
+      entry_fee_end: this.state.entry_fee_range && (this.state.entry_fee_range.max * 100),
      }
 
     return options;
@@ -263,6 +326,9 @@ export default class BaseCallSearch extends React.Component {
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'dates' ? 'active' : '') }` } onClick={function(){ selectFilterSection('dates') }}>
                   Dates
                 </div>
+                <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'entry_fee' ? 'active' : '') }` } onClick={function(){ selectFilterSection('entry_fee') }}>
+                  Entry Fee
+                </div>
               </nav>
             </div>
           </div>
@@ -272,6 +338,7 @@ export default class BaseCallSearch extends React.Component {
             { renderDateFilters() }
             { this.renderCallTypeFilterMaybe() }
             { this.renderSpiderFilterMaybe() }
+            { this.renderEntryFeeFilterMaybe() }
           </div>
         </div>
       </div>
@@ -330,6 +397,30 @@ export default class BaseCallSearch extends React.Component {
     )
   }
 
+  renderEntryFeeFilterMaybe() {
+    let thisComponent = this;
+
+    if (this.state.activeFilterSection != 'entry_fee') {
+      return;
+    }
+
+    let updateEntryRange = function(value) {
+      thisComponent.setState({ entry_fee_range: value });
+    }
+
+    return (
+      <div className='p-2 mt-4'>
+        <InputRange
+          formatLabel={value => `${value} $`}
+          maxValue={100}
+          minValue={0}
+          value={this.state.entry_fee_range || { min: 0, max: 100 }}
+          onChange={updateEntryRange}
+          onChangeComplete={function() { thisComponent.getCalls(); }} />
+      </div>
+    )
+  }
+
   renderFilterSection() {
     return (
       <div>
@@ -338,10 +429,12 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
+  // TODO: getCalls on change item
+  // TODO: add clear option & clear state on change item
   renderDateTimePicker(attribute_name, label) {
     let thisComponent = this;
 
-    let date = this.dateTimePickerValue({ id: attribute_name });
+    let date = this.state[attribute_name] || this.dateTimePickerValue({ id: attribute_name });
     let visibility_toggle_name = `show_filter__${attribute_name}`;
     let inputID = `${ attribute_name }`;
 
