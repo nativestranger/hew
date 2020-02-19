@@ -116,7 +116,8 @@ class CafeSpider < Spider
   def entry_fee_in_cents
     # TODO: handle exceptions in euros or other... €, CAD
 
-    browser.text.split('Entry Fee')[1].
+    browser.html.split('Entry Fee')[1].
+      split(/<br>|\n/).first.
       match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
   rescue => e
     Rails.logger.debug "ENTRY FEE ERROR #{e.message}"

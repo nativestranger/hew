@@ -57,6 +57,7 @@ class ResartisSpider < Spider
     # TODO: add this?
 
     browser.text.downcase.split('fee')[1].
+      split(/<br>|\n/).first.
       match(/(?:\$)\d+(\.[\d]+)?/)&.to_s&.gsub('$', '')&.to_f * 100
   rescue => e
     Rails.logger.debug "ENTRY FEE ERROR #{e.message}"
