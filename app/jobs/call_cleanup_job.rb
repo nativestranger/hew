@@ -6,4 +6,4 @@ class CallCleanupJob < ApplicationJob
     "entry_deadline < ?", Time.current
     ).find_in_batches { |calls| calls.each(&:destroy) }
   end
-end  
+end
