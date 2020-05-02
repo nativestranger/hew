@@ -2,6 +2,7 @@
 
 class ApplicationController < ActionController::Base
   include Pundit
+  skip_before_action :track_ahoy_visit # TODO: reenable per env
 
   protect_from_forgery prepend: true, with: :exception
   before_action :set_locale
