@@ -28,7 +28,7 @@ end
 
 Call.internal.each do |call|
   rand(3..12).times { FactoryBot.create(:entry, call: call, creation_status: 'submitted') }
-  FactoryBot.create(:entry, call: call, user: [user,nil].sample, creation_status: 'submitted')
+  FactoryBot.create(:entry, call: call, user: [user,create(:user, is_artist: true)].sample, creation_status: 'submitted')
 end
 
 # not applied to
