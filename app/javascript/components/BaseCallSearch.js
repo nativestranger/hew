@@ -445,7 +445,7 @@ export default class BaseCallSearch extends React.Component {
     let renderjQueryInput = function() {
       let style;
       if (!thisComponent.state[visibility_toggle_name]) {
-        style = { display: 'none' };
+        style = { display: 'none' }; // TODO: uhh had 'maybe remove' comment?
       } else {
         style = {  };
       }
@@ -460,7 +460,7 @@ export default class BaseCallSearch extends React.Component {
       )
     }
 
-    // TODO: generalize
+    // TODO: generalize: "want date vs datetime_local? and time?"
     return (
       <div>
         <div className="form-group datetime_local optional">
