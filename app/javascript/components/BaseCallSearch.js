@@ -293,7 +293,7 @@ export default class BaseCallSearch extends React.Component {
     return (
       <div className={className}>
         <div className='row'>
-          <div className='col-11'>
+          <div className='col-10'>
             <div className=''>
               <nav className="nav nav-tabs">
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` } onClick={function(){ selectFilterSection('call_types') }}>
@@ -310,7 +310,7 @@ export default class BaseCallSearch extends React.Component {
               </nav>
             </div>
           </div>
-          <div className='col-1'>
+          <div className='col-2 d-flex align-items-end flex-column'>
             <div className='btn btn-sm btn-danger c-pointer' onClick={this.resetFilters}>
               <small className='d-inline-block'>
                 Reset
