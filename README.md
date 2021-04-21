@@ -1,3 +1,5 @@
+- [ better currency scrape/filter]
+
 ## Bulk spiders
 
 HEADLESS=false be rake scrapers:cafe
