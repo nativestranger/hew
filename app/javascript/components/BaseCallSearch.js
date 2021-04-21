@@ -27,54 +27,44 @@ export default class BaseCallSearch extends React.Component {
     this.localStoreKey = this.localStoreKey.bind(this);
     this.setupFilters = this.setupFilters.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+    this.resetFilters = this.resetFilters.bind(this);
   }
 
   setupFilters() {
+    console.log('setupFilters')
     let filters = {};
-    let storedFilters = localStorage.getItem(this.localStoreKey());
+    let localStore = localStorage.getItem(this.localStoreKey());
 
-    if (storedFilters) {
-      filters = JSON.parse(storedFilters);
-    }
-
-    let call_types = Object.assign([], this.props.call_types);
-    let orderOptions = Object.assign([], this.props.orderOptions);
-
-    if (filters.call_type_ids) {
-      call_types.map(function(type) {
-        if (filters.call_type_ids.indexOf(type.id) != -1) {
-          type.selected = true;
-        } else {
-          type.selected = false;
-        }
-      });
-    }
-
-    if (filters.order_option) {
-      orderOptions.map(function(option) {
-        if (filters.order_option.name == option.name) {
-          option.selected = true;
-        } else {
-          option.selected = false;
-        }
-      });
-    }
-
-    if (filters.entry_fee_start) {
-      filters.entry_fee_range = {
-        min: filters.entry_fee_start / 100, // convert back to cents
-        max: filters.entry_fee_end / 100,
-      }
+    if (localStore) {
+      filters = JSON.parse(localStore);
+    } else {
+      localStorage.setItem(
+        this.localStoreKey(),
+        JSON.stringify(filters)
+      );
     }
 
     this.setState({
-      call_types: call_types,
-      orderOptions: orderOptions,
-      start_at_start: filters.start_at_start,
-      entry_deadline_start: filters.entry_deadline_start,
-      entry_fee_range: filters.entry_fee_range,
-      activeFilterSection: 'call_types',
+      activeFilterSection: 'call_types'
     });
+
+    console.log(this.props.call_types); // why are props changing?..
+
+    this.setState({
+      call_types: Object.assign([], filters.call_types || this.props.call_types),
+      orderOptions: Object.assign([], filters.orderOptions || this.props.orderOptions)
+    });
+  }
+
+  resetFilters() {
+    let thisComponent = this;
+    localStorage.setItem(this.localStoreKey(), JSON.stringify({}));
+    location.reload();
+
+    // TODO: see why props are getting mutated.. !!
+    // this.setupFilters();
+    // thisComponent.getCalls();
+    // setTimeout(100, function() { thisComponent.getCalls() });
   }
 
   componentWillMount() {
@@ -107,10 +97,12 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  setLocalStorageFilters() {
+  setLocalStorageFilters(property, value) {
     this.setState({ preserveLocalStorageFilters: true });
 
-    localStorage.setItem(this.localStoreKey(), JSON.stringify(this.callSearchOptions()));
+    let filters = JSON.parse(localStorage.getItem(this.localStoreKey()));
+    filters[property] = value;
+    localStorage.setItem(this.localStoreKey(), JSON.stringify(filters));
   }
 
   selectedSpiders() {
@@ -193,7 +185,7 @@ export default class BaseCallSearch extends React.Component {
         <button className="hover-dropbtn btn btn-sm btn-light">Call Types</button>
 
         <div className="hover-dropdown-content">
-          { this.props.call_types.map(function(callType) {
+          { this.state.call_types.map(function(callType) {
             return (
               <div key={callType.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleCallType(callType.name) } }>
                 <span>{callType.name}</span>
@@ -229,7 +221,7 @@ export default class BaseCallSearch extends React.Component {
         <button className="hover-dropbtn btn btn-sm btn-light">Site</button>
 
         <div className="hover-dropdown-content">
-          { this.props.spiders.map(function(spider) {
+          { this.state.spiders.map(function(spider) {
             return (
               <div key={spider.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleSpider(spider.name) } }>
                 <span>{spider.name}</span>
@@ -247,7 +239,7 @@ export default class BaseCallSearch extends React.Component {
     let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
 
     let options = {
-      authenticity_token: App.getMetaContent("csrf-token"),
+      authenticity_token: App.getMetaContent("csrf-token"), // remove from local store..
       call_name: searchValInput,
       page: this.currentPage(),
       call_type_ids: this.selectedCallTypes().map(type => type.id),
@@ -307,7 +299,7 @@ export default class BaseCallSearch extends React.Component {
     return (
       <div className={className}>
         <div className='row'>
-          <div className='col-12'>
+          <div className='col-10'>
             <div className=''>
               <nav className="nav nav-tabs">
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` } onClick={function(){ selectFilterSection('call_types') }}>
@@ -325,6 +317,13 @@ export default class BaseCallSearch extends React.Component {
                   Entry Fee
                 </div>
               </nav>
+            </div>
+          </div>
+          <div className='col-2 d-flex align-items-end flex-column'>
+            <div className='btn btn-sm btn-danger c-pointer' onClick={this.resetFilters}>
+              <small className='d-inline-block'>
+                Reset
+              </small>
             </div>
           </div>
         </div>
@@ -482,7 +481,7 @@ export default class BaseCallSearch extends React.Component {
     let renderjQueryInput = function() {
       let style;
       if (!thisComponent.state[visibility_toggle_name]) {
-        style = { display: 'none' };
+        style = { display: 'none' }; // TODO: uhh had 'maybe remove' comment?
       } else {
         style = {  };
       }
@@ -497,7 +496,7 @@ export default class BaseCallSearch extends React.Component {
       )
     }
 
-    // TODO: generalize
+    // TODO: generalize: "want date vs datetime_local? and time?"
     return (
       <div>
         <div className="form-group datetime_local optional">
