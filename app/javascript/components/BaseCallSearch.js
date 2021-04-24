@@ -77,6 +77,7 @@ export default class BaseCallSearch extends React.Component {
     }
 
     this.setState({
+      searchVal: filters.call_name || '',
       activeFilterSection: filters.activeFilterSection || 'call_types',
       call_types: call_types,
       orderOptions: orderOptions,
@@ -87,14 +88,8 @@ export default class BaseCallSearch extends React.Component {
   }
 
   resetFilters() {
-    let thisComponent = this;
     localStorage.setItem(this.localStoreKey(), JSON.stringify({}));
     location.reload();
-
-    // TODO: see why props are getting mutated.. !!
-    // this.setupFilters();
-    // thisComponent.getCalls();
-    // setTimeout(100, function() { thisComponent.getCalls() });
   }
 
   componentWillMount() {
@@ -106,7 +101,7 @@ export default class BaseCallSearch extends React.Component {
 
   componentWillUnmount() {
     if (!this.state.preserveLocalStorageFilters) {
-      localStorage.clear(); // clear unless pagination click
+      localStorage.clear();
     }
   }
 
@@ -271,8 +266,8 @@ export default class BaseCallSearch extends React.Component {
     let searchValInput = this.refs.searchValInput && this.refs.searchValInput.value;
 
     let options = {
-      authenticity_token: App.getMetaContent("csrf-token"), // remove from local store..
-      call_name: searchValInput, // TODO: use in local store
+      authenticity_token: App.getMetaContent("csrf-token"),
+      call_name: searchValInput,
       page: this.currentPage(),
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
