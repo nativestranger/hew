@@ -27,7 +27,7 @@ require 'rspec/rails'
 if ENV['TRAVIS_JOB_NUMBER']
   system "RAILS_ENV=test bundle exec rails runner 'Webdrivers::Chromedriver.update'"
 else
-  Webdrivers::Chromedriver.required_version = '79.0.3945.36'
+  Webdrivers::Chromedriver.required_version = '90.0.4430.24'
 end
 
 # Checks for pending migrations and applies them before tests are run.
