@@ -69,7 +69,12 @@ export default class BaseCallSearch extends React.Component {
       entry_fee_range.max = 100;
     }
 
-    // TODO: add spiders for admin search
+    let spiders = Object.assign([], this.props.spiders);
+    if (filters.spiders) {
+      spiders.map(
+        spider => spider.selected = filters.spiders.includes(spider.id)
+      )
+    }
 
     this.setState({
       activeFilterSection: filters.activeFilterSection || 'call_types',

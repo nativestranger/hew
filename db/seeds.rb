@@ -24,7 +24,7 @@ ApplicationRecord.transaction do
   FactoryBot.create(:call, :accepting_entries, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
   FactoryBot.create(:call, :categories, :accepting_entries, :categories, user: admin, venue: venue, is_public: true, is_approved: true, external: true)
 
-  2.times do
+  50.times do
     FactoryBot.create(:call, user: admin, is_public: true, is_approved: true)
   end
 
