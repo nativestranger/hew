@@ -27,54 +27,69 @@ export default class BaseCallSearch extends React.Component {
     this.localStoreKey = this.localStoreKey.bind(this);
     this.setupFilters = this.setupFilters.bind(this);
     this.setLocalStorageFilters = this.setLocalStorageFilters.bind(this);
+    this.resetFilters = this.resetFilters.bind(this);
   }
 
   setupFilters() {
     let filters = {};
-    let storedFilters = localStorage.getItem(this.localStoreKey());
+    let localStore = localStorage.getItem(this.localStoreKey());
 
-    if (storedFilters) {
-      filters = JSON.parse(storedFilters);
+    if (localStore) {
+      filters = JSON.parse(localStore);
+    } else {
+      localStorage.setItem(
+        this.localStoreKey(),
+        JSON.stringify(filters)
+      );
     }
 
     let call_types = Object.assign([], this.props.call_types);
-    let orderOptions = Object.assign([], this.props.orderOptions);
-
     if (filters.call_type_ids) {
-      call_types.map(function(type) {
-        if (filters.call_type_ids.indexOf(type.id) != -1) {
-          type.selected = true;
-        } else {
-          type.selected = false;
-        }
-      });
+      call_types.map(
+        callType => callType.selected = filters.call_type_ids.includes(callType.id)
+      )
     }
 
-    if (filters.order_option) {
-      orderOptions.map(function(option) {
-        if (filters.order_option.name == option.name) {
-          option.selected = true;
-        } else {
-          option.selected = false;
-        }
-      });
+    let orderOptions = Object.assign([], this.props.orderOptions);
+    filters.order_option = filters.order_option || '';
+    orderOptions.map(orderOption => orderOption.selected = filters.order_option.name == orderOption.name);
+    if (!orderOptions.find(orderOption => orderOption.selected)) {
+      orderOptions.find(orderOption => orderOption.name == 'Deadline (soonest)').selected = true;
     }
 
+    let entry_fee_range = {};
     if (filters.entry_fee_start) {
-      filters.entry_fee_range = {
-        min: filters.entry_fee_start / 100, // convert back to cents
-        max: filters.entry_fee_end / 100,
-      }
+      entry_fee_range.min = (filters.entry_fee_start / 100);
+    } else {
+      entry_fee_range.min = 0;
+    }
+    if (filters.entry_fee_end) {
+      entry_fee_range.max = (filters.entry_fee_end / 100);
+    } else {
+      entry_fee_range.max = 100;
+    }
+
+    let spiders = Object.assign([], this.props.spiders);
+    if (filters.spiders) {
+      spiders.map(
+        spider => spider.selected = filters.spiders.includes(spider.id)
+      )
     }
 
     this.setState({
+      searchVal: filters.call_name || '',
+      activeFilterSection: filters.activeFilterSection || 'call_types',
       call_types: call_types,
       orderOptions: orderOptions,
       start_at_start: filters.start_at_start,
       entry_deadline_start: filters.entry_deadline_start,
-      entry_fee_range: filters.entry_fee_range,
-      activeFilterSection: 'call_types',
+      entry_fee_range: entry_fee_range
     });
+  }
+
+  resetFilters() {
+    localStorage.setItem(this.localStoreKey(), JSON.stringify({}));
+    location.reload();
   }
 
   componentWillMount() {
@@ -86,7 +101,7 @@ export default class BaseCallSearch extends React.Component {
 
   componentWillUnmount() {
     if (!this.state.preserveLocalStorageFilters) {
-      localStorage.clear(); // clear unless pagination click
+      localStorage.clear();
     }
   }
 
@@ -110,7 +125,11 @@ export default class BaseCallSearch extends React.Component {
   setLocalStorageFilters() {
     this.setState({ preserveLocalStorageFilters: true });
 
-    localStorage.setItem(this.localStoreKey(), JSON.stringify(this.callSearchOptions()));
+    let filters = this.callSearchOptions();
+    delete filters.page;
+    delete filters.authenticity_token;
+    filters.activeFilterSection = this.state.activeFilterSection;
+    localStorage.setItem(this.localStoreKey(), JSON.stringify(filters));
   }
 
   selectedSpiders() {
@@ -193,7 +212,7 @@ export default class BaseCallSearch extends React.Component {
         <button className="hover-dropbtn btn btn-sm btn-light">Call Types</button>
 
         <div className="hover-dropdown-content">
-          { this.props.call_types.map(function(callType) {
+          { this.state.call_types.map(function(callType) {
             return (
               <div key={callType.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleCallType(callType.name) } }>
                 <span>{callType.name}</span>
@@ -229,7 +248,7 @@ export default class BaseCallSearch extends React.Component {
         <button className="hover-dropbtn btn btn-sm btn-light">Site</button>
 
         <div className="hover-dropdown-content">
-          { this.props.spiders.map(function(spider) {
+          { this.state.spiders.map(function(spider) {
             return (
               <div key={spider.name} className="dropdown-item c-pointer d-flex justify-content-between" onClick={ function() { thisComponent.toggleSpider(spider.name) } }>
                 <span>{spider.name}</span>
@@ -307,7 +326,7 @@ export default class BaseCallSearch extends React.Component {
     return (
       <div className={className}>
         <div className='row'>
-          <div className='col-12'>
+          <div className='col-10'>
             <div className=''>
               <nav className="nav nav-tabs">
                 <div className={ `nav-item nav-link c-pointer ${ (this.state.activeFilterSection == 'call_types' ? 'active' : '') }` } onClick={function(){ selectFilterSection('call_types') }}>
@@ -325,6 +344,13 @@ export default class BaseCallSearch extends React.Component {
                   Entry Fee
                 </div>
               </nav>
+            </div>
+          </div>
+          <div className='col-2 d-flex align-items-end flex-column'>
+            <div className='btn btn-sm btn-danger c-pointer' onClick={this.resetFilters}>
+              <small className='d-inline-block'>
+                Reset
+              </small>
             </div>
           </div>
         </div>
@@ -425,7 +451,7 @@ export default class BaseCallSearch extends React.Component {
   }
 
   // TODO: getCalls on change item
-  // TODO: add clear option & clear state on change item
+  // TODO: add clear option & clear state on option on it
   renderDateTimePicker(attribute_name, label) {
     let thisComponent = this;
 
@@ -465,6 +491,10 @@ export default class BaseCallSearch extends React.Component {
 
           $(`#${ inputID }`).blur(function() {
             $(`#${ inputID }`).datetimepicker('hide');
+            let changes = {};
+            let lookup = {}; lookup.id = inputID;
+            changes[attribute_name] = thisComponent.dateTimePickerValue(lookup);
+            thisComponent.setState(changes, thisComponent.getCalls);
           });
 
           $(`#${ inputID }`).datetimepicker('toggle');
@@ -482,7 +512,7 @@ export default class BaseCallSearch extends React.Component {
     let renderjQueryInput = function() {
       let style;
       if (!thisComponent.state[visibility_toggle_name]) {
-        style = { display: 'none' };
+        style = { display: 'none' }; // TODO: uhh had 'maybe remove' comment?
       } else {
         style = {  };
       }
@@ -497,7 +527,7 @@ export default class BaseCallSearch extends React.Component {
       )
     }
 
-    // TODO: generalize
+    // TODO: generalize: "want date vs datetime_local? and time?"
     return (
       <div>
         <div className="form-group datetime_local optional">
