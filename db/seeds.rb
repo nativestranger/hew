@@ -34,7 +34,6 @@ end
 # not applied to
 FactoryBot.create(:call, user: admin, is_public: true, is_approved: true)
 12.times { FactoryBot.create(:call, :accepting_entries, is_public: true, is_approved: true) }
-
 ###
 
 # little_cats = FactoryBot.create(:piece, user: user, title: 'Little Cats')

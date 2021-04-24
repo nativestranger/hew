@@ -31,7 +31,6 @@ export default class BaseCallSearch extends React.Component {
   }
 
   setupFilters() {
-    console.log('setupFilters')
     let filters = {};
     let localStore = localStorage.getItem(this.localStoreKey());
 
@@ -44,15 +43,41 @@ export default class BaseCallSearch extends React.Component {
       );
     }
 
-    this.setState({
-      activeFilterSection: 'call_types'
-    });
+    let call_types = Object.assign([], this.props.call_types);
+    if (filters.call_type_ids) {
+      call_types.map(
+        callType => callType.selected = filters.call_type_ids.includes(callType.id)
+      )
+    }
 
-    console.log(this.props.call_types); // why are props changing?..
+    let orderOptions = Object.assign([], this.props.orderOptions);
+    filters.order_option = filters.order_option || '';
+    orderOptions.map(orderOption => orderOption.selected = filters.order_option.name == orderOption.name);
+    if (!orderOptions.find(orderOption => orderOption.selected)) {
+      orderOptions.find(orderOption => orderOption.name == 'Deadline (soonest)').selected = true;
+    }
+
+    let entry_fee_range = {};
+    if (filters.entry_fee_start) {
+      entry_fee_range.min = (filters.entry_fee_start / 100);
+    } else {
+      entry_fee_range.min = 0;
+    }
+    if (filters.entry_fee_end) {
+      entry_fee_range.max = (filters.entry_fee_end / 100);
+    } else {
+      entry_fee_range.max = 100;
+    }
+
+    // TODO: add spiders for admin search
 
     this.setState({
-      call_types: Object.assign([], filters.call_types || this.props.call_types),
-      orderOptions: Object.assign([], filters.orderOptions || this.props.orderOptions)
+      activeFilterSection: filters.activeFilterSection || 'call_types',
+      call_types: call_types,
+      orderOptions: orderOptions,
+      start_at_start: filters.start_at_start,
+      entry_deadline_start: filters.entry_deadline_start,
+      entry_fee_range: entry_fee_range
     });
   }
 
@@ -97,11 +122,13 @@ export default class BaseCallSearch extends React.Component {
     );
   }
 
-  setLocalStorageFilters(property, value) {
+  setLocalStorageFilters() {
     this.setState({ preserveLocalStorageFilters: true });
 
-    let filters = JSON.parse(localStorage.getItem(this.localStoreKey()));
-    filters[property] = value;
+    let filters = this.callSearchOptions();
+    delete filters.page;
+    delete filters.authenticity_token;
+    filters.activeFilterSection = this.state.activeFilterSection;
     localStorage.setItem(this.localStoreKey(), JSON.stringify(filters));
   }
 
@@ -240,7 +267,7 @@ export default class BaseCallSearch extends React.Component {
 
     let options = {
       authenticity_token: App.getMetaContent("csrf-token"), // remove from local store..
-      call_name: searchValInput,
+      call_name: searchValInput, // TODO: use in local store
       page: this.currentPage(),
       call_type_ids: this.selectedCallTypes().map(type => type.id),
       spiders: this.selectedSpiders().map(spider => spider.id),
@@ -424,7 +451,7 @@ export default class BaseCallSearch extends React.Component {
   }
 
   // TODO: getCalls on change item
-  // TODO: add clear option & clear state on change item
+  // TODO: add clear option & clear state on option on it
   renderDateTimePicker(attribute_name, label) {
     let thisComponent = this;
 
@@ -464,6 +491,10 @@ export default class BaseCallSearch extends React.Component {
 
           $(`#${ inputID }`).blur(function() {
             $(`#${ inputID }`).datetimepicker('hide');
+            let changes = {};
+            let lookup = {}; lookup.id = inputID;
+            changes[attribute_name] = thisComponent.dateTimePickerValue(lookup);
+            thisComponent.setState(changes, thisComponent.getCalls);
           });
 
           $(`#${ inputID }`).datetimepicker('toggle');

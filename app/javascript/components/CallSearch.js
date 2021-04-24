@@ -34,7 +34,7 @@ export default class CallSearch extends BaseCallSearch {
     e && e.preventDefault();
     this.setState({ loading: true });
 
-    var thisComponent = this;
+    let thisComponent = this;
 
     $.get("/v1/calls", this.callSearchOptions()).done(function(response) {
         thisComponent.setState({
